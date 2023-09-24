@@ -1,8 +1,7 @@
 #pragma once
-#include "ObjectComponent.h"
-#include "InputController.h"
-#include "ObjectManager.h"
+#include "../FlatEngine/InputController.h"
 #include "Bullet.h"
+#include "Shared.h"
 
 class Firearm :
 	public ObjectComponent

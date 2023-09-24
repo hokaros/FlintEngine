@@ -1,6 +1,6 @@
 #pragma once
-#include "Window.h"
-#include "Vector.h"
+#include "../FlatEngine/Window.h"
+#include "../FlatEngine/Vector.h"
 
 // Element wyœwietlaj¹cy pewn¹ statystykê (zdrowie / liczbê graczy itp.)
 class StatRenderer

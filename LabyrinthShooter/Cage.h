@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include "../FlatEngine/GameObject.h"
 
 // Kolizje wystêpuj¹ na zewn¹trz, nie w œrodku obiektu
 class Cage :

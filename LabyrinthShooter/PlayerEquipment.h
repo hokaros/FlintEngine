@@ -1,5 +1,5 @@
 #pragma once
-#include "ObjectComponent.h"
+#include "../FlatEngine/ObjectComponent.h"
 #include "Firearm.h"
 
 // Komponent odpowiedzialny za zmienianie broni

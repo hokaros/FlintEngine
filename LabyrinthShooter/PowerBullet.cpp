@@ -1,4 +1,5 @@
 #include "PowerBullet.h"
+#include "../FlatEngine/ObjectManager.h"
 
 PowerBullet::PowerBullet(GameObject& owner, float speed, int damage)
 	: Bullet(owner, speed, damage), health(POWER_BULLET_HEALTH) {

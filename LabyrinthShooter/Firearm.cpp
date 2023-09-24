@@ -1,4 +1,5 @@
 #include "Firearm.h"
+#include "../FlatEngine/ObjectManager.h"
 
 Firearm::Firearm(GameObject& owner, const GameObject& bulletPrefab, float reloadTime, FirearmType type)
 	: ObjectComponent(owner), bulletPrefab(bulletPrefab), reloadTime(reloadTime), type(type) {

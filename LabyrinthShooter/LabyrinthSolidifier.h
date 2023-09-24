@@ -1,9 +1,9 @@
 #pragma once
 #include "Labirynt.h"
-#include "GameObject.h"
-#include "RectangleRenderer.h"
+#include "../FlatEngine/GameObject.h"
+#include "../FlatEngine/RectangleRenderer.h"
 #include "Regenerable.h"
-#include "Window.h"
+#include "../FlatEngine/Window.h"
 #include "ColliderMemory.h"
 
 #define WALL_REGEN 5.0

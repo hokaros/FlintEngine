@@ -1,5 +1,6 @@
 #pragma once
-#include "ObjectComponent.h"
+#include "../FlatEngine/ObjectComponent.h"
+
 class Regenerable :
 	public ObjectComponent
 {

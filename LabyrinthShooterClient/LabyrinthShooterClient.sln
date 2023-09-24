@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LabyrinthShooterClient", "L
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LabyrinthShooter", "..\LabyrinthShooter\LabyrinthShooter.vcxproj", "{D84D0BF2-1771-444E-83AC-315AB153F202}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlatEngine", "..\FlatEngine\FlatEngine.vcxproj", "{7A954612-E77D-491F-BF56-7DC2B0894CD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{D84D0BF2-1771-444E-83AC-315AB153F202}.Release|x64.Build.0 = Release|x64
 		{D84D0BF2-1771-444E-83AC-315AB153F202}.Release|x86.ActiveCfg = Release|Win32
 		{D84D0BF2-1771-444E-83AC-315AB153F202}.Release|x86.Build.0 = Release|Win32
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Debug|x64.ActiveCfg = Debug|x64
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Debug|x64.Build.0 = Debug|x64
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Debug|x86.ActiveCfg = Debug|Win32
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Debug|x86.Build.0 = Debug|Win32
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Release|x64.ActiveCfg = Release|x64
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Release|x64.Build.0 = Release|x64
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Release|x86.ActiveCfg = Release|Win32
+		{7A954612-E77D-491F-BF56-7DC2B0894CD4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

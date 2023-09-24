@@ -1,5 +1,4 @@
 #pragma once
-#include "Shared.h"
 
 class IUpdateable {
 public:

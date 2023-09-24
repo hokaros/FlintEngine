@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include "../FlatEngine/ObjectManager.h"
 
 Bullet::Bullet(GameObject& owner, float speed, int damage)
 	: ObjectComponent(owner), speed(speed), direction(Direction::EAST), damage(damage) {

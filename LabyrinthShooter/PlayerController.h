@@ -1,6 +1,6 @@
 #pragma once
-#include "ObjectComponent.h"
-#include "InputController.h"
+#include "../FlatEngine/ObjectComponent.h"
+#include "../FlatEngine/InputController.h"
 #include "PlayerEquipment.h"
 #include "ConstantMover.h"
 #include "Firearm.h"

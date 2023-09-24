@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include "../FlatEngine/GameObject.h"
 
 class ColliderMemory
 {

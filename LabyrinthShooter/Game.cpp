@@ -2,8 +2,7 @@
 
 Game::Game(Window* window, GameStartInfo&& gameInfo)
 	: window(window)
-	, basicBullet(Vector(4, 4)
-	, objectManager.GetAllObjects()) // uwa¿aæ przy zmienianiu objectManagera
+	, basicBullet(Vector(4, 4), objectManager.GetAllObjects()) // uwa¿aæ przy zmienianiu objectManagera
 	, superBullet(Vector(10, 10)
 	, objectManager.GetAllObjects())
 	, startInfo(std::move(gameInfo)) {
@@ -109,9 +108,9 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 
 	// Obiekt gracza
 	GameObject* player = new GameObject(Vector(20, 20), position, objectManager.GetAllObjects());
+	objectManager.AddObject(player);
 	ConstantMover* mover = new ConstantMover(*player, PLAYER_SPEED);
 	player->AddComponent(mover);
-	objectManager.AddObject(player);
 
 	// Broñ
 	GameObject* basicWeapon = new GameObject(
@@ -120,10 +119,10 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 		objectManager.GetAllObjects()
 	);
 	Firearm* basicFirearm = new Firearm(*basicWeapon, basicBullet, WPN_BASIC_RELOAD, FirearmType::Basic);
+	objectManager.AddObject(basicWeapon);
 	basicFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
 	basicWeapon->AddComponent(basicFirearm);
 	player->AddChild(basicWeapon);
-	objectManager.AddObject(basicWeapon);
 
 	// Silna broñ
 	GameObject * superWeapon = new GameObject(
@@ -132,10 +131,10 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 		objectManager.GetAllObjects()
 	);
 	Firearm* superFirearm = new Firearm(*superWeapon, superBullet, WPN_SUPER_RELOAD, FirearmType::Super);
+	objectManager.AddObject(superWeapon);
 	superFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
 	superWeapon->AddComponent(superFirearm);
 	player->AddChild(superWeapon);
-	objectManager.AddObject(superWeapon);
 
 	// Ekwipunek
 	player->AddComponent(new PlayerEquipment(*player));

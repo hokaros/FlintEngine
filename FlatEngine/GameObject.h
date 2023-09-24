@@ -101,8 +101,6 @@ private:
 
 	const std::list<GameObject*>& allObjects;
 
-	std::mutex rotationMutex;
-
 private:
 	void HandleCollisions();
 	// Wypycha inny obiekt podczas kolizji

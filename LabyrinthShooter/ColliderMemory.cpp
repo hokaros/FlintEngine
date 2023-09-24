@@ -1,6 +1,6 @@
 #include "ColliderMemory.h"
-#include "Window.h"
-#include "Draw.h"
+#include "../FlatEngine/Window.h"
+#include "../FlatEngine/Draw.h"
 
 ColliderMemory::ColliderMemory(size_t width, size_t height)
 	: width(width), height(height) {

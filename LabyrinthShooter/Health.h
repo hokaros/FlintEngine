@@ -1,5 +1,5 @@
 #pragma once
-#include "ObjectComponent.h"
+#include "../FlatEngine/ObjectComponent.h"
 #include "StatRenderer.h"
 #include <list>
 

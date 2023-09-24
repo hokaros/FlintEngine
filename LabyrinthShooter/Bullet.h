@@ -1,6 +1,5 @@
 #pragma once
-#include "ObjectComponent.h"
-#include "ObjectManager.h"
+#include "../FlatEngine/ObjectComponent.h"
 #include "Health.h"
 
 // Obiekt biegn¹cy przed siebie do momentu kolizji
