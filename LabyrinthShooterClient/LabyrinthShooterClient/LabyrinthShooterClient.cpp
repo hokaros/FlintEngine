@@ -10,17 +10,9 @@
 
 Game* CreateGame(Window& window)
 {
-	PlayerPositionsGenerator positions_generator;
-	positions_generator.Generate(PLAYERS_NUM, WIDTH, HEIGHT, MAP_START_X, MAP_START_Y);
+	Vector player_start_pos = Vector(260, 160);
 
-	std::vector<Vector> positions = positions_generator.GetPlayerPositions();
-	Vector* positions_arr = new Vector[positions.size()];
-	for (size_t i = 0; i < positions.size(); i++)
-	{
-		positions_arr[i] = positions[i];
-	}
-
-	GameStartInfo gameInfo = GameStartInfo(positions_arr, 1, 0);
+	GameStartInfo gameInfo = GameStartInfo(player_start_pos);
 	return new Game(&window, std::move(gameInfo));
 }
 

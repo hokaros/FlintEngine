@@ -54,18 +54,12 @@ private:
 
 struct GameStartInfo {
 public:
-	GameStartInfo(Vector* playerPositions, size_t playerCount, int controllableIndex);
-	GameStartInfo(GameStartInfo&& other);
-	~GameStartInfo();
+	GameStartInfo(const Vector& player_position);
 
-	Vector GetPlayerPosition(int index) const;
-	size_t GetPlayerCount() const;
-	int GetControllableIndex() const;
+	const Vector& GetPlayerPosition() const;
 
 private:
-	Vector* playerPositions;
-	size_t playerCount;
-	int controllableIndex;
+	Vector m_PlayerPosition;
 };
 
 
@@ -80,8 +74,7 @@ public:
 	function<void(int id, int dmg)> onPlayerHurt;
 
 public:
-	Game(Window* window, GameStartInfo&& gameInfo, bool serverVersion = false);
-	~Game();
+	Game(Window* window, GameStartInfo&& gameInfo);
 
 	// G³ówna pêtla gry. Zwraca fa³sz, jeœli w trakcie u¿ytkownik zamknie okno
 	bool Run();
@@ -92,21 +85,15 @@ public:
 
 	void InvokeOnNextFrame(function<void()> fun);
 
-	GameObject* GetControlledPlayer();
-	GameObject* GetPlayer(int id);
-	int GetPlayerIndex(GameObject* player) const;
+	GameObject* GetPlayer();
 
 	LabyrinthSolidifier* GetLab() const;
 
 private:
-	bool isServer;
-
 	Window* window = NULL;
 	Timer timer;
 	ObjectManager objectManager;
-	GameObject** players = NULL;
-	size_t playerCount = 0;
-	GameObject* controlledPlayer = NULL;
+	GameObject* m_Player = NULL;
 	LabyrinthSolidifier* lab;
 
 	GameStartInfo startInfo;
@@ -130,7 +117,7 @@ private:
 	void LoadStartingObjects();
 	void SetRunning(bool running);
 
-	GameObject* CreatePlayer(const Vector& position, bool isControlled = false);
+	GameObject* CreatePlayer(const Vector& position);
 
 	void InvokePostponed();
 
