@@ -2,8 +2,8 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_main.h>
-#include "../../LabyrinthShooter/Game.h"
-#include "../../LabyrinthShooter/PlayerPositionsGenerator.h"
+#include "Game.h"
+#include "PlayerPositionsGenerator.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
