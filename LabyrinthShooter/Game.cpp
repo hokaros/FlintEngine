@@ -2,9 +2,8 @@
 
 Game::Game(Window* window, GameStartInfo&& gameInfo)
 	: window(window)
-	, basicBullet(Vector(4, 4), objectManager.GetAllObjects()) // uwa¿aæ przy zmienianiu objectManagera
-	, superBullet(Vector(10, 10)
-	, objectManager.GetAllObjects())
+	, basicBullet(Vector(4, 4), objectManager.GetAllObjects(), {}) // uwa¿aæ przy zmienianiu objectManagera
+	, superBullet(Vector(10, 10), objectManager.GetAllObjects(), {})
 	, startInfo(std::move(gameInfo)) {
 
 
@@ -107,31 +106,26 @@ void Game::Clear() {
 GameObject* Game::CreatePlayer(const Vector& position) {
 
 	// Obiekt gracza
-	GameObject* player = new GameObject(Vector(20, 20), position, objectManager.GetAllObjects());
-	objectManager.AddObject(player);
+	GameObject* player = GameObject::Instantiate(Vector(20, 20), position);
 	ConstantMover* mover = new ConstantMover(*player, PLAYER_SPEED);
 	player->AddComponent(mover);
 
 	// Broñ
-	GameObject* basicWeapon = new GameObject(
+	GameObject* basicWeapon = GameObject::Instantiate(
 		Vector(30, 10),
-		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x,
-		objectManager.GetAllObjects()
+		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x
 	);
 	Firearm* basicFirearm = new Firearm(*basicWeapon, basicBullet, WPN_BASIC_RELOAD, FirearmType::Basic);
-	objectManager.AddObject(basicWeapon);
 	basicFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
 	basicWeapon->AddComponent(basicFirearm);
 	player->AddChild(basicWeapon);
 
 	// Silna broñ
-	GameObject * superWeapon = new GameObject(
+	GameObject * superWeapon = GameObject::Instantiate(
 		Vector(30, 10),
-		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x,
-		objectManager.GetAllObjects()
+		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x
 	);
 	Firearm* superFirearm = new Firearm(*superWeapon, superBullet, WPN_SUPER_RELOAD, FirearmType::Super);
-	objectManager.AddObject(superWeapon);
 	superFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
 	superWeapon->AddComponent(superFirearm);
 	player->AddChild(superWeapon);

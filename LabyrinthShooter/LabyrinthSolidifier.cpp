@@ -144,7 +144,7 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
 }
 
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, int color) {
-	GameObject* wall = new GameObject(size, allObjects);
+	GameObject* wall = GameObject::Instantiate(size);
 
 	wall->AddComponent(new Regenerable(*wall, WALL_REGEN));
 	wall->isStatic = true;

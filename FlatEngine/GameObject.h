@@ -9,6 +9,18 @@
 #include <list>
 #define BUMPOUT_SPEED 10000.0
 
+class Game;
+
+class PrefabCreationKey
+{
+private:
+	PrefabCreationKey() = default;
+	PrefabCreationKey(const PrefabCreationKey&) = default;
+	PrefabCreationKey(PrefabCreationKey&&) = default;
+
+	friend Game;
+};
+
 class GameObject
 {
 public:
@@ -22,10 +34,13 @@ public:
 
 	std::function<void(GameObject& collider)> onCollision;
 public:
-	GameObject(const std::list<GameObject*>& allObjects);
-	GameObject(const Vector& size, const std::list<GameObject*>& allObjects);
-	GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects);
+	GameObject(const std::list<GameObject*>& allObjects, PrefabCreationKey);
+	GameObject(const Vector& size, const std::list<GameObject*>& allObjects, PrefabCreationKey);
+	GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects, PrefabCreationKey);
 	GameObject(const GameObject& other);
+
+	static GameObject* Instantiate(const Vector& size);
+	static GameObject* Instantiate(const Vector& size, const Vector& position);
 
 	void AddComponent(IUpdateable* component);
 	// Znajduje komponent okreœlonego typu
@@ -80,6 +95,11 @@ public:
 
 
 	~GameObject();
+protected:
+	GameObject(const std::list<GameObject*>& allObjects);
+	GameObject(const Vector& size, const std::list<GameObject*>& allObjects);
+	GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects);
+
 protected:
 	std::list<IUpdateable*> components;
 	IUpdateable* renderer;

@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "ObjectComponent.h"
+#include "ObjectManager.h"
 
 GameObject::GameObject(const std::list<GameObject*>& allObjects)
 	: size(1, 1), allObjects(allObjects) {
@@ -16,8 +17,23 @@ GameObject::GameObject(const Vector& size, const Vector& position, const std::li
 
 }
 
+GameObject::GameObject(const std::list<GameObject*>& allObjects, PrefabCreationKey)
+	: GameObject(allObjects) {
+
+}
+
+GameObject::GameObject(const Vector& size, const std::list<GameObject*>& allObjects, PrefabCreationKey)
+	: GameObject(size, allObjects) {
+
+}
+
+GameObject::GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects, PrefabCreationKey)
+	: GameObject(size, position, allObjects) {
+
+}
+
 GameObject::GameObject(const GameObject& other) 
-	: GameObject(other.size, other.position, other.allObjects) {
+	: GameObject(other.size, other.position, other.allObjects, {}) {
 	// Skopiowanie komponentów
 	for (IUpdateable* component : other.components) {
 		IUpdateable* cmpCpy;
@@ -52,6 +68,26 @@ GameObject::GameObject(const GameObject& other)
 
 		AddChild(childCopy);
 	}
+}
+
+GameObject* GameObject::Instantiate(const Vector& size)
+{
+	ObjectManager* object_manager = ObjectManager::Main();
+
+	GameObject* game_object = new GameObject(size, object_manager->GetAllObjects(), {});
+	object_manager->AddObject(game_object);
+
+	return game_object;
+}
+
+GameObject* GameObject::Instantiate(const Vector& size, const Vector& position)
+{
+	ObjectManager* object_manager = ObjectManager::Main();
+
+	GameObject* game_object = new GameObject(size, position, object_manager->GetAllObjects(), {});
+	object_manager->AddObject(game_object);
+
+	return game_object;
 }
 
 GameObject::~GameObject() {
