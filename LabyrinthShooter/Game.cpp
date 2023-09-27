@@ -140,9 +140,9 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 	Health* playerHealth = new Health(*player, MAX_HEALTH, healthRenderer);
 	player->AddComponent(playerHealth);
 	playerHealth->SubscribeDeath(
-		[&](Health* deadPlayer) {
+		[](Health* deadPlayer) {
 			printf("Dead\n");
-			objectManager.DestroyObject(&(deadPlayer->GetOwner()));
+			GameObject::Destroy(&(deadPlayer->GetOwner()));
 		}
 	);
 
