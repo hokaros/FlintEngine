@@ -37,10 +37,11 @@ public:
 	GameObject(const std::list<GameObject*>& allObjects, PrefabCreationKey);
 	GameObject(const Vector& size, const std::list<GameObject*>& allObjects, PrefabCreationKey);
 	GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects, PrefabCreationKey);
-	GameObject(const GameObject& other);
 
 	static GameObject* Instantiate(const Vector& size);
 	static GameObject* Instantiate(const Vector& size, const Vector& position);
+	static GameObject* Instantiate(const GameObject& other);
+	static void Destroy(GameObject* game_object);
 
 	void AddComponent(IUpdateable* component);
 	// Znajduje komponent okreœlonego typu
@@ -99,6 +100,7 @@ protected:
 	GameObject(const std::list<GameObject*>& allObjects);
 	GameObject(const Vector& size, const std::list<GameObject*>& allObjects);
 	GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects);
+	GameObject(const GameObject& other);
 
 protected:
 	std::list<IUpdateable*> components;

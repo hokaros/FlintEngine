@@ -19,9 +19,7 @@ bool Firearm::TryShoot() {
 		return false;
 
 	// Stworzenie pocisku
-	GameObject* bullet = new GameObject(bulletPrefab);
-
-	ObjectManager::Main()->AddObject(bullet);
+	GameObject* bullet = GameObject::Instantiate(bulletPrefab);
 
 	// Ustawienie pozycji
 	Vector relativePos = Vector(Direction::EAST) * gameObject.GetSize().x;

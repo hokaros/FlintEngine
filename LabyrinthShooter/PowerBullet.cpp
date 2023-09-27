@@ -24,6 +24,6 @@ void PowerBullet::OnCollision(GameObject& collider) {
 void PowerBullet::DecreaseHealth() {
 	health--;
 	if (health <= 0) {
-		ObjectManager::Main()->DestroyObject(&gameObject);
+		GameObject::Destroy(&gameObject);
 	}
 }

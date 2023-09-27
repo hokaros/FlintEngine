@@ -90,6 +90,19 @@ GameObject* GameObject::Instantiate(const Vector& size, const Vector& position)
 	return game_object;
 }
 
+GameObject* GameObject::Instantiate(const GameObject& other)
+{
+	GameObject* game_object = new GameObject(other);
+	ObjectManager::Main()->AddObject(game_object);
+
+	return game_object;
+}
+
+void GameObject::Destroy(GameObject* game_object)
+{
+	ObjectManager::Main()->DestroyObject(game_object);
+}
+
 GameObject::~GameObject() {
 	for (IUpdateable* component : components) {
 		delete component;

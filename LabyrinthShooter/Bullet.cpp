@@ -26,7 +26,7 @@ void Bullet::OnCollision(GameObject& collider) {
 		onPlayerCollision(collider, damage);
 	}
 
-	ObjectManager::Main()->DestroyObject(&gameObject); // zniszczenie pocisku
+	GameObject::Destroy(&gameObject); // zniszczenie pocisku
 }
 
 ObjectComponent* Bullet::Copy(GameObject& newOwner) {
