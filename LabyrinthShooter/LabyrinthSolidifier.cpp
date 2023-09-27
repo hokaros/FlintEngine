@@ -3,12 +3,11 @@
 LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	int wallWidth, int wallLength,
 	int xCount, int yCount,
-	const std::list<GameObject*>& allObjects,
 	double changeTime,
 	bool shouldChange)
 	: position(pos), wallWidth(wallWidth), wallLength(wallLength),
 	xCount(xCount), yCount(yCount),
-	labyrinth(xCount, yCount), allObjects(allObjects),
+	labyrinth(xCount, yCount),
 	changeTime(changeTime),
 	shouldChange(shouldChange),
 	colliderMemory(LabyrinthSize(wallWidth, wallLength, xCount, yCount).x + pos.x, LabyrinthSize(wallWidth, wallLength, xCount, yCount).y + pos.y)

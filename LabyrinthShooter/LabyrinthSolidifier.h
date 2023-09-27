@@ -19,7 +19,6 @@ public:
 	LabyrinthSolidifier(const Vector& pos,
 		int wallWidth, int wallLength,
 		int xCount, int yCount,
-		const std::list<GameObject*>& allObjects,
 		double changeTime,
 		bool shouldChange = false
 	);
@@ -52,7 +51,6 @@ private:
 	Labirynt labyrinth;
 	ColliderMemory colliderMemory;
 
-	const std::list<GameObject*>& allObjects;
 	GameObject** walls; // œciany podzielone na pionowe i poziome
 	GameObject** border; // czêœci obwódki
 	int borderCount;

@@ -41,7 +41,7 @@ bool Game::Run() {
 	}
 
 	Vector mapStart(10, 10);
-	lab = new LabyrinthSolidifier(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, objectManager.GetAllObjects(), LAB_TIME, true);
+	lab = new LabyrinthSolidifier(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, LAB_TIME, true);
 	for (int i = 0; i < lab->WallsCount(); i++) {
 		objectManager.AddUndestroyable(lab->GetWalls()[i]);
 	}
