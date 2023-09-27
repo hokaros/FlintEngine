@@ -1,8 +1,8 @@
 #pragma once
-#include "../FlatEngine/Window.h"
-#include "../FlatEngine/Timer.h"
-#include "../FlatEngine/Draw.h"
-#include "../FlatEngine/ObjectManager.h"
+#include "Window.h"
+#include "Timer.h"
+#include "Draw.h"
+#include "ObjectManager.h"
 
 
 class GameBase

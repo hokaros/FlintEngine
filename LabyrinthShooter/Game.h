@@ -1,20 +1,17 @@
 #pragma once
 #include <list>
 
-#include "../FlatEngine/Vector.h"
-#include "../FlatEngine/GameObject.h"
 #include "../FlatEngine/RectangleRenderer.h"
 #include "../FlatEngine/SpriteRenderer.h"
 #include "PlayerController.h"
 #include "Cage.h"
-#include "../FlatEngine/Window.h"
 #include "LabyrinthSolidifier.h"
 #include "PowerBullet.h"
 #include "PlayerEquipment.h"
 #include "Firearm.h"
 #include "Health.h"
 
-#include "GameBase.h"
+#include "../FlatEngine/GameBase.h"
 
 // Czas, co jaki zmienia siê labirynt
 #define LAB_TIME 2

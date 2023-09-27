@@ -1,6 +1,6 @@
 #include "GameBase.h"
 
-#include "../FlatEngine/InputController.h"
+#include "InputController.h"
 
 GameBase::GameBase(Window* window)
 	: window(window)
