@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game(Window* window, GameStartInfo&& gameInfo)
-	: window(window)
+	: GameBase(window)
 	, basicBullet(Vector(4, 4), objectManager.GetAllObjects(), {}) // uwa¿aæ przy zmienianiu objectManagera
 	, superBullet(Vector(10, 10), objectManager.GetAllObjects(), {})
 	, startInfo(std::move(gameInfo)) {
@@ -28,79 +28,6 @@ void Game::LoadStartingObjects() {
 	std::lock_guard<std::mutex> lock(playersMutex);
 
 	m_Player = CreatePlayer(startInfo.GetPlayerPosition());
-}
-
-bool Game::Run() {
-	InputController* input = InputController::Main();
-
-	int black = 0;
-	SDL_Surface* screen = NULL;
-	if (window != NULL) {
-		screen = window->GetScreen();
-		black = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
-	}
-
-	Vector mapStart(10, 10);
-	lab = new LabyrinthSolidifier(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, LAB_TIME, true);
-	for (int i = 0; i < lab->WallsCount(); i++) {
-		objectManager.AddUndestroyable(lab->GetWalls()[i]);
-	}
-	for (int i = 0; i < lab->BorderElements(); i++) {
-		objectManager.AddUndestroyable(lab->GetBorder()[i]);
-	}
-	//lab->onChanged = [this](bool* newWalls) {onLabChanged(newWalls); };
-
-	LoadStartingObjects();
-
-	int quit = 0;
-
-	timer.NextFrame();
-
-	for (GameObject* go : objectManager.GetAllObjects()) {
-		go->Start();
-	}
-
-	SetRunning(true);
-	// Pêtla gry
-	while (!quit) {
-		// Nowa klatka
-		timer.NextFrame();
-
-		if (input != NULL && !input->Update())
-			return false;
-
-		if (input != NULL && input->PressedThisFrame(SDLK_ESCAPE))
-			quit = 1;
-
-		//generowanie t³a
-		if(screen != NULL)
-			SDL_FillRect(screen, NULL, black);
-
-		// Wywo³anie zleconych akcji
-		InvokePostponed();
-
-		// Zaktualizowanie stanu gry
-		for (GameObject* go : objectManager.GetAllObjects()) {
-			go->Update();
-		}
-		lab->Update();
-
-		// Renderowanie obiektów
-		if (window != NULL) {
-			Render();
-			window->Render();
-		}
-
-		objectManager.DisposeDestroyed();
-	}
-
-	SetRunning(false);
-	delete lab;
-	return true;
-}
-
-void Game::Clear() {
-	objectManager.Clear();
 }
 
 GameObject* Game::CreatePlayer(const Vector& position) {
@@ -181,20 +108,6 @@ LabyrinthSolidifier* Game::GetLab() const {
 	return lab;
 }
 
-void Game::InvokeOnNextFrame(function<void()> fun) {
-	std::lock_guard<std::mutex> lock(invokesMutex);
-	invokes.push_back(std::move(fun));
-}
-
-void Game::InvokePostponed() {
-	std::lock_guard<std::mutex> lock(invokesMutex);
-	for (function<void()> fun : invokes) {
-		if (fun)
-			fun();
-	}
-	invokes.clear();
-}
-
 void Game::OnControlledDirectionChanged(const Vector& newDir) {
 	if (onControlledDirectionChanged)
 		onControlledDirectionChanged(newDir);
@@ -206,39 +119,50 @@ void Game::OnBulletPlayerHit(GameObject& player, int dmg) {
 	player.FindComponent<Health>()->Hurt(dmg);
 }
 
-bool Game::IsRunning() {
-	std::lock_guard<std::mutex> lock(metadataMutex);
-	return isRunning;
-}
-
-void Game::SetRunning(bool running) {
-	std::lock_guard<std::mutex> lock(metadataMutex);
-	isRunning = running;
-}
-
-void Game::Render() {
-	for (GameObject* go : objectManager.GetAllObjects()) {
-		if (go->renderUnseen) {
-			go->RenderUpdate();
-			continue;
-		}
-
-		// Wyœwietlanie tylko, jeœli obiekt jest widziany przez obecnego gracza
-		if ((go->GetPosition() - m_Player->GetPosition()).LengthSquared() > PLAYER_SIGHT * PLAYER_SIGHT)
-			continue;  // zbyt daleko
-
-		// Sprawdzenie, czy œciana stoi na drodze
-		bool canSee = !lab->GetColliderMemory().Raycast(
-			m_Player->GetMiddle(),
-			go->GetMiddle(),
-			go
-		);
-		if (canSee) {
-			go->RenderUpdate();
-		}
+void Game::PreRun()
+{
+	Vector mapStart(10, 10);
+	lab = new LabyrinthSolidifier(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, LAB_TIME, true);
+	for (int i = 0; i < lab->WallsCount(); i++) {
+		objectManager.AddUndestroyable(lab->GetWalls()[i]);
 	}
+	for (int i = 0; i < lab->BorderElements(); i++) {
+		objectManager.AddUndestroyable(lab->GetBorder()[i]);
+	}
+
+	//lab->onChanged = [this](bool* newWalls) {onLabChanged(newWalls); };
+
+	LoadStartingObjects();
+}
+
+void Game::PostRun()
+{
+	delete lab;
+}
+
+void Game::PostRender()
+{
 	// Renderowanie nak³adek UI
 	healthStats->Render();
+}
+
+void Game::PostObjectsUpdate()
+{
+	lab->Update();
+}
+
+bool Game::ShouldRender(GameObject* go)
+{
+	// Wyœwietlanie tylko, jeœli obiekt jest widziany przez obecnego gracza
+	if ((go->GetPosition() - m_Player->GetPosition()).LengthSquared() > PLAYER_SIGHT * PLAYER_SIGHT)
+		return false;  // zbyt daleko
+
+	// Sprawdzenie, czy œciana stoi na drodze
+	return !lab->GetColliderMemory().Raycast(
+		m_Player->GetMiddle(),
+		go->GetMiddle(),
+		go
+	);
 }
 
 

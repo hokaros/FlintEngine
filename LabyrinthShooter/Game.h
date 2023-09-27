@@ -1,9 +1,6 @@
 #pragma once
 #include <list>
 
-#include "../FlatEngine/Timer.h"
-#include "../FlatEngine/Draw.h"
-#include "../FlatEngine/InputController.h"
 #include "../FlatEngine/Vector.h"
 #include "../FlatEngine/GameObject.h"
 #include "../FlatEngine/RectangleRenderer.h"
@@ -12,11 +9,12 @@
 #include "Cage.h"
 #include "../FlatEngine/Window.h"
 #include "LabyrinthSolidifier.h"
-#include "../FlatEngine/ObjectManager.h"
 #include "PowerBullet.h"
 #include "PlayerEquipment.h"
 #include "Firearm.h"
 #include "Health.h"
+
+#include "GameBase.h"
 
 // Czas, co jaki zmienia siê labirynt
 #define LAB_TIME 2
@@ -64,6 +62,7 @@ private:
 
 
 class Game
+	: public GameBase
 {
 public:
 	function<void(const Vector&)> onControlledDirectionChanged;
@@ -76,28 +75,15 @@ public:
 public:
 	Game(Window* window, GameStartInfo&& gameInfo);
 
-	// G³ówna pêtla gry. Zwraca fa³sz, jeœli w trakcie u¿ytkownik zamknie okno
-	bool Run();
-	bool IsRunning();
-
-	// Usuwa wszystkie obiekty
-	void Clear();
-
-	void InvokeOnNextFrame(function<void()> fun);
-
 	GameObject* GetPlayer();
 
 	LabyrinthSolidifier* GetLab() const;
 
 private:
-	Window* window = NULL;
-	Timer timer;
-	ObjectManager objectManager;
 	GameObject* m_Player = NULL;
 	LabyrinthSolidifier* lab;
 
 	GameStartInfo startInfo;
-	bool isRunning = false;
 
 	GameBitmaps* bitmaps = NULL;
 
@@ -105,25 +91,19 @@ private:
 
 	GameObject basicBullet; // TODO: przenieœæ prefaby do osobnej struktury
 	GameObject superBullet;
-
-	// Lista funkcji do wykonania w najbli¿szej klatce
-	std::list<function<void()>> invokes;
-
-	std::mutex invokesMutex;
 	std::mutex playersMutex;
-	std::mutex metadataMutex;
 
 private:
 	void LoadStartingObjects();
-	void SetRunning(bool running);
 
 	GameObject* CreatePlayer(const Vector& position);
-
-	void InvokePostponed();
 
 	void OnControlledDirectionChanged(const Vector& newDir);
 	void OnBulletPlayerHit(GameObject& player, int dmg);
 
-	void Render();
-
+	virtual void PreRun() override;
+	virtual void PostRun() override;
+	virtual void PostRender() override;
+	virtual void PostObjectsUpdate() override;
+	virtual bool ShouldRender(GameObject* gameObject) override;
 };
