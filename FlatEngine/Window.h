@@ -35,19 +35,19 @@ public:
 
 	static Window* Main();
 private:
-	int width;
-	int height;
+	int m_Width;
+	int m_Height;
 
-	SDL_Surface* screen = NULL;
-	SDL_Surface* charset = NULL;
-	SDL_Surface* bigCharset = NULL;
-	SDL_Texture* scrtex = NULL;
-	SDL_Window* window = NULL;
-	SDL_Renderer* renderer = NULL;
+	SDL_Surface* m_Screen = nullptr;
+	SDL_Surface* m_Charset = nullptr;
+	SDL_Surface* m_BigCharset = nullptr;
+	SDL_Texture* m_Scrtex = nullptr;
+	SDL_Window* m_Window = nullptr;
+	SDL_Renderer* m_Renderer = nullptr;
 
-	std::list<TextureRenderArgs> renderTextures;
+	std::list<TextureRenderArgs> m_RenderTextures;
 
-	static Window* mainWindow;
+	static Window* s_MainWindow;
 
 private:
 	bool LoadCharsets();
