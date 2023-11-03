@@ -4,7 +4,6 @@
 Firearm::Firearm(GameObject& owner, const GameObject& bulletPrefab, float reloadTime, FirearmType type)
 	: ObjectComponent(owner), bulletPrefab(bulletPrefab), reloadTime(reloadTime), type(type) {
 
-	gameObject.collisionEnabled = false;
 }
 
 void Firearm::Update() {
@@ -33,7 +32,6 @@ bool Firearm::TryShoot() {
 
 	// Zachowanie po kolizji
 	b->onPlayerCollision = onPlayerCollision;
-	bullet->bumping = false;
 
 	// Aktualizacja info o prze³adowaniu
 	timeSinceLastShot = 0.0f;

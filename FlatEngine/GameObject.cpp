@@ -126,8 +126,6 @@ void GameObject::Update() {
 	for (IUpdateable* component : components) {
 		component->Update();
 	}
-
-	HandleCollisions();
 }
 
 void GameObject::RenderUpdate() {
@@ -144,6 +142,23 @@ void GameObject::Start() {
 
 	for (IUpdateable* component : components) {
 		component->Start();
+	}
+}
+
+void GameObject::Awake()
+{
+	if (!isEnabled)
+		return;
+
+	for (IUpdateable* component : components) {
+		component->Awake();
+	}
+}
+
+void GameObject::OnDestroy()
+{
+	for (IUpdateable* component : components) {
+		component->OnDestroy();
 	}
 }
 
@@ -279,37 +294,6 @@ GameObject* GameObject::GetParent() const {
 	return parent;
 }
 
-bool GameObject::Collides(const GameObject& other) const {
-	if (!collisionEnabled || !other.collisionEnabled)
-		return false;
-
-	// Rozpatrzenie kolizji odwrotnych (mog¹ siê znosiæ)
-	bool inverse = false;
-	if (insideOutCollision)
-		inverse = !inverse;
-	if (other.insideOutCollision)
-		inverse = !inverse;
-
-	bool intersect = DoesIntersect(other);
-	if (inverse) {
-		if (IsInside(*this, other))
-			return false;  // wewn¹trz
-		if (intersect)
-			return true;  // na zewn¹trz
-	}
-
-	return intersect;
-}
-
-bool GameObject::CollidesWithAny() const {
-	for (GameObject* go : allObjects) {
-		if (go != this && Collides(*go))
-			return true;
-	}
-
-	return false;
-}
-
 std::vector<VectorInt>* GameObject::GetPixels() const {
 	std::vector<VectorInt>* pixels = new std::vector<VectorInt>();
 
@@ -349,125 +333,4 @@ bool GameObject::IsEnabled() const {
 
 void GameObject::SubscribeDestroyed(function<void(GameObject*)> handler) {
 	onDestroyedChanged.push_back(handler);
-}
-
-bool GameObject::DoesIntersect(const GameObject& other) const {
-	float yMin1 = position.y;
-	float yMax1 = yMin1 + size.y;
-	float yMin2 = other.position.y;
-	float yMax2 = yMin2 + other.size.y;
-
-	if (!DoLinesIntersect(yMin1, yMax1, yMin2, yMax2))
-		return false;
-
-	float xMin1 = position.x;
-	float xMax1 = xMin1 + size.x;
-	float xMin2 = other.position.x;
-	float xMax2 = xMin2 + other.size.x;
-
-	if (!DoLinesIntersect(xMin1, xMax1, xMin2, xMax2))
-		return false;
-
-	return true;
-}
-
-bool GameObject::IsInside(const GameObject& go1, const GameObject& go2) {
-	float yMin1 = go1.position.y;
-	float yMax1 = yMin1 + go1.size.y;
-	float yMin2 = go2.position.y;
-	float yMax2 = yMin2 + go2.size.y;
-
-	if (!IsLineInside(yMin1, yMax1, yMin2, yMax2))
-		return false;
-
-
-	float xMin1 = go1.position.x;
-	float xMax1 = xMin1 + go1.size.x;
-	float xMin2 = go2.position.x;
-	float xMax2 = xMin2 + go2.size.x;
-
-	if (!IsLineInside(xMin1, xMax1, xMin2, xMax2))
-		return false;
-
-	return true;
-}
-
-Rect GameObject::GetIntersection(const GameObject& other) const {
-	float yMin1 = position.y;
-	float yMax1 = yMin1 + size.y;
-	float yMin2 = other.position.y;
-	float yMax2 = yMin2 + other.size.y;
-
-	Vector yIntersection = LinesIntersection(yMin1, yMax1, yMin2, yMax2);
-
-	float xMin1 = position.x;
-	float xMax1 = xMin1 + size.x;
-	float xMin2 = other.position.x;
-	float xMax2 = xMin2 + other.size.x;
-
-	Vector xIntersection = LinesIntersection(xMin1, xMax1, xMin2, xMax2);
-
-	Vector size(
-		xIntersection.y - xIntersection.x,
-		yIntersection.y - yIntersection.x
-	);
-	return Rect(
-		Vector(xIntersection.x, yIntersection.x),
-		size
-	);
-}
-
-bool GameObject::IsLineInside(float min1, float max1, float min2, float max2) {
-	return (min1 >= min2 && max1 <= max2)
-		|| (min2 >= min1 && max2 <= max1);
-}
-bool GameObject::DoLinesIntersect(float min1, float max1, float min2, float max2) {
-	return (min1 >= min2 && min1 <= max2)
-		|| (max1 >= min2 && max1 <= max2)
-		|| (min2 >= min1 && min2 <= max1)
-		|| (max2 >= min1 && max2 <= max1);
-}
-
-Vector GameObject::LinesIntersection(float min1, float max1, float min2, float max2) {
-	if (!DoLinesIntersect(min1, max1, min2, max2))
-		return Vector(0, 0);
-
-	float start = (min1 < min2) ? min2 : min1;
-	float end = (max1 < max2) ? max1 : max2;
-	return Vector(start, end);
-}
-
-void GameObject::HandleCollisions() {
-	for (GameObject* go : allObjects) {
-		if (go == this || !go->isEnabled)
-			continue;
-
-		if (Collides(*go)) {
-			if (onCollision) {
-				onCollision(*go);
-			}
-			if (go->onCollision) {
-				go->onCollision(*this);
-			}
-
-			if (!go->isStatic && go->bumping && bumping) {
-				BumpOut(*go);
-			}
-		}
-	}
-}
-
-void GameObject::BumpOut(GameObject& other) {
-	// Tylko jeœli koliduje z other
-	Rect intersection = GetIntersection(other);
-
-	Vector outVector = other.GetMiddle() - intersection.GetMiddle();
-	if (outVector.Length() == 0) {
-		outVector = Vector(0, -FLT_EPSILON);
-	}
-
-	float speed = BUMPOUT_SPEED / outVector.Length(); // im bli¿ej, tym bardziej odpycha
-	outVector.Normalize();
-	Vector dPos = outVector * speed * Timer::Main()->GetDeltaTime();
-	other.Translate(dPos);
 }

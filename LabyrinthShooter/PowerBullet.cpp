@@ -3,16 +3,21 @@
 
 PowerBullet::PowerBullet(GameObject& owner, float speed, int damage)
 	: Bullet(owner, speed, damage), health(POWER_BULLET_HEALTH) {
-	gameObject.isStatic = true;
+
+}
+
+void PowerBullet::Awake()
+{
+	Bullet::Awake();
 }
 
 ObjectComponent* PowerBullet::Copy(GameObject& newOwner) {
 	return new PowerBullet(newOwner, speed, damage);
 }
 
-void PowerBullet::OnCollision(GameObject& collider) {
-	if (collider.isDestroyable) {
-		collider.SetDestroyed(true);
+void PowerBullet::OnCollision(BoxCollider& collider) {
+	if (collider.GetOwner().isDestroyable) {
+		collider.GetOwner().SetDestroyed(true);
 
 		DecreaseHealth();
 	}

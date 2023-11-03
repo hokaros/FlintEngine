@@ -1,14 +1,21 @@
 #include "Bullet.h"
 #include "../FlatEngine/ObjectManager.h"
+#include "../FlatEngine/utility.h"
 
 Bullet::Bullet(GameObject& owner, float speed, int damage)
 	: ObjectComponent(owner), speed(speed), direction(Direction::EAST), damage(damage) {
 
-	gameObject.isStatic = true;
+}
 
-	owner.onCollision =
-		[this](GameObject& collider) {
-		OnCollision(collider);
+void Bullet::Awake()
+{
+	BoxCollider* collider = gameObject.FindComponent<BoxCollider>();
+	collider->m_IsStatic = true;
+	collider->m_Bumping = false;
+
+	collider->onCollision =
+		[this](BoxCollider& c) {
+		OnCollision(c);
 	};
 }
 
@@ -18,12 +25,13 @@ void Bullet::Update() {
 	);
 }
 
-void Bullet::OnCollision(GameObject& collider) {
+void Bullet::OnCollision(BoxCollider& collider) {
+	GameObject& other_game_object = collider.GetOwner();
 	// Obs³uga trafienia gracza
-	Health* playerHealth = collider.FindComponent<Health>();
+	Health* playerHealth = other_game_object.FindComponent<Health>();
 	if (playerHealth != NULL && onPlayerCollision) {
 		printf("Bullet collided with a player\n");
-		onPlayerCollision(collider, damage);
+		onPlayerCollision(other_game_object, damage);
 	}
 
 	GameObject::Destroy(&gameObject); // zniszczenie pocisku

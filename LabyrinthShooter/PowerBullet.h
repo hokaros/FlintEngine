@@ -9,9 +9,10 @@ class PowerBullet :
 public:
 	PowerBullet(GameObject& owner, float speed, int damage);
 
+	void Awake() override;
 	virtual ObjectComponent* Copy(GameObject& newOwner) override;
 protected:
-	virtual void OnCollision(GameObject& collider) override;
+	virtual void OnCollision(BoxCollider& collider) override;
 private:
 	int health;
 private:

@@ -14,6 +14,7 @@ public:
 	void DestroyObject(GameObject* object, bool detach=true);
 
 	void DisposeDestroyed();
+	void ActivateNewObjects();
 
 	const std::list<GameObject*>& GetAllObjects() const;
 
@@ -27,6 +28,7 @@ private:
 	std::list<GameObject*> allObjects;
 	std::list<GameObject*> destroyables;
 	std::list<GameObject*> destroyed;
+	std::list<GameObject*> newObjects;
 
 	static ObjectManager* main;
 };

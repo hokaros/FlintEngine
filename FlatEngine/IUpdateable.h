@@ -7,7 +7,10 @@ public:
 	virtual void RenderUpdate() {}
 
 	// Wywo³ywane przed rozpoczêciem gry
+	virtual void Awake() {}
 	virtual void Start() {}
+
+	virtual void OnDestroy() {}
 
 	virtual IUpdateable* Copy() = 0;
 };

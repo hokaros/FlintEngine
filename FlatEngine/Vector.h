@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include <iostream>
 
 enum class Direction { NORTH, SOUTH, EAST, WEST };
 
@@ -26,10 +27,23 @@ public:
     float x;
     float y;
 public:
-    Vector();
-    Vector(float x, float y);
+    constexpr Vector()
+        : x(0)
+        , y(0) 
+    {}
+
+    constexpr Vector(float x, float y)
+        : x(x)
+        , y(y) 
+    {}
+
+    constexpr Vector(const VectorInt& other)
+        : x(other.x)
+        , y(other.y) 
+    {}
+
     Vector(Direction direction);
-    Vector(const VectorInt& other);
+
     // Sprowadza do d³ugoœci 1
     void Normalize();
     // Sprawia, ¿e x <= y
@@ -46,9 +60,13 @@ public:
     friend Vector operator-(const Vector& left, const Vector& right);
     friend Vector operator*(const Vector& left, float multiplier);
     friend Vector operator/(const Vector& left, float dividor);
+    friend std::ostream& operator<<(std::ostream& ostr, const Vector& v);
 
     // K¹t w radianach miêdzy dwoma wektorami
     static double GetAngle(const Vector& v1, const Vector& v2);
+
+    // Sta³e
+    static const Vector ZERO;
 };
 
 struct Rect 
@@ -60,4 +78,5 @@ public:
     Rect(const Vector& position, const Vector& size);
 
     Vector GetMiddle() const;
+    float CalculateArea() const;
 };

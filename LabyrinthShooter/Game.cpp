@@ -1,9 +1,12 @@
 #include "Game.h"
 
+Vector Game::s_BasicBulletSize = Vector(4, 4);
+Vector Game::s_SuperBulletSize = Vector(10, 10);
+
 Game::Game(Window* window, GameStartInfo&& gameInfo)
 	: GameBase(window)
-	, basicBullet(Vector(4, 4), objectManager.GetAllObjects(), {}) // uwa¿aæ przy zmienianiu objectManagera
-	, superBullet(Vector(10, 10), objectManager.GetAllObjects(), {})
+	, basicBullet(s_BasicBulletSize, objectManager.GetAllObjects(), {}) // uwa¿aæ przy zmienianiu objectManagera
+	, superBullet(s_SuperBulletSize, objectManager.GetAllObjects(), {})
 	, startInfo(std::move(gameInfo)) {
 
 
@@ -21,7 +24,10 @@ Game::Game(Window* window, GameStartInfo&& gameInfo)
 	}
 
 	basicBullet.AddComponent(new Bullet(basicBullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));
+	basicBullet.AddComponent(new BoxCollider(basicBullet, Vector::ZERO, basicBullet.GetSize()));
+
 	superBullet.AddComponent(new PowerBullet(superBullet, BULLET_SUPER_SPEED, BULLET_SUPER_DAMAGE));
+	superBullet.AddComponent(new BoxCollider(superBullet, Vector::ZERO, superBullet.GetSize()));
 }
 
 void Game::LoadStartingObjects() {
@@ -33,9 +39,11 @@ void Game::LoadStartingObjects() {
 GameObject* Game::CreatePlayer(const Vector& position) {
 
 	// Obiekt gracza
-	GameObject* player = GameObject::Instantiate(Vector(20, 20), position);
+	Vector player_size = Vector(20, 20);
+	GameObject* player = GameObject::Instantiate(player_size, position);
 	ConstantMover* mover = new ConstantMover(*player, PLAYER_SPEED);
 	player->AddComponent(mover);
+	player->AddComponent(new BoxCollider(*player, Vector::ZERO, player_size));
 
 	// Broñ
 	GameObject* basicWeapon = GameObject::Instantiate(

@@ -23,6 +23,7 @@ ObjectManager::~ObjectManager() {
 }
 
 void ObjectManager::AddObject(GameObject* gameObject) {
+	newObjects.push_back(gameObject);
 	allObjects.push_back(gameObject);
 
 	destroyables.push_back(gameObject);
@@ -42,6 +43,8 @@ void ObjectManager::DestroyObject(GameObject* gameObject, bool detach) {
 		if (destroyedObj == gameObject)
 			return;  // ju¿ usuniêty
 	}
+
+	gameObject->OnDestroy();
 
 	destroyed.push_back(gameObject); // zakolejkowanie do usuniêcia
 	gameObject->SetEnabled(false);
@@ -65,6 +68,20 @@ void ObjectManager::DisposeDestroyed() {
 	}
 
 	destroyed.clear();
+}
+
+void ObjectManager::ActivateNewObjects()
+{
+	for (GameObject* go : newObjects)
+	{
+		go->Awake();
+	}
+	for (GameObject* go : newObjects)
+	{
+		go->Start();
+	}
+
+	newObjects.clear();
 }
 
 const std::list<GameObject*>& ObjectManager::GetAllObjects() const {

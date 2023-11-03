@@ -1,5 +1,6 @@
 #pragma once
 #include "../FlatEngine/ObjectComponent.h"
+#include "../FlatEngine/BoxCollider.h"
 #include "Health.h"
 
 // Obiekt biegn¹cy przed siebie do momentu kolizji
@@ -11,6 +12,7 @@ public:
 
 public:
 	Bullet(GameObject& owner, float speed, int damage);
+	void Awake() override;
 	void Update() override;
 
 	void SetDirection(const Vector& direction);
@@ -20,7 +22,7 @@ protected:
 	float speed;
 	int damage;
 protected:
-	virtual void OnCollision(GameObject& collider);
+	virtual void OnCollision(BoxCollider& collider);
 private:
 	Vector direction;
 };

@@ -3,6 +3,8 @@
 #include "Timer.h"
 #include "Draw.h"
 #include "ObjectManager.h"
+#include "PhysicsSystem.h"
+#include "DebugRenderer.h"
 
 
 class GameBase
@@ -20,9 +22,11 @@ public:
 	void InvokeOnNextFrame(function<void()> fun);
 
 protected:
-	Window* window = NULL;
+	Window* window = nullptr;
 	Timer timer;
 	ObjectManager objectManager;
+	PhysicsSystem physicsSystem;
+	DebugRenderer* m_DebugRenderer = nullptr;
 
 	bool isRunning = false;
 
@@ -34,6 +38,7 @@ protected:
 
 private:
 	void Render();
+	void DebugRender();
 
 	void InvokePostponed();
 

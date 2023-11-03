@@ -24,11 +24,7 @@ private:
 class GameObject
 {
 public:
-	bool bumping = true;
 	bool renderUnseen = false;
-	// Czy obiekt ignoruje dzia³aj¹ce na niego si³y
-	bool isStatic = false;
-	bool collisionEnabled = true;
 	// Czy obiekt mo¿e byæ niszczony przez pociski
 	bool isDestroyable = false;
 
@@ -61,14 +57,15 @@ public:
 	void RenderUpdate();
 	// Na pocz¹tku gry
 	void Start();
+	// Przed Start()
+	void Awake();
+	void OnDestroy();
 
 	const Vector& GetPosition() const;
 	const Vector& GetSize() const;
 	double GetRotation() const;
 	Vector LookingDirection() const;
 	Vector GetMiddle() const;
-	bool Collides(const GameObject& other) const;
-	bool CollidesWithAny() const;
 	// Piksele, w których ten obiekt ma collidera
 	std::vector<VectorInt>* GetPixels() const;
 
@@ -121,21 +118,7 @@ private:
 
 	std::list<function<void(GameObject*)>> onDestroyedChanged;
 
-	const std::list<GameObject*>& allObjects;
-
-private:
-	void HandleCollisions();
-	// Wypycha inny obiekt podczas kolizji
-	void BumpOut(GameObject& other);
-
-	bool DoesIntersect(const GameObject& other) const;
-	static bool IsInside(const GameObject& go1, const GameObject& go2);
-	Rect GetIntersection(const GameObject& other) const;
-
-	/***** Operacje na jednowymiarowych liniach ******/
-	static bool IsLineInside(float min1, float max1, float min2, float max2);
-	static bool DoLinesIntersect(float min1, float max1, float min2, float max2);
-	static Vector LinesIntersection(float min1, float max1, float min2, float max2);
+	const std::list<GameObject*>& allObjects; // TODO: we won't need it if we implement ECS
 };
 
 

@@ -1,20 +1,7 @@
 #include "Vector.h"
 #include <SDL_stdinc.h>
 
-Vector::Vector()
-	: x(0), y(0) {
-
-}
-
-Vector::Vector(float x, float y)
-	: x(x), y(y) {
-
-}
-
-Vector::Vector(const VectorInt& other)
-	: x(other.x), y(other.y) {
-
-}
+const Vector Vector::ZERO = Vector(0.0f, 0.0f);
 
 Vector::Vector(Direction direction) : x(0), y(0) {
 	switch (direction) {
@@ -116,6 +103,12 @@ Vector operator/(const Vector& left, float dividor) {
 	return result;
 }
 
+std::ostream& operator<<(std::ostream& ostr, const Vector& v)
+{
+	ostr << "(" << v.x << "; " << v.y << ")";
+	return ostr;
+}
+
 double Vector::GetAngle(const Vector& v1, const Vector& v2) {
 	return v1.GetAngle() - v2.GetAngle();
 }
@@ -168,4 +161,9 @@ Rect::Rect(const Vector& position, const Vector& size)
 
 Vector Rect::GetMiddle() const {
 	return pos + size / 2;
+}
+
+float Rect::CalculateArea() const
+{
+	return size.x * size.y;
 }

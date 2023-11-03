@@ -7,7 +7,7 @@ RectangleRenderer::RectangleRenderer(GameObject& owner, SDL_Surface* screen, Uin
 
 void RectangleRenderer::Render(SDL_Surface* screen) {
 	Vector size = gameObject.GetSize();
-	DrawRectangle(
+	draw::DrawRectangle(
 		screen,
 		gameObject.GetPosition().x,
 		gameObject.GetPosition().y,

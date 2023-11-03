@@ -1,4 +1,5 @@
 #include "LabyrinthSolidifier.h"
+#include "../FlatEngine/BoxCollider.h"
 
 LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	int wallWidth, int wallLength,
@@ -97,6 +98,7 @@ void LabyrinthSolidifier::PlaceWalls() {
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
 				wall->SetSize(verticalWall);
+				wall->FindComponent<BoxCollider>()->SetSize(verticalWall);
 				wall->SetPosition(Vector(x * wallLength, y * wallLength) + position);
 			}
 		}
@@ -111,6 +113,7 @@ void LabyrinthSolidifier::PlaceWalls() {
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
 				wall->SetSize(horizontalWall);
+				wall->FindComponent<BoxCollider>()->SetSize(horizontalWall);
 				wall->SetPosition(Vector(x * wallLength, y * wallLength) + position);
 			}
 		}
@@ -146,7 +149,9 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, int color) {
 	GameObject* wall = GameObject::Instantiate(size);
 
 	wall->AddComponent(new Regenerable(*wall, WALL_REGEN));
-	wall->isStatic = true;
+	BoxCollider* collider = new BoxCollider(*wall, Vector::ZERO, size);
+	collider->m_IsStatic = true;
+	wall->AddComponent(collider);
 
 	if (Window::Main() != NULL)
 		wall->SetRenderer(new RectangleRenderer(*wall, Window::Main()->GetScreen(), color, color));

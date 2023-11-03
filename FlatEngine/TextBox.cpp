@@ -7,7 +7,7 @@ TextBox::TextBox(const SDL_Rect& rect, Uint32 outline, Uint32 fill, int fontSize
 
 void TextBox::Draw() {
 	// Ramka
-	DrawRectangle(
+	draw::DrawRectangle(
 		Window::Main()->GetScreen(),
 		rect.x,
 		rect.y,

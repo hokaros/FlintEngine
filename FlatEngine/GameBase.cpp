@@ -4,6 +4,7 @@
 
 GameBase::GameBase(Window* window)
 	: window(window)
+	, physicsSystem({})
 {
 }
 
@@ -18,19 +19,18 @@ bool GameBase::Run()
 		black = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
 	}
 
+	m_DebugRenderer = new DebugRenderer(screen);
+
 	PreRun(); // TODO: move to the start of this function
 
 	int quit = 0;
 
 	timer.NextFrame();
 
-	for (GameObject* go : objectManager.GetAllObjects()) {
-		go->Start();
-	}
-
 	SetRunning(true);
 	// Pêtla gry
 	while (!quit) {
+		objectManager.ActivateNewObjects();
 		// Nowa klatka
 		timer.NextFrame();
 
@@ -53,9 +53,12 @@ bool GameBase::Run()
 		}
 		PostObjectsUpdate();
 
+		physicsSystem.Update();
+
 		// Renderowanie obiektów
 		if (window != NULL) {
 			Render();
+			DebugRender();
 			window->Render();
 		}
 
@@ -64,6 +67,8 @@ bool GameBase::Run()
 
 	SetRunning(false);
 	PostRun();
+
+	delete m_DebugRenderer;
 	return true;
 }
 
@@ -101,6 +106,11 @@ void GameBase::Render()
 	}
 
 	PostRender();
+}
+
+void GameBase::DebugRender()
+{
+	physicsSystem.DebugRender();
 }
 
 void GameBase::InvokePostponed()

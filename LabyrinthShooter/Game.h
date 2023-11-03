@@ -90,6 +90,9 @@ private:
 	GameObject superBullet;
 	std::mutex playersMutex;
 
+	static Vector s_BasicBulletSize;
+	static Vector s_SuperBulletSize;
+
 private:
 	void LoadStartingObjects();
 
