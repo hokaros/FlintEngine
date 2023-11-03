@@ -100,26 +100,13 @@ void PhysicsSystem::Discollide(BoxCollider& col1, BoxCollider& col2)
 	Vector to_col2 = col2.GetWorldMiddle() - intersection_mid;
 	clamp_to_half_size(to_col2, intersection.size);
 
-	if (col1.m_IsStatic)
+	if (!col1.m_IsStatic)
 	{
-		/*Vector sum = to_col1 * (-1.0f) + to_col2;
-		std::cout << "Bumping for: " << sum << std::endl;
-		col2.GetOwner().Translate(sum);*/
-		col2.GetOwner().Translate(to_col2);
-	}
-	else if (col2.m_IsStatic)
-	{
-		/*Vector sum = to_col2 * (-1.0f) + to_col1;
-		std::cout << "Bumping for: " << sum << std::endl;
-		col1.GetOwner().Translate(sum);*/
 		col1.GetOwner().Translate(to_col1);
 	}
-	else
+	if (!col2.m_IsStatic)
 	{
-		std::cout << "Bumping for: " << to_col2 << std::endl;
 		col2.GetOwner().Translate(to_col2);
-		std::cout << "Bumping for: " << to_col1 << std::endl;
-		col1.GetOwner().Translate(to_col1);
 	}
 }
 
