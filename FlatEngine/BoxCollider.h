@@ -23,7 +23,6 @@ public:
 	virtual ObjectComponent* Copy(GameObject& new_owner) override;
 
 public:
-	bool m_Bumping = true;
 	bool m_IsStatic = false;
 	std::function<void(BoxCollider& collider)> onCollision;
 

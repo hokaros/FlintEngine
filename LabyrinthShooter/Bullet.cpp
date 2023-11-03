@@ -11,7 +11,6 @@ void Bullet::Awake()
 {
 	BoxCollider* collider = gameObject.FindComponent<BoxCollider>();
 	collider->m_IsStatic = true;
-	collider->m_Bumping = false;
 
 	collider->onCollision =
 		[this](BoxCollider& c) {
