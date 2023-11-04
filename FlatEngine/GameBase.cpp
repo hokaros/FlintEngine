@@ -10,9 +10,9 @@ GameBase::GameBase(Window* window)
 
 bool GameBase::Run()
 {
-	InputController* input = InputController::Main();
+	PreRun();
 
-	PreRun(); // TODO: move to the start of this function
+	InputController* input = InputController::Main();
 
 	int quit = 0;
 
