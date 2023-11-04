@@ -135,6 +135,10 @@ void PhysicsSystem::DebugDrawColliders() const
 		{
 			color = Rgb8(0xFF, 0x00, 0x00);
 		}
+		if (!collider->GetOwner().IsEnabled())
+		{
+			color = Rgb8(0xFF, 0xFF, 0xFF);
+		}
 
 		Vector col_min = collider->GetWorldPos();
 		Vector col_size = collider->GetWorldSize();
