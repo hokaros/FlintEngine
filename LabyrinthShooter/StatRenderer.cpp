@@ -7,25 +7,26 @@ void StatRenderer::UpdateStat(int newStat)
 
 
 BMPStats::BMPStats(SDL_Surface* bitmap, const VectorInt& elementSize, const VectorInt& startPosition)
-	: bitmap(bitmap), elementSize(elementSize), startPos(startPosition) 
+	: m_Bitmap(SDL_CreateTextureFromSurface(Window::Main()->GetRenderer(), bitmap))
+	, m_ElementSize(elementSize)
+	, m_StartPos(startPosition)
 {
 
 }
 
-void BMPStats::Render() {
+void BMPStats::Render() 
+{
 	// Wyœwietl tyle elementów, ile wynosi stat
-	SDL_Surface* screen = Window::Main()->GetScreen();
-
 	SDL_Rect dest;
-	dest.x = startPos.x;
-	dest.y = startPos.y;
-	dest.w = elementSize.x;
-	dest.h = elementSize.y;
+	dest.x = m_StartPos.x;
+	dest.y = m_StartPos.y;
+	dest.w = m_ElementSize.x;
+	dest.h = m_ElementSize.y;
 
 	for (int i = 0; i < stat; i++) 
 	{
-		SDL_BlitScaled(bitmap, NULL, screen, &dest);
+		Window::Main()->RenderTexture(m_Bitmap, dest, /* angle = */0.0f);
 
-		dest.x += elementSize.x;
+		dest.x += m_ElementSize.x;
 	}
 }

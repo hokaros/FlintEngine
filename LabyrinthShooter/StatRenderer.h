@@ -23,8 +23,8 @@ public:
 	void Render() override;
 
 private:
-	SDL_Surface* bitmap;
-	VectorInt elementSize;
-	VectorInt startPos;
+	SDL_Texture* m_Bitmap;
+	VectorInt m_ElementSize;
+	VectorInt m_StartPos;
 };
 
