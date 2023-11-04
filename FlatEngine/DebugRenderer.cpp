@@ -4,6 +4,24 @@
 
 DebugRenderer* DebugRenderer::s_Instance = nullptr;
 
+SDL_Rect RectToSDLRect(const Rect& rect)
+{
+	SDL_Rect sdl_rect;
+	sdl_rect.x = rect.pos.x;
+	sdl_rect.y = rect.pos.y;
+	sdl_rect.w = rect.size.x;
+	sdl_rect.h = rect.size.y;
+	return sdl_rect;
+}
+
+Rect SDLRectToRect(const SDL_Rect& sdl_rect)
+{
+	return Rect(
+		Vector(sdl_rect.x, sdl_rect.y),
+		Vector(sdl_rect.w, sdl_rect.h)
+	);
+}
+
 DebugRenderer::DebugRenderer(SDL_Renderer* renderer)
 	: m_Renderer(renderer)
 {
@@ -15,14 +33,14 @@ void DebugRenderer::DrawLine(const Vector& start, const Vector& end, const Rgb8&
 	s_Instance->DrawLineImpl(start, end, color);
 }
 
-void DebugRenderer::DrawRect(const Vector& min, const Vector& size, const Rgb8& color)
+void DebugRenderer::DrawRect(const Rect& rect, const Rgb8& color)
 {
-	s_Instance->DrawRectImpl(min, size, color);
+	s_Instance->DrawRectImpl(rect, color);
 }
 
-void DebugRenderer::DrawWireRect(const Vector& min, const Vector& size, const Rgb8& color)
+void DebugRenderer::DrawWireRect(const Rect& rect, const Rgb8& color)
 {
-	s_Instance->DrawWireRectImpl(min, size, color);
+	s_Instance->DrawWireRectImpl(rect, color);
 }
 
 void DebugRenderer::DrawLineImpl(const Vector& start, const Vector& end, const Rgb8& color)
@@ -33,41 +51,22 @@ void DebugRenderer::DrawLineImpl(const Vector& start, const Vector& end, const R
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void DebugRenderer::DrawRectImpl(const Vector& min, const Vector& size, const Rgb8& color)
+void DebugRenderer::DrawRectImpl(const Rect& rect, const Rgb8& color)
 {
-	SDL_Rect rect;
-	rect.x = min.x;
-	rect.y = min.y;
-	rect.w = size.x;
-	rect.h = size.y;
+	SDL_Rect sdl_rect = RectToSDLRect(rect);
 
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
 
-	int result = SDL_RenderFillRect(m_Renderer, &rect);
+	int result = SDL_RenderFillRect(m_Renderer, &sdl_rect);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void DebugRenderer::DrawWireRectImpl(const Vector& min, const Vector& size, const Rgb8& color)
+void DebugRenderer::DrawWireRectImpl(const Rect& rect, const Rgb8& color)
 {
-	// TODO: receive Rect and convert with RectToSDLRect()
-	SDL_Rect rect;
-	rect.x = min.x;
-	rect.y = min.y;
-	rect.w = size.x;
-	rect.h = size.y;
+	SDL_Rect sdl_rect = RectToSDLRect(rect);
 
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
 
-	int result = SDL_RenderDrawRect(m_Renderer, &rect);
+	int result = SDL_RenderDrawRect(m_Renderer, &sdl_rect);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
-}
-
-SDL_Rect DebugRenderer::RectToSDLRect(const Rect& rect)
-{
-	SDL_Rect sdl_rect;
-	sdl_rect.x = rect.pos.x;
-	sdl_rect.y = rect.pos.y;
-	sdl_rect.w = rect.size.x;
-	sdl_rect.h = rect.size.y;
-	return sdl_rect;
 }

@@ -10,7 +10,8 @@ RectangleRenderer::RectangleRenderer(GameObject& owner, const Rgb8& color)
 
 void RectangleRenderer::Render() 
 {
-	DebugRenderer::DrawRect(gameObject.GetPosition(), gameObject.GetSize(), m_Color);
+	Rect rect = Rect(gameObject.GetPosition(), gameObject.GetSize());
+	DebugRenderer::DrawRect(rect, m_Color);
 }
 
 ObjectComponent* RectangleRenderer::Copy(GameObject& newOwner) 

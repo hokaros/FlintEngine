@@ -13,10 +13,9 @@ TextBox::TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, in
 void TextBox::Draw() 
 {
 	// Ramka
-	Vector rect_min = Vector(m_Rect.x, m_Rect.y);
-	Vector rect_size = Vector(m_Rect.w, m_Rect.h);
-	DebugRenderer::DrawRect(rect_min, rect_size, m_Fill);
-	DebugRenderer::DrawWireRect(rect_min, rect_size, m_Outline);
+	Rect rect = SDLRectToRect(m_Rect);
+	DebugRenderer::DrawRect(rect, m_Fill);
+	DebugRenderer::DrawWireRect(rect, m_Outline);
 
 	// Wyœwietlenie zebranego tekstu
 	char buffer[32];
