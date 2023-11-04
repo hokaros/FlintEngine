@@ -16,6 +16,8 @@ struct TextureRenderArgs {
 
 // TODO: IDebugRenderer
 
+// TODO: FRenderer jako API do renderowania
+
 class Window
 {
 public:

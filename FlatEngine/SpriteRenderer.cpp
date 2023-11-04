@@ -1,8 +1,8 @@
 #include "SpriteRenderer.h"
 #include "Draw.h"
 
-SpriteRenderer::SpriteRenderer(GameObject& owner, SDL_Surface* screen, SDL_Surface* sprite)
-	: ObjectRenderer(owner, screen), sprite(sprite),
+SpriteRenderer::SpriteRenderer(GameObject& owner, SDL_Surface* sprite)
+	: ObjectRenderer(owner), sprite(sprite),
 	texture(SDL_CreateTextureFromSurface(Window::Main()->GetRenderer(), sprite)) {
 
 }
@@ -11,7 +11,7 @@ SpriteRenderer::~SpriteRenderer() {
 	SDL_DestroyTexture(texture);
 }
 
-void SpriteRenderer::Render(SDL_Surface* screen) {
+void SpriteRenderer::Render() {
 	SDL_Renderer* renderer = Window::Main()->GetRenderer();
 
 	SDL_Rect dstRect;
@@ -26,7 +26,6 @@ void SpriteRenderer::Render(SDL_Surface* screen) {
 ObjectComponent* SpriteRenderer::Copy(GameObject& newOwner) {
 	return new SpriteRenderer(
 		newOwner,
-		screen,
 		sprite
 	);
 }

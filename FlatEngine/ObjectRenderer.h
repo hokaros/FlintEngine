@@ -6,10 +6,8 @@
 class ObjectRenderer : public ObjectComponent
 {
 public:
-	ObjectRenderer(GameObject& owner, SDL_Surface* screen);
+	ObjectRenderer(GameObject& owner);
 	void RenderUpdate() override;
-	virtual void Render(SDL_Surface* screen) = 0;
-protected:
-	SDL_Surface* screen;
+	virtual void Render() = 0;
 };
 

@@ -10,7 +10,7 @@
 class TextBox
 {
 public:
-	TextBox(const SDL_Rect& rect, Uint32 outline, Uint32 fill, int fontSize);
+	TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, int fontSize);
 
 	void Draw();
 	void Update();
@@ -23,11 +23,11 @@ public:
 	std::string GetContent() const;
 
 private:
-	SDL_Rect rect;
-	Uint32 outline;
-	Uint32 fill;
-	int fontSize;
+	SDL_Rect m_Rect;
+	Rgb8 m_Outline;
+	Rgb8 m_Fill;
+	int m_FontSize;
 
-	std::deque<char> content;
+	std::deque<char> m_Content;
 };
 

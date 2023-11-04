@@ -7,20 +7,18 @@ Game::Game(Window* window, GameStartInfo&& gameInfo)
 	: GameBase(window)
 	, basicBullet(s_BasicBulletSize, objectManager.GetAllObjects(), {}) // uwa¿aæ przy zmienianiu objectManagera
 	, superBullet(s_SuperBulletSize, objectManager.GetAllObjects(), {})
-	, startInfo(std::move(gameInfo)) {
-
-
+	, startInfo(std::move(gameInfo)) 
+{
 	bitmaps = new GameBitmaps();
 	healthStats = new  BMPStats(bitmaps->heartBmp, VectorInt(30, 30), VectorInt(3, 3));
 
-	if (window != NULL) {
-		SDL_Surface* screen = window->GetScreen();
-
+	if (window != NULL) 
+	{
 		Rgb8 red = Rgb8(0xFF, 0x00, 0x00);
 		Rgb8 yellow = Rgb8(0xFF, 0xFF, 0x00);
 
-		basicBullet.SetRenderer(new RectangleRenderer(basicBullet, screen, yellow));
-		superBullet.SetRenderer(new RectangleRenderer(superBullet, screen, red));
+		basicBullet.SetRenderer(new RectangleRenderer(basicBullet, yellow));
+		superBullet.SetRenderer(new RectangleRenderer(superBullet, red));
 	}
 
 	basicBullet.AddComponent(new Bullet(basicBullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));
@@ -98,11 +96,9 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 	mover->onDirectionChanged = [this](const Vector& newDir) {OnControlledDirectionChanged(newDir); };
 
 	if (window != NULL) {
-		SDL_Surface* screen = window->GetScreen();
-
-		player->SetRenderer(new SpriteRenderer(*player, screen, bitmaps->playerBmp));
-		basicWeapon->SetRenderer(new SpriteRenderer(*basicWeapon, screen, bitmaps->wpnBasicBmp));
-		superWeapon->SetRenderer(new SpriteRenderer(*superWeapon, screen, bitmaps->wpnSuperBmp));
+		player->SetRenderer(new SpriteRenderer(*player, bitmaps->playerBmp));
+		basicWeapon->SetRenderer(new SpriteRenderer(*basicWeapon, bitmaps->wpnBasicBmp));
+		superWeapon->SetRenderer(new SpriteRenderer(*superWeapon, bitmaps->wpnSuperBmp));
 	}
 
 	return player;

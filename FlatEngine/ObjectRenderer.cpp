@@ -1,11 +1,11 @@
 #include "ObjectRenderer.h"
 
 
-ObjectRenderer::ObjectRenderer(GameObject& owner, SDL_Surface* screen)
-	: ObjectComponent(owner), screen(screen) {
+ObjectRenderer::ObjectRenderer(GameObject& owner)
+	: ObjectComponent(owner) {
 
 }
 
 void ObjectRenderer::RenderUpdate() {
-	Render(screen);
+	Render();
 }

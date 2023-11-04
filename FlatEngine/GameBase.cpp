@@ -12,13 +12,6 @@ bool GameBase::Run()
 {
 	InputController* input = InputController::Main();
 
-	int black = 0;
-	SDL_Surface* screen = NULL;
-	if (window != NULL) {
-		screen = window->GetScreen();
-		black = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
-	}
-
 	PreRun(); // TODO: move to the start of this function
 
 	int quit = 0;
@@ -27,15 +20,16 @@ bool GameBase::Run()
 
 	SetRunning(true);
 	// Pêtla gry
-	while (!quit) {
+	while (!quit) 
+	{
 		objectManager.ActivateNewObjects();
 		// Nowa klatka
 		timer.NextFrame();
 
-		if (input != NULL && !input->Update())
+		if (input != nullptr && !input->Update())
 			return false;
 
-		if (input != NULL && input->PressedThisFrame(SDLK_ESCAPE))
+		if (input != nullptr && input->PressedThisFrame(SDLK_ESCAPE))
 			quit = 1;
 
 		// Wywo³anie zleconych akcji
@@ -50,7 +44,8 @@ bool GameBase::Run()
 		physicsSystem.Update();
 
 		// Renderowanie obiektów
-		if (window != NULL) {
+		if (window != nullptr) 
+		{
 			Render();
 			DebugRender();
 			window->Render();

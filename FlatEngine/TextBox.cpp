@@ -1,37 +1,42 @@
 #include "TextBox.h"
+#include "DebugRenderer.h" // TODO: remove
 
-TextBox::TextBox(const SDL_Rect& rect, Uint32 outline, Uint32 fill, int fontSize)
-	: rect(rect), outline(outline), fill(fill), fontSize(fontSize) {
+TextBox::TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, int fontSize)
+	: m_Rect(rect)
+	, m_Outline(outline)
+	, m_Fill(fill)
+	, m_FontSize(fontSize) 
+{
 
 }
 
-void TextBox::Draw() {
+void TextBox::Draw() 
+{
 	// Ramka
-	draw::DrawRectangle(
-		Window::Main()->GetScreen(),
-		rect.x,
-		rect.y,
-		rect.w,
-		rect.h,
-		outline, fill
-	);
+	Vector rect_min = Vector(m_Rect.x, m_Rect.y);
+	Vector rect_size = Vector(m_Rect.w, m_Rect.h);
+	DebugRenderer::DrawRect(rect_min, rect_size, m_Fill);
+	DebugRenderer::DrawWireRect(rect_min, rect_size, m_Outline);
 
 	// Wyœwietlenie zebranego tekstu
 	char buffer[32];
 	int i = 0;
-	for (char c : content) {
+	for (char c : m_Content) 
+	{
 		buffer[i++] = c;
 	}
 	buffer[i] = '\0';
 
 	Window::Main()->DrawString(
-		rect.x + TEXTBOX_PADDING,
-		rect.y + rect.h / 2 - fontSize / 2,
-		buffer, fontSize
+		m_Rect.x + TEXTBOX_PADDING,
+		m_Rect.y + m_Rect.h / 2 - m_FontSize / 2,
+		buffer,
+		m_FontSize
 	);
 }
 
-void TextBox::Update() {
+void TextBox::Update() 
+{
 	// Odczytanie klawiszy
 	for (char digit = '0'; digit <= '9'; digit++) {
 		SDL_Keycode key = (SDL_Keycode)digit;
@@ -50,27 +55,33 @@ void TextBox::Update() {
 	}
 }
 
-int TextBox::MaxCharacters() const {
-	return (rect.w - 2* TEXTBOX_PADDING) / fontSize;
+int TextBox::MaxCharacters() const 
+{
+	return (m_Rect.w - 2* TEXTBOX_PADDING) / m_FontSize;
 }
 
-void TextBox::AddCharacter(char character) {
-	if (content.size() < MaxCharacters()) {
-		content.push_back(character);
+void TextBox::AddCharacter(char character) 
+{
+	if (m_Content.size() < MaxCharacters())
+	{
+		m_Content.push_back(character);
 	}
 }
 
-void TextBox::RemoveLast() {
-	if (content.empty())
+void TextBox::RemoveLast() 
+{
+	if (m_Content.empty())
 		return;  // jestem tylko biednym textboxem
 
-	content.pop_back();
+	m_Content.pop_back();
 }
 
-std::string TextBox::GetContent() const {
+std::string TextBox::GetContent() const 
+{
 	char buffer[32];
 	int i = 0;
-	for (char c : content) {
+	for (char c : m_Content)
+	{
 		buffer[i++] = c;
 	}
 	buffer[i] = '\0';

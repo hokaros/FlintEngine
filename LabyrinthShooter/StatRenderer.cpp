@@ -1,12 +1,14 @@
 #include "StatRenderer.h"
 
-void StatRenderer::UpdateStat(int newStat) {
+void StatRenderer::UpdateStat(int newStat) 
+{
 	stat = newStat;
 }
 
 
 BMPStats::BMPStats(SDL_Surface* bitmap, const VectorInt& elementSize, const VectorInt& startPosition)
-	: bitmap(bitmap), elementSize(elementSize), startPos(startPosition) {
+	: bitmap(bitmap), elementSize(elementSize), startPos(startPosition) 
+{
 
 }
 
@@ -20,7 +22,8 @@ void BMPStats::Render() {
 	dest.w = elementSize.x;
 	dest.h = elementSize.y;
 
-	for (int i = 0; i < stat; i++) {
+	for (int i = 0; i < stat; i++) 
+	{
 		SDL_BlitScaled(bitmap, NULL, screen, &dest);
 
 		dest.x += elementSize.x;

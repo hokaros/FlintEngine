@@ -24,7 +24,8 @@ public:
 
 namespace draw
 {
-
+	// TODO: Let's remove this
+	
 	// narysowanie na ekranie screen powierzchni sprite w punkcie (x, y)
 	// (x, y) to punkt œrodka obrazka sprite na ekranie
 	void DrawSurface(SDL_Surface* screen, SDL_Surface* sprite, int x, int y);

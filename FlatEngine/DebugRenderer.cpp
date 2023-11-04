@@ -41,3 +41,28 @@ void DebugRenderer::DrawRectImpl(const Vector& min, const Vector& size, const Rg
 	int result = SDL_RenderFillRect(m_Renderer, &rect);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
+
+void DebugRenderer::DrawWireRectImpl(const Vector& min, const Vector& size, const Rgb8& color)
+{
+	// TODO: receive Rect and convert with RectToSDLRect()
+	SDL_Rect rect;
+	rect.x = min.x;
+	rect.y = min.y;
+	rect.w = size.x;
+	rect.h = size.y;
+
+	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
+
+	int result = SDL_RenderDrawRect(m_Renderer, &rect);
+	FE_ASSERT(result == 0, "ERROR: Could not render");
+}
+
+SDL_Rect DebugRenderer::RectToSDLRect(const Rect& rect)
+{
+	SDL_Rect sdl_rect;
+	sdl_rect.x = rect.pos.x;
+	sdl_rect.y = rect.pos.y;
+	sdl_rect.w = rect.size.x;
+	sdl_rect.h = rect.size.y;
+	return sdl_rect;
+}
