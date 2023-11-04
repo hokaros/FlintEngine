@@ -54,9 +54,6 @@ bool Window::Init() {
 
 	SDL_SetWindowTitle(m_Window, "Labyrinth Shooter");
 
-	m_Screen = SDL_CreateRGBSurface(0, m_Width, m_Height, 32,
-		0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-
 	m_Scrtex = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888,
 		SDL_TEXTUREACCESS_STREAMING,
 		m_Width, m_Height);
@@ -101,15 +98,10 @@ void Window::DrawString(int x, int y, const char* text, int fontSize) {
 		s.y = py;
 		d.x = x;
 		d.y = y;
-		SDL_BlitScaled(m_Charset, &s, m_Screen, &d);
-		//SDL_BlitSurface(charset, &s, screen, &d);
+		SDL_RenderCopy(m_Renderer, m_CharsetTex, &s, &d);
 		x += fontSize;
 		text++;
 	};
-}
-
-SDL_Surface* Window::GetScreen() const {
-	return m_Screen;
 }
 
 SDL_Renderer* Window::GetRenderer() const {
@@ -129,7 +121,6 @@ bool Window::LoadCharsets() {
 	m_Charset = SDL_LoadBMP("resources/cs8x8.bmp");
 	if (m_Charset == nullptr) {
 		printf("SDL_LoadBMP(resources/cs8x8.bmp) error: %s\n", SDL_GetError());
-		SDL_FreeSurface(m_Screen);
 		SDL_DestroyTexture(m_Scrtex);
 		SDL_DestroyWindow(m_Window);
 		SDL_DestroyRenderer(m_Renderer);
@@ -137,6 +128,7 @@ bool Window::LoadCharsets() {
 		return false;
 	};
 
+	m_CharsetTex = SDL_CreateTextureFromSurface(m_Renderer, m_Charset);
 	SDL_SetColorKey(m_Charset, /*enable color key*/true, /*color key*/0x000000);
 
 	return true;

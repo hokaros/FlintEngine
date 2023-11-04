@@ -32,7 +32,6 @@ public:
 	// narysowanie napisu txt na ekranie, zaczynaj¹c od punktu (x, y)
 	void DrawString(int x, int y, const char* text, int fontSize);
 
-	SDL_Surface* GetScreen() const;
 	SDL_Renderer* GetRenderer() const;
 
 	int GetWidth() const;
@@ -48,9 +47,9 @@ private:
 	int m_Width;
 	int m_Height;
 
-	SDL_Surface* m_Screen = nullptr; // TODO: remove this
-	SDL_Surface* m_Charset = nullptr;
+	SDL_Surface* m_Charset = nullptr; // TODO: remove
 	SDL_Surface* m_BigCharset = nullptr;
+	SDL_Texture* m_CharsetTex = nullptr;
 	SDL_Texture* m_Scrtex = nullptr;
 	SDL_Window* m_Window = nullptr;
 	SDL_Renderer* m_Renderer = nullptr;
