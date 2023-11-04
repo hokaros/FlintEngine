@@ -69,12 +69,8 @@ bool Window::Init() {
 	return true;
 }
 
-void Window::Render() {
-	// Renderowanie
-	SDL_UpdateTexture(m_Scrtex, /* rect = */nullptr, m_Screen->pixels, m_Screen->pitch);
-	//SDL_RenderClear(renderer);
-	//SDL_RenderCopy(m_Renderer, m_Scrtex, nullptr, nullptr);
-
+void Window::Render() 
+{
 	RenderRequestedTextures();
 
 	SDL_RenderPresent(m_Renderer);
