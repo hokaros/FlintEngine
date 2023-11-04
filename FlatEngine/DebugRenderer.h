@@ -2,9 +2,6 @@
 #include "Draw.h"
 #include "Vector.h"
 
-SDL_Rect RectToSDLRect(const Rect& rect); // TODO: move to Draw utilities or sth
-Rect SDLRectToRect(const SDL_Rect& sdl_rect);
-
 class DebugRenderer
 {
 public:

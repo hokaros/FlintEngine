@@ -21,3 +21,6 @@ public:
 		, b(b)
 	{}
 };
+
+SDL_Rect RectToSDLRect(const Rect& rect);
+Rect SDLRectToRect(const SDL_Rect& sdl_rect);
