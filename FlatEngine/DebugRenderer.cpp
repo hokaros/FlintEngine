@@ -1,4 +1,5 @@
 #include "DebugRenderer.h"
+#include "Window.h"
 
 DebugRenderer* DebugRenderer::s_Instance = nullptr;
 

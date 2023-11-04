@@ -19,8 +19,6 @@ bool GameBase::Run()
 		black = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
 	}
 
-	m_DebugRenderer = new DebugRenderer(screen);
-
 	PreRun(); // TODO: move to the start of this function
 
 	int quit = 0;
@@ -68,7 +66,6 @@ bool GameBase::Run()
 	SetRunning(false);
 	PostRun();
 
-	delete m_DebugRenderer;
 	return true;
 }
 

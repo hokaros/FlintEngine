@@ -18,6 +18,11 @@ Window::~Window() {
 	if (s_MainWindow == this) {
 		s_MainWindow = nullptr;
 	}
+
+	if (m_DebugRenderer != nullptr)
+	{
+		delete m_DebugRenderer;
+	}
 }
 
 Window* Window::Main() {
@@ -56,6 +61,8 @@ bool Window::Init() {
 		SDL_TEXTUREACCESS_STREAMING,
 		m_Width, m_Height);
 
+	m_DebugRenderer = new DebugRenderer(m_Screen);
+
 	if (!LoadCharsets())
 		return false;
 
@@ -68,13 +75,7 @@ void Window::Render() {
 	//SDL_RenderClear(renderer);
 	SDL_RenderCopy(m_Renderer, m_Scrtex, nullptr, nullptr);
 
-	for (TextureRenderArgs tra : m_RenderTextures) {
-		SDL_Point mid;
-		mid.x = tra.rect.w / 2;
-		mid.y = tra.rect.h / 2;
-		SDL_RenderCopyEx(m_Renderer, tra.texture, NULL, &(tra.rect), tra.angle, &mid, SDL_FLIP_NONE);
-	}
-	m_RenderTextures.clear();
+	RenderRequestedTextures();
 
 	SDL_RenderPresent(m_Renderer);
 }
@@ -140,4 +141,15 @@ bool Window::LoadCharsets() {
 	SDL_SetColorKey(m_Charset, /*enable color key*/true, /*color key*/0x000000);
 
 	return true;
+}
+
+void Window::RenderRequestedTextures()
+{
+	for (TextureRenderArgs tra : m_RenderTextures) {
+		SDL_Point mid;
+		mid.x = tra.rect.w / 2;
+		mid.y = tra.rect.h / 2;
+		SDL_RenderCopyEx(m_Renderer, tra.texture, NULL, &(tra.rect), tra.angle, &mid, SDL_FLIP_NONE);
+	}
+	m_RenderTextures.clear();
 }

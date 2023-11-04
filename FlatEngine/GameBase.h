@@ -26,7 +26,6 @@ protected:
 	Timer timer;
 	ObjectManager objectManager;
 	PhysicsSystem physicsSystem;
-	DebugRenderer* m_DebugRenderer = nullptr;
 
 	bool isRunning = false;
 

@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_main.h>
 #include <list>
+#include "DebugRenderer.h"
 
 struct TextureRenderArgs {
 	SDL_Texture* texture;
@@ -12,6 +13,8 @@ struct TextureRenderArgs {
 	TextureRenderArgs(SDL_Texture* texture, SDL_Rect rect, double angle)
 		: texture(texture), rect(rect), angle(angle) {}
 };
+
+// TODO: IDebugRenderer
 
 class Window
 {
@@ -34,6 +37,11 @@ public:
 	int GetHeight() const;
 
 	static Window* Main();
+
+private:
+	bool LoadCharsets();
+	void RenderRequestedTextures();
+
 private:
 	int m_Width;
 	int m_Height;
@@ -45,11 +53,10 @@ private:
 	SDL_Window* m_Window = nullptr;
 	SDL_Renderer* m_Renderer = nullptr;
 
+	DebugRenderer* m_DebugRenderer = nullptr;
+
 	std::list<TextureRenderArgs> m_RenderTextures;
 
 	static Window* s_MainWindow;
-
-private:
-	bool LoadCharsets();
 };
 
