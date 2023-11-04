@@ -5,7 +5,7 @@
 class DebugRenderer
 {
 public:
-	DebugRenderer(SDL_Surface* screen);
+	DebugRenderer(SDL_Renderer* renderer);
 
 	// TODO: let's delete this singleton and pass the DebugRenderer directly to IDebugRenderers
 	static void DrawLine(const Vector& start, const Vector& end, Rgb8 color);
@@ -14,7 +14,7 @@ private:
 	void DrawLineImpl(const Vector& start, const Vector& end, Rgb8 color);
 
 private:
-	SDL_Surface* m_Screen;
+	SDL_Renderer* m_Renderer;
 
 	static DebugRenderer* s_Instance;
 };

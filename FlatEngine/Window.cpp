@@ -61,7 +61,7 @@ bool Window::Init() {
 		SDL_TEXTUREACCESS_STREAMING,
 		m_Width, m_Height);
 
-	m_DebugRenderer = new DebugRenderer(m_Screen);
+	m_DebugRenderer = new DebugRenderer(m_Renderer);
 
 	if (!LoadCharsets())
 		return false;
