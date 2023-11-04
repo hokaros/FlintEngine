@@ -48,7 +48,9 @@ bool GameBase::Run()
 		{
 			Render();
 			DebugRender();
-			window->Render();
+
+			PrePresent();
+			window->Present();
 		}
 
 		objectManager.DisposeDestroyed();
@@ -92,8 +94,6 @@ void GameBase::Render()
 			go->RenderUpdate();
 		}
 	}
-
-	PostRender();
 }
 
 void GameBase::DebugRender()
@@ -125,7 +125,7 @@ void GameBase::PostRun()
 {
 }
 
-void GameBase::PostRender()
+void GameBase::PrePresent()
 {
 }
 

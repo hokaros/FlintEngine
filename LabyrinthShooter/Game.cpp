@@ -134,8 +134,6 @@ void Game::PreRun()
 		objectManager.AddUndestroyable(lab->GetBorder()[i]);
 	}
 
-	//lab->onChanged = [this](bool* newWalls) {onLabChanged(newWalls); };
-
 	LoadStartingObjects();
 }
 
@@ -144,7 +142,7 @@ void Game::PostRun()
 	delete lab;
 }
 
-void Game::PostRender()
+void Game::PrePresent()
 {
 	// Renderowanie nak³adek UI
 	healthStats->Render();

@@ -74,7 +74,7 @@ bool Window::Init()
 	return true;
 }
 
-void Window::Render() 
+void Window::Present() 
 {
 	SDL_RenderPresent(m_Renderer);
 

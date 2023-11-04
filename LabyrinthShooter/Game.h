@@ -103,7 +103,7 @@ private:
 
 	virtual void PreRun() override;
 	virtual void PostRun() override;
-	virtual void PostRender() override;
+	virtual void PrePresent() override;
 	virtual void PostObjectsUpdate() override;
 	virtual bool ShouldRender(GameObject* gameObject) override;
 };

@@ -45,7 +45,7 @@ private:
 
 	virtual void PreRun();
 	virtual void PostRun();
-	virtual void PostRender();
+	virtual void PrePresent();
 	virtual void PostObjectsUpdate();
 	virtual bool ShouldRender(GameObject* gameObject);
 };

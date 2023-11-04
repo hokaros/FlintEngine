@@ -25,7 +25,7 @@ public:
 	~Window();
 
 	bool Init();
-	void Render();
+	void Present();
 
 	void RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle);
 
