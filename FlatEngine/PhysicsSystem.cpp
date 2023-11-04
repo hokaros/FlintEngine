@@ -137,7 +137,7 @@ void PhysicsSystem::DebugDrawColliders() const
 		}
 
 		Vector col_min = collider->GetWorldPos();
-		Vector col_max = col_min + collider->GetWorldSize();
-		DebugRenderer::DrawLine(col_min, col_max, color);
+		Vector col_size = collider->GetWorldSize();
+		DebugRenderer::DrawWireRect(col_min, col_size, color);
 	}
 }

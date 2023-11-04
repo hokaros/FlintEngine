@@ -20,6 +20,11 @@ void DebugRenderer::DrawRect(const Vector& min, const Vector& size, const Rgb8& 
 	s_Instance->DrawRectImpl(min, size, color);
 }
 
+void DebugRenderer::DrawWireRect(const Vector& min, const Vector& size, const Rgb8& color)
+{
+	s_Instance->DrawWireRectImpl(min, size, color);
+}
+
 void DebugRenderer::DrawLineImpl(const Vector& start, const Vector& end, const Rgb8& color)
 {
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
