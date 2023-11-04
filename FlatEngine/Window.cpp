@@ -58,7 +58,6 @@ bool Window::Init()
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	SDL_RenderSetLogicalSize(m_Renderer, m_Width, m_Height);
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 
 	SDL_SetWindowTitle(m_Window, "Labyrinth Shooter");
 
