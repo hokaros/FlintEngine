@@ -41,7 +41,6 @@ public:
 
 private:
 	bool LoadCharsets();
-	void RenderRequestedTextures();
 
 private:
 	int m_Width;
@@ -55,8 +54,6 @@ private:
 	SDL_Renderer* m_Renderer = nullptr;
 
 	DebugRenderer* m_DebugRenderer = nullptr;
-
-	std::list<TextureRenderArgs> m_RenderTextures;
 
 	static Window* s_MainWindow;
 };

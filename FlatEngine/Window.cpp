@@ -3,13 +3,17 @@
 Window* Window::s_MainWindow = nullptr;
 
 Window::Window(int width, int height)
-	: m_Width(width), m_Height(height) {
-	if (s_MainWindow == NULL) {
+	: m_Width(width)
+	, m_Height(height) 
+{
+	if (s_MainWindow == nullptr) 
+	{
 		s_MainWindow = this;
 	}
 }
 
-Window::~Window() {
+Window::~Window() 
+{
 	if (m_Window != nullptr) {
 		SDL_DestroyWindow(m_Window);
 	}
@@ -25,14 +29,17 @@ Window::~Window() {
 	}
 }
 
-Window* Window::Main() {
+Window* Window::Main() 
+{
 	return s_MainWindow;
 }
 
-bool Window::Init() {
+bool Window::Init() 
+{
 	int rc;
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) 
+	{
 		printf("SDL_Init error: %s\n", SDL_GetError());
 		return false;
 	}
@@ -42,7 +49,8 @@ bool Window::Init() {
 //	                                 &window, &renderer);
 	rc = SDL_CreateWindowAndRenderer(m_Width, m_Height, 0,
 		&m_Window, &m_Renderer);
-	if (rc != 0) {
+	if (rc != 0) 
+	{
 		SDL_Quit();
 		printf("SDL_CreateWindowAndRenderer error: %s\n", SDL_GetError());
 		return false;
@@ -68,21 +76,22 @@ bool Window::Init() {
 
 void Window::Render() 
 {
-	RenderRequestedTextures();
-
 	SDL_RenderPresent(m_Renderer);
 
 	SDL_SetRenderDrawColor(m_Renderer, 0x00, 0x00, 0x00, 0xFF);
 	SDL_RenderClear(m_Renderer);
 }
 
-void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle) {
-	m_RenderTextures.push_back(
-		TextureRenderArgs(texture, rect, angle)
-	);
+void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle) 
+{
+	SDL_Point mid;
+	mid.x = rect.w / 2;
+	mid.y = rect.h / 2;
+	SDL_RenderCopyEx(m_Renderer, texture, NULL, &(rect), angle, &mid, SDL_FLIP_NONE);
 }
 
-void Window::DrawString(int x, int y, const char* text, int fontSize) {
+void Window::DrawString(int x, int y, const char* text, int fontSize) 
+{
 	int px, py, c;
 	SDL_Rect s, d;
 	s.w = 8;
@@ -90,7 +99,8 @@ void Window::DrawString(int x, int y, const char* text, int fontSize) {
 	d.w = fontSize;
 	d.h = fontSize;
 
-	while (*text) {
+	while (*text) 
+	{
 		c = *text & 255;
 		px = (c % 16) * 8;
 		py = (c / 16) * 8;
@@ -104,22 +114,27 @@ void Window::DrawString(int x, int y, const char* text, int fontSize) {
 	};
 }
 
-SDL_Renderer* Window::GetRenderer() const {
+SDL_Renderer* Window::GetRenderer() const 
+{
 	return m_Renderer;
 }
 
-int Window::GetWidth() const {
+int Window::GetWidth() const 
+{
 	return m_Width;
 }
 
-int Window::GetHeight() const {
+int Window::GetHeight() const 
+{
 	return m_Height;
 }
 
-bool Window::LoadCharsets() {
+bool Window::LoadCharsets() 
+{
 	// wczytanie obrazka cs8x8.bmp
 	m_Charset = SDL_LoadBMP("resources/cs8x8.bmp");
-	if (m_Charset == nullptr) {
+	if (m_Charset == nullptr) 
+	{
 		printf("SDL_LoadBMP(resources/cs8x8.bmp) error: %s\n", SDL_GetError());
 		SDL_DestroyTexture(m_Scrtex);
 		SDL_DestroyWindow(m_Window);
@@ -132,15 +147,4 @@ bool Window::LoadCharsets() {
 	SDL_SetColorKey(m_Charset, /*enable color key*/true, /*color key*/0x000000);
 
 	return true;
-}
-
-void Window::RenderRequestedTextures()
-{
-	for (TextureRenderArgs tra : m_RenderTextures) {
-		SDL_Point mid;
-		mid.x = tra.rect.w / 2;
-		mid.y = tra.rect.h / 2;
-		SDL_RenderCopyEx(m_Renderer, tra.texture, NULL, &(tra.rect), tra.angle, &mid, SDL_FLIP_NONE);
-	}
-	m_RenderTextures.clear();
 }
