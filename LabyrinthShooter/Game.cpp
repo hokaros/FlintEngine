@@ -146,6 +146,9 @@ void Game::PrePresent()
 {
 	// Renderowanie nak³adek UI
 	healthStats->Render();
+
+	VectorInt player_label_pos = GetPlayer()->GetPosition() + Vector(-20, -20);
+	Window::Main()->DrawString(player_label_pos.x, player_label_pos.y, "Player", 10);
 }
 
 void Game::PostObjectsUpdate()

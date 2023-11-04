@@ -41,6 +41,7 @@ public:
 
 private:
 	bool LoadCharsets();
+	VectorInt GetCharCoordinates(char c) const;
 
 private:
 	int m_Width;

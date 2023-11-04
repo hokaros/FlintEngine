@@ -91,23 +91,21 @@ void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double an
 
 void Window::DrawString(int x, int y, const char* text, int fontSize) 
 {
-	int px, py, c;
-	SDL_Rect s, d;
-	s.w = 8;
-	s.h = 8;
-	d.w = fontSize;
-	d.h = fontSize;
+	SDL_Rect src, dest;
+	src.w = 8;
+	src.h = 8;
+	dest.w = fontSize;
+	dest.h = fontSize;
 
 	while (*text) 
 	{
-		c = *text & 255;
-		px = (c % 16) * 8;
-		py = (c / 16) * 8;
-		s.x = px;
-		s.y = py;
-		d.x = x;
-		d.y = y;
-		SDL_RenderCopy(m_Renderer, m_CharsetTex, &s, &d);
+		VectorInt char_coords = GetCharCoordinates(*text);
+		src.x = char_coords.x;
+		src.y = char_coords.y;
+
+		dest.x = x;
+		dest.y = y;
+		SDL_RenderCopy(m_Renderer, m_CharsetTex, &src, &dest);
 		x += fontSize;
 		text++;
 	};
@@ -146,4 +144,14 @@ bool Window::LoadCharsets()
 	SDL_SetColorKey(m_Charset, /*enable color key*/true, /*color key*/0x000000);
 
 	return true;
+}
+
+VectorInt Window::GetCharCoordinates(char c) const
+{
+	int c_int = c & 255;
+
+	int x = (c_int % 16) * 8;
+	int y = (c_int / 16) * 8;
+
+	return VectorInt(x, y);
 }
