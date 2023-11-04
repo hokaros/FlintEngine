@@ -16,11 +16,11 @@ Game::Game(Window* window, GameStartInfo&& gameInfo)
 	if (window != NULL) {
 		SDL_Surface* screen = window->GetScreen();
 
-		int red = SDL_MapRGB(screen->format, 0xFF, 0x00, 0x00);
-		int yellow = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0x00);
+		Rgb8 red = Rgb8(0xFF, 0x00, 0x00);
+		Rgb8 yellow = Rgb8(0xFF, 0xFF, 0x00);
 
-		basicBullet.SetRenderer(new RectangleRenderer(basicBullet, screen, yellow, yellow));
-		superBullet.SetRenderer(new RectangleRenderer(superBullet, screen, red, red));
+		basicBullet.SetRenderer(new RectangleRenderer(basicBullet, screen, yellow));
+		superBullet.SetRenderer(new RectangleRenderer(superBullet, screen, red));
 	}
 
 	basicBullet.AddComponent(new Bullet(basicBullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));

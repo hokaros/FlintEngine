@@ -8,10 +8,12 @@ public:
 	DebugRenderer(SDL_Renderer* renderer);
 
 	// TODO: let's delete this singleton and pass the DebugRenderer directly to IDebugRenderers
-	static void DrawLine(const Vector& start, const Vector& end, Rgb8 color);
+	static void DrawLine(const Vector& start, const Vector& end, const Rgb8& color);
+	static void DrawRect(const Vector& min, const Vector& size, const Rgb8& color);
 
 private:
-	void DrawLineImpl(const Vector& start, const Vector& end, Rgb8 color);
+	void DrawLineImpl(const Vector& start, const Vector& end, const Rgb8& color);
+	void DrawRectImpl(const Vector& min, const Vector& size, const Rgb8& color);
 
 private:
 	SDL_Renderer* m_Renderer;

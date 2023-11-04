@@ -73,11 +73,14 @@ void Window::Render() {
 	// Renderowanie
 	SDL_UpdateTexture(m_Scrtex, /* rect = */nullptr, m_Screen->pixels, m_Screen->pitch);
 	//SDL_RenderClear(renderer);
-	SDL_RenderCopy(m_Renderer, m_Scrtex, nullptr, nullptr);
+	//SDL_RenderCopy(m_Renderer, m_Scrtex, nullptr, nullptr);
 
 	RenderRequestedTextures();
 
 	SDL_RenderPresent(m_Renderer);
+
+	SDL_SetRenderDrawColor(m_Renderer, 0x00, 0x00, 0x00, 0xFF);
+	SDL_RenderClear(m_Renderer);
 }
 
 void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle) {

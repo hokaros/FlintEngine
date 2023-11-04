@@ -38,10 +38,6 @@ bool GameBase::Run()
 		if (input != NULL && input->PressedThisFrame(SDLK_ESCAPE))
 			quit = 1;
 
-		//generowanie t³a
-		if (screen != NULL)
-			SDL_FillRect(screen, NULL, black);
-
 		// Wywo³anie zleconych akcji
 		InvokePostponed();
 

@@ -55,8 +55,8 @@ private:
 	GameObject** border; // czêœci obwódki
 	int borderCount;
 
-	int wallColor;
-	int gateColor;
+	Rgb8 m_WallColor;
+	Rgb8 m_GateColor;
 
 	bool shouldChange;
 	double changeTime;
@@ -65,7 +65,7 @@ private:
 	void PlaceWalls();
 
 	GameObject* BuildWall(const Vector& size);
-	GameObject* BuildWall(const Vector& size, int color);
+	GameObject* BuildWall(const Vector& size, const Rgb8& color);
 	void BuildBorder();
 	GameObject** BuildGateWall(Direction side);
 

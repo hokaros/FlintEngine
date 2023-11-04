@@ -5,12 +5,11 @@ class RectangleRenderer :
 	public ObjectRenderer
 {
 public:
-	RectangleRenderer(GameObject& owner, SDL_Surface* screen, Uint32 outlineColor, Uint32 fillColor);
+	RectangleRenderer(GameObject& owner, SDL_Surface* screen, const Rgb8& color);
 	void Render(SDL_Surface* screen) override;
 
 	ObjectComponent* Copy(GameObject& newOwner) override;
 private:
-	Uint32 outlineColor;
-	Uint32 fillColor;
+	Rgb8 m_Color;
 };
 

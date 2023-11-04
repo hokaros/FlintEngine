@@ -6,20 +6,18 @@ LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	int xCount, int yCount,
 	double changeTime,
 	bool shouldChange)
-	: position(pos), wallWidth(wallWidth), wallLength(wallLength),
-	xCount(xCount), yCount(yCount),
-	labyrinth(xCount, yCount),
-	changeTime(changeTime),
-	shouldChange(shouldChange),
-	colliderMemory(LabyrinthSize(wallWidth, wallLength, xCount, yCount).x + pos.x, LabyrinthSize(wallWidth, wallLength, xCount, yCount).y + pos.y)
+	: position(pos)
+	, wallWidth(wallWidth)
+	, wallLength(wallLength)
+	, xCount(xCount)
+	, yCount(yCount)
+	, labyrinth(xCount, yCount)
+	, changeTime(changeTime)
+	, shouldChange(shouldChange)
+	, colliderMemory(LabyrinthSize(wallWidth, wallLength, xCount, yCount).x + pos.x, LabyrinthSize(wallWidth, wallLength, xCount, yCount).y + pos.y)
+	, m_WallColor(0x00, 0x00, 0xAA)
+	, m_GateColor(0x00, 0xCC, 0xAA)
 	{
-
-	if (Window::Main() != NULL) {
-		SDL_Surface* screen = Window::Main()->GetScreen();
-		wallColor = SDL_MapRGB(screen->format, 0x00, 0x00, 0xAA);
-		gateColor = SDL_MapRGB(screen->format, 0x00, 0xCC, 0xAA);
-	}
-
 	// Stworzenie œcian
 	walls = new GameObject * [labyrinth.ActiveCount()];
 	function<void(GameObject*)> destroyedHandler = [this](GameObject* source) {OnWallDestroyedChanged(source); };
@@ -142,10 +140,10 @@ const ColliderMemory& LabyrinthSolidifier::GetColliderMemory() const {
 }
 
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
-	return BuildWall(size, wallColor);
+	return BuildWall(size, m_WallColor);
 }
 
-GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, int color) {
+GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color) {
 	GameObject* wall = GameObject::Instantiate(size);
 
 	wall->AddComponent(new Regenerable(*wall, WALL_REGEN));
@@ -154,7 +152,7 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, int color) {
 	wall->AddComponent(collider);
 
 	if (Window::Main() != NULL)
-		wall->SetRenderer(new RectangleRenderer(*wall, Window::Main()->GetScreen(), color, color));
+		wall->SetRenderer(new RectangleRenderer(*wall, Window::Main()->GetScreen(), color));
 
 	return wall;
 }
@@ -197,7 +195,7 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 
 		// Brama
 		elemSize = Vector(wallWidth, wallLength);
-		w[1] = BuildWall(elemSize, gateColor);
+		w[1] = BuildWall(elemSize, m_GateColor);
 		w[1]->SetPosition(nextPos);
 		nextPos.y += elemSize.y;
 
@@ -216,7 +214,7 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 
 		// Brama
 		elemSize = Vector(wallLength, wallWidth);
-		w[1] = BuildWall(elemSize, gateColor);
+		w[1] = BuildWall(elemSize, m_GateColor);
 		w[1]->SetPosition(nextPos);
 		nextPos.x += elemSize.x;
 
