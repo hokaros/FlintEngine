@@ -46,6 +46,7 @@ bool GameBase::Run()
 		// Renderowanie obiektów
 		if (window != nullptr) 
 		{
+			m_DebugConfigWindow.Render();
 			Render();
 			DebugRender();
 

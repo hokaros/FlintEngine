@@ -5,6 +5,7 @@
 #include "ObjectManager.h"
 #include "PhysicsSystem.h"
 #include "DebugRenderer.h"
+#include "DebugConfig.h"
 
 
 class GameBase
@@ -26,6 +27,7 @@ protected:
 	Timer timer;
 	ObjectManager objectManager;
 	PhysicsSystem physicsSystem;
+	debug::DebugConfigWindow m_DebugConfigWindow;
 
 	bool isRunning = false;
 

@@ -2,6 +2,7 @@
 #include "BoxCollider.h" // TODO: remove
 #include "utility.h"
 #include "DebugRenderer.h"
+#include "DebugConfig.h"
 
 PhysicsSystem* PhysicsSystem::s_Instance = nullptr;
 
@@ -37,7 +38,10 @@ void PhysicsSystem::Update()
 
 void PhysicsSystem::DebugRender()
 {
-	DebugDrawColliders();
+	if (debug::DebugConfig::ShouldDebugRenderPhysics())
+	{
+		DebugDrawColliders();
+	}
 }
 
 PhysicsSystem* PhysicsSystem::GetInstance()

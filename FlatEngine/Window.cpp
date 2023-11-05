@@ -199,12 +199,6 @@ void Window::ImGuiNewFrame()
 
 void Window::RenderImGui()
 {
-	ImGui::Begin("Hello ImGui!");
-
-	ImGui::Text("What shall we do with all this power?");
-
-	ImGui::End();
-
 	ImGui::Render();
 	SDL_RenderSetScale(m_Renderer, ImGui::GetIO().DisplayFramebufferScale.x, ImGui::GetIO().DisplayFramebufferScale.y);
 	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
