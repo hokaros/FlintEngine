@@ -1,7 +1,11 @@
 #pragma once
 #include <stdio.h>
 
+#ifdef WIN32
 #define debug_break() __asm {int 3}
+#else
+#define debug_break() __debugbreak()
+#endif
 
 #ifdef _DEBUG
 
@@ -10,6 +14,7 @@
 		else							\
 		{								\
 			printf(error_message);		\
+			printf("\n");				\
 			debug_break();				\
 		}								
 
