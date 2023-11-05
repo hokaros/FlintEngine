@@ -1,4 +1,6 @@
 #include "InputController.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_sdl2.h"
 
 InputController* InputController::main{ NULL };
 
@@ -40,6 +42,7 @@ bool InputController::Update() {
 	bool quit = false;
 
 	while (SDL_PollEvent(&event)) {
+		ImGui_ImplSDL2_ProcessEvent(&event);
 		if (event.type == SDL_QUIT)
 			quit = true;
 

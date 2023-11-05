@@ -5,6 +5,8 @@
 #include <list>
 #include "DebugRenderer.h"
 
+#include "imgui/imgui.h"
+
 struct TextureRenderArgs {
 	SDL_Texture* texture;
 	SDL_Rect rect;
@@ -42,6 +44,11 @@ public:
 private:
 	bool LoadCharsets();
 	VectorInt GetCharCoordinates(char c) const;
+
+	void InitImGui();
+	void DeinitImGui();
+	void ImGuiNewFrame();
+	void RenderImGui();
 
 private:
 	int m_Width;

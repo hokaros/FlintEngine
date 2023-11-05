@@ -1,5 +1,8 @@
 #include "Window.h"
 
+#include "imgui/imgui_impl_sdl2.h"
+#include "imgui/imgui_impl_sdlrenderer2.h"
+
 Window* Window::s_MainWindow = nullptr;
 
 Window::Window(int width, int height)
@@ -14,6 +17,8 @@ Window::Window(int width, int height)
 
 Window::~Window() 
 {
+	DeinitImGui();
+
 	if (m_Window != nullptr) {
 		SDL_DestroyWindow(m_Window);
 	}
@@ -70,15 +75,20 @@ bool Window::Init()
 	if (!LoadCharsets())
 		return false;
 
+	InitImGui();
 	return true;
 }
 
 void Window::Present() 
 {
+	RenderImGui();
+
 	SDL_RenderPresent(m_Renderer);
 
 	SDL_SetRenderDrawColor(m_Renderer, 0x00, 0x00, 0x00, 0xFF);
 	SDL_RenderClear(m_Renderer);
+
+	ImGuiNewFrame();
 }
 
 void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle) 
@@ -154,4 +164,48 @@ VectorInt Window::GetCharCoordinates(char c) const
 	int y = (c_int / 16) * 8;
 
 	return VectorInt(x, y);
+}
+
+void Window::InitImGui()
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplSDL2_InitForSDLRenderer(m_Window, m_Renderer);
+	ImGui_ImplSDLRenderer2_Init(m_Renderer);
+
+	ImGuiNewFrame();
+}
+
+void Window::DeinitImGui()
+{
+	ImGui_ImplSDLRenderer2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+}
+
+void Window::ImGuiNewFrame()
+{
+	ImGui_ImplSDLRenderer2_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+}
+
+void Window::RenderImGui()
+{
+	ImGui::Begin("Hello ImGui!");
+
+	ImGui::Text("What shall we do with all this power?");
+
+	ImGui::End();
+
+	ImGui::Render();
+	SDL_RenderSetScale(m_Renderer, ImGui::GetIO().DisplayFramebufferScale.x, ImGui::GetIO().DisplayFramebufferScale.y);
+	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
 }
