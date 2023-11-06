@@ -5,8 +5,8 @@ Vector Game::s_SuperBulletSize = Vector(10, 10);
 
 Game::Game(Window* window, GameStartInfo&& gameInfo)
 	: GameBase(window)
-	, basicBullet(s_BasicBulletSize, objectManager.GetAllObjects(), {}) // uwa¿aæ przy zmienianiu objectManagera
-	, superBullet(s_SuperBulletSize, objectManager.GetAllObjects(), {})
+	, basicBullet(s_BasicBulletSize, PrefabCreationKey())
+	, superBullet(s_SuperBulletSize, PrefabCreationKey())
 	, startInfo(std::move(gameInfo)) 
 {
 	bitmaps = new GameBitmaps();

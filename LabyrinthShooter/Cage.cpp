@@ -1,11 +1,11 @@
 #include "Cage.h"
 
-Cage::Cage(const Vector& size, const std::list<GameObject*>& allObjects) 
-	: GameObject(size, allObjects) {
+Cage::Cage(const Vector& size) 
+	: GameObject(size) {
 	insideOutCollision = true;
 }
 
-Cage::Cage(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects)
-	: GameObject(size, position, allObjects) {
+Cage::Cage(const Vector& size, const Vector& position)
+	: GameObject(size, position) {
 	insideOutCollision = true;
 }

@@ -30,9 +30,9 @@ public:
 
 	std::function<void(GameObject& collider)> onCollision;
 public:
-	GameObject(const std::list<GameObject*>& allObjects, PrefabCreationKey);
-	GameObject(const Vector& size, const std::list<GameObject*>& allObjects, PrefabCreationKey);
-	GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects, PrefabCreationKey);
+	GameObject(PrefabCreationKey);
+	GameObject(const Vector& size, PrefabCreationKey);
+	GameObject(const Vector& size, const Vector& position, PrefabCreationKey);
 
 	static GameObject* Instantiate(const Vector& size);
 	static GameObject* Instantiate(const Vector& size, const Vector& position);
@@ -94,9 +94,9 @@ public:
 
 	~GameObject();
 protected:
-	GameObject(const std::list<GameObject*>& allObjects);
-	GameObject(const Vector& size, const std::list<GameObject*>& allObjects);
-	GameObject(const Vector& size, const Vector& position, const std::list<GameObject*>& allObjects);
+	GameObject();
+	GameObject(const Vector& size);
+	GameObject(const Vector& size, const Vector& position);
 	GameObject(const GameObject& other);
 
 protected:
@@ -117,8 +117,6 @@ private:
 	std::list<GameObject*> children;
 
 	std::list<function<void(GameObject*)>> onDestroyedChanged;
-
-	const std::list<GameObject*>& allObjects; // TODO: we won't need it if we implement ECS
 };
 
 
