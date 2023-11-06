@@ -5,27 +5,10 @@ Vector Game::s_SuperBulletSize = Vector(10, 10);
 
 Game::Game(Window* window, GameStartInfo&& gameInfo)
 	: GameBase(window)
-	, basicBullet(s_BasicBulletSize, PrefabCreationKey())
-	, superBullet(s_SuperBulletSize, PrefabCreationKey())
 	, startInfo(std::move(gameInfo)) 
 {
 	bitmaps = new GameBitmaps();
 	healthStats = new  BMPStats(bitmaps->heartBmp, VectorInt(30, 30), VectorInt(3, 3));
-
-	if (window != NULL) 
-	{
-		Rgb8 red = Rgb8(0xFF, 0x00, 0x00);
-		Rgb8 yellow = Rgb8(0xFF, 0xFF, 0x00);
-
-		basicBullet.SetRenderer(new RectangleRenderer(basicBullet, yellow));
-		superBullet.SetRenderer(new RectangleRenderer(superBullet, red));
-	}
-
-	basicBullet.AddComponent(new Bullet(basicBullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));
-	basicBullet.AddComponent(new BoxCollider(basicBullet, Vector::ZERO, basicBullet.GetSize()));
-
-	superBullet.AddComponent(new PowerBullet(superBullet, BULLET_SUPER_SPEED, BULLET_SUPER_DAMAGE));
-	superBullet.AddComponent(new BoxCollider(superBullet, Vector::ZERO, superBullet.GetSize()));
 }
 
 void Game::LoadStartingObjects() {
@@ -44,11 +27,14 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 	player->AddComponent(new BoxCollider(*player, Vector::ZERO, player_size));
 
 	// Broñ
+	const GameObject& basic_bullet = m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::BasicBullet);
+	const GameObject& super_bullet = m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::SuperBullet);
+
 	GameObject* basicWeapon = GameObject::Instantiate(
 		Vector(30, 10),
 		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x
 	);
-	Firearm* basicFirearm = new Firearm(*basicWeapon, basicBullet, WPN_BASIC_RELOAD, FirearmType::Basic);
+	Firearm* basicFirearm = new Firearm(*basicWeapon, basic_bullet, WPN_BASIC_RELOAD, FirearmType::Basic);
 	basicFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
 	basicWeapon->AddComponent(basicFirearm);
 	player->AddChild(basicWeapon);
@@ -58,7 +44,7 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 		Vector(30, 10),
 		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x
 	);
-	Firearm* superFirearm = new Firearm(*superWeapon, superBullet, WPN_SUPER_RELOAD, FirearmType::Super);
+	Firearm* superFirearm = new Firearm(*superWeapon, super_bullet, WPN_SUPER_RELOAD, FirearmType::Super);
 	superFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
 	superWeapon->AddComponent(superFirearm);
 	player->AddChild(superWeapon);

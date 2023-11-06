@@ -10,6 +10,7 @@
 #define BUMPOUT_SPEED 10000.0
 
 class Game;
+class PrefabFactory;
 
 class PrefabCreationKey
 {
@@ -18,7 +19,8 @@ private:
 	PrefabCreationKey(const PrefabCreationKey&) = default;
 	PrefabCreationKey(PrefabCreationKey&&) = default;
 
-	friend Game;
+	friend Game; // TODO: let's not
+	friend PrefabFactory;
 };
 
 class GameObject

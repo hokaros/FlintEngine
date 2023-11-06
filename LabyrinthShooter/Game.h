@@ -9,16 +9,13 @@
 #include "PlayerEquipment.h"
 #include "Firearm.h"
 #include "Health.h"
+#include "PrefabFactory.h"
 
 #include "../FlatEngine/GameBase.h"
 
 // Czas, co jaki zmienia siê labirynt
 #define LAB_TIME 2
 
-#define BULLET_BASIC_SPEED 1000
-#define BULLET_BASIC_DAMAGE 1
-#define BULLET_SUPER_SPEED 2000
-#define BULLET_SUPER_DAMAGE 2
 #define WPN_BASIC_RELOAD 0.2
 #define WPN_SUPER_RELOAD 2
 
@@ -85,8 +82,7 @@ private:
 
 	BMPStats* healthStats = NULL;
 
-	GameObject basicBullet; // TODO: przenieœæ prefaby do osobnej struktury
-	GameObject superBullet;
+	PrefabFactory m_PrefabFactory;
 	std::mutex playersMutex;
 
 	static Vector s_BasicBulletSize;
