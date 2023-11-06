@@ -4,7 +4,6 @@
 #include "../FlatEngine/RectangleRenderer.h"
 #include "../FlatEngine/SpriteRenderer.h"
 #include "PlayerController.h"
-#include "Cage.h"
 #include "LabyrinthSolidifier.h"
 #include "PowerBullet.h"
 #include "PlayerEquipment.h"
