@@ -1,11 +1,14 @@
 #include "PrefabFactory.h"
 #include "../FlatEngine/RectangleRenderer.h"
 #include "PowerBullet.h"
+#include "Firearm.h"
 
 PrefabFactory::PrefabFactory()
 {
 	CreateBasicBulletPrefab();
 	CreateSuperBulletPrefab();
+	CreateBasicFirearmPrefab();
+	CreateSuperFirearmPrefab();
 }
 
 PrefabFactory::~PrefabFactory()
@@ -48,6 +51,26 @@ void PrefabFactory::CreateSuperBulletPrefab()
 	super_bullet->SetRenderer(new RectangleRenderer(*super_bullet, super_bullet_color));
 
 	InsertPrefab(EPrefabId::SuperBullet, super_bullet);
+}
+
+void PrefabFactory::CreateBasicFirearmPrefab()
+{
+	constexpr Vector basic_weapon_size = Vector(30, 10);
+
+	GameObject* basic_weapon = new GameObject(basic_weapon_size, PrefabCreationKey());
+	basic_weapon->AddComponent(new Firearm(*basic_weapon, GetPrefab(EPrefabId::BasicBullet), WPN_BASIC_RELOAD, FirearmType::Basic));
+
+	InsertPrefab(EPrefabId::BasicFirearm, basic_weapon);
+}
+
+void PrefabFactory::CreateSuperFirearmPrefab()
+{
+	constexpr Vector super_weapon_size = Vector(30, 10);
+
+	GameObject* super_weapon = new GameObject(super_weapon_size, PrefabCreationKey());
+	super_weapon->AddComponent(new Firearm(*super_weapon, GetPrefab(EPrefabId::SuperBullet), WPN_SUPER_RELOAD, FirearmType::Super));
+
+	InsertPrefab(EPrefabId::SuperFirearm, super_weapon);
 }
 
 void PrefabFactory::InsertPrefab(EPrefabId prefab_id, GameObject* prefab)

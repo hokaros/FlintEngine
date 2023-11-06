@@ -16,9 +16,6 @@
 // Czas, co jaki zmienia siê labirynt
 #define LAB_TIME 2
 
-#define WPN_BASIC_RELOAD 0.2
-#define WPN_SUPER_RELOAD 2
-
 #define MAX_HEALTH 3
 #define PLAYER_SPEED 300.0
 

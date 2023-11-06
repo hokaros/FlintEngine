@@ -30,24 +30,21 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 	const GameObject& basic_bullet = m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::BasicBullet);
 	const GameObject& super_bullet = m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::SuperBullet);
 
-	GameObject* basicWeapon = GameObject::Instantiate(
-		Vector(30, 10),
-		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x
+	// Zwyk³a broñ
+	GameObject* basic_weapon = GameObject::Instantiate(
+		m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::BasicFirearm)
 	);
-	Firearm* basicFirearm = new Firearm(*basicWeapon, basic_bullet, WPN_BASIC_RELOAD, FirearmType::Basic);
-	basicFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
-	basicWeapon->AddComponent(basicFirearm);
-	player->AddChild(basicWeapon);
+	basic_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
+	basic_weapon->FindComponent<Firearm>()->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
+	player->AddChild(basic_weapon);
 
 	// Silna broñ
-	GameObject * superWeapon = GameObject::Instantiate(
-		Vector(30, 10),
-		player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x
+	GameObject* super_weapon = GameObject::Instantiate(
+		m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::SuperFirearm)
 	);
-	Firearm* superFirearm = new Firearm(*superWeapon, super_bullet, WPN_SUPER_RELOAD, FirearmType::Super);
-	superFirearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
-	superWeapon->AddComponent(superFirearm);
-	player->AddChild(superWeapon);
+	super_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
+	super_weapon->FindComponent<Firearm>()->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
+	player->AddChild(super_weapon);
 
 	// Ekwipunek
 	player->AddComponent(new PlayerEquipment(*player));
@@ -83,8 +80,8 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 
 	if (window != NULL) {
 		player->SetRenderer(new SpriteRenderer(*player, bitmaps->playerBmp));
-		basicWeapon->SetRenderer(new SpriteRenderer(*basicWeapon, bitmaps->wpnBasicBmp));
-		superWeapon->SetRenderer(new SpriteRenderer(*superWeapon, bitmaps->wpnSuperBmp));
+		basic_weapon->SetRenderer(new SpriteRenderer(*basic_weapon, bitmaps->wpnBasicBmp)); // TODO: set this in PrefabFactory
+		super_weapon->SetRenderer(new SpriteRenderer(*super_weapon, bitmaps->wpnSuperBmp));
 	}
 
 	return player;

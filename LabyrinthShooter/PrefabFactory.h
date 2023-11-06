@@ -7,13 +7,18 @@
 #define BULLET_SUPER_SPEED 2000
 #define BULLET_SUPER_DAMAGE 2
 
+#define WPN_BASIC_RELOAD 0.2
+#define WPN_SUPER_RELOAD 2
+
 class PrefabFactory
 {
 public:
 	enum class EPrefabId
 	{
 		BasicBullet,
-		SuperBullet
+		SuperBullet,
+		BasicFirearm,
+		SuperFirearm
 	};
 
 public:
@@ -25,6 +30,8 @@ public:
 private:
 	void CreateBasicBulletPrefab();
 	void CreateSuperBulletPrefab();
+	void CreateBasicFirearmPrefab();
+	void CreateSuperFirearmPrefab();
 
 	void InsertPrefab(EPrefabId prefab_id, GameObject* prefab);
 
