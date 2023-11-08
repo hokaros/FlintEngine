@@ -9,13 +9,13 @@
 
 #ifdef _DEBUG
 
-#define FE_ASSERT(cond, error_message)	\
-		if (cond){}						\
-		else							\
-		{								\
-			printf(error_message);		\
-			printf("\n");				\
-			debug_break();				\
+#define FE_ASSERT(cond, error_message, ...)		\
+		if (cond){}								\
+		else									\
+		{										\
+			printf(error_message, __VA_ARGS__);	\
+			printf("\n");						\
+			debug_break();						\
 		}								
 
 #else
@@ -23,3 +23,7 @@
 #define FE_ASSERT(cond)
 
 #endif
+
+#define FE_LOG(message, ...)			\
+	printf(message, __VA_ARGS__);		\
+	printf("\n");

@@ -1,14 +1,16 @@
 #include "Game.h"
 
-Vector Game::s_BasicBulletSize = Vector(4, 4);
-Vector Game::s_SuperBulletSize = Vector(10, 10);
+static constexpr const char* s_PlayerBitmapPath = "resources/player.bmp";
+static constexpr const char* s_HeartBitmapPath = "resources/heart.bmp";
 
 Game::Game(Window* window, GameStartInfo&& gameInfo)
 	: GameBase(window)
 	, startInfo(std::move(gameInfo)) 
 {
-	bitmaps = new GameBitmaps();
-	healthStats = new  BMPStats(bitmaps->heartBmp, VectorInt(30, 30), VectorInt(3, 3));
+	m_AssetManager.AddAsset(s_PlayerBitmapPath);
+	m_AssetManager.AddAsset(s_HeartBitmapPath);
+	SDL_Surface* heart_bitmap = m_AssetManager.GetSurfaceAsset(s_HeartBitmapPath);
+	healthStats = new  BMPStats(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
 }
 
 void Game::LoadStartingObjects() {
@@ -79,9 +81,8 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 	mover->onDirectionChanged = [this](const Vector& newDir) {OnControlledDirectionChanged(newDir); };
 
 	if (window != NULL) {
-		player->SetRenderer(new SpriteRenderer(*player, bitmaps->playerBmp));
-		basic_weapon->SetRenderer(new SpriteRenderer(*basic_weapon, bitmaps->wpnBasicBmp)); // TODO: set this in PrefabFactory
-		super_weapon->SetRenderer(new SpriteRenderer(*super_weapon, bitmaps->wpnSuperBmp));
+		SDL_Surface* player_bitmap = m_AssetManager.GetSurfaceAsset(s_PlayerBitmapPath);
+		player->SetRenderer(new SpriteRenderer(*player, player_bitmap));
 	}
 
 	return player;
@@ -153,44 +154,6 @@ bool Game::ShouldRender(GameObject* go)
 	);
 }
 
-
-
-
-GameBitmaps::GameBitmaps() {
-	playerBmp = SDL_LoadBMP("resources/player.bmp");
-	if (playerBmp == NULL) {
-		printf("Nie udalo sie zaladowac resources/player.bmp\n");
-		bitmapsOk = false;
-	}
-
-	wpnBasicBmp = SDL_LoadBMP("resources/weapon_primary.bmp");
-	if (wpnBasicBmp == NULL) {
-		printf("Nie udalo sie zaladowac resources/weapon_primary.bmp\n");
-		bitmapsOk = false;
-	}
-
-	wpnSuperBmp = SDL_LoadBMP("resources/weapon_super.bmp");
-	if (wpnSuperBmp == NULL) {
-		printf("Nie udalo sie zaladowac resources/weapon_super.bmp\n");
-		bitmapsOk = false;
-	}
-
-	heartBmp = SDL_LoadBMP("resources/heart.bmp");
-	if (heartBmp == NULL) {
-		printf("Nie udalo sie zaladowac resources/heart.bmp\n");
-		bitmapsOk = false;
-	}
-}
-
-GameBitmaps::~GameBitmaps() {
-	SDL_FreeSurface(playerBmp);
-	SDL_FreeSurface(wpnBasicBmp);
-	SDL_FreeSurface(wpnSuperBmp);
-}
-
-bool GameBitmaps::IsOk() const {
-	return bitmapsOk;
-}
 
 
 

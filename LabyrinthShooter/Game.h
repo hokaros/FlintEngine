@@ -12,6 +12,7 @@
 #include "PrefabFactory.h"
 
 #include "../FlatEngine/GameBase.h"
+#include "../FlatEngine/AssetManager.h"
 
 // Czas, co jaki zmienia siê labirynt
 #define LAB_TIME 2
@@ -20,24 +21,6 @@
 #define PLAYER_SPEED 300.0
 
 #define PLAYER_SIGHT 400
-
-
-struct GameBitmaps {
-public:
-	SDL_Surface* playerBmp;
-	SDL_Surface* wpnBasicBmp;
-	SDL_Surface* wpnSuperBmp;
-	SDL_Surface* heartBmp;
-
-public:
-	GameBitmaps();
-	~GameBitmaps();
-
-	bool IsOk() const;
-
-private:
-	bool bitmapsOk = true;
-};
 
 
 struct GameStartInfo {
@@ -75,7 +58,7 @@ private:
 
 	GameStartInfo startInfo;
 
-	GameBitmaps* bitmaps = NULL;
+	AssetManager m_AssetManager;
 
 	BMPStats* healthStats = NULL;
 
