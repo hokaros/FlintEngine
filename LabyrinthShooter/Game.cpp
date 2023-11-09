@@ -66,19 +66,6 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 
 	PlayerController* controller = new PlayerController(*player);
 	player->AddComponent(controller);
-	controller->onAimChanged = [this](double newRot) {
-		if (onControlledAimChanged) 
-			onControlledAimChanged(newRot); 
-	};
-	controller->onShot = [this]() {
-		if (onControlledShot)
-			onControlledShot();
-	};
-	controller->onWeaponChanged = [this](FirearmType newType) {
-		if (onControlledWeaponChanged)
-			onControlledWeaponChanged(newType);
-	};
-	mover->onDirectionChanged = [this](const Vector& newDir) {OnControlledDirectionChanged(newDir); };
 
 	if (window != NULL) {
 		SDL_Surface* player_bitmap = m_AssetManager.GetSurfaceAsset(s_PlayerBitmapPath);
@@ -94,11 +81,6 @@ GameObject* Game::GetPlayer() {
 
 LabyrinthSolidifier* Game::GetLab() const {
 	return lab;
-}
-
-void Game::OnControlledDirectionChanged(const Vector& newDir) {
-	if (onControlledDirectionChanged)
-		onControlledDirectionChanged(newDir);
 }
 
 void Game::OnBulletPlayerHit(GameObject& player, int dmg) {

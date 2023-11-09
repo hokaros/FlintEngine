@@ -38,14 +38,6 @@ class Game
 	: public GameBase
 {
 public:
-	function<void(const Vector&)> onControlledDirectionChanged;
-	function<void(double)> onControlledAimChanged;
-	function<void()> onControlledShot;
-	function<void(FirearmType)> onControlledWeaponChanged;
-	function<void(bool*)> onLabChanged;
-	function<void(int id, int dmg)> onPlayerHurt;
-
-public:
 	Game(Window* window, GameStartInfo&& gameInfo);
 
 	GameObject* GetPlayer();
@@ -73,7 +65,6 @@ private:
 
 	GameObject* CreatePlayer(const Vector& position);
 
-	void OnControlledDirectionChanged(const Vector& newDir);
 	void OnBulletPlayerHit(GameObject& player, int dmg);
 
 	virtual void PreRun() override;
