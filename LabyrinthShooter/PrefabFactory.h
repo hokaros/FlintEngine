@@ -18,7 +18,8 @@ public:
 		BasicBullet,
 		SuperBullet,
 		BasicFirearm,
-		SuperFirearm
+		SuperFirearm,
+		Player
 	};
 
 public:
@@ -34,6 +35,7 @@ private:
 	void CreateSuperBulletPrefab();
 	void CreateBasicFirearmPrefab();
 	void CreateSuperFirearmPrefab();
+	void CreatePlayerPrefab();
 
 	void InsertPrefab(EPrefabId prefab_id, GameObject* prefab);
 

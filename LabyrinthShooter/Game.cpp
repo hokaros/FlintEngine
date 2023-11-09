@@ -21,56 +21,24 @@ void Game::LoadStartingObjects() {
 
 GameObject* Game::CreatePlayer(const Vector& position) {
 
-	// Obiekt gracza
-	Vector player_size = Vector(20, 20);
-	GameObject* player = GameObject::Instantiate(player_size, position);
-	ConstantMover* mover = new ConstantMover(*player, PLAYER_SPEED);
-	player->AddComponent(mover);
-	player->AddComponent(new BoxCollider(*player, Vector::ZERO, player_size));
+	GameObject* player = GameObject::Instantiate(m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::Player));
+	player->SetPosition(position);
 
-	// Broñ
-	const GameObject& basic_bullet = m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::BasicBullet);
-	const GameObject& super_bullet = m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::SuperBullet);
-
-	// Zwyk³a broñ
-	GameObject* basic_weapon = GameObject::Instantiate(
-		m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::BasicFirearm)
-	);
-	basic_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
-	basic_weapon->FindComponent<Firearm>()->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
-	player->AddChild(basic_weapon);
-
-	// Silna broñ
-	GameObject* super_weapon = GameObject::Instantiate(
-		m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::SuperFirearm)
-	);
-	super_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
-	super_weapon->FindComponent<Firearm>()->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
-	player->AddChild(super_weapon);
-
-	// Ekwipunek
-	player->AddComponent(new PlayerEquipment(*player));
-	// Zdrowie
-	StatRenderer* healthRenderer = NULL;
-	if (healthStats != NULL) {
-		healthRenderer = healthStats;
+	std::list<Firearm*>* firearms = player->FindComponentsInChildren<Firearm>();
+	for (Firearm* firearm : *firearms)
+	{
+		firearm->onPlayerCollision = [this](GameObject& p, int dmg) {OnBulletPlayerHit(p, dmg); };
 	}
-	Health* playerHealth = new Health(*player, MAX_HEALTH, healthRenderer);
-	player->AddComponent(playerHealth);
-	playerHealth->SubscribeDeath(
+	delete firearms;
+
+	Health* player_health = player->FindComponent<Health>();
+	player_health->SetStatRenderer(healthStats);
+	player_health->SubscribeDeath(
 		[](Health* deadPlayer) {
 			printf("Dead\n");
 			GameObject::Destroy(&(deadPlayer->GetOwner()));
 		}
 	);
-
-	PlayerController* controller = new PlayerController(*player);
-	player->AddComponent(controller);
-
-	if (window != NULL) {
-		SDL_Surface* player_bitmap = m_AssetManager.GetSurfaceAsset(s_PlayerBitmapPath);
-		player->SetRenderer(new SpriteRenderer(*player, player_bitmap));
-	}
 
 	return player;
 }

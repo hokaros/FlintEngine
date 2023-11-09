@@ -5,6 +5,9 @@
 #include "../FlatEngine/SpriteRenderer.h"
 #include "PowerBullet.h"
 #include "Firearm.h"
+#include "ConstantMover.h"
+#include "PlayerEquipment.h"
+#include "PlayerController.h"
 
 static constexpr const char* s_PlayerBitmapPath = "resources/player.bmp";
 static constexpr const char* s_WeaponPrimaryBitmapPath = "resources/weapon_primary.bmp";
@@ -19,6 +22,7 @@ PrefabFactory::PrefabFactory()
 	CreateSuperBulletPrefab();
 	CreateBasicFirearmPrefab();
 	CreateSuperFirearmPrefab();
+	CreatePlayerPrefab();
 }
 
 PrefabFactory::~PrefabFactory()
@@ -95,6 +99,44 @@ void PrefabFactory::CreateSuperFirearmPrefab()
 	super_weapon->SetRenderer(new SpriteRenderer(*super_weapon, bitmap));
 
 	InsertPrefab(EPrefabId::SuperFirearm, super_weapon);
+}
+
+void PrefabFactory::CreatePlayerPrefab()
+{
+	constexpr float player_speed = 300.0f;
+	constexpr Vector player_size = Vector(20, 20);
+	constexpr int player_max_health = 3;
+
+	GameObject* player = new GameObject(player_size, PrefabCreationKey());
+
+	player->AddComponent(new ConstantMover(*player, player_speed));
+	player->AddComponent(new BoxCollider(*player, Vector::ZERO, player_size));
+	player->AddComponent(new PlayerEquipment(*player));
+	player->AddComponent(new Health(*player, player_max_health, nullptr));
+	player->AddComponent(new PlayerController(*player));
+
+	// Broñ
+	const GameObject& basic_bullet = GetPrefab(PrefabFactory::EPrefabId::BasicBullet);
+	const GameObject& super_bullet = GetPrefab(PrefabFactory::EPrefabId::SuperBullet);
+
+	// Zwyk³a broñ
+	GameObject* basic_weapon = GameObject::Instantiate(
+		GetPrefab(PrefabFactory::EPrefabId::BasicFirearm)
+	);
+	basic_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
+	player->AddChild(basic_weapon);
+
+	// Silna broñ
+	GameObject* super_weapon = GameObject::Instantiate(
+		GetPrefab(PrefabFactory::EPrefabId::SuperFirearm)
+	);
+	super_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
+	player->AddChild(super_weapon);
+
+	SDL_Surface* player_bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_PlayerBitmapPath);
+	player->SetRenderer(new SpriteRenderer(*player, player_bitmap));
+
+	InsertPrefab(EPrefabId::Player, player);
 }
 
 void PrefabFactory::InsertPrefab(EPrefabId prefab_id, GameObject* prefab)

@@ -34,6 +34,11 @@ bool Health::IsDead() const {
 	return currHealth <= 0;
 }
 
+void Health::SetStatRenderer(StatRenderer* value)
+{
+	healthRenderer = value;
+}
+
 void Health::OnDeath() {
 	for (function<void(Health*)> handler : onDeath) {
 		if (handler) {
