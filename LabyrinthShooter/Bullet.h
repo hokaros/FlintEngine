@@ -1,5 +1,4 @@
 #pragma once
-#include "../FlatEngine/ObjectComponent.h"
 #include "../FlatEngine/BoxCollider.h"
 #include "../FlatEngine/ComponentDefinition.h"
 #include "Health.h"

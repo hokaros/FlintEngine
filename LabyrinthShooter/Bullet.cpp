@@ -1,6 +1,4 @@
 #include "Bullet.h"
-#include "../FlatEngine/ObjectManager.h"
-#include "../FlatEngine/utility.h"
 
 DEFINE_COMPONENT(Bullet);
 
