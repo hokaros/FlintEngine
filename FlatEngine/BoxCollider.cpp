@@ -1,6 +1,17 @@
 #include "BoxCollider.h"
 #include "PhysicsSystem.h"
 
+DEFINE_COMPONENT(BoxCollider);
+
+DEFINE_FIELD(BoxCollider, m_InsideOutCollision);
+DEFINE_FIELD(BoxCollider, m_Position);
+DEFINE_FIELD(BoxCollider, m_Size);
+
+BoxCollider::BoxCollider(GameObject& owner)
+	: ObjectComponent(owner)
+{
+}
+
 BoxCollider::BoxCollider(GameObject& owner, Vector local_pos, Vector size, bool inside_out)
 	: ObjectComponent(owner)
 	, m_Position(local_pos)

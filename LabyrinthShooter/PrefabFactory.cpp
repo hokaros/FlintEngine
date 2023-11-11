@@ -68,7 +68,13 @@ void PrefabFactory::CreateBasicBulletPrefab()
 	bullet_desc.fields.insert({ "damage", "1" });
 	basic_bullet->AddComponent(ComponentSerializer::DeserializeComponent(bullet_desc, *basic_bullet));
 	//basic_bullet->AddComponent(new Bullet(*basic_bullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));
-	basic_bullet->AddComponent(new BoxCollider(*basic_bullet, Vector::ZERO, basic_bullet_size));
+
+	ComponentStringDesc collider_desc;
+	collider_desc.type = "BoxCollider";
+	collider_desc.fields.insert({ "m_Position", "0,0" });
+	collider_desc.fields.insert({ "m_Size", "4,4" });
+	basic_bullet->AddComponent(ComponentSerializer::DeserializeComponent(collider_desc, *basic_bullet));
+	//basic_bullet->AddComponent(new BoxCollider(*basic_bullet, Vector::ZERO, basic_bullet_size));
 	basic_bullet->SetRenderer(new RectangleRenderer(*basic_bullet, basic_bullet_color));
 
 	InsertPrefab(EPrefabId::BasicBullet, basic_bullet);

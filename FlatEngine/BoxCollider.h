@@ -1,10 +1,13 @@
 #pragma once
-#include "ObjectComponent.h"
+#include "ComponentDefinition.h"
 
 class BoxCollider
 	: public ObjectComponent
 {
+	DECLARE_COMPONENT();
+
 public:
+	BoxCollider(GameObject& owner);
 	BoxCollider(GameObject& owner, Vector local_pos, Vector size, bool inside_out = false);
 
 	bool DoesCollide(const BoxCollider& other) const;
@@ -36,8 +39,12 @@ private:
 	static Vector LinesIntersection(float min1, float max1, float min2, float max2);
 
 private:
-	bool m_InsideOutCollision;
-	Vector m_Position;
-	Vector m_Size;
+	bool m_InsideOutCollision = false;
+	Vector m_Position = Vector(0,0);
+	Vector m_Size = Vector(0,0);
+
+	DECLARE_FIELD(m_InsideOutCollision);
+	DECLARE_FIELD(m_Position);
+	DECLARE_FIELD(m_Size);
 };
 

@@ -23,6 +23,22 @@ inline void ParseString<int>(const std::string& str, int& out_value)
 }
 
 template<>
+inline void ParseString<bool>(const std::string& str, bool& out_value)
+{
+	int int_value = std::stoi(str);
+	FE_ASSERT(int_value == 0 || int_value == 1, "Invalid boolean string");
+	
+	if (int_value == 0)
+	{
+		out_value = false;
+	}
+	else
+	{
+		out_value = true;
+	}
+}
+
+template<>
 inline void ParseString<Vector>(const std::string& str, Vector& out_value)
 {
 	size_t comma_pos = str.find(',');
@@ -54,6 +70,17 @@ template<>
 inline std::string ToString<int>(const int& value)
 {
 	return std::to_string(value);
+}
+
+template<>
+inline std::string ToString<bool>(const bool& value)
+{
+	if (value)
+	{
+		return "1";
+	}
+
+	return "0";
 }
 
 template<>
