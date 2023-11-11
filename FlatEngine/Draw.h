@@ -15,6 +15,12 @@ public:
 	Uint8 b;
 
 public:
+	constexpr Rgb8()
+		: r(0)
+		, g(0)
+		, b(0)
+	{}
+
 	constexpr Rgb8(Uint8 r, Uint8 g, Uint8 b)
 		: r(r)
 		, g(g)

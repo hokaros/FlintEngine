@@ -1,6 +1,14 @@
 #include "RectangleRenderer.h"
 #include "DebugRenderer.h"
 
+DEFINE_COMPONENT(RectangleRenderer);
+DEFINE_FIELD(RectangleRenderer, m_Color);
+
+RectangleRenderer::RectangleRenderer(GameObject& owner)
+	: ObjectRenderer(owner)
+{
+}
+
 RectangleRenderer::RectangleRenderer(GameObject& owner, const Rgb8& color)
 	:ObjectRenderer(owner)
 	, m_Color(color)
