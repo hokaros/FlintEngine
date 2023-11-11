@@ -50,18 +50,6 @@ GameObject::GameObject(const GameObject& other)
 		components.push_back(cmpCpy);
 	}
 
-	IUpdateable* rendererCpy;
-	if (other.renderer != NULL) {
-		ObjectComponent* objCmp = static_cast<ObjectComponent*>(other.renderer);
-		if (objCmp != NULL) {
-			rendererCpy = objCmp->Copy(*this);
-		}
-		else {
-			rendererCpy = other.renderer->Copy();
-		}
-		renderer = rendererCpy;
-	}
-
 	// Skopiowanie dzieci
 	for (GameObject* child : other.children) {
 		GameObject* childCopy = new GameObject(*child);
@@ -107,16 +95,10 @@ GameObject::~GameObject() {
 	for (IUpdateable* component : components) {
 		delete component;
 	}
-
-	delete renderer;
 }
 
 void GameObject::AddComponent(IUpdateable* component) {
 	components.push_back(component);
-}
-
-void GameObject::SetRenderer(IUpdateable* renderer) {
-	this->renderer = renderer;
 }
 
 void GameObject::Update() {
@@ -132,8 +114,9 @@ void GameObject::RenderUpdate() {
 	if (!isEnabled)
 		return;
 
-	if (renderer != NULL)
-		renderer->RenderUpdate();
+	for (IUpdateable* component : components) {
+		component->RenderUpdate();
+	}
 }
 
 void GameObject::Start() {

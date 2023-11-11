@@ -11,6 +11,7 @@
 
 class Game;
 class PrefabFactory;
+class GameObjectSerializer;
 
 class PrefabCreationKey
 {
@@ -21,6 +22,7 @@ private:
 
 	friend Game; // TODO: let's not
 	friend PrefabFactory;
+	friend GameObjectSerializer;
 };
 
 class GameObject
@@ -51,7 +53,6 @@ public:
 	// Znajduje wszystkie komponenty okreœlonego typu u dzieci
 	template<class T>
 	std::list<T*>* FindComponentsInChildren();
-	void SetRenderer(IUpdateable* renderer);
 	
 
 	// Raz na klatkê
@@ -103,7 +104,6 @@ protected:
 
 protected:
 	std::list<IUpdateable*> components;
-	IUpdateable* renderer;
 
 	bool insideOutCollision = false;
 private:

@@ -152,7 +152,7 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color
 	wall->AddComponent(collider);
 
 	if (Window::Main() != NULL)
-		wall->SetRenderer(new RectangleRenderer(*wall, color));
+		wall->AddComponent(new RectangleRenderer(*wall, color));
 
 	return wall;
 }

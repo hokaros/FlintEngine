@@ -12,6 +12,7 @@
 #include "PrefabLoader.h"
 
 #include "../FlatEngine/ComponentSerializer.h"
+#include "../FlatEngine/GameObjectSerializer.h"
 
 static constexpr const char* s_PlayerBitmapPath = "resources/player.bmp";
 static constexpr const char* s_WeaponPrimaryBitmapPath = "resources/weapon_primary.bmp";
@@ -57,30 +58,27 @@ void PrefabFactory::CreateBasicBulletPrefab()
 {
 	PrefabLoader::LoadPrefab("resources/basic_bullet.prefab");
 
-	constexpr Vector basic_bullet_size = Vector(4, 4);
-	Rgb8 basic_bullet_color = Rgb8(0xFF, 0xFF, 0x00);
-
-	GameObject* basic_bullet = new GameObject(basic_bullet_size, PrefabCreationKey());
-
 	ComponentStringDesc bullet_desc;
 	bullet_desc.type = "Bullet";
 	bullet_desc.fields.insert({ "speed", "1000" });
 	bullet_desc.fields.insert({ "damage", "1" });
-	basic_bullet->AddComponent(ComponentSerializer::DeserializeComponent(bullet_desc, *basic_bullet));
-	//basic_bullet->AddComponent(new Bullet(*basic_bullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));
 
 	ComponentStringDesc collider_desc;
 	collider_desc.type = "BoxCollider";
 	collider_desc.fields.insert({ "m_Position", "0,0" });
 	collider_desc.fields.insert({ "m_Size", "4,4" });
-	basic_bullet->AddComponent(ComponentSerializer::DeserializeComponent(collider_desc, *basic_bullet));
-	//basic_bullet->AddComponent(new BoxCollider(*basic_bullet, Vector::ZERO, basic_bullet_size));
 
 	ComponentStringDesc renderer_desc;
 	renderer_desc.type = "RectangleRenderer";
 	renderer_desc.fields.insert({ "m_Color", "0xFF, 0xFF, 0x00" });
-	basic_bullet->SetRenderer(ComponentSerializer::DeserializeComponent(renderer_desc, *basic_bullet));
-	//basic_bullet->SetRenderer(new RectangleRenderer(*basic_bullet, basic_bullet_color));
+
+	GameObjectStringDesc prefab_desc;
+	prefab_desc.params.insert({ "m_Size", "4, 4" });
+	prefab_desc.components.push_back(bullet_desc);
+	prefab_desc.components.push_back(collider_desc);
+	prefab_desc.components.push_back(renderer_desc);
+
+	GameObject* basic_bullet = GameObjectSerializer::DeserializeGameObject(prefab_desc);
 
 	InsertPrefab(EPrefabId::BasicBullet, basic_bullet);
 }
@@ -94,7 +92,7 @@ void PrefabFactory::CreateSuperBulletPrefab()
 
 	super_bullet->AddComponent(new PowerBullet(*super_bullet, BULLET_SUPER_SPEED, BULLET_SUPER_DAMAGE));
 	super_bullet->AddComponent(new BoxCollider(*super_bullet, Vector::ZERO, super_bullet_size));
-	super_bullet->SetRenderer(new RectangleRenderer(*super_bullet, super_bullet_color));
+	super_bullet->AddComponent(new RectangleRenderer(*super_bullet, super_bullet_color));
 
 	InsertPrefab(EPrefabId::SuperBullet, super_bullet);
 }
@@ -106,7 +104,7 @@ void PrefabFactory::CreateBasicFirearmPrefab()
 
 	GameObject* basic_weapon = new GameObject(basic_weapon_size, PrefabCreationKey());
 	basic_weapon->AddComponent(new Firearm(*basic_weapon, GetPrefab(EPrefabId::BasicBullet), WPN_BASIC_RELOAD, FirearmType::Basic));
-	basic_weapon->SetRenderer(new SpriteRenderer(*basic_weapon, bitmap));
+	basic_weapon->AddComponent(new SpriteRenderer(*basic_weapon, bitmap));
 
 	InsertPrefab(EPrefabId::BasicFirearm, basic_weapon);
 }
@@ -118,7 +116,7 @@ void PrefabFactory::CreateSuperFirearmPrefab()
 
 	GameObject* super_weapon = new GameObject(super_weapon_size, PrefabCreationKey());
 	super_weapon->AddComponent(new Firearm(*super_weapon, GetPrefab(EPrefabId::SuperBullet), WPN_SUPER_RELOAD, FirearmType::Super));
-	super_weapon->SetRenderer(new SpriteRenderer(*super_weapon, bitmap));
+	super_weapon->AddComponent(new SpriteRenderer(*super_weapon, bitmap));
 
 	InsertPrefab(EPrefabId::SuperFirearm, super_weapon);
 }
@@ -156,7 +154,7 @@ void PrefabFactory::CreatePlayerPrefab()
 	player->AddChild(super_weapon);
 
 	SDL_Surface* player_bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_PlayerBitmapPath);
-	player->SetRenderer(new SpriteRenderer(*player, player_bitmap));
+	player->AddComponent(new SpriteRenderer(*player, player_bitmap));
 
 	InsertPrefab(EPrefabId::Player, player);
 }
