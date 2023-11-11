@@ -9,6 +9,10 @@
 #include "PlayerEquipment.h"
 #include "PlayerController.h"
 
+#include "PrefabLoader.h"
+
+#include "../FlatEngine/ComponentSerializer.h"
+
 static constexpr const char* s_PlayerBitmapPath = "resources/player.bmp";
 static constexpr const char* s_WeaponPrimaryBitmapPath = "resources/weapon_primary.bmp";
 static constexpr const char* s_WeaponSuperBitmapPath = "resources/weapon_super.bmp";
@@ -51,12 +55,19 @@ void PrefabFactory::LoadNeededAssets()
 
 void PrefabFactory::CreateBasicBulletPrefab()
 {
+	PrefabLoader::LoadPrefab("resources/basic_bullet.prefab");
+
 	constexpr Vector basic_bullet_size = Vector(4, 4);
 	Rgb8 basic_bullet_color = Rgb8(0xFF, 0xFF, 0x00);
 
 	GameObject* basic_bullet = new GameObject(basic_bullet_size, PrefabCreationKey());
 
-	basic_bullet->AddComponent(new Bullet(*basic_bullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));
+	ComponentStringDesc bullet_desc;
+	bullet_desc.type = "Bullet";
+	bullet_desc.fields.insert({ "speed", "1000" });
+	bullet_desc.fields.insert({ "damage", "1" });
+	basic_bullet->AddComponent(ComponentSerializer::DeserializeComponent(bullet_desc, *basic_bullet));
+	//basic_bullet->AddComponent(new Bullet(*basic_bullet, BULLET_BASIC_SPEED, BULLET_BASIC_DAMAGE));
 	basic_bullet->AddComponent(new BoxCollider(*basic_bullet, Vector::ZERO, basic_bullet_size));
 	basic_bullet->SetRenderer(new RectangleRenderer(*basic_bullet, basic_bullet_color));
 
