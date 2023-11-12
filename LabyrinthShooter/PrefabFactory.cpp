@@ -9,7 +9,7 @@
 #include "PlayerEquipment.h"
 #include "PlayerController.h"
 
-#include "PrefabLoader.h"
+#include "../FlatEngine/PrefabLoader.h"
 
 #include "../FlatEngine/ComponentSerializer.h"
 #include "../FlatEngine/GameObjectSerializer.h"
@@ -56,7 +56,7 @@ void PrefabFactory::LoadNeededAssets()
 
 void PrefabFactory::CreateBasicBulletPrefab()
 {
-	PrefabLoader::LoadPrefab("resources/basic_bullet.prefab");
+	GameObject* basic_bullet1 = PrefabLoader::LoadPrefab("resources/basic_bullet.prefab");
 
 	ComponentStringDesc bullet_desc;
 	bullet_desc.type = "Bullet";

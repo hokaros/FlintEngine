@@ -1,2 +1,10 @@
-Hello there
-General Kenobi!
+- size: 4, 4
+- components:
+	- Bullet:
+		- m_Speed: 1000
+		- m_Damage: 1
+	- BoxCollider:
+		- m_Pos: 0, 0
+		- m_Size: 4, 4
+	- RectangleRenderer:
+		- color: 0xFF, 0xFF, 0x00
