@@ -56,29 +56,7 @@ void PrefabFactory::LoadNeededAssets()
 
 void PrefabFactory::CreateBasicBulletPrefab()
 {
-	GameObject* basic_bullet1 = PrefabLoader::LoadPrefab("resources/basic_bullet.prefab");
-
-	ComponentStringDesc bullet_desc;
-	bullet_desc.type = "Bullet";
-	bullet_desc.fields.insert({ "speed", "1000" });
-	bullet_desc.fields.insert({ "damage", "1" });
-
-	ComponentStringDesc collider_desc;
-	collider_desc.type = "BoxCollider";
-	collider_desc.fields.insert({ "m_Position", "0,0" });
-	collider_desc.fields.insert({ "m_Size", "4,4" });
-
-	ComponentStringDesc renderer_desc;
-	renderer_desc.type = "RectangleRenderer";
-	renderer_desc.fields.insert({ "m_Color", "0xFF, 0xFF, 0x00" });
-
-	GameObjectStringDesc prefab_desc;
-	prefab_desc.params.insert({ "m_Size", "4, 4" });
-	prefab_desc.components.push_back(bullet_desc);
-	prefab_desc.components.push_back(collider_desc);
-	prefab_desc.components.push_back(renderer_desc);
-
-	GameObject* basic_bullet = GameObjectSerializer::DeserializeGameObject(prefab_desc);
+	GameObject* basic_bullet = PrefabLoader::LoadPrefab("resources/basic_bullet.prefab");
 
 	InsertPrefab(EPrefabId::BasicBullet, basic_bullet);
 }

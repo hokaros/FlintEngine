@@ -29,31 +29,35 @@ GameObject* PrefabLoader::LoadPrefab(std::fstream& file)
         file.getline(line, 256);
         std::cout << "Loaded line: " << std::endl;
         std::cout << line << std::endl;
-    }
 
-    ParseGameObjectParamLine("size: 4, 4");
-    ParseGameObjectParamLine("components:");
-
-    {
-        ParseComponentNameLine("Bullet:");
-        ParseComponentFieldLine("speed: 1000");
-        ParseComponentFieldLine("damage: 1");
-    }
-
-    {
-        ParseComponentNameLine("BoxCollider:");
-        ParseComponentFieldLine("m_Pos: 0, 0");
-        ParseComponentFieldLine("m_Size: 4, 4");
-    }
-
-    {
-        ParseComponentNameLine("RectangleRenderer:");
-        ParseComponentFieldLine("m_Color: 0xFF, 0xFF, 0x00");
+        DispatchLine(line);
     }
 
     SetParsingState(ParsingState::GameObjectParams);
 
     return GameObjectSerializer::DeserializeGameObject(m_GameObjectDesc);
+}
+
+void PrefabLoader::DispatchLine(const std::string& line)
+{
+    size_t curr_indent = line.find('-');
+    if (curr_indent >= line.size() - 1)
+        return;
+
+    std::string line_unindented = line.substr(curr_indent + 1);
+    
+    if (curr_indent == 0 && m_ParsingState != ParsingState::GameObjectParams)
+    {
+        SetParsingState(ParsingState::GameObjectParams);
+    }
+    else if (curr_indent < m_PrevIndent)
+    {
+        GoToOuterParsingState();
+    }
+
+    ParseLineForCurrentState(line_unindented);
+
+    m_PrevIndent = curr_indent;
 }
 
 void PrefabLoader::ParseGameObjectParamLine(const std::string& line)
@@ -110,14 +114,45 @@ void PrefabLoader::SetParsingState(ParsingState state)
     m_ParsingState = state;
 }
 
+void PrefabLoader::GoToOuterParsingState()
+{
+    switch (m_ParsingState)
+    {
+    case ParsingState::ComponentDefinitions:
+        SetParsingState(ParsingState::GameObjectParams);
+        break;
+    case ParsingState::SpecificComponentDefinition:
+        SetParsingState(ParsingState::ComponentDefinitions);
+        break;
+    }
+}
+
+void PrefabLoader::ParseLineForCurrentState(const std::string& line)
+{
+    switch (m_ParsingState)
+    {
+    case ParsingState::GameObjectParams:
+        ParseGameObjectParamLine(line);
+        break;
+    case ParsingState::ComponentDefinitions:
+        ParseComponentNameLine(line);
+        break;
+    case ParsingState::SpecificComponentDefinition:
+        ParseComponentFieldLine(line);
+        break;
+    default:
+        FE_ASSERT(false, "Missing parsing state");
+    }
+}
+
 void PrefabLoader::SplitLineToKeyAndValue(const std::string& line, std::string& key, std::string& value)
 {
     size_t colon_pos = line.find(':');
-    FE_ASSERT(colon_pos != (size_t)-1, "Colon not found");
 
     key = line.substr(0, colon_pos);
     TrimWhitespaces(key);
-    if (colon_pos == line.size() - 1)
+    if (colon_pos == line.size() - 1 ||
+        colon_pos == (size_t)-1)
     {
         value = "";
         return;
