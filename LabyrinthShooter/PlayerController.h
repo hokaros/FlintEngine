@@ -19,11 +19,12 @@ public:
 	function<void(FirearmType)> onWeaponChanged;
 
 public:
-	PlayerController(GameObject& player);
+	PlayerController() = default;
+
 	void Update() override;
 	void Start() override;
 
-	ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
 protected:
 	InputController* input = NULL;
 	PlayerEquipment* equipment = NULL;

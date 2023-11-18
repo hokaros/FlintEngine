@@ -7,14 +7,17 @@ class PowerBullet :
 	public Bullet
 {
 public:
-	PowerBullet(GameObject& owner, float speed, int damage);
+	PowerBullet(float speed, int damage);
 
 	void Awake() override;
-	virtual ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
+
 protected:
 	virtual void OnCollision(BoxCollider& collider) override;
+
 private:
 	int health;
+
 private:
 	void DecreaseHealth();
 };

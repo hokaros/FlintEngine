@@ -146,13 +146,13 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color) {
 	GameObject* wall = GameObject::Instantiate(size);
 
-	wall->AddComponent(new Regenerable(*wall, WALL_REGEN));
-	BoxCollider* collider = new BoxCollider(*wall, Vector::ZERO, size);
+	wall->AddComponent(new Regenerable(WALL_REGEN));
+	BoxCollider* collider = new BoxCollider(Vector::ZERO, size);
 	collider->m_IsStatic = true;
 	wall->AddComponent(collider);
 
 	if (Window::Main() != NULL)
-		wall->AddComponent(new RectangleRenderer(*wall, color));
+		wall->AddComponent(new RectangleRenderer(color));
 
 	return wall;
 }

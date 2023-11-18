@@ -8,11 +8,11 @@ class RectangleRenderer :
 	DECLARE_COMPONENT();
 
 public:
-	RectangleRenderer(GameObject& owner);
-	RectangleRenderer(GameObject& owner, const Rgb8& color);
+	RectangleRenderer() = default;
+	RectangleRenderer(const Rgb8& color);
 	void Render() override;
 
-	ObjectComponent* Copy(GameObject& newOwner) override;
+	IUpdateable* Copy() override;
 private:
 	Rgb8 m_Color;
 

@@ -10,7 +10,7 @@ public:
 	function<void(GameObject&, int dmg)> onPlayerCollision; // zdarzenie, gdy pocisk trafi w gracza
 
 public:
-	Firearm(GameObject& owner, const GameObject& bulletPrefab, float reloadTime, FirearmType type);
+	Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type);
 
 	void Update() override;
 	// Strzela, jeœli prze³adowano
@@ -18,7 +18,8 @@ public:
 
 	FirearmType GetType() const;
 
-	ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
+
 protected:
 	const GameObject& bulletPrefab;
 private:

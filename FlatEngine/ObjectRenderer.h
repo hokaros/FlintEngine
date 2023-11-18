@@ -6,7 +6,6 @@
 class ObjectRenderer : public ObjectComponent
 {
 public:
-	ObjectRenderer(GameObject& owner);
 	void RenderUpdate() override;
 	virtual void Render() = 0;
 };

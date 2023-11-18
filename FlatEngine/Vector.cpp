@@ -3,27 +3,6 @@
 
 const Vector Vector::ZERO = Vector(0.0f, 0.0f);
 
-Vector::Vector(Direction direction) : x(0), y(0) {
-	switch (direction) {
-	case Direction::EAST:
-		x = 1;
-		y = 0;
-		break;
-	case Direction::WEST:
-		x = -1;
-		y = 0;
-		break;
-	case Direction::NORTH:
-		x = 0;
-		y = -1;
-		break;
-	case Direction::SOUTH:
-		x = 0;
-		y = 1;
-		break;
-	}
-}
-
 void Vector::Normalize() {
 	float length = Length();
 	if (length == 0)

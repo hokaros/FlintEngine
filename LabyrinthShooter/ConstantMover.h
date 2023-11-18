@@ -11,7 +11,7 @@ public:
 	function<void(const Vector&)> onDirectionChanged;
 
 public:
-	ConstantMover(GameObject& owner, float movementSpeed);
+	ConstantMover(float movementSpeed);
 
 	void Update() override;
 
@@ -20,7 +20,7 @@ public:
 	// Czy obiekt porusza siê w okreœlon¹ stronê
 	bool IsSameDirection(const Vector& otherDir) const;
 
-	ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
 
 protected:
 	// Prêdkoœæ [piksele na sekundê]

@@ -1,18 +1,18 @@
 #include "ConstantMover.h"
 
-ConstantMover::ConstantMover(GameObject& owner, float movementSpeed)
-	: ObjectComponent(owner), movementSpeed(movementSpeed) {
+ConstantMover::ConstantMover(float movementSpeed)
+	: movementSpeed(movementSpeed) {
 
 }
 
-ObjectComponent* ConstantMover::Copy(GameObject& newOwner) {
-	return new ConstantMover(newOwner, movementSpeed);
+IUpdateable* ConstantMover::Copy() {
+	return new ConstantMover(movementSpeed);
 }
 
 void ConstantMover::Update() {
 	// Ruch
 	Vector dPos = moveDir * movementSpeed * Timer::Main()->GetDeltaTime();
-	gameObject.SetPosition(gameObject.GetPosition() + dPos);
+	m_GameObject->SetPosition(m_GameObject->GetPosition() + dPos);
 }
 
 void ConstantMover::SetDirection(const Vector& newDir) {

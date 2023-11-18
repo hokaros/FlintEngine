@@ -1,45 +1,50 @@
 #include "PlayerEquipment.h"
 
-PlayerEquipment::PlayerEquipment(GameObject& owner)
-	: ObjectComponent(owner) {
-
-}
-
-void PlayerEquipment::Start() {
+void PlayerEquipment::Start() 
+{
 	LoadWeaponsFromChildren();
 
 	EquipWeapon(basicWpn);
 
-	if (superWpn != NULL) {
+	if (superWpn != nullptr) 
+	{
 		superWpn->GetOwner().SetEnabled(false);
 	}
 }
 
-ObjectComponent* PlayerEquipment::Copy(GameObject& newOwner) {
-	return new PlayerEquipment(newOwner);
+IUpdateable* PlayerEquipment::Copy()
+{
+	return new PlayerEquipment();
 }
 
-void PlayerEquipment::EquipWeapon(FirearmType weaponType) {
-	if (weaponType == FirearmType::Basic) {
+void PlayerEquipment::EquipWeapon(FirearmType weaponType) 
+{
+	if (weaponType == FirearmType::Basic) 
+	{
 		EquipWeapon(basicWpn);
 	}
-	else {
+	else 
+	{
 		EquipWeapon(superWpn);
 	}
 }
 
-void PlayerEquipment::SwitchWeapon() {
+void PlayerEquipment::SwitchWeapon() 
+{
 	if (currWpn == basicWpn)
 		EquipWeapon(superWpn);
 	else
 		EquipWeapon(basicWpn);
 }
 
-void PlayerEquipment::EquipWeapon(Firearm* wpn) {
-	if (currWpn != NULL) {
+void PlayerEquipment::EquipWeapon(Firearm* wpn) 
+{
+	if (currWpn != nullptr) 
+	{
 		currWpn->GetOwner().SetEnabled(false);
 	}
-	if (wpn != NULL) {
+	if (wpn != nullptr) 
+	{
 		wpn->GetOwner().SetEnabled(true);
 	}
 
@@ -47,14 +52,14 @@ void PlayerEquipment::EquipWeapon(Firearm* wpn) {
 }
 
 Firearm* PlayerEquipment::GetCurrentWeapon() {
-	if (currWpn == NULL)
-		return NULL;
+	if (currWpn == nullptr)
+		return nullptr;
 
 	return currWpn;
 }
 
 void PlayerEquipment::LoadWeaponsFromChildren() {
-	std::list<Firearm*>* firearms = gameObject.FindComponentsInChildren<Firearm>();
+	std::list<Firearm*>* firearms = m_GameObject->FindComponentsInChildren<Firearm>();
 
 	for (Firearm* firearm : *firearms) {
 		if (firearm->GetType() == FirearmType::Basic) {

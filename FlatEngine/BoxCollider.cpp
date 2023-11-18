@@ -7,14 +7,8 @@ DEFINE_FIELD(BoxCollider, m_InsideOutCollision);
 DEFINE_FIELD(BoxCollider, m_Position);
 DEFINE_FIELD(BoxCollider, m_Size);
 
-BoxCollider::BoxCollider(GameObject& owner)
-	: ObjectComponent(owner)
-{
-}
-
-BoxCollider::BoxCollider(GameObject& owner, Vector local_pos, Vector size, bool inside_out)
-	: ObjectComponent(owner)
-	, m_Position(local_pos)
+BoxCollider::BoxCollider(Vector local_pos, Vector size, bool inside_out)
+	: m_Position(local_pos)
 	, m_Size(size)
 	, m_InsideOutCollision(inside_out)
 {
@@ -79,9 +73,9 @@ void BoxCollider::OnDestroy()
 	PhysicsSystem::GetInstance()->UnregisterCollider(this);
 }
 
-ObjectComponent* BoxCollider::Copy(GameObject& new_owner)
+IUpdateable* BoxCollider::Copy()
 {
-	return new BoxCollider(new_owner, m_Position, m_Size);
+	return new BoxCollider(m_Position, m_Size);
 }
 
 bool BoxCollider::DoesIntersect(const BoxCollider& other) const

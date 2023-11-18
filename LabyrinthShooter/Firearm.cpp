@@ -1,19 +1,25 @@
 #include "Firearm.h"
 #include "../FlatEngine/ObjectManager.h"
 
-Firearm::Firearm(GameObject& owner, const GameObject& bulletPrefab, float reloadTime, FirearmType type)
-	: ObjectComponent(owner), bulletPrefab(bulletPrefab), reloadTime(reloadTime), type(type) {
+Firearm::Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type)
+	: bulletPrefab(bulletPrefab)
+	, reloadTime(reloadTime)
+	, type(type) 
+{
 
 }
 
-void Firearm::Update() {
+void Firearm::Update() 
+{
 	timeSinceLastShot += Timer::Main()->GetDeltaTime();
-	if (timeSinceLastShot >= reloadTime) {
+	if (timeSinceLastShot >= reloadTime) 
+	{
 		isReloaded = true;
 	}
 }
 
-bool Firearm::TryShoot() {
+bool Firearm::TryShoot() 
+{
 	if (!isReloaded)
 		return false;
 
@@ -21,14 +27,14 @@ bool Firearm::TryShoot() {
 	GameObject* bullet = GameObject::Instantiate(bulletPrefab);
 
 	// Ustawienie pozycji
-	Vector relativePos = Vector(Direction::EAST) * gameObject.GetSize().x;
-	bullet->SetPosition(gameObject.LocalToWorld(relativePos));
+	Vector relativePos = Vector(Direction::EAST) * m_GameObject->GetSize().x;
+	bullet->SetPosition(m_GameObject->LocalToWorld(relativePos));
 	// Obrót zgodnie z obrotem broni
-	bullet->Rotate(gameObject.GetRotation());
+	bullet->Rotate(m_GameObject->GetRotation());
 
 	// Nadanie kierunku lotu
 	Bullet* b = bullet->FindComponent<Bullet>();
-	b->SetDirection(gameObject.LookingDirection());
+	b->SetDirection(m_GameObject->LookingDirection());
 
 	// Zachowanie po kolizji
 	b->onPlayerCollision = onPlayerCollision;
@@ -40,8 +46,8 @@ bool Firearm::TryShoot() {
 	return true;
 }
 
-ObjectComponent* Firearm::Copy(GameObject& newOwner) {
-	return new Firearm(newOwner, bulletPrefab, reloadTime, type);
+IUpdateable* Firearm::Copy() {
+	return new Firearm(bulletPrefab, reloadTime, type);
 }
 
 FirearmType Firearm::GetType() const {

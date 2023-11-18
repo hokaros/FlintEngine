@@ -5,13 +5,16 @@ class Regenerable :
 	public ObjectComponent
 {
 public:
-	Regenerable(GameObject& owner, double regenerationTime);
+	Regenerable(double regenerationTime);
 
-	void Update() override;
+	virtual void Start() override;
+	virtual void Update() override;
 
-	ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
+
 private:
 	double regenerationTime;
+
 private:
 	void OnDestroyed();
 };

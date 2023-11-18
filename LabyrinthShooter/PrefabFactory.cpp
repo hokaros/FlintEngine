@@ -68,9 +68,9 @@ void PrefabFactory::CreateSuperBulletPrefab()
 
 	GameObject* super_bullet = new GameObject(super_bullet_size, PrefabCreationKey());
 
-	super_bullet->AddComponent(new PowerBullet(*super_bullet, BULLET_SUPER_SPEED, BULLET_SUPER_DAMAGE));
-	super_bullet->AddComponent(new BoxCollider(*super_bullet, Vector::ZERO, super_bullet_size));
-	super_bullet->AddComponent(new RectangleRenderer(*super_bullet, super_bullet_color));
+	super_bullet->AddComponent(new PowerBullet(BULLET_SUPER_SPEED, BULLET_SUPER_DAMAGE));
+	super_bullet->AddComponent(new BoxCollider(Vector::ZERO, super_bullet_size));
+	super_bullet->AddComponent(new RectangleRenderer(super_bullet_color));
 
 	InsertPrefab(EPrefabId::SuperBullet, super_bullet);
 }
@@ -81,8 +81,8 @@ void PrefabFactory::CreateBasicFirearmPrefab()
 	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_WeaponPrimaryBitmapPath);
 
 	GameObject* basic_weapon = new GameObject(basic_weapon_size, PrefabCreationKey());
-	basic_weapon->AddComponent(new Firearm(*basic_weapon, GetPrefab(EPrefabId::BasicBullet), WPN_BASIC_RELOAD, FirearmType::Basic));
-	basic_weapon->AddComponent(new SpriteRenderer(*basic_weapon, bitmap));
+	basic_weapon->AddComponent(new Firearm(GetPrefab(EPrefabId::BasicBullet), WPN_BASIC_RELOAD, FirearmType::Basic));
+	basic_weapon->AddComponent(new SpriteRenderer(bitmap));
 
 	InsertPrefab(EPrefabId::BasicFirearm, basic_weapon);
 }
@@ -93,8 +93,8 @@ void PrefabFactory::CreateSuperFirearmPrefab()
 	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_WeaponSuperBitmapPath);
 
 	GameObject* super_weapon = new GameObject(super_weapon_size, PrefabCreationKey());
-	super_weapon->AddComponent(new Firearm(*super_weapon, GetPrefab(EPrefabId::SuperBullet), WPN_SUPER_RELOAD, FirearmType::Super));
-	super_weapon->AddComponent(new SpriteRenderer(*super_weapon, bitmap));
+	super_weapon->AddComponent(new Firearm(GetPrefab(EPrefabId::SuperBullet), WPN_SUPER_RELOAD, FirearmType::Super));
+	super_weapon->AddComponent(new SpriteRenderer(bitmap));
 
 	InsertPrefab(EPrefabId::SuperFirearm, super_weapon);
 }
@@ -107,11 +107,11 @@ void PrefabFactory::CreatePlayerPrefab()
 
 	GameObject* player = new GameObject(player_size, PrefabCreationKey());
 
-	player->AddComponent(new ConstantMover(*player, player_speed));
-	player->AddComponent(new BoxCollider(*player, Vector::ZERO, player_size));
-	player->AddComponent(new PlayerEquipment(*player));
-	player->AddComponent(new Health(*player, player_max_health, nullptr));
-	player->AddComponent(new PlayerController(*player));
+	player->AddComponent(new ConstantMover(player_speed));
+	player->AddComponent(new BoxCollider(Vector::ZERO, player_size));
+	player->AddComponent(new PlayerEquipment());
+	player->AddComponent(new Health(player_max_health, nullptr));
+	player->AddComponent(new PlayerController());
 
 	// Broñ
 	const GameObject& basic_bullet = GetPrefab(PrefabFactory::EPrefabId::BasicBullet);
@@ -132,7 +132,7 @@ void PrefabFactory::CreatePlayerPrefab()
 	player->AddChild(super_weapon);
 
 	SDL_Surface* player_bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_PlayerBitmapPath);
-	player->AddComponent(new SpriteRenderer(*player, player_bitmap));
+	player->AddComponent(new SpriteRenderer(player_bitmap));
 
 	InsertPrefab(EPrefabId::Player, player);
 }

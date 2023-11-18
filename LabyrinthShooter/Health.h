@@ -9,7 +9,7 @@ class Health :
 	public ObjectComponent
 {
 public:
-	Health(GameObject& owner, int maxHealth, StatRenderer* healthRenderer);
+	Health(int maxHealth, StatRenderer* healthRenderer);
 
 	void Hurt(int hp);
 	bool IsDead() const;
@@ -19,7 +19,7 @@ public:
 	// Obs³ugiwanie œmierci z argumentem tego komponentu
 	void SubscribeDeath(function<void(Health*)> handler);
 
-	virtual ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
 
 private:
 	int maxHealth;

@@ -5,15 +5,8 @@ DEFINE_COMPONENT(Bullet);
 DEFINE_FIELD(Bullet, speed);
 DEFINE_FIELD(Bullet, damage);
 
-Bullet::Bullet(GameObject& owner)
-	: ObjectComponent(owner)
-	, direction(Direction::EAST)
-{
-}
-
-Bullet::Bullet(GameObject& owner, float speed, int damage)
-	: ObjectComponent(owner)
-	, speed(speed)
+Bullet::Bullet(float speed, int damage)
+	: speed(speed)
 	, direction(Direction::EAST)
 	, damage(damage) 
 {
@@ -22,7 +15,7 @@ Bullet::Bullet(GameObject& owner, float speed, int damage)
 
 void Bullet::Awake()
 {
-	BoxCollider* collider = gameObject.FindComponent<BoxCollider>();
+	BoxCollider* collider = m_GameObject->FindComponent<BoxCollider>();
 	collider->m_IsStatic = true;
 
 	collider->onCollision =
@@ -33,7 +26,7 @@ void Bullet::Awake()
 
 void Bullet::Update() 
 {
-	gameObject.Translate(
+	m_GameObject->Translate(
 		direction * speed * Timer::Main()->GetDeltaTime()
 	);
 }
@@ -49,12 +42,12 @@ void Bullet::OnCollision(BoxCollider& collider)
 		onPlayerCollision(other_game_object, damage);
 	}
 
-	GameObject::Destroy(&gameObject); // zniszczenie pocisku
+	GameObject::Destroy(m_GameObject); // zniszczenie pocisku
 }
 
-ObjectComponent* Bullet::Copy(GameObject& newOwner) 
+IUpdateable* Bullet::Copy() 
 {
-	return new Bullet(newOwner, speed, damage);
+	return new Bullet(speed, damage);
 }
 
 void Bullet::SetDirection(const Vector& direction) 

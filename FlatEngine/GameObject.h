@@ -1,7 +1,6 @@
 #pragma once
 #include "Vector.h"
 #include "Timer.h"
-#include "IUpdateable.h"
 #include <functional>
 #include <math.h>
 #include <mutex>
@@ -9,9 +8,9 @@
 #include <list>
 #define BUMPOUT_SPEED 10000.0
 
-class Game;
 class PrefabFactory;
 class GameObjectSerializer;
+class ObjectComponent;
 
 class PrefabCreationKey
 {
@@ -20,7 +19,6 @@ private:
 	PrefabCreationKey(const PrefabCreationKey&) = default;
 	PrefabCreationKey(PrefabCreationKey&&) = default;
 
-	//friend Game; // TODO: let's not
 	friend PrefabFactory;
 	friend GameObjectSerializer;
 };
@@ -43,7 +41,7 @@ public:
 	static GameObject* Instantiate(const GameObject& other);
 	static void Destroy(GameObject* game_object);
 
-	void AddComponent(IUpdateable* component);
+	void AddComponent(ObjectComponent* component);
 	// Znajduje komponent okreœlonego typu
 	template<class T>
 	T* FindComponent();
@@ -103,7 +101,7 @@ protected:
 	GameObject(const GameObject& other);
 
 protected:
-	std::list<IUpdateable*> components;
+	std::list<ObjectComponent*> components;
 
 	bool insideOutCollision = false;
 private:
@@ -125,7 +123,7 @@ private:
 
 template<class T>
 T* GameObject::FindComponent() {
-	for (IUpdateable* component : components) {
+	for (ObjectComponent* component : components) {
 		T* desired = dynamic_cast<T*>(component);
 		if (desired != NULL) {
 			return desired;
@@ -138,7 +136,7 @@ template<class T>
 std::list<T*>* GameObject::FindComponents() {
 	std::list<T*>* found = new std::list<T*>();
 
-	for (IUpdateable* component : components) {
+	for (ObjectComponent* component : components) {
 		T* desired = dynamic_cast<T*>(component);
 		if (desired != NULL) {
 			found->push_back(desired);

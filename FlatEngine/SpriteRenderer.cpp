@@ -1,31 +1,28 @@
 #include "SpriteRenderer.h"
 #include "Draw.h"
 
-SpriteRenderer::SpriteRenderer(GameObject& owner, SDL_Surface* sprite)
-	: ObjectRenderer(owner), sprite(sprite),
-	texture(SDL_CreateTextureFromSurface(Window::Main()->GetRenderer(), sprite)) {
+SpriteRenderer::SpriteRenderer(SDL_Surface* sprite)
+	: m_Sprite(sprite)
+	, m_Texture(SDL_CreateTextureFromSurface(Window::Main()->GetRenderer(), sprite)) {
 
 }
 
 SpriteRenderer::~SpriteRenderer() {
-	SDL_DestroyTexture(texture);
+	SDL_DestroyTexture(m_Texture);
 }
 
 void SpriteRenderer::Render() {
 	SDL_Renderer* renderer = Window::Main()->GetRenderer();
 
 	SDL_Rect dstRect;
-	dstRect.x = gameObject.GetPosition().x;
-	dstRect.y = gameObject.GetPosition().y;
-	dstRect.w = gameObject.GetSize().x;
-	dstRect.h = gameObject.GetSize().y;
+	dstRect.x = m_GameObject->GetPosition().x;
+	dstRect.y = m_GameObject->GetPosition().y;
+	dstRect.w = m_GameObject->GetSize().x;
+	dstRect.h = m_GameObject->GetSize().y;
 
-	Window::Main()->RenderTexture(texture, dstRect, gameObject.GetRotation());
+	Window::Main()->RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
 }
 
-ObjectComponent* SpriteRenderer::Copy(GameObject& newOwner) {
-	return new SpriteRenderer(
-		newOwner,
-		sprite
-	);
+IUpdateable* SpriteRenderer::Copy() {
+	return new SpriteRenderer(m_Sprite);
 }

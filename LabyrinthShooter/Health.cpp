@@ -1,16 +1,20 @@
 #include "Health.h"
 
-Health::Health(GameObject& owner, int maxHealth, StatRenderer* healthRenderer)
-	: ObjectComponent(owner), maxHealth(maxHealth), currHealth(maxHealth), healthRenderer(healthRenderer) {
+Health::Health(int maxHealth, StatRenderer* healthRenderer)
+	: maxHealth(maxHealth)
+	, currHealth(maxHealth)
+	, healthRenderer(healthRenderer) 
+{
 
-	if (healthRenderer != NULL) {
+	if (healthRenderer != nullptr) 
+	{
 		healthRenderer->UpdateStat(currHealth);
 	}
 }
 
-ObjectComponent* Health::Copy(GameObject& newOwner)
+IUpdateable* Health::Copy()
 {
-	Health* health = new Health(newOwner, maxHealth, NULL);
+	Health* health = new Health(maxHealth, nullptr);
 	// Dodanie funkcji obs³ugi œmierci
 	for (function<void(Health*)> deathHandler : onDeath) {
 		health->SubscribeDeath(deathHandler);
@@ -18,19 +22,22 @@ ObjectComponent* Health::Copy(GameObject& newOwner)
 	return health;
 }
 
-void Health::Hurt(int hp) {
+void Health::Hurt(int hp) 
+{
 	currHealth -= hp;
 	printf("Ouch, curr = %d\n", currHealth);
 
-	if (healthRenderer != NULL)
+	if (healthRenderer != nullptr)
 		healthRenderer->UpdateStat(currHealth);
 
-	if (currHealth <= 0) {
+	if (currHealth <= 0) 
+	{
 		OnDeath();
 	}
 }
 
-bool Health::IsDead() const {
+bool Health::IsDead() const 
+{
 	return currHealth <= 0;
 }
 
@@ -39,14 +46,18 @@ void Health::SetStatRenderer(StatRenderer* value)
 	healthRenderer = value;
 }
 
-void Health::OnDeath() {
-	for (function<void(Health*)> handler : onDeath) {
-		if (handler) {
+void Health::OnDeath() 
+{
+	for (function<void(Health*)> handler : onDeath) 
+	{
+		if (handler) 
+		{
 			handler(this);
 		}
 	}
 }
 
-void Health::SubscribeDeath(function<void(Health*)> handler) {
+void Health::SubscribeDeath(function<void(Health*)> handler) 
+{
 	onDeath.push_back(handler);
 }

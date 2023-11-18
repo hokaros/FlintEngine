@@ -7,8 +7,8 @@ class BoxCollider
 	DECLARE_COMPONENT();
 
 public:
-	BoxCollider(GameObject& owner);
-	BoxCollider(GameObject& owner, Vector local_pos, Vector size, bool inside_out = false);
+	BoxCollider() = default;
+	BoxCollider(Vector local_pos, Vector size, bool inside_out = false);
 
 	bool DoesCollide(const BoxCollider& other) const;
 	Rect GetIntersection(const BoxCollider& other) const;
@@ -23,7 +23,7 @@ public:
 
 	virtual void Awake() override;
 	virtual void OnDestroy() override;
-	virtual ObjectComponent* Copy(GameObject& new_owner) override;
+	virtual IUpdateable* Copy() override;
 
 public:
 	bool m_IsStatic = false;

@@ -7,7 +7,7 @@ class PlayerEquipment :
 	public ObjectComponent
 {
 public:
-	PlayerEquipment(GameObject& owner);
+	PlayerEquipment() = default;
 
 	void Start() override;
 
@@ -16,7 +16,7 @@ public:
 
 	Firearm* GetCurrentWeapon();
 
-	ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
 
 private:
 	Firearm* basicWpn = NULL;

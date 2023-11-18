@@ -3,55 +3,48 @@
 #include "ObjectManager.h"
 
 GameObject::GameObject()
-	: size(1, 1) {
-
+	: size(1, 1) 
+{
 }
 
 GameObject::GameObject(const Vector& size)
-	: size(size) {
-
+	: size(size) 
+{
 }
 
 GameObject::GameObject(const Vector& size, const Vector& position)
-	: position(position), size(size) {
-
+	: position(position), size(size) 
+{
 }
 
 GameObject::GameObject(PrefabCreationKey)
-	: GameObject() {
-
+	: GameObject() 
+{
 }
 
 GameObject::GameObject(const Vector& size, PrefabCreationKey)
-	: GameObject(size) {
-
+	: GameObject(size) 
+{
 }
 
 GameObject::GameObject(const Vector& size, const Vector& position, PrefabCreationKey)
-	: GameObject(size, position) {
-
+	: GameObject(size, position) 
+{
 }
 
 GameObject::GameObject(const GameObject& other) 
-	: GameObject(other.size, other.position, {}) {
+	: GameObject(other.size, other.position, {}) 
+{
 	// Skopiowanie komponentów
-	for (IUpdateable* component : other.components) {
-		IUpdateable* cmpCpy;
-
-		// Rzutowanie na ObjectComponent, aby zmieniæ w³aœciciela
-		ObjectComponent* objCmp = static_cast<ObjectComponent*>(component);
-		if (objCmp != NULL) {
-			cmpCpy = objCmp->Copy(*this);
-		}
-		else {
-			cmpCpy = component->Copy();
-		}
-
-		components.push_back(cmpCpy);
+	for (ObjectComponent* component : other.components) 
+	{
+		ObjectComponent* cmpCpy = static_cast<ObjectComponent*>(component->Copy());
+		AddComponent(cmpCpy);
 	}
 
 	// Skopiowanie dzieci
-	for (GameObject* child : other.children) {
+	for (GameObject* child : other.children) 
+	{
 		GameObject* childCopy = new GameObject(*child);
 
 		AddChild(childCopy);
@@ -97,8 +90,9 @@ GameObject::~GameObject() {
 	}
 }
 
-void GameObject::AddComponent(IUpdateable* component) {
+void GameObject::AddComponent(ObjectComponent* component) {
 	components.push_back(component);
+	component->SetOwner(this);
 }
 
 void GameObject::Update() {

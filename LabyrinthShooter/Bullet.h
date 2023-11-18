@@ -13,14 +13,14 @@ public:
 	function<void(GameObject&, int dmg)> onPlayerCollision;
 
 public:
-	Bullet(GameObject& owner);
-	Bullet(GameObject& owner, float speed, int damage);
+	Bullet() = default;
+	Bullet(float speed, int damage);
 	void Awake() override;
 	void Update() override;
 
 	void SetDirection(const Vector& direction);
 
-	virtual ObjectComponent* Copy(GameObject& newOwner) override;
+	virtual IUpdateable* Copy() override;
 
 protected:
 	float speed = 1.0f;
@@ -30,7 +30,7 @@ protected:
 	virtual void OnCollision(BoxCollider& collider);
 
 private:
-	Vector direction;
+	Vector direction = Direction::EAST;
 
 	DECLARE_FIELD(speed);
 	DECLARE_FIELD(damage);

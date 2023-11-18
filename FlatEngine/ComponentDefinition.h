@@ -53,7 +53,7 @@ private:
 class ComponentDefinition
 {
 public:
-	using ComponentConstructorT = std::function<ObjectComponent* (GameObject&)>;
+	using ComponentConstructorT = std::function<ObjectComponent* ()>;
 
 	ComponentDefinition(const std::string& name, ComponentConstructorT constructor);
 
@@ -92,8 +92,8 @@ private:												\
 
 #define DEFINE_COMPONENT(clazz)							\
 ComponentDefinition clazz::s_ComponentDefinition =		\
-	ComponentDefinition(#clazz, [](GameObject& go)		\
-		{ return new clazz(go); }						\
+	ComponentDefinition(#clazz, []()		\
+		{ return new clazz(); }						\
 );
 
 #define DECLARE_FIELD(name)															\

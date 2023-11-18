@@ -6,14 +6,14 @@ class SpriteRenderer :
 	public ObjectRenderer
 {
 public:
-	SpriteRenderer(GameObject& owner, SDL_Surface* sprite);
+	SpriteRenderer(SDL_Surface* sprite);
 	~SpriteRenderer();
 
 	void Render() override;
 
-	ObjectComponent* Copy(GameObject& newOwner) override;
+	IUpdateable* Copy() override;
 protected:
-	SDL_Surface* sprite;
-	SDL_Texture* texture;
+	SDL_Surface* m_Sprite;
+	SDL_Texture* m_Texture;
 };
 

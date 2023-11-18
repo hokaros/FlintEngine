@@ -1,16 +1,11 @@
 #include "PlayerController.h"
 #include "Health.h"
 
-PlayerController::PlayerController(GameObject& player)
-	: ObjectComponent(player) {
-
-}
-
 void PlayerController::Start() {
 	// Za³adowanie cache'a
 	input = InputController::Main();
-	equipment = gameObject.FindComponent<PlayerEquipment>();
-	mover = gameObject.FindComponent<ConstantMover>();
+	equipment = m_GameObject->FindComponent<PlayerEquipment>();
+	mover = m_GameObject->FindComponent<ConstantMover>();
 }
 
 void PlayerController::Update() {
@@ -34,8 +29,8 @@ void PlayerController::Update() {
 	}
 }
 
-ObjectComponent* PlayerController::Copy(GameObject& newOwner) {
-	return new PlayerController(newOwner);
+IUpdateable* PlayerController::Copy() {
+	return new PlayerController();
 }
 
 void PlayerController::ProcessMovement() {
@@ -64,11 +59,11 @@ void PlayerController::ProcessMovement() {
 }
 
 void PlayerController::ProcessAim() {
-	double prevRotation = gameObject.GetRotation();
+	double prevRotation = m_GameObject->GetRotation();
 
 	Vector mousePos = input->GetMousePosition();
-	gameObject.LookAt(mousePos);
+	m_GameObject->LookAt(mousePos);
 
-	if (gameObject.GetRotation() != prevRotation && onAimChanged)
-		onAimChanged(gameObject.GetRotation());
+	if (m_GameObject->GetRotation() != prevRotation && onAimChanged)
+		onAimChanged(m_GameObject->GetRotation());
 }

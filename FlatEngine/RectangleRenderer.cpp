@@ -4,25 +4,19 @@
 DEFINE_COMPONENT(RectangleRenderer);
 DEFINE_FIELD(RectangleRenderer, m_Color);
 
-RectangleRenderer::RectangleRenderer(GameObject& owner)
-	: ObjectRenderer(owner)
-{
-}
-
-RectangleRenderer::RectangleRenderer(GameObject& owner, const Rgb8& color)
-	:ObjectRenderer(owner)
-	, m_Color(color)
+RectangleRenderer::RectangleRenderer(const Rgb8& color)
+	: m_Color(color)
 {
 
 }
 
 void RectangleRenderer::Render() 
 {
-	Rect rect = Rect(gameObject.GetPosition(), gameObject.GetSize());
+	Rect rect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
 	DebugRenderer::DrawRect(rect, m_Color);
 }
 
-ObjectComponent* RectangleRenderer::Copy(GameObject& newOwner) 
+IUpdateable* RectangleRenderer::Copy() 
 {
-	return new RectangleRenderer(newOwner, m_Color);
+	return new RectangleRenderer(m_Color);
 }

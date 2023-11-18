@@ -1,8 +1,10 @@
 #include "PowerBullet.h"
 #include "../FlatEngine/ObjectManager.h"
 
-PowerBullet::PowerBullet(GameObject& owner, float speed, int damage)
-	: Bullet(owner, speed, damage), health(POWER_BULLET_HEALTH) {
+PowerBullet::PowerBullet(float speed, int damage)
+	: Bullet(speed, damage)
+	, health(POWER_BULLET_HEALTH) 
+{
 
 }
 
@@ -11,24 +13,30 @@ void PowerBullet::Awake()
 	Bullet::Awake();
 }
 
-ObjectComponent* PowerBullet::Copy(GameObject& newOwner) {
-	return new PowerBullet(newOwner, speed, damage);
+IUpdateable* PowerBullet::Copy()
+{
+	return new PowerBullet(speed, damage);
 }
 
-void PowerBullet::OnCollision(BoxCollider& collider) {
-	if (collider.GetOwner().isDestroyable) {
+void PowerBullet::OnCollision(BoxCollider& collider) 
+{
+	if (collider.GetOwner().isDestroyable) 
+	{
 		collider.GetOwner().SetDestroyed(true);
 
 		DecreaseHealth();
 	}
-	else {
+	else 
+	{
 		Bullet::OnCollision(collider);
 	}
 }
 
-void PowerBullet::DecreaseHealth() {
+void PowerBullet::DecreaseHealth() 
+{
 	health--;
-	if (health <= 0) {
-		GameObject::Destroy(&gameObject);
+	if (health <= 0) 
+	{
+		GameObject::Destroy(m_GameObject);
 	}
 }

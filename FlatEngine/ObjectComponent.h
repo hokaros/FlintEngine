@@ -3,17 +3,19 @@
 #include "IUpdateable.h"
 #include "GameObject.h"
 
+class GameObject;
+
 class ObjectComponent : public IUpdateable
 {
 public:
-	ObjectComponent(GameObject& owner);
-
 	GameObject& GetOwner() const;
 
-	IUpdateable* Copy() override;
-	virtual ObjectComponent* Copy(GameObject& newOwner) = 0;
+protected:
+	void SetOwner(GameObject* owner);
 
 protected:
-	GameObject& gameObject;
+	GameObject* m_GameObject;
+
+	friend GameObject;
 };
 
