@@ -62,7 +62,6 @@ void PrefabLoader::DispatchLine(const std::string& line)
     else
     {
         SetParsingState(m_ParsingState);
-        m_ParsingStateAfterIndent = m_ParsingState;
     }
 
     ParseLineForCurrentState(line_unindented);
@@ -123,7 +122,7 @@ void PrefabLoader::SetParsingState(ParsingState state)
     }
 
     m_ParsingState = state;
-    
+    m_ParsingStateAfterIndent = state;
 }
 
 void PrefabLoader::SetParsingStateAfterIndent(ParsingState state)
