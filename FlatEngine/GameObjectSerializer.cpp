@@ -1,6 +1,9 @@
 #include "GameObjectSerializer.h"
 #include "SerializableTypes.h"
 
+static constexpr const char* s_GameObjectSizeFieldName = "m_Size";
+static constexpr const char* s_GameObjectPositionFieldName = "m_Pos";
+
 GameObject* GameObjectSerializer::DeserializeGameObject(const GameObjectStringDesc& desc)
 {
 	GameObject* game_object = DeserializePureGameObject(desc);
@@ -16,14 +19,14 @@ GameObject* GameObjectSerializer::DeserializePureGameObject(const GameObjectStri
 	Vector pos;
 	bool is_pos_present = false;
 
-	auto size_it = desc.params.find("m_Size");
+	auto size_it = desc.params.find(s_GameObjectSizeFieldName);
 	if (size_it != desc.params.end())
 	{
 		ParseString<Vector>(size_it->second, size);
 		is_size_present = true;
 	}
 
-	auto pos_it = desc.params.find("m_Pos");
+	auto pos_it = desc.params.find(s_GameObjectPositionFieldName);
 	if (pos_it != desc.params.end())
 	{
 		ParseString<Vector>(pos_it->second, pos);
