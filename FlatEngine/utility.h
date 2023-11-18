@@ -27,3 +27,8 @@
 #define FE_LOG(message, ...)			\
 	printf(message, __VA_ARGS__);		\
 	printf("\n");
+
+#define FE_DATA_ERROR(message, ...)		\
+	printf("ERROR: ");					\
+	printf(message, __VA_ARGS__);		\
+	printf("\n");

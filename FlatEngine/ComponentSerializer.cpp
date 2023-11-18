@@ -1,19 +1,25 @@
 #include "ComponentSerializer.h"
 
-#include "ComponentDefinition.h"
-
 ObjectComponent* ComponentSerializer::DeserializeComponent(const ComponentStringDesc& component_desc, GameObject& owner)
 {
+	FE_LOG("Loading component: %s", component_desc.type.c_str());
+
 	ComponentDefinition* comp_def = ComponentDefinitionManager::GetInstance().GetDefinitionFromName(component_desc.type);
+	if (comp_def == nullptr)
+	{
+		FE_DATA_ERROR("Invalid component name");
+		return nullptr;
+	}
+
 	ObjectComponent* component = comp_def->GetConstructor() (owner);
 
-	const std::map<std::string, std::string>& serialized_fields = component_desc.fields;
+	const std::map<std::string, std::string>& input_fields = component_desc.fields;
 	size_t matched_fields = 0;
 	for (const ComponentFieldDefinition* field : comp_def->GetFields())
 	{
 		std::string field_name = field->GetFieldName();
-		auto it = serialized_fields.find(field_name);
-		if (it == serialized_fields.end())
+		auto it = input_fields.find(field_name);
+		if (it == input_fields.end())
 			continue; // This field is not overriden
 
 		const std::string& field_value = it->second;
@@ -21,9 +27,35 @@ ObjectComponent* ComponentSerializer::DeserializeComponent(const ComponentString
 		matched_fields++;
 	}
 
-	if (matched_fields != serialized_fields.size())
+	if (matched_fields != input_fields.size())
 	{
-		FE_LOG("Some fields were not found");
+		FE_DATA_ERROR("Some input fields were not matched");
+#ifdef _DEBUG
+		ValidateInputFields(component_desc, *comp_def);
+#endif
 	}
 	return component;
+}
+
+void ComponentSerializer::ValidateInputFields(const ComponentStringDesc& component_desc, const ComponentDefinition& component_definition)
+{
+	// Find incorrect input fields
+	for (auto& input_field : component_desc.fields)
+	{
+		const std::string& field_name = input_field.first;
+
+		bool found = false;
+		for (const ComponentFieldDefinition* field : component_definition.GetFields())
+		{
+			if (field_name == field->GetFieldName())
+			{
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			FE_DATA_ERROR("Unmatched field: %s", field_name.c_str());
+		}
+	}
 }

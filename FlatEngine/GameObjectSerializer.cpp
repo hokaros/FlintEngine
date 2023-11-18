@@ -46,6 +46,10 @@ void GameObjectSerializer::DeserializeComponents(GameObject* game_object, const 
 {
 	for (const ComponentStringDesc& component_desc : desc.components)
 	{
-		game_object->AddComponent(ComponentSerializer::DeserializeComponent(component_desc, *game_object));
+		ObjectComponent* component = ComponentSerializer::DeserializeComponent(component_desc, *game_object);
+		if (component != nullptr)
+		{
+			game_object->AddComponent(component);
+		}
 	}
 }

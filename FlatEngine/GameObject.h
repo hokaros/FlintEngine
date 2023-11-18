@@ -20,7 +20,7 @@ private:
 	PrefabCreationKey(const PrefabCreationKey&) = default;
 	PrefabCreationKey(PrefabCreationKey&&) = default;
 
-	friend Game; // TODO: let's not
+	//friend Game; // TODO: let's not
 	friend PrefabFactory;
 	friend GameObjectSerializer;
 };

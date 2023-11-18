@@ -1,10 +1,11 @@
-- m_Size: 8, 8
+- m_Size: 4, 4
 - components:
 	- Bullet:
-		- speed: 100
+		- speed: 1000
 		- damage: 1
 	- BoxCollider:
-		- m_Pos: 0, 0
+		- m_Position: 0, 0
 		- m_Size: 4, 4
+	- SHitController
 	- RectangleRenderer:
 		- m_Color: 0xFF, 0xFF, 0x00

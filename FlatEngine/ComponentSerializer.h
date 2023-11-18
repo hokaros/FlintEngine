@@ -1,5 +1,5 @@
 #pragma once
-#include "ObjectComponent.h"
+#include "ComponentDefinition.h"
 
 #include <map>
 
@@ -13,5 +13,8 @@ class ComponentSerializer
 {
 public:
 	static ObjectComponent* DeserializeComponent(const ComponentStringDesc& component_desc, GameObject& owner);
+
+private:
+	static void ValidateInputFields(const ComponentStringDesc& component_desc, const ComponentDefinition& component_definition);
 };
 

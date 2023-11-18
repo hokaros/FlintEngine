@@ -27,9 +27,6 @@ GameObject* PrefabLoader::LoadPrefab(std::fstream& file)
     while (!file.eof())
     {
         file.getline(line, 256);
-        std::cout << "Loaded line: " << std::endl;
-        std::cout << line << std::endl;
-
         DispatchLine(line);
     }
 
