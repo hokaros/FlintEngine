@@ -30,7 +30,11 @@ GameObject* PrefabLoader::LoadPrefab(std::fstream& file)
         DispatchLine(line);
     }
 
-    SetParsingState(ParsingState::GameObjectParams);
+    // Go to the most outer state
+    while (m_ParsingState != ParsingState::GameObjectParams)
+    {
+        GoToOuterParsingState();
+    }
 
     return GameObjectSerializer::DeserializeGameObject(m_GameObjectDesc);
 }
@@ -51,6 +55,15 @@ void PrefabLoader::DispatchLine(const std::string& line)
     {
         GoToOuterParsingState();
     }
+    else if (curr_indent > m_PrevIndent)
+    {
+        SetParsingState(m_ParsingStateAfterIndent);
+    }
+    else
+    {
+        SetParsingState(m_ParsingState);
+        m_ParsingStateAfterIndent = m_ParsingState;
+    }
 
     ParseLineForCurrentState(line_unindented);
 
@@ -64,9 +77,9 @@ void PrefabLoader::ParseGameObjectParamLine(const std::string& line)
     
     if (key == "components")
     {
-        FE_ASSERT(value.size() == 0, "Inline value for components detected");
+        FE_DATA_CHECK(value.size() == 0, "Inline value for components detected");
 
-        SetParsingState(ParsingState::ComponentDefinitions);
+        SetParsingStateAfterIndent(ParsingState::ComponentDefinitions);
     }
     else
     {
@@ -76,13 +89,13 @@ void PrefabLoader::ParseGameObjectParamLine(const std::string& line)
 
 void PrefabLoader::ParseComponentNameLine(const std::string& line)
 {
-    SetParsingState(ParsingState::SpecificComponentDefinition);
-
     std::string key, value;
     SplitLineToKeyAndValue(line, key, value);
-    FE_ASSERT(value.size() == 0, "Value after component name detected");
+    FE_DATA_CHECK(value.size() == 0, "Value after component name detected");
 
     m_CurrComponentDesc.type = key;
+
+    SetParsingStateAfterIndent(ParsingState::SpecificComponentDefinition);
 }
 
 void PrefabLoader::ParseComponentFieldLine(const std::string& line)
@@ -103,12 +116,19 @@ void PrefabLoader::FinalizeComponentLoading()
 
 void PrefabLoader::SetParsingState(ParsingState state)
 {
-    if (m_ParsingState == ParsingState::SpecificComponentDefinition)
+    bool is_loading_component = m_ParsingState == ParsingState::SpecificComponentDefinition || m_ParsingStateAfterIndent == ParsingState::SpecificComponentDefinition;
+    if (state != ParsingState::SpecificComponentDefinition && is_loading_component)
     {
         FinalizeComponentLoading();
     }
 
     m_ParsingState = state;
+    
+}
+
+void PrefabLoader::SetParsingStateAfterIndent(ParsingState state)
+{
+    m_ParsingStateAfterIndent = state;
 }
 
 void PrefabLoader::GoToOuterParsingState()

@@ -32,3 +32,10 @@
 	printf("ERROR: ");					\
 	printf(message, __VA_ARGS__);		\
 	printf("\n");
+
+#define FE_DATA_CHECK(cond, error_message, ...)			\
+		if (cond){}										\
+		else											\
+		{												\
+			FE_DATA_ERROR(error_message, __VA_ARGS__)	\
+		}	

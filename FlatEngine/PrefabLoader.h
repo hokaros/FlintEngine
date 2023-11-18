@@ -26,6 +26,7 @@ private:
 	void FinalizeComponentLoading();
 
 	void SetParsingState(ParsingState state);
+	void SetParsingStateAfterIndent(ParsingState state);
 	void GoToOuterParsingState();
 	void ParseLineForCurrentState(const std::string& line);
 
@@ -34,6 +35,7 @@ private:
 
 private:
 	ParsingState m_ParsingState = ParsingState::GameObjectParams;
+	ParsingState m_ParsingStateAfterIndent = ParsingState::GameObjectParams;
 	GameObjectStringDesc m_GameObjectDesc;
 	ComponentStringDesc m_CurrComponentDesc;
 	size_t m_PrevIndent = 0;
