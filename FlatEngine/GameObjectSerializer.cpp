@@ -12,6 +12,18 @@ std::unique_ptr<GameObject> GameObjectSerializer::DeserializeGameObject(const Ga
 	return game_object;
 }
 
+std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(const GameObject& game_object)
+{
+	std::unique_ptr<GameObjectStringDesc> go_serialized = std::make_unique<GameObjectStringDesc>();
+
+	go_serialized->params.insert({ s_GameObjectSizeFieldName, ToString<Vector>(game_object.GetSize()) });
+	go_serialized->params.insert({ s_GameObjectPositionFieldName, ToString<Vector>(game_object.GetPosition()) });
+
+	// TODO: component serialization
+
+	return go_serialized;
+}
+
 std::unique_ptr<GameObject> GameObjectSerializer::DeserializePureGameObject(const GameObjectStringDesc& desc)
 {
 	Vector size;

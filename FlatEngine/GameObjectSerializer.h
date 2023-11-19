@@ -12,6 +12,7 @@ class GameObjectSerializer
 {
 public:
 	static std::unique_ptr<GameObject> DeserializeGameObject(const GameObjectStringDesc& desc);
+	static std::unique_ptr<GameObjectStringDesc> SerializeGameObject(const GameObject& game_object);
 
 private:
 	static std::unique_ptr<GameObject> DeserializePureGameObject(const GameObjectStringDesc& desc);

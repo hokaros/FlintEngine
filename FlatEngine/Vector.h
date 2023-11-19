@@ -63,6 +63,11 @@ public:
         }
     }
 
+    constexpr Vector(float values[2])
+        : x(values[0])
+        , y(values[1])
+    {}
+
     // Sprowadza do d³ugoœci 1
     void Normalize();
     // Sprawia, ¿e x <= y

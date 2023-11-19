@@ -11,6 +11,7 @@
 
 class PrefabFactory;
 class GameObjectSerializer;
+class Editor;
 
 class PrefabCreationKey
 {
@@ -23,6 +24,7 @@ private:
 
 	friend PrefabFactory;
 	friend GameObjectSerializer;
+	friend Editor;
 };
 
 class GameObject
@@ -106,6 +108,7 @@ protected:
 	std::list<std::unique_ptr<ObjectComponent>> components;
 
 	bool insideOutCollision = false;
+
 private:
 	bool isEnabled = true;
 
