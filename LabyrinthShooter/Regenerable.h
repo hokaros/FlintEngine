@@ -7,10 +7,10 @@ class Regenerable :
 public:
 	Regenerable(double regenerationTime);
 
-	virtual void Start() override;
+	virtual void Awake() override;
 	virtual void Update() override;
 
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 private:
 	double regenerationTime;

@@ -1,6 +1,7 @@
 #pragma once
 #include "../FlatEngine/BoxCollider.h"
 #include "../FlatEngine/ComponentDefinition.h"
+#include "../FlatEngine/GameObject.h"
 #include "Health.h"
 
 // Obiekt biegn¹cy przed siebie do momentu kolizji
@@ -20,7 +21,7 @@ public:
 
 	void SetDirection(const Vector& direction);
 
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 protected:
 	float speed = 1.0f;

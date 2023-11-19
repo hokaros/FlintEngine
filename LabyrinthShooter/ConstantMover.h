@@ -1,6 +1,8 @@
 #pragma once
 #include "../FlatEngine/ObjectComponent.h"
+#include "../FlatEngine/Vector.h"
 #include <mutex>
+#include <functional>
 
 #define DIRECTION_TOLERANCE 0.001
 
@@ -8,7 +10,7 @@ class ConstantMover :
 	public ObjectComponent
 {
 public:
-	function<void(const Vector&)> onDirectionChanged;
+	std::function<void(const Vector&)> onDirectionChanged;
 
 public:
 	ConstantMover(float movementSpeed);
@@ -20,7 +22,7 @@ public:
 	// Czy obiekt porusza siê w okreœlon¹ stronê
 	bool IsSameDirection(const Vector& otherDir) const;
 
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 protected:
 	// Prêdkoœæ [piksele na sekundê]

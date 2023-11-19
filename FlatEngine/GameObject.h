@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector.h"
 #include "Timer.h"
+#include "ObjectComponent.h"
 #include <functional>
 #include <math.h>
 #include <mutex>
@@ -10,14 +11,15 @@
 
 class PrefabFactory;
 class GameObjectSerializer;
-class ObjectComponent;
 
 class PrefabCreationKey
 {
-private:
-	PrefabCreationKey() = default;
+public:
 	PrefabCreationKey(const PrefabCreationKey&) = default;
 	PrefabCreationKey(PrefabCreationKey&&) = default;
+
+private:
+	PrefabCreationKey() = default;
 
 	friend PrefabFactory;
 	friend GameObjectSerializer;
@@ -41,7 +43,7 @@ public:
 	static GameObject* Instantiate(const GameObject& other);
 	static void Destroy(GameObject* game_object);
 
-	void AddComponent(ObjectComponent* component);
+	void AddComponent(std::unique_ptr<ObjectComponent> component);
 	// Znajduje komponent okreœlonego typu
 	template<class T>
 	T* FindComponent();
@@ -92,8 +94,8 @@ public:
 	const std::list<GameObject*>& GetChildren() const;
 	GameObject* GetParent() const;
 
+	~GameObject() = default;
 
-	~GameObject();
 protected:
 	GameObject();
 	GameObject(const Vector& size);
@@ -101,7 +103,7 @@ protected:
 	GameObject(const GameObject& other);
 
 protected:
-	std::list<ObjectComponent*> components;
+	std::list<std::unique_ptr<ObjectComponent>> components;
 
 	bool insideOutCollision = false;
 private:
@@ -123,9 +125,11 @@ private:
 
 template<class T>
 T* GameObject::FindComponent() {
-	for (ObjectComponent* component : components) {
-		T* desired = dynamic_cast<T*>(component);
-		if (desired != NULL) {
+	for (std::unique_ptr<ObjectComponent>& component : components) 
+	{
+		T* desired = dynamic_cast<T*>(component.get());
+		if (desired != nullptr) 
+		{
 			return desired;
 		}
 	}
@@ -133,12 +137,15 @@ T* GameObject::FindComponent() {
 }
 
 template<class T>
-std::list<T*>* GameObject::FindComponents() {
+std::list<T*>* GameObject::FindComponents() 
+{
 	std::list<T*>* found = new std::list<T*>();
 
-	for (ObjectComponent* component : components) {
-		T* desired = dynamic_cast<T*>(component);
-		if (desired != NULL) {
+	for (std::unique_ptr<ObjectComponent>& component : components) 
+	{
+		T* desired = dynamic_cast<T*>(component.get());
+		if (desired != nullptr) 
+		{
 			found->push_back(desired);
 		}
 	}
@@ -147,13 +154,16 @@ std::list<T*>* GameObject::FindComponents() {
 }
 
 template<class T>
-std::list<T*>* GameObject::FindComponentsInChildren() {
+std::list<T*>* GameObject::FindComponentsInChildren() 
+{
 	std::list<T*>* found = new std::list<T*>();
 
-	for (GameObject* child : children) {
+	for (GameObject* child : children) 
+	{
 		std::list<T*>* foundInChild = child->FindComponents<T>();
 
-		for (T* desired : *foundInChild) {
+		for (T* desired : *foundInChild) 
+		{
 			found->push_back(desired);
 		}
 

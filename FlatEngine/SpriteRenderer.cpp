@@ -1,5 +1,6 @@
 #include "SpriteRenderer.h"
 #include "Draw.h"
+#include "GameObject.h"
 
 SpriteRenderer::SpriteRenderer(SDL_Surface* sprite)
 	: m_Sprite(sprite)
@@ -23,6 +24,6 @@ void SpriteRenderer::Render() {
 	Window::Main()->RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
 }
 
-IUpdateable* SpriteRenderer::Copy() {
-	return new SpriteRenderer(m_Sprite);
+std::unique_ptr<ObjectComponent> SpriteRenderer::Copy() {
+	return std::make_unique<SpriteRenderer>(m_Sprite);
 }

@@ -2,8 +2,7 @@
 #include "../FlatEngine/ObjectComponent.h"
 #include "StatRenderer.h"
 #include <list>
-
-using std::function;
+#include <functional>
 
 class Health :
 	public ObjectComponent
@@ -17,15 +16,15 @@ public:
 	void SetStatRenderer(StatRenderer* value);
 
 	// Obs³ugiwanie œmierci z argumentem tego komponentu
-	void SubscribeDeath(function<void(Health*)> handler);
+	void SubscribeDeath(std::function<void(Health*)> handler);
 
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 private:
 	int maxHealth;
 	int currHealth;
 
-	std::list<function<void(Health*)>> onDeath;
+	std::list<std::function<void(Health*)>> onDeath;
 
 	StatRenderer* healthRenderer;
 

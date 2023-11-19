@@ -11,6 +11,4 @@ public:
 	virtual void Start() {}
 
 	virtual void OnDestroy() {}
-
-	virtual IUpdateable* Copy() = 0;
 };

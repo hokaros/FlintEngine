@@ -12,7 +12,8 @@ public:
 	RectangleRenderer(const Rgb8& color);
 	void Render() override;
 
-	IUpdateable* Copy() override;
+	std::unique_ptr<ObjectComponent> Copy() override;
+
 private:
 	Rgb8 m_Color;
 

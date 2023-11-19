@@ -1,12 +1,13 @@
 #include "ConstantMover.h"
+#include "../FlatEngine/GameObject.h"
 
 ConstantMover::ConstantMover(float movementSpeed)
 	: movementSpeed(movementSpeed) {
 
 }
 
-IUpdateable* ConstantMover::Copy() {
-	return new ConstantMover(movementSpeed);
+std::unique_ptr<ObjectComponent> ConstantMover::Copy() {
+	return std::make_unique<ConstantMover>(movementSpeed);
 }
 
 void ConstantMover::Update() {

@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include "../FlatEngine/GameObject.h"
 
 DEFINE_COMPONENT(Bullet);
 
@@ -45,9 +46,9 @@ void Bullet::OnCollision(BoxCollider& collider)
 	GameObject::Destroy(m_GameObject); // zniszczenie pocisku
 }
 
-IUpdateable* Bullet::Copy() 
+std::unique_ptr<ObjectComponent> Bullet::Copy()
 {
-	return new Bullet(speed, damage);
+	return std::make_unique<Bullet>(speed, damage);
 }
 
 void Bullet::SetDirection(const Vector& direction) 

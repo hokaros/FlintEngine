@@ -1,19 +1,23 @@
 #include "PlayerController.h"
 #include "Health.h"
+#include "../FlatEngine/GameObject.h"
 
-void PlayerController::Start() {
+void PlayerController::Start() 
+{
 	// Za³adowanie cache'a
 	input = InputController::Main();
 	equipment = m_GameObject->FindComponent<PlayerEquipment>();
 	mover = m_GameObject->FindComponent<ConstantMover>();
 }
 
-void PlayerController::Update() {
+void PlayerController::Update() 
+{
 	ProcessMovement();
 	ProcessAim();
 
 	// Zmiana broni
-	if (input->PressedThisFrame(WPN_SWITCH_KEY)) {
+	if (input->PressedThisFrame(WPN_SWITCH_KEY)) 
+	{
 		equipment->SwitchWeapon();
 
 		if (onWeaponChanged)
@@ -21,7 +25,8 @@ void PlayerController::Update() {
 	}
 
 	// Strzelanie
-	if (input->IsKeyDown(SHOOT_KEY) && equipment->GetCurrentWeapon() != NULL) {
+	if (input->IsKeyDown(SHOOT_KEY) && equipment->GetCurrentWeapon() != NULL) 
+	{
 		bool success = equipment->GetCurrentWeapon()->TryShoot();
 
 		if (success && onShot)
@@ -29,27 +34,34 @@ void PlayerController::Update() {
 	}
 }
 
-IUpdateable* PlayerController::Copy() {
-	return new PlayerController();
+std::unique_ptr<ObjectComponent> PlayerController::Copy() 
+{
+	return std::make_unique<PlayerController>();
 }
 
-void PlayerController::ProcessMovement() {
+void PlayerController::ProcessMovement() 
+{
 	// Odczytanie wciœniêtych klawiszy ruchu
 	Vector moveDir;
-	if (input->IsKeyDown(SDLK_UP) || input->IsKeyDown(SDLK_w)) {
+	if (input->IsKeyDown(SDLK_UP) || input->IsKeyDown(SDLK_w)) 
+	{
 		moveDir.y -= 1;
 	}
-	if (input->IsKeyDown(SDLK_DOWN) || input->IsKeyDown(SDLK_s)) {
+	if (input->IsKeyDown(SDLK_DOWN) || input->IsKeyDown(SDLK_s)) 
+	{
 		moveDir.y += 1;
 	}
-	if (input->IsKeyDown(SDLK_LEFT) || input->IsKeyDown(SDLK_a)) {
+	if (input->IsKeyDown(SDLK_LEFT) || input->IsKeyDown(SDLK_a)) 
+	{
 		moveDir.x -= 1;
 	}
-	if (input->IsKeyDown(SDLK_RIGHT) || input->IsKeyDown(SDLK_d)) {
+	if (input->IsKeyDown(SDLK_RIGHT) || input->IsKeyDown(SDLK_d)) 
+	{
 		moveDir.x += 1;
 	}
 
-	if (!mover->IsSameDirection(moveDir)) {
+	if (!mover->IsSameDirection(moveDir)) 
+	{
 		// Zmieniony kierunek ruchu
 		mover->SetDirection(moveDir);
 
@@ -58,7 +70,8 @@ void PlayerController::ProcessMovement() {
 	}
 }
 
-void PlayerController::ProcessAim() {
+void PlayerController::ProcessAim() 
+{
 	double prevRotation = m_GameObject->GetRotation();
 
 	Vector mousePos = input->GetMousePosition();

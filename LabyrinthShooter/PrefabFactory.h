@@ -24,7 +24,6 @@ public:
 
 public:
 	PrefabFactory();
-	~PrefabFactory();
 
 	const GameObject& GetPrefab(EPrefabId prefab_id) const;
 
@@ -37,9 +36,9 @@ private:
 	void CreateSuperFirearmPrefab();
 	void CreatePlayerPrefab();
 
-	void InsertPrefab(EPrefabId prefab_id, GameObject* prefab);
+	void InsertPrefab(EPrefabId prefab_id, std::unique_ptr<GameObject> prefab);
 
 private:
-	std::map<EPrefabId, GameObject*> m_PrefabDict;
+	std::map<EPrefabId, std::unique_ptr<GameObject>> m_PrefabDict;
 };
 

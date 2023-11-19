@@ -39,10 +39,6 @@ LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	labyrinth.PrintLab(); // wyœwietlenie w konsoli
 }
 
-IUpdateable* LabyrinthSolidifier::Copy() {
-	return new LabyrinthSolidifier(*this);
-}
-
 LabyrinthSolidifier::~LabyrinthSolidifier() {
 	for (int i = 0; i < labyrinth.ActiveCount(); i++) {
 		delete walls[i];
@@ -146,13 +142,13 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color) {
 	GameObject* wall = GameObject::Instantiate(size);
 
-	wall->AddComponent(new Regenerable(WALL_REGEN));
-	BoxCollider* collider = new BoxCollider(Vector::ZERO, size);
+	wall->AddComponent(std::make_unique<Regenerable>(WALL_REGEN));
+	std::unique_ptr<BoxCollider> collider = std::make_unique<BoxCollider>(Vector::ZERO, size);
 	collider->m_IsStatic = true;
-	wall->AddComponent(collider);
+	wall->AddComponent(std::move(collider));
 
-	if (Window::Main() != NULL)
-		wall->AddComponent(new RectangleRenderer(color));
+	if (Window::Main() != nullptr)
+		wall->AddComponent(std::make_unique<RectangleRenderer>(color));
 
 	return wall;
 }

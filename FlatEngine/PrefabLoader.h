@@ -4,7 +4,7 @@
 class PrefabLoader
 {
 public:
-	static GameObject* LoadPrefab(const char* file_path);
+	static std::unique_ptr<GameObject> LoadPrefab(const char* file_path);
 
 private:
 	enum class ParsingState
@@ -16,7 +16,7 @@ private:
 
 private:
 	PrefabLoader() = default;
-	GameObject* LoadPrefab(std::fstream& file);
+	std::unique_ptr<GameObject> LoadPrefab(std::fstream& file);
 	void DispatchLine(const std::string& line);
 	void ParseGameObjectParamLine(const std::string& line);
 

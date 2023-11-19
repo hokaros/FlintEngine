@@ -23,7 +23,7 @@ public:
 
 	virtual void Awake() override;
 	virtual void OnDestroy() override;
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 public:
 	bool m_IsStatic = false;

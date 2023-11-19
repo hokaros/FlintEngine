@@ -12,7 +12,7 @@ struct ComponentStringDesc
 class ComponentSerializer
 {
 public:
-	static ObjectComponent* DeserializeComponent(const ComponentStringDesc& component_desc);
+	static std::unique_ptr<ObjectComponent> DeserializeComponent(const ComponentStringDesc& component_desc);
 
 private:
 	static void ValidateInputFields(const ComponentStringDesc& component_desc, const ComponentDefinition& component_definition);

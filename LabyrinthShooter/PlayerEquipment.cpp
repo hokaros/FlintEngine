@@ -1,4 +1,5 @@
 #include "PlayerEquipment.h"
+#include "../FlatEngine/GameObject.h"
 
 void PlayerEquipment::Start() 
 {
@@ -12,9 +13,9 @@ void PlayerEquipment::Start()
 	}
 }
 
-IUpdateable* PlayerEquipment::Copy()
+std::unique_ptr<ObjectComponent> PlayerEquipment::Copy()
 {
-	return new PlayerEquipment();
+	return std::make_unique<PlayerEquipment>();
 }
 
 void PlayerEquipment::EquipWeapon(FirearmType weaponType) 
@@ -51,21 +52,26 @@ void PlayerEquipment::EquipWeapon(Firearm* wpn)
 	currWpn = wpn;
 }
 
-Firearm* PlayerEquipment::GetCurrentWeapon() {
+Firearm* PlayerEquipment::GetCurrentWeapon() 
+{
 	if (currWpn == nullptr)
 		return nullptr;
 
 	return currWpn;
 }
 
-void PlayerEquipment::LoadWeaponsFromChildren() {
+void PlayerEquipment::LoadWeaponsFromChildren() 
+{
 	std::list<Firearm*>* firearms = m_GameObject->FindComponentsInChildren<Firearm>();
 
-	for (Firearm* firearm : *firearms) {
-		if (firearm->GetType() == FirearmType::Basic) {
+	for (Firearm* firearm : *firearms) 
+	{
+		if (firearm->GetType() == FirearmType::Basic) 
+		{
 			basicWpn = firearm;
 		}
-		else {
+		else 
+		{
 			superWpn = firearm;
 		}
 	}

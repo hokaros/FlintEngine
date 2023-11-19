@@ -24,7 +24,7 @@ public:
 	void Update() override;
 	void Start() override;
 
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 protected:
 	InputController* input = NULL;
 	PlayerEquipment* equipment = NULL;

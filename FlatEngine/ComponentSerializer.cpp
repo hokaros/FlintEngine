@@ -1,6 +1,6 @@
 #include "ComponentSerializer.h"
 
-ObjectComponent* ComponentSerializer::DeserializeComponent(const ComponentStringDesc& component_desc)
+std::unique_ptr<ObjectComponent> ComponentSerializer::DeserializeComponent(const ComponentStringDesc& component_desc)
 {
 	FE_LOG("Loading component: %s", component_desc.type.c_str());
 
@@ -11,7 +11,7 @@ ObjectComponent* ComponentSerializer::DeserializeComponent(const ComponentString
 		return nullptr;
 	}
 
-	ObjectComponent* component = comp_def->GetConstructor() ();
+	std::unique_ptr<ObjectComponent> component = comp_def->GetConstructor() ();
 
 	const std::map<std::string, std::string>& input_fields = component_desc.fields;
 	size_t matched_fields = 0;
@@ -23,7 +23,7 @@ ObjectComponent* ComponentSerializer::DeserializeComponent(const ComponentString
 			continue; // This field is not overriden
 
 		const std::string& field_value = it->second;
-		field->SetFieldValue(component, field_value);
+		field->SetFieldValue(component.get(), field_value);
 		matched_fields++;
 	}
 

@@ -16,7 +16,7 @@ public:
 
 	Firearm* GetCurrentWeapon();
 
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 private:
 	Firearm* basicWpn = NULL;

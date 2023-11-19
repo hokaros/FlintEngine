@@ -1,5 +1,6 @@
 #include "RectangleRenderer.h"
 #include "DebugRenderer.h"
+#include "GameObject.h"
 
 DEFINE_COMPONENT(RectangleRenderer);
 DEFINE_FIELD(RectangleRenderer, m_Color);
@@ -16,7 +17,7 @@ void RectangleRenderer::Render()
 	DebugRenderer::DrawRect(rect, m_Color);
 }
 
-IUpdateable* RectangleRenderer::Copy() 
+std::unique_ptr<ObjectComponent> RectangleRenderer::Copy()
 {
-	return new RectangleRenderer(m_Color);
+	return std::make_unique<RectangleRenderer>(m_Color);
 }

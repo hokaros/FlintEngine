@@ -1,11 +1,12 @@
 #include "Regenerable.h"
+#include "../FlatEngine/GameObject.h"
 
 Regenerable::Regenerable(double regenerationTime)
 	: regenerationTime(regenerationTime) 
 {
 }
 
-void Regenerable::Start()
+void Regenerable::Awake()
 {
 	m_GameObject->SubscribeDestroyed([this](GameObject*) {OnDestroyed(); });
 }
@@ -28,7 +29,7 @@ void Regenerable::OnDestroyed()
 	);
 }
 
-IUpdateable* Regenerable::Copy() 
+std::unique_ptr<ObjectComponent> Regenerable::Copy()
 {
-	return new Regenerable(regenerationTime);
+	return std::make_unique<Regenerable>(regenerationTime);
 }

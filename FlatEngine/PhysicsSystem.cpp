@@ -1,8 +1,9 @@
 #include "PhysicsSystem.h"
-#include "BoxCollider.h" // TODO: remove
+#include "BoxCollider.h"
 #include "utility.h"
 #include "DebugRenderer.h"
 #include "DebugConfig.h"
+#include "GameObject.h"
 
 PhysicsSystem* PhysicsSystem::s_Instance = nullptr;
 

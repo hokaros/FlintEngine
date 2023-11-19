@@ -1,5 +1,6 @@
 #include "Firearm.h"
 #include "../FlatEngine/ObjectManager.h"
+#include "../FlatEngine/GameObject.h"
 
 Firearm::Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type)
 	: bulletPrefab(bulletPrefab)
@@ -46,8 +47,8 @@ bool Firearm::TryShoot()
 	return true;
 }
 
-IUpdateable* Firearm::Copy() {
-	return new Firearm(bulletPrefab, reloadTime, type);
+std::unique_ptr<ObjectComponent> Firearm::Copy() {
+	return std::make_unique<Firearm>(bulletPrefab, reloadTime, type);
 }
 
 FirearmType Firearm::GetType() const {

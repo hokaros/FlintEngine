@@ -1,5 +1,6 @@
 #include "PowerBullet.h"
 #include "../FlatEngine/ObjectManager.h"
+#include "../FlatEngine/GameObject.h"
 
 PowerBullet::PowerBullet(float speed, int damage)
 	: Bullet(speed, damage)
@@ -13,9 +14,9 @@ void PowerBullet::Awake()
 	Bullet::Awake();
 }
 
-IUpdateable* PowerBullet::Copy()
+std::unique_ptr<ObjectComponent> PowerBullet::Copy()
 {
-	return new PowerBullet(speed, damage);
+	return std::make_unique<PowerBullet>(speed, damage);
 }
 
 void PowerBullet::OnCollision(BoxCollider& collider) 

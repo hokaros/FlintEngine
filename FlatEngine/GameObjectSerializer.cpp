@@ -4,15 +4,15 @@
 static constexpr const char* s_GameObjectSizeFieldName = "m_Size";
 static constexpr const char* s_GameObjectPositionFieldName = "m_Pos";
 
-GameObject* GameObjectSerializer::DeserializeGameObject(const GameObjectStringDesc& desc)
+std::unique_ptr<GameObject> GameObjectSerializer::DeserializeGameObject(const GameObjectStringDesc& desc)
 {
-	GameObject* game_object = DeserializePureGameObject(desc);
-	DeserializeComponents(game_object, desc);
+	std::unique_ptr<GameObject> game_object = DeserializePureGameObject(desc);
+	DeserializeComponents(*game_object, desc);
 
 	return game_object;
 }
 
-GameObject* GameObjectSerializer::DeserializePureGameObject(const GameObjectStringDesc& desc)
+std::unique_ptr<GameObject> GameObjectSerializer::DeserializePureGameObject(const GameObjectStringDesc& desc)
 {
 	Vector size;
 	bool is_size_present = false;
@@ -35,24 +35,24 @@ GameObject* GameObjectSerializer::DeserializePureGameObject(const GameObjectStri
 
 	if (is_size_present && is_pos_present)
 	{
-		return new GameObject(size, pos, PrefabCreationKey());
+		return std::make_unique<GameObject>(size, pos, PrefabCreationKey());
 	}
 	else if (is_size_present)
 	{
-		return new GameObject(size, PrefabCreationKey());
+		return std::make_unique<GameObject>(size, PrefabCreationKey());
 	}
 
-	return new GameObject(PrefabCreationKey());
+	return std::make_unique<GameObject>(PrefabCreationKey());
 }
 
-void GameObjectSerializer::DeserializeComponents(GameObject* game_object, const GameObjectStringDesc& desc)
+void GameObjectSerializer::DeserializeComponents(GameObject& game_object, const GameObjectStringDesc& desc)
 {
 	for (const ComponentStringDesc& component_desc : desc.components)
 	{
-		ObjectComponent* component = ComponentSerializer::DeserializeComponent(component_desc);
+		std::unique_ptr<ObjectComponent> component = ComponentSerializer::DeserializeComponent(component_desc);
 		if (component != nullptr)
 		{
-			game_object->AddComponent(component);
+			game_object.AddComponent(std::move(component));
 		}
 	}
 }

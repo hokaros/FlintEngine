@@ -36,10 +36,10 @@ GameObject::GameObject(const GameObject& other)
 	: GameObject(other.size, other.position, {}) 
 {
 	// Skopiowanie komponentów
-	for (ObjectComponent* component : other.components) 
+	for (const std::unique_ptr<ObjectComponent>& component : other.components)
 	{
-		ObjectComponent* cmpCpy = static_cast<ObjectComponent*>(component->Copy());
-		AddComponent(cmpCpy);
+		std::unique_ptr<ObjectComponent> cmpCpy = component->Copy();
+		AddComponent(std::move(cmpCpy));
 	}
 
 	// Skopiowanie dzieci
@@ -84,40 +84,41 @@ void GameObject::Destroy(GameObject* game_object)
 	ObjectManager::Main()->DestroyObject(game_object);
 }
 
-GameObject::~GameObject() {
-	for (IUpdateable* component : components) {
-		delete component;
-	}
-}
-
-void GameObject::AddComponent(ObjectComponent* component) {
-	components.push_back(component);
+void GameObject::AddComponent(std::unique_ptr<ObjectComponent> component) 
+{
 	component->SetOwner(this);
+	components.push_back(std::move(component));
 }
 
-void GameObject::Update() {
+void GameObject::Update() 
+{
 	if (!isEnabled)
 		return;
 
-	for (IUpdateable* component : components) {
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
 		component->Update();
 	}
 }
 
-void GameObject::RenderUpdate() {
+void GameObject::RenderUpdate() 
+{
 	if (!isEnabled)
 		return;
 
-	for (IUpdateable* component : components) {
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
 		component->RenderUpdate();
 	}
 }
 
-void GameObject::Start() {
+void GameObject::Start() 
+{
 	if (!isEnabled)
 		return;
 
-	for (IUpdateable* component : components) {
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
 		component->Start();
 	}
 }
@@ -127,79 +128,94 @@ void GameObject::Awake()
 	if (!isEnabled)
 		return;
 
-	for (IUpdateable* component : components) {
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
 		component->Awake();
 	}
 }
 
 void GameObject::OnDestroy()
 {
-	for (IUpdateable* component : components) {
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
 		component->OnDestroy();
 	}
 }
 
-const Vector& GameObject::GetSize() const {
+const Vector& GameObject::GetSize() const 
+{
 	return size;
 }
 
-double GameObject::GetRotation() const {
+double GameObject::GetRotation() const 
+{
 	return rotation;
 }
 
-Vector GameObject::LookingDirection() const {
+Vector GameObject::LookingDirection() const 
+{
 	return Vector(
 		cos(rotation * M_PI / 180),
 		sin(rotation * M_PI / 180)
 	);
 }
 
-const Vector& GameObject::GetPosition() const {
+const Vector& GameObject::GetPosition() const 
+{
 	return position;
 }
 
-Vector GameObject::GetMiddle() const {
+Vector GameObject::GetMiddle() const 
+{
 	return position + size / 2;
 }
 
-void GameObject::SetPosition(const Vector& newPosition) {
+void GameObject::SetPosition(const Vector& newPosition) 
+{
 	Vector offset = newPosition - position;
 	position = newPosition;
 
-	for (GameObject* child : children) {
+	for (GameObject* child : children) 
+	{
 		child->Translate(offset);
 	}
 }
 
-void GameObject::Translate(const Vector& offset) {
+void GameObject::Translate(const Vector& offset) 
+{
 	position += offset;
 
-	for (GameObject* child : children) {
+	for (GameObject* child : children) 
+	{
 		child->Translate(offset);
 	}
 }
 
-void GameObject::SetSize(const Vector& newSize) {
+void GameObject::SetSize(const Vector& newSize) 
+{
 	Vector sizeChange(newSize.x / size.x, newSize.y / size.y);
 
 	size.x = newSize.x;
 	size.y = newSize.y;
 
 	// Rozmiar dzieci
-	for (GameObject* child : children) {
+	for (GameObject* child : children) 
+	{
 		Vector childNewSize(child->size.x * sizeChange.x, child->size.y * sizeChange.y);
 		child->SetSize(childNewSize);
 	}
 }
 
-void GameObject::Rotate(double angle) {
+void GameObject::Rotate(double angle) 
+{
 	double prevRot = rotation;
 	double newRot = rotation + angle;
 	double newRotRadians = newRot * M_PI / 180;
 
 	Vector middle = GetMiddle();
 	
-	for (GameObject* child : children) {
+	for (GameObject* child : children) 
+	{
 		child->Rotate(angle);
 
 		Vector childMid = child->GetMiddle();
@@ -219,12 +235,14 @@ void GameObject::Rotate(double angle) {
 	rotation += angle;
 }
 
-void GameObject::SetRotation(double newRot) {
+void GameObject::SetRotation(double newRot) 
+{
 	double dRot = newRot - rotation;
 	Rotate(dRot);
 }
 
-void GameObject::LookAt(const Vector& point) {
+void GameObject::LookAt(const Vector& point) 
+{
 	Vector toPoint = point - GetMiddle();
 	double lookRotation = atan2(toPoint.y, toPoint.x) * 180 / M_PI;
 
@@ -232,7 +250,8 @@ void GameObject::LookAt(const Vector& point) {
 	Rotate(dRot);
 }
 
-Vector GameObject::LocalToWorld(const Vector& localPos) const {
+Vector GameObject::LocalToWorld(const Vector& localPos) const 
+{
 	Vector fromMid = localPos - size / 2;
 	//double radius = fromMid.Length();
 	fromMid.Rotate(rotation * M_PI / 180);
@@ -251,31 +270,38 @@ Vector GameObject::LocalToWorld(const Vector& localPos) const {
 	//return unrotatedPos + position + rotatedSize / 2;
 }
 
-void GameObject::AddChild(GameObject* child) {
+void GameObject::AddChild(GameObject* child) 
+{
 	child->parent = this;
 
 	children.push_back(child);
 }
 
-void GameObject::RemoveChild(GameObject* child) {
+void GameObject::RemoveChild(GameObject* child) 
+{
 	child->parent = NULL;
 
 	children.remove(child);
 }
 
-const std::list<GameObject*>& GameObject::GetChildren() const {
+const std::list<GameObject*>& GameObject::GetChildren() const 
+{
 	return children;
 }
 
-GameObject* GameObject::GetParent() const {
+GameObject* GameObject::GetParent() const 
+{
 	return parent;
 }
 
-std::vector<VectorInt>* GameObject::GetPixels() const {
+std::vector<VectorInt>* GameObject::GetPixels() const 
+{
 	std::vector<VectorInt>* pixels = new std::vector<VectorInt>();
 
-	for (int x = 0; x < size.x; x++) {
-		for (int y = 0; y < size.y; y++) {
+	for (int x = 0; x < size.x; x++) 
+	{
+		for (int y = 0; y < size.y; y++) 
+		{
 			pixels->push_back(position + Vector(x, y));
 		} 
 	}
@@ -283,31 +309,38 @@ std::vector<VectorInt>* GameObject::GetPixels() const {
 	return pixels;
 }
 
-void GameObject::SetDestroyed(bool destroyed) {
+void GameObject::SetDestroyed(bool destroyed) 
+{
 	isEnabled = !destroyed;
 
-	for (function<void(GameObject*)> handler : onDestroyedChanged) {
+	for (function<void(GameObject*)> handler : onDestroyedChanged) 
+	{
 		if (handler)
 			handler(this);
 	}
 }
 
-void GameObject::SetEnabled(bool enabled) {
+void GameObject::SetEnabled(bool enabled) 
+{
 	isEnabled = enabled;
 
-	for (GameObject* child : children) {
+	for (GameObject* child : children) 
+	{
 		child->SetEnabled(enabled);
 	}
 }
 
-bool GameObject::IsDestroyed() const {
+bool GameObject::IsDestroyed() const 
+{
 	return !isEnabled;
 }
 
-bool GameObject::IsEnabled() const {
+bool GameObject::IsEnabled() const 
+{
 	return isEnabled;
 }
 
-void GameObject::SubscribeDestroyed(function<void(GameObject*)> handler) {
+void GameObject::SubscribeDestroyed(function<void(GameObject*)> handler) 
+{
 	onDestroyedChanged.push_back(handler);
 }

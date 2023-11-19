@@ -4,7 +4,7 @@
 #include "../FlatEngine/utility.h"
 #include "../FlatEngine/GameObjectSerializer.h"
 
-GameObject* PrefabLoader::LoadPrefab(const char* file_path)
+std::unique_ptr<GameObject> PrefabLoader::LoadPrefab(const char* file_path)
 {
     std::fstream prefab_file;
     prefab_file.open(file_path, std::ios::in);
@@ -15,13 +15,13 @@ GameObject* PrefabLoader::LoadPrefab(const char* file_path)
     }
 
     PrefabLoader prefab_loader;
-    GameObject* prefab = prefab_loader.LoadPrefab(prefab_file);
+    std::unique_ptr<GameObject> prefab = prefab_loader.LoadPrefab(prefab_file);
 
     prefab_file.close();
     return prefab;
 }
 
-GameObject* PrefabLoader::LoadPrefab(std::fstream& file)
+std::unique_ptr<GameObject> PrefabLoader::LoadPrefab(std::fstream& file)
 {
     char line[256];
     while (!file.eof())

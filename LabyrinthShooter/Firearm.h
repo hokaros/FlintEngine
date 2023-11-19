@@ -18,7 +18,7 @@ public:
 
 	FirearmType GetType() const;
 
-	virtual IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 protected:
 	const GameObject& bulletPrefab;

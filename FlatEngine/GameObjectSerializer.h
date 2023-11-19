@@ -11,10 +11,10 @@ struct GameObjectStringDesc
 class GameObjectSerializer
 {
 public:
-	static GameObject* DeserializeGameObject(const GameObjectStringDesc& desc);
+	static std::unique_ptr<GameObject> DeserializeGameObject(const GameObjectStringDesc& desc);
 
 private:
-	static GameObject* DeserializePureGameObject(const GameObjectStringDesc& desc);
-	static void DeserializeComponents(GameObject* game_object, const GameObjectStringDesc& desc);
+	static std::unique_ptr<GameObject> DeserializePureGameObject(const GameObjectStringDesc& desc);
+	static void DeserializeComponents(GameObject& game_object, const GameObjectStringDesc& desc);
 };
 

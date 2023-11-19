@@ -1,5 +1,6 @@
 #include "BoxCollider.h"
 #include "PhysicsSystem.h"
+#include "GameObject.h"
 
 DEFINE_COMPONENT(BoxCollider);
 
@@ -73,9 +74,9 @@ void BoxCollider::OnDestroy()
 	PhysicsSystem::GetInstance()->UnregisterCollider(this);
 }
 
-IUpdateable* BoxCollider::Copy()
+std::unique_ptr<ObjectComponent> BoxCollider::Copy()
 {
-	return new BoxCollider(m_Position, m_Size);
+	return std::make_unique<BoxCollider>(m_Position, m_Size);
 }
 
 bool BoxCollider::DoesIntersect(const BoxCollider& other) const

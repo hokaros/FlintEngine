@@ -2,6 +2,7 @@
 #include <iostream>
 #include <functional>
 #include <map>
+#include <vector>
 
 #include "ObjectComponent.h"
 #include "SerializableTypes.h"
@@ -53,7 +54,7 @@ private:
 class ComponentDefinition
 {
 public:
-	using ComponentConstructorT = std::function<ObjectComponent* ()>;
+	using ComponentConstructorT = std::function<std::unique_ptr<ObjectComponent> ()>;
 
 	ComponentDefinition(const std::string& name, ComponentConstructorT constructor);
 
@@ -92,8 +93,8 @@ private:												\
 
 #define DEFINE_COMPONENT(clazz)							\
 ComponentDefinition clazz::s_ComponentDefinition =		\
-	ComponentDefinition(#clazz, []()		\
-		{ return new clazz(); }						\
+	ComponentDefinition(#clazz, []()					\
+		{ return std::make_unique<clazz>(); }			\
 );
 
 #define DECLARE_FIELD(name)															\

@@ -12,11 +12,11 @@ Health::Health(int maxHealth, StatRenderer* healthRenderer)
 	}
 }
 
-IUpdateable* Health::Copy()
+std::unique_ptr<ObjectComponent> Health::Copy()
 {
-	Health* health = new Health(maxHealth, nullptr);
+	std::unique_ptr<Health> health = std::make_unique<Health>(maxHealth, nullptr);
 	// Dodanie funkcji obs³ugi œmierci
-	for (function<void(Health*)> deathHandler : onDeath) {
+	for (std::function<void(Health*)> deathHandler : onDeath) {
 		health->SubscribeDeath(deathHandler);
 	}
 	return health;
@@ -48,7 +48,7 @@ void Health::SetStatRenderer(StatRenderer* value)
 
 void Health::OnDeath() 
 {
-	for (function<void(Health*)> handler : onDeath) 
+	for (std::function<void(Health*)> handler : onDeath) 
 	{
 		if (handler) 
 		{
@@ -57,7 +57,7 @@ void Health::OnDeath()
 	}
 }
 
-void Health::SubscribeDeath(function<void(Health*)> handler) 
+void Health::SubscribeDeath(std::function<void(Health*)> handler) 
 {
 	onDeath.push_back(handler);
 }

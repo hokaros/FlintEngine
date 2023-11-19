@@ -11,7 +11,7 @@ public:
 
 	void Render() override;
 
-	IUpdateable* Copy() override;
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 protected:
 	SDL_Surface* m_Sprite;
 	SDL_Texture* m_Texture;
