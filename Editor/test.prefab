@@ -6,3 +6,11 @@
 	- Bullet:
 		- speed: 1.000000
 		- damage: 2
+	- BoxCollider:
+		- m_InsideOutCollision: 0
+		- m_Position: 0.000000, 0.000000
+		- m_Size: 0.000000, 0.000000
+	- BoxCollider:
+		- m_InsideOutCollision: 0
+		- m_Position: 0.000000, 0.000000
+		- m_Size: 0.000000, 0.000000

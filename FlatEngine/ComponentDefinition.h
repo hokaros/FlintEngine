@@ -34,6 +34,7 @@ public:
 
 	void RegisterComponent(ComponentDefinition& definition);
 	void AddComponentField(const std::string& component_name, const ComponentFieldDefinition& field);
+	std::vector<const ComponentDefinition*> GetAllComponents() const;
 
 	ComponentDefinition* GetDefinitionFromName(const std::string& name) const;
 	ComponentDefinition* GetDefinitionFromTypeCode(RuntimeTypeCode type_code) const;

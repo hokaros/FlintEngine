@@ -21,9 +21,13 @@ public:
 	void SetGameObject(std::unique_ptr<EditorGameObjectHandle> game_object);
 
 private:
+	void LoadAddableComponents();
+
 	void RenderGameObjectEditor(GameObject& game_object);
 	void RenderComponentEditors();
+	void RenderComponentAddSection();
 	void LoadComponents(GameObject& game_object);
+	void AddComponent(const ComponentDefinition* component);
 
 	void InitValuesFromGameObject(const GameObject& game_object);
 	void ApplyValuesToGameObject(GameObject& game_object);
@@ -31,6 +35,9 @@ private:
 private:
 	std::unique_ptr<EditorGameObjectHandle> m_GameObjectHandle = nullptr;
 	std::vector<std::unique_ptr<ComponentEditor>> m_ComponentEditors;
+
+	std::vector<const char*> m_AddableComponentNames;
+	std::vector<const ComponentDefinition*> m_AddableComponents;
 
 	float m_GameObjectPosition[2];
 	float m_GameObjectSize[2];

@@ -55,6 +55,18 @@ void ComponentDefinitionManager::AddComponentField(const std::string& component_
 	GetDefinitionFromName(component_name)->AddField(field);
 }
 
+std::vector<const ComponentDefinition*> ComponentDefinitionManager::GetAllComponents() const
+{
+	std::vector<const ComponentDefinition*> components;
+
+	for (auto& entry : m_ComponentTypeCodeToDefinition)
+	{
+		components.push_back(entry.second);
+	}
+
+	return components;
+}
+
 ComponentDefinition* ComponentDefinitionManager::GetDefinitionFromName(const std::string& name) const
 {
 	auto it = m_ComponentNameToDefinition.find(name);

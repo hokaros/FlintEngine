@@ -26,6 +26,20 @@ void GameObjectEditor::SetGameObject(std::unique_ptr<EditorGameObjectHandle> gam
     GameObject& go = *m_GameObjectHandle->GetGameObject();
     InitValuesFromGameObject(go);
     LoadComponents(go);
+
+    LoadAddableComponents();
+}
+
+void GameObjectEditor::LoadAddableComponents()
+{
+    m_AddableComponentNames.clear();
+    m_AddableComponents.clear();
+
+    for (const ComponentDefinition* component : ComponentDefinitionManager::GetInstance().GetAllComponents())
+    {
+        m_AddableComponentNames.push_back(component->GetName().c_str());
+        m_AddableComponents.push_back(component);
+    }
 }
 
 void GameObjectEditor::RenderGameObjectEditor(GameObject& game_object)
@@ -34,6 +48,7 @@ void GameObjectEditor::RenderGameObjectEditor(GameObject& game_object)
     ImGui::DragFloat2("Size", m_GameObjectSize, s_SlidersSpeed);
 
     RenderComponentEditors();
+    RenderComponentAddSection();
 
     ApplyValuesToGameObject(game_object);
 
@@ -51,6 +66,16 @@ void GameObjectEditor::RenderComponentEditors()
     ImGui::Separator();
 }
 
+void GameObjectEditor::RenderComponentAddSection()
+{
+    static int s_ItemCurrent = 0;
+    ImGui::Combo("Component", &s_ItemCurrent, m_AddableComponentNames.data(), m_AddableComponentNames.size());
+    if (ImGui::Button("+"))
+    {
+        AddComponent(m_AddableComponents[s_ItemCurrent]);
+    }
+}
+
 void GameObjectEditor::LoadComponents(GameObject& game_object)
 {
     m_ComponentEditors.clear();
@@ -60,6 +85,14 @@ void GameObjectEditor::LoadComponents(GameObject& game_object)
         std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(*component);
         m_ComponentEditors.push_back(std::move(comp_editor));
     }
+}
+
+void GameObjectEditor::AddComponent(const ComponentDefinition* component)
+{
+    GameObject& game_object = *m_GameObjectHandle->GetGameObject();
+    game_object.AddComponent(component->GetConstructor()());
+
+    LoadComponents(game_object);
 }
 
 void GameObjectEditor::InitValuesFromGameObject(const GameObject& game_object)

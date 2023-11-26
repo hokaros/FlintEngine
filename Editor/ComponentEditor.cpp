@@ -16,7 +16,7 @@ void ComponentEditor::Render()
 	for (const ComponentFieldDefinition* field : m_ComponentDefinition.GetFields())
 	{
 		std::string field_value = field->GetFieldValue(&m_Component);
-		char buffer[16];
+		char buffer[64];
 		strcpy_s(buffer, field_value.c_str());
 
 		ImGui::SetNextItemWidth(100.0f);
