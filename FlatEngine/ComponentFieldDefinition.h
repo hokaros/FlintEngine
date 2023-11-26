@@ -12,12 +12,18 @@ public:
 
 	const std::string& GetComponentName() const;
 	const std::string& GetFieldName() const;
+
 	void SetFieldValue(ObjectComponent* component, const std::string& value) const;
 	std::string GetFieldValue(ObjectComponent* component) const;
 
-private:
+	// value - typed field value
 	virtual void SetFieldValue(ObjectComponent* component, void* value) const = 0;
+	// value - typed field value
 	virtual void GetFieldValue(ObjectComponent* component, void* value) const = 0;
+
+	virtual RuntimeTypeCode GetValueRTC() = 0;
+
+private:
 	virtual void AllocateValue(void*& value) const = 0;
 	virtual void ParseValue(const std::string& str, void* value) const = 0;
 	virtual void ValueToString(void* value, std::string& str) const = 0;
@@ -37,9 +43,12 @@ public:
 
 	ComponentFieldDefinitionTyped(const std::string& component_name, const std::string& field_name, FieldGetterT getter, FieldSetterT setter);
 
-private:
 	virtual void SetFieldValue(ObjectComponent* component, void* value) const override;
 	virtual void GetFieldValue(ObjectComponent* component, void* value) const override;
+
+	virtual RuntimeTypeCode GetValueRTC() override;
+
+private:
 	virtual void AllocateValue(void*& value) const override;
 	virtual void ParseValue(const std::string& str, void* value) const override;
 	virtual void ValueToString(void* value, std::string& str) const override;
@@ -100,6 +109,12 @@ inline void ComponentFieldDefinitionTyped<FieldT>::GetFieldValue(ObjectComponent
 }
 
 template<typename FieldT>
+inline RuntimeTypeCode ComponentFieldDefinitionTyped<FieldT>::GetValueRTC()
+{
+	return STI<FieldT>::GetTypeCode();
+}
+
+template<typename FieldT>
 inline void ComponentFieldDefinitionTyped<FieldT>::AllocateValue(void*& value) const
 {
 	value = new FieldT();
@@ -109,12 +124,12 @@ template<typename FieldT>
 inline void ComponentFieldDefinitionTyped<FieldT>::ParseValue(const std::string& str, void* value) const
 {
 	FieldT* value_typed = reinterpret_cast<FieldT*>(value);
-	ParseString<FieldT>(str, *value_typed);
+	STI<FieldT>::ParseString(str, *value_typed);
 }
 
 template<typename FieldT>
 inline void ComponentFieldDefinitionTyped<FieldT>::ValueToString(void* value, std::string& str) const
 {
 	FieldT* value_typed = reinterpret_cast<FieldT*>(value);
-	str = ToString<FieldT>(*value_typed);
+	str = STI<FieldT>::ToString(*value_typed);
 }

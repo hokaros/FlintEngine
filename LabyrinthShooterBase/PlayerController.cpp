@@ -2,6 +2,8 @@
 #include "Health.h"
 #include "../FlatEngine/GameObject.h"
 
+DEFINE_COMPONENT(PlayerController);
+
 void PlayerController::Start() 
 {
 	// Za³adowanie cache'a

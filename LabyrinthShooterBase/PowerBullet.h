@@ -16,7 +16,7 @@ protected:
 	virtual void OnCollision(BoxCollider& collider) override;
 
 private:
-	int health;
+	int health; // TODO: let's add this field (component inheritance)
 
 private:
 	void DecreaseHealth();

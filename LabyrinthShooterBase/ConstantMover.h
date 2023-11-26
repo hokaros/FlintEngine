@@ -1,5 +1,5 @@
 #pragma once
-#include "../FlatEngine/ObjectComponent.h"
+#include "../FlatEngine/ComponentDefinition.h"
 #include "../FlatEngine/Vector.h"
 #include <mutex>
 #include <functional>
@@ -9,10 +9,12 @@
 class ConstantMover :
 	public ObjectComponent
 {
+	DECLARE_COMPONENT();
 public:
 	std::function<void(const Vector&)> onDirectionChanged;
 
 public:
+	ConstantMover() = default;
 	ConstantMover(float movementSpeed);
 
 	void Update() override;
@@ -26,7 +28,7 @@ public:
 
 protected:
 	// Prêdkoœæ [piksele na sekundê]
-	float movementSpeed;
+	float movementSpeed = 10.0f;
 	Vector moveDir;
 
 private:

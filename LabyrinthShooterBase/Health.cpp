@@ -1,5 +1,12 @@
 #include "Health.h"
 
+DEFINE_COMPONENT(Health);
+
+Health::Health()
+{
+	currHealth = maxHealth;
+}
+
 Health::Health(int maxHealth, StatRenderer* healthRenderer)
 	: maxHealth(maxHealth)
 	, currHealth(maxHealth)

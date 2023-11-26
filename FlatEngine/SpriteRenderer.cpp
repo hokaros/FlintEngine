@@ -2,6 +2,8 @@
 #include "Draw.h"
 #include "GameObject.h"
 
+DEFINE_COMPONENT(SpriteRenderer);
+
 SpriteRenderer::SpriteRenderer(SDL_Surface* sprite)
 	: m_Sprite(sprite)
 	, m_Texture(SDL_CreateTextureFromSurface(Window::Main()->GetRenderer(), sprite)) {

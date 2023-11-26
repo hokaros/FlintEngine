@@ -1,6 +1,8 @@
 #include "PlayerEquipment.h"
 #include "../FlatEngine/GameObject.h"
 
+DEFINE_COMPONENT(PlayerEquipment);
+
 void PlayerEquipment::Start() 
 {
 	LoadWeaponsFromChildren();

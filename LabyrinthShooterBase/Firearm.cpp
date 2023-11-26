@@ -2,8 +2,10 @@
 #include "../FlatEngine/ObjectManager.h"
 #include "../FlatEngine/GameObject.h"
 
+DEFINE_COMPONENT(Firearm);
+
 Firearm::Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type)
-	: bulletPrefab(bulletPrefab)
+	: bulletPrefab(&bulletPrefab)
 	, reloadTime(reloadTime)
 	, type(type) 
 {
@@ -25,7 +27,7 @@ bool Firearm::TryShoot()
 		return false;
 
 	// Stworzenie pocisku
-	GameObject* bullet = GameObject::Instantiate(bulletPrefab);
+	GameObject* bullet = GameObject::Instantiate(*bulletPrefab);
 
 	// Ustawienie pozycji
 	Vector relativePos = Vector(Direction::EAST) * m_GameObject->GetSize().x;
@@ -48,7 +50,7 @@ bool Firearm::TryShoot()
 }
 
 std::unique_ptr<ObjectComponent> Firearm::Copy() {
-	return std::make_unique<Firearm>(bulletPrefab, reloadTime, type);
+	return std::make_unique<Firearm>(*bulletPrefab, reloadTime, type);
 }
 
 FirearmType Firearm::GetType() const {

@@ -1,7 +1,8 @@
 #pragma once
 #include <SDL.h>
-#include "IUpdateable.h"
 #include <memory>
+#include "IUpdateable.h"
+#include "RuntimeTypeCode.h"
 
 class GameObject;
 
@@ -11,6 +12,7 @@ public:
 	GameObject& GetOwner() const;
 
 	virtual std::unique_ptr<ObjectComponent> Copy() = 0;
+	virtual RuntimeTypeCode GetTypeCode() = 0;
 
 protected:
 	void SetOwner(GameObject* owner);

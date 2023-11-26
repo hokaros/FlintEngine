@@ -1,6 +1,8 @@
 #include "Regenerable.h"
 #include "../FlatEngine/GameObject.h"
 
+DEFINE_COMPONENT(Regenerable);
+
 Regenerable::Regenerable(double regenerationTime)
 	: regenerationTime(regenerationTime) 
 {

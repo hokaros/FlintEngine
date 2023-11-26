@@ -13,6 +13,7 @@ public:
 	ComponentDefinition(const std::string& name, ComponentConstructorT constructor);
 
 	const std::string& GetName() const;
+	RuntimeTypeCode GetTypeCode() const;
 	const ComponentConstructorT& GetConstructor() const;
 	const std::vector<const ComponentFieldDefinition*> GetFields() const;
 
@@ -20,6 +21,7 @@ public:
 
 private:
 	std::string m_Name;
+	RuntimeTypeCode m_TypeCode;
 	ComponentConstructorT m_Constructor;
 	std::vector<const ComponentFieldDefinition*> m_Fields;
 };
@@ -32,22 +34,40 @@ public:
 
 	void RegisterComponent(ComponentDefinition& definition);
 	void AddComponentField(const std::string& component_name, const ComponentFieldDefinition& field);
+
 	ComponentDefinition* GetDefinitionFromName(const std::string& name) const;
+	ComponentDefinition* GetDefinitionFromTypeCode(RuntimeTypeCode type_code) const;
 
 private:
 	std::map<std::string, ComponentDefinition*> m_ComponentNameToDefinition;
+	std::map<RuntimeTypeCode, ComponentDefinition*> m_ComponentTypeCodeToDefinition;
 };
 
 
 
 #define DECLARE_COMPONENT()								\
 private:												\
-	static ComponentDefinition s_ComponentDefinition;
+	static ComponentDefinition s_ComponentDefinition;	\
+														\
+public:													\
+	virtual RuntimeTypeCode GetTypeCode() override;
+
+
+// TODO: move to RuntimeTypeCode.h
+#define DEFINE_RTC(clazz)											\
+RuntimeTypeCode clazz::GetTypeCode()								\
+{																	\
+static RuntimeTypeCode s_TypeCode = RuntimeTypeCode::CreateNew();	\
+return s_TypeCode;													\
+}													
 
 
 #define DEFINE_COMPONENT(clazz)							\
 ComponentDefinition clazz::s_ComponentDefinition =		\
 	ComponentDefinition(#clazz, []()					\
 		{ return std::make_unique<clazz>(); }			\
-);
+);														\
+														\
+DEFINE_RTC(clazz);
+
 

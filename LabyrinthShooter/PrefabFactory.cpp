@@ -3,11 +3,11 @@
 #include "../FlatEngine/RectangleRenderer.h"
 #include "../FlatEngine/AssetManager.h"
 #include "../FlatEngine/SpriteRenderer.h"
-#include "PowerBullet.h"
-#include "Firearm.h"
-#include "ConstantMover.h"
-#include "PlayerEquipment.h"
-#include "PlayerController.h"
+#include "../LabyrinthShooterBase/PowerBullet.h"
+#include "../LabyrinthShooterBase/Firearm.h"
+#include "../LabyrinthShooterBase/ConstantMover.h"
+#include "../LabyrinthShooterBase/PlayerEquipment.h"
+#include "../LabyrinthShooterBase/PlayerController.h"
 
 #include "../FlatEngine/PrefabLoader.h"
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "../FlatEngine/ObjectComponent.h"
+#include "../FlatEngine/ComponentDefinition.h"
 #include "../FlatEngine/InputController.h"
 #include "PlayerEquipment.h"
 #include "ConstantMover.h"
@@ -11,6 +11,7 @@
 class PlayerController :
 	public ObjectComponent
 {
+	DECLARE_COMPONENT();
 public:
 	// Zdarzenie zmiany kierunku ruchu (nowy kierunek podawany jako argument)
 	function<void(Vector)> onMovementChanged;

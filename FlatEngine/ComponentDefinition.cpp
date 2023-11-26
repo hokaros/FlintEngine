@@ -2,14 +2,23 @@
 
 ComponentDefinition::ComponentDefinition(const std::string& name, ComponentConstructorT constructor)
 	: m_Name(name)
+	, m_TypeCode(RuntimeTypeCode::INVALID)
 	, m_Constructor(constructor)
 {
+	std::unique_ptr<ObjectComponent> representing_component = constructor();
+	m_TypeCode = representing_component->GetTypeCode();
+
 	ComponentDefinitionManager::GetInstance().RegisterComponent(*this);
 }
 
 const std::string& ComponentDefinition::GetName() const
 {
 	return m_Name;
+}
+
+RuntimeTypeCode ComponentDefinition::GetTypeCode() const
+{
+	return m_TypeCode;
 }
 
 const ComponentDefinition::ComponentConstructorT& ComponentDefinition::GetConstructor() const
@@ -38,6 +47,7 @@ ComponentDefinitionManager& ComponentDefinitionManager::GetInstance()
 void ComponentDefinitionManager::RegisterComponent(ComponentDefinition& definition)
 {
 	m_ComponentNameToDefinition.insert({ definition.GetName(), &definition });
+	m_ComponentTypeCodeToDefinition.insert({ definition.GetTypeCode(), &definition });
 }
 
 void ComponentDefinitionManager::AddComponentField(const std::string& component_name, const ComponentFieldDefinition& field)
@@ -49,6 +59,15 @@ ComponentDefinition* ComponentDefinitionManager::GetDefinitionFromName(const std
 {
 	auto it = m_ComponentNameToDefinition.find(name);
 	if (it == m_ComponentNameToDefinition.end())
+		return nullptr;
+
+	return it->second;
+}
+
+ComponentDefinition* ComponentDefinitionManager::GetDefinitionFromTypeCode(RuntimeTypeCode type_code) const
+{
+	auto it = m_ComponentTypeCodeToDefinition.find(type_code);
+	if (it == m_ComponentTypeCodeToDefinition.end())
 		return nullptr;
 
 	return it->second;

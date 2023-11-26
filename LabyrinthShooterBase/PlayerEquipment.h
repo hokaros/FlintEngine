@@ -1,11 +1,13 @@
 #pragma once
-#include "../FlatEngine/ObjectComponent.h"
+#include "../FlatEngine/ComponentDefinition.h"
 #include "Firearm.h"
 
 // Komponent odpowiedzialny za zmienianie broni
 class PlayerEquipment :
 	public ObjectComponent
 {
+	DECLARE_COMPONENT();
+
 public:
 	PlayerEquipment() = default;
 
@@ -19,10 +21,10 @@ public:
 	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 private:
-	Firearm* basicWpn = NULL;
-	Firearm* superWpn = NULL;
+	Firearm* basicWpn = nullptr;
+	Firearm* superWpn = nullptr;
 
-	Firearm* currWpn = NULL;
+	Firearm* currWpn = nullptr;
 
 private:
 	void EquipWeapon(Firearm* wpn);

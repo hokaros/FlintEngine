@@ -2,7 +2,7 @@
 #include "Labirynt.h"
 #include "../FlatEngine/GameObject.h"
 #include "../FlatEngine/RectangleRenderer.h"
-#include "Regenerable.h"
+#include "../LabyrinthShooterBase/Regenerable.h"
 #include "../FlatEngine/Window.h"
 #include "ColliderMemory.h"
 

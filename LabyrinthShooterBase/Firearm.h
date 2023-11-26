@@ -6,10 +6,12 @@
 class Firearm :
 	public ObjectComponent
 {
+	DECLARE_COMPONENT();
 public:
 	function<void(GameObject&, int dmg)> onPlayerCollision; // zdarzenie, gdy pocisk trafi w gracza
 
 public:
+	Firearm() = default;
 	Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type);
 
 	void Update() override;
@@ -21,7 +23,7 @@ public:
 	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 protected:
-	const GameObject& bulletPrefab;
+	const GameObject* bulletPrefab = nullptr;
 private:
 	float reloadTime;
 	float timeSinceLastShot = INFINITY;

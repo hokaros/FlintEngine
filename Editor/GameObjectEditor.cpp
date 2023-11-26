@@ -23,7 +23,9 @@ void GameObjectEditor::SetGameObject(std::unique_ptr<EditorGameObjectHandle> gam
     if (m_GameObjectHandle == nullptr)
         return;
 
-    InitValuesFromGameObject(*m_GameObjectHandle->GetGameObject());
+    GameObject& go = *m_GameObjectHandle->GetGameObject();
+    InitValuesFromGameObject(go);
+    LoadComponents(go);
 }
 
 void GameObjectEditor::RenderGameObjectEditor(GameObject& game_object)
@@ -31,10 +33,31 @@ void GameObjectEditor::RenderGameObjectEditor(GameObject& game_object)
     ImGui::DragFloat2("Position", m_GameObjectPosition, s_SlidersSpeed);
     ImGui::DragFloat2("Size", m_GameObjectSize, s_SlidersSpeed);
 
+    RenderComponentEditors();
+
     ApplyValuesToGameObject(game_object);
 
     if (ImGui::Button("Save"))
         m_GameObjectHandle->SaveGameObject();
+}
+
+void GameObjectEditor::RenderComponentEditors()
+{
+    for (std::unique_ptr<ComponentEditor>& comp_editor : m_ComponentEditors)
+    {
+        comp_editor->Render();
+    }
+}
+
+void GameObjectEditor::LoadComponents(GameObject& game_object)
+{
+    m_ComponentEditors.clear();
+
+    for (ObjectComponent* component : game_object.GetAllComponents())
+    {
+        std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(*component);
+        m_ComponentEditors.push_back(std::move(comp_editor));
+    }
 }
 
 void GameObjectEditor::InitValuesFromGameObject(const GameObject& game_object)

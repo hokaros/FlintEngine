@@ -1,6 +1,8 @@
 #include "ConstantMover.h"
 #include "../FlatEngine/GameObject.h"
 
+DEFINE_COMPONENT(ConstantMover);
+
 ConstantMover::ConstantMover(float movementSpeed)
 	: movementSpeed(movementSpeed) {
 

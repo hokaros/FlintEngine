@@ -90,6 +90,18 @@ void GameObject::AddComponent(std::unique_ptr<ObjectComponent> component)
 	components.push_back(std::move(component));
 }
 
+std::list<ObjectComponent*> GameObject::GetAllComponents()
+{
+	std::list<ObjectComponent*> out_components;
+
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
+		out_components.push_back(component.get());
+	}
+
+	return out_components;
+}
+
 void GameObject::Update() 
 {
 	if (!isEnabled)

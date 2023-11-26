@@ -16,8 +16,8 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 {
 	std::unique_ptr<GameObjectStringDesc> go_serialized = std::make_unique<GameObjectStringDesc>();
 
-	go_serialized->params.insert({ s_GameObjectSizeFieldName, ToString<Vector>(game_object.GetSize()) });
-	go_serialized->params.insert({ s_GameObjectPositionFieldName, ToString<Vector>(game_object.GetPosition()) });
+	go_serialized->params.insert({ s_GameObjectSizeFieldName, STI<Vector>::ToString(game_object.GetSize()) });
+	go_serialized->params.insert({ s_GameObjectPositionFieldName, STI<Vector>::ToString(game_object.GetPosition()) });
 
 	// TODO: component serialization
 
@@ -34,14 +34,14 @@ std::unique_ptr<GameObject> GameObjectSerializer::DeserializePureGameObject(cons
 	auto size_it = desc.params.find(s_GameObjectSizeFieldName);
 	if (size_it != desc.params.end())
 	{
-		ParseString<Vector>(size_it->second, size);
+		STI<Vector>::ParseString(size_it->second, size);
 		is_size_present = true;
 	}
 
 	auto pos_it = desc.params.find(s_GameObjectPositionFieldName);
 	if (pos_it != desc.params.end())
 	{
-		ParseString<Vector>(pos_it->second, pos);
+		STI<Vector>::ParseString(pos_it->second, pos);
 		is_pos_present = true;
 	}
 
