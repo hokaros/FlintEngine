@@ -26,7 +26,7 @@ void ComponentFieldDefinition::SetFieldValue(ObjectComponent* component, const s
 	SetFieldValue(component, parsed_value);
 }
 
-std::string ComponentFieldDefinition::GetFieldValue(ObjectComponent* component) const
+std::string ComponentFieldDefinition::GetFieldValue(const ObjectComponent* component) const
 {
 	void* value_unstringified;
 	AllocateValue(value_unstringified);

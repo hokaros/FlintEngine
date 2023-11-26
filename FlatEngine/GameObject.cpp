@@ -102,6 +102,18 @@ std::list<ObjectComponent*> GameObject::GetAllComponents()
 	return out_components;
 }
 
+std::list<const ObjectComponent*> GameObject::GetAllComponents() const
+{
+	std::list<const ObjectComponent*> out_components;
+
+	for (const std::unique_ptr<ObjectComponent>& component : components)
+	{
+		out_components.push_back(component.get());
+	}
+
+	return out_components;
+}
+
 void GameObject::Update() 
 {
 	if (!isEnabled)

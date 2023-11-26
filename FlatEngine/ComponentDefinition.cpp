@@ -73,4 +73,9 @@ ComponentDefinition* ComponentDefinitionManager::GetDefinitionFromTypeCode(Runti
 	return it->second;
 }
 
+ComponentDefinition* ComponentDefinitionManager::GetDefinition(const ObjectComponent& component) const
+{
+	return GetDefinitionFromTypeCode(component.GetTypeCode());
+}
+
 

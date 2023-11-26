@@ -37,6 +37,7 @@ public:
 
 	ComponentDefinition* GetDefinitionFromName(const std::string& name) const;
 	ComponentDefinition* GetDefinitionFromTypeCode(RuntimeTypeCode type_code) const;
+	ComponentDefinition* GetDefinition(const ObjectComponent& component) const;
 
 private:
 	std::map<std::string, ComponentDefinition*> m_ComponentNameToDefinition;
@@ -50,12 +51,12 @@ private:												\
 	static ComponentDefinition s_ComponentDefinition;	\
 														\
 public:													\
-	virtual RuntimeTypeCode GetTypeCode() override;
+	virtual RuntimeTypeCode GetTypeCode() const override;
 
 
 // TODO: move to RuntimeTypeCode.h
 #define DEFINE_RTC(clazz)											\
-RuntimeTypeCode clazz::GetTypeCode()								\
+RuntimeTypeCode clazz::GetTypeCode() const							\
 {																	\
 static RuntimeTypeCode s_TypeCode = RuntimeTypeCode::CreateNew();	\
 return s_TypeCode;													\

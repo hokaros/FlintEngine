@@ -14,12 +14,12 @@ public:
 	const std::string& GetFieldName() const;
 
 	void SetFieldValue(ObjectComponent* component, const std::string& value) const;
-	std::string GetFieldValue(ObjectComponent* component) const;
+	std::string GetFieldValue(const ObjectComponent* component) const;
 
 	// value - typed field value
 	virtual void SetFieldValue(ObjectComponent* component, void* value) const = 0;
 	// value - typed field value
-	virtual void GetFieldValue(ObjectComponent* component, void* value) const = 0;
+	virtual void GetFieldValue(const ObjectComponent* component, void* value) const = 0;
 
 	virtual RuntimeTypeCode GetValueRTC() = 0;
 
@@ -44,7 +44,7 @@ public:
 	ComponentFieldDefinitionTyped(const std::string& component_name, const std::string& field_name, FieldGetterT getter, FieldSetterT setter);
 
 	virtual void SetFieldValue(ObjectComponent* component, void* value) const override;
-	virtual void GetFieldValue(ObjectComponent* component, void* value) const override;
+	virtual void GetFieldValue(const ObjectComponent* component, void* value) const override;
 
 	virtual RuntimeTypeCode GetValueRTC() override;
 
@@ -102,7 +102,7 @@ inline void ComponentFieldDefinitionTyped<FieldT>::SetFieldValue(ObjectComponent
 }
 
 template<typename FieldT>
-inline void ComponentFieldDefinitionTyped<FieldT>::GetFieldValue(ObjectComponent* component, void* value) const
+inline void ComponentFieldDefinitionTyped<FieldT>::GetFieldValue(const ObjectComponent* component, void* value) const
 {
 	FieldT* value_typed = reinterpret_cast<FieldT*>(value);
 	m_Getter(component, *value_typed);

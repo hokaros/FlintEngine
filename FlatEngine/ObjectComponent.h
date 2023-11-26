@@ -12,7 +12,7 @@ public:
 	GameObject& GetOwner() const;
 
 	virtual std::unique_ptr<ObjectComponent> Copy() = 0;
-	virtual RuntimeTypeCode GetTypeCode() = 0;
+	virtual RuntimeTypeCode GetTypeCode() const = 0;
 
 protected:
 	void SetOwner(GameObject* owner);

@@ -45,8 +45,10 @@ void GameObjectEditor::RenderComponentEditors()
 {
     for (std::unique_ptr<ComponentEditor>& comp_editor : m_ComponentEditors)
     {
+        ImGui::Separator();
         comp_editor->Render();
     }
+    ImGui::Separator();
 }
 
 void GameObjectEditor::LoadComponents(GameObject& game_object)

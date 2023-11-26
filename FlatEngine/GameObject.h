@@ -47,6 +47,7 @@ public:
 
 	void AddComponent(std::unique_ptr<ObjectComponent> component);
 	std::list<ObjectComponent*> GetAllComponents();
+	std::list<const ObjectComponent*> GetAllComponents() const;
 	// Znajduje komponent okreœlonego typu
 	template<class T>
 	T* FindComponent();

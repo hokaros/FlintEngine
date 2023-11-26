@@ -12,4 +12,16 @@ ComponentEditor::ComponentEditor(ObjectComponent& component)
 void ComponentEditor::Render()
 {
 	ImGui::Text("Component: %s", m_ComponentDefinition.GetName().c_str());
+
+	for (const ComponentFieldDefinition* field : m_ComponentDefinition.GetFields())
+	{
+		std::string field_value = field->GetFieldValue(&m_Component);
+		char buffer[16];
+		strcpy_s(buffer, field_value.c_str());
+
+		ImGui::SetNextItemWidth(100.0f);
+		ImGui::InputText(field->GetFieldName().c_str(), buffer, 16);
+		field_value = buffer;
+		field->SetFieldValue(&m_Component, field_value);
+	}
 }
