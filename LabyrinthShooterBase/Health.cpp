@@ -1,29 +1,34 @@
 #include "Health.h"
 
 DEFINE_COMPONENT(Health);
+DEFINE_FIELD(Health, m_MaxHealth);
 
 Health::Health()
 {
-	currHealth = maxHealth;
+	m_CurrHealth = m_MaxHealth;
 }
 
-Health::Health(int maxHealth, StatRenderer* healthRenderer)
-	: maxHealth(maxHealth)
-	, currHealth(maxHealth)
-	, healthRenderer(healthRenderer) 
+Health::Health(int max_health, StatRenderer* health_renderer)
+	: m_MaxHealth(max_health)
+	, m_CurrHealth(max_health)
+	, m_HealthRenderer(health_renderer) 
 {
 
-	if (healthRenderer != nullptr) 
+}
+
+void Health::Start()
+{
+	if (m_HealthRenderer != nullptr)
 	{
-		healthRenderer->UpdateStat(currHealth);
+		m_HealthRenderer->UpdateStat(m_CurrHealth);
 	}
 }
 
 std::unique_ptr<ObjectComponent> Health::Copy()
 {
-	std::unique_ptr<Health> health = std::make_unique<Health>(maxHealth, nullptr);
+	std::unique_ptr<Health> health = std::make_unique<Health>(m_MaxHealth, nullptr);
 	// Dodanie funkcji obs³ugi œmierci
-	for (std::function<void(Health*)> deathHandler : onDeath) {
+	for (std::function<void(Health*)> deathHandler : m_OnDeath) {
 		health->SubscribeDeath(deathHandler);
 	}
 	return health;
@@ -31,13 +36,13 @@ std::unique_ptr<ObjectComponent> Health::Copy()
 
 void Health::Hurt(int hp) 
 {
-	currHealth -= hp;
-	printf("Ouch, curr = %d\n", currHealth);
+	m_CurrHealth -= hp;
+	printf("Ouch, curr = %d\n", m_CurrHealth);
 
-	if (healthRenderer != nullptr)
-		healthRenderer->UpdateStat(currHealth);
+	if (m_HealthRenderer != nullptr)
+		m_HealthRenderer->UpdateStat(m_CurrHealth);
 
-	if (currHealth <= 0) 
+	if (m_CurrHealth <= 0)
 	{
 		OnDeath();
 	}
@@ -45,17 +50,17 @@ void Health::Hurt(int hp)
 
 bool Health::IsDead() const 
 {
-	return currHealth <= 0;
+	return m_CurrHealth <= 0;
 }
 
 void Health::SetStatRenderer(StatRenderer* value)
 {
-	healthRenderer = value;
+	m_HealthRenderer = value;
 }
 
 void Health::OnDeath() 
 {
-	for (std::function<void(Health*)> handler : onDeath) 
+	for (std::function<void(Health*)> handler : m_OnDeath)
 	{
 		if (handler) 
 		{
@@ -66,5 +71,5 @@ void Health::OnDeath()
 
 void Health::SubscribeDeath(std::function<void(Health*)> handler) 
 {
-	onDeath.push_back(handler);
+	m_OnDeath.push_back(handler);
 }

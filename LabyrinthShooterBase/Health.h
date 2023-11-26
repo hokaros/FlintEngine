@@ -11,7 +11,9 @@ class Health :
 
 public:
 	Health();
-	Health(int maxHealth, StatRenderer* healthRenderer);
+	Health(int max_health, StatRenderer* health_renderer);
+
+	virtual void Start() override;
 
 	void Hurt(int hp);
 	bool IsDead() const;
@@ -24,14 +26,16 @@ public:
 	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 private:
-	int maxHealth = 3;
-	int currHealth;
-
-	std::list<std::function<void(Health*)>> onDeath;
-
-	StatRenderer* healthRenderer = nullptr;
+	void OnDeath();
 
 private:
-	void OnDeath();
+	int m_MaxHealth = 3;
+	int m_CurrHealth;
+
+	std::list<std::function<void(Health*)>> m_OnDeath;
+
+	StatRenderer* m_HealthRenderer = nullptr;
+
+	DECLARE_FIELD(m_MaxHealth);
 };
 
