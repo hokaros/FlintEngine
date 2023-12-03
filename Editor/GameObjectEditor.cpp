@@ -61,6 +61,7 @@ void GameObjectEditor::RenderComponentEditors()
     for (std::unique_ptr<ComponentEditor>& comp_editor : m_ComponentEditors)
     {
         ImGui::Separator();
+
         comp_editor->Render();
     }
     ImGui::Separator();
@@ -81,10 +82,13 @@ void GameObjectEditor::LoadComponents(GameObject& game_object)
 {
     m_ComponentEditors.clear();
 
+    size_t component_idx = 0;
     for (ObjectComponent* component : game_object.GetAllComponents())
     {
-        std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(*component);
+        std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(*component, component_idx);
         m_ComponentEditors.push_back(std::move(comp_editor));
+
+        component_idx++;
     }
 }
 
