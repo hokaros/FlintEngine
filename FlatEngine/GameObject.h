@@ -5,6 +5,7 @@
 #include <functional>
 #include <math.h>
 #include <mutex>
+#include <optional>
 
 #include <list>
 #define BUMPOUT_SPEED 10000.0
@@ -144,14 +145,11 @@ private:
 	std::unique_ptr<GameObject> CreatePrefabSizePosition(PrefabCreationKey);
 
 private:
-	std::string m_Name;
-	bool m_IsNameSet = false;
+	std::optional<std::string> m_Name;
 
-	Vector m_Size;
-	bool m_IsSizeSet = false;
+	std::optional<Vector> m_Size;
 
-	Vector m_Position;
-	bool m_IsPositionSet = false;
+	std::optional<Vector> m_Position;
 };
 
 

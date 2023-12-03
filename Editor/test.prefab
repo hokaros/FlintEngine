@@ -1,6 +1,6 @@
 - m_Name: Destroyer of Worlds
 - m_Pos: 0.000000, 0.000000
-- m_Size: 1.000000, 1.000000
+- m_Size: 1.500000, 1.000000
 - components:
 	- Health:
 		- m_MaxHealth: 2

@@ -1,5 +1,19 @@
+- m_Name: Destroyer of Worlds
 - m_Pos: 0.000000, 0.000000
-- m_Size: 4.000000, 4.000000
+- m_Size: 1.000000, 1.000000
 - components:
 	- Health:
-		- m_MaxHealth: 4
+		- m_MaxHealth: 2
+	- Bullet:
+		- speed: 1.000000
+		- damage: 2
+	- BoxCollider:
+		- m_InsideOutCollision: 1
+		- m_Position: 0.000000, 0.000000
+		- m_Size: 1.000000, 1.000000
+	- BoxCollider:
+		- m_InsideOutCollision: 0
+		- m_Position: 10.000000, 0.000000
+		- m_Size: 5.000000, 5.000000
+	- ConstantMover:
+		- movementSpeed: 5.000000

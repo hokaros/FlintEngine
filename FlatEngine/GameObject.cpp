@@ -383,9 +383,9 @@ std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab(PrefabCreationKey ke
 {
 	std::unique_ptr<GameObject> prefab = CreatePrefabSizePosition(key);
 
-	if (m_IsNameSet)
+	if (m_Name.has_value())
 	{
-		prefab->SetName(m_Name);
+		prefab->SetName(m_Name.value());
 	}
 
 	return prefab;
@@ -394,7 +394,6 @@ std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab(PrefabCreationKey ke
 GameObjectFactory& GameObjectFactory::SetName(const std::string& name)
 {
 	m_Name = name;
-	m_IsNameSet = true;
 
 	return *this;
 }
@@ -402,7 +401,6 @@ GameObjectFactory& GameObjectFactory::SetName(const std::string& name)
 GameObjectFactory& GameObjectFactory::SetSize(const Vector& size)
 {
 	m_Size = size;
-	m_IsSizeSet = true;
 
 	return *this;
 }
@@ -410,20 +408,19 @@ GameObjectFactory& GameObjectFactory::SetSize(const Vector& size)
 GameObjectFactory& GameObjectFactory::SetPosition(const Vector& position)
 {
 	m_Position = position;
-	m_IsPositionSet = true;
 
 	return *this;
 }
 
 std::unique_ptr<GameObject> GameObjectFactory::CreatePrefabSizePosition(PrefabCreationKey key)
 {
-	if (m_IsSizeSet && m_IsPositionSet)
+	if (m_Size.has_value() && m_Position.has_value())
 	{
-		return std::make_unique<GameObject>(m_Size, m_Position, key);
+		return std::make_unique<GameObject>(m_Size.value(), m_Position.value(), key);
 	}
-	else if (m_IsSizeSet)
+	else if (m_Size.has_value())
 	{
-		return std::make_unique<GameObject>(m_Size, key);
+		return std::make_unique<GameObject>(m_Size.value(), key);
 	}
 
 	return std::make_unique<GameObject>(key);
