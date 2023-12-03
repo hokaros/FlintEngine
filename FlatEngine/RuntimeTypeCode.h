@@ -7,6 +7,7 @@ public:
 
 	static RuntimeTypeCode CreateNew();
 
+	bool operator ==(const RuntimeTypeCode& other) const;
 	friend bool operator <(const RuntimeTypeCode& lhs, const RuntimeTypeCode& rhs);
 
 public:

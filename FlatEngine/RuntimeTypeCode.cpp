@@ -14,6 +14,11 @@ RuntimeTypeCode RuntimeTypeCode::CreateNew()
 	return RuntimeTypeCode(s_HighestId);
 }
 
+bool RuntimeTypeCode::operator==(const RuntimeTypeCode& other) const
+{
+	return this->m_Id == other.m_Id;
+}
+
 bool operator<(const RuntimeTypeCode& lhs, const RuntimeTypeCode& rhs)
 {
 	return lhs.m_Id < rhs.m_Id;

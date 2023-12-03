@@ -21,7 +21,7 @@ public:
 	// value - typed field value
 	virtual void GetFieldValue(const ObjectComponent* component, void* value) const = 0;
 
-	virtual RuntimeTypeCode GetValueRTC() = 0;
+	virtual RuntimeTypeCode GetValueRTC() const = 0;
 
 private:
 	virtual void AllocateValue(void*& value) const = 0;
@@ -46,7 +46,7 @@ public:
 	virtual void SetFieldValue(ObjectComponent* component, void* value) const override;
 	virtual void GetFieldValue(const ObjectComponent* component, void* value) const override;
 
-	virtual RuntimeTypeCode GetValueRTC() override;
+	virtual RuntimeTypeCode GetValueRTC() const override;
 
 private:
 	virtual void AllocateValue(void*& value) const override;
@@ -109,7 +109,7 @@ inline void ComponentFieldDefinitionTyped<FieldT>::GetFieldValue(const ObjectCom
 }
 
 template<typename FieldT>
-inline RuntimeTypeCode ComponentFieldDefinitionTyped<FieldT>::GetValueRTC()
+inline RuntimeTypeCode ComponentFieldDefinitionTyped<FieldT>::GetValueRTC() const
 {
 	return STI<FieldT>::GetTypeCode();
 }
