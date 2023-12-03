@@ -69,7 +69,8 @@ void GameObjectEditor::RenderComponentEditors()
 void GameObjectEditor::RenderComponentAddSection()
 {
     static int s_ItemCurrent = 0;
-    ImGui::Combo("Component", &s_ItemCurrent, m_AddableComponentNames.data(), m_AddableComponentNames.size());
+    ImGui::Combo("New component", &s_ItemCurrent, m_AddableComponentNames.data(), m_AddableComponentNames.size());
+    ImGui::SameLine();
     if (ImGui::Button("+"))
     {
         AddComponent(m_AddableComponents[s_ItemCurrent]);

@@ -11,16 +11,13 @@ public:
 	void Render();
 
 private:
-	void RenderStartingWindow();
-	void RenderAnotherWindow();
+	void RenderEditorConfigWindow();
 
 	std::unique_ptr<EditorPrefabHandle> OpenPrefab(const std::string& prefab_path);
 
 private:
 	GameObjectEditor m_GameObjectEditor;
 
-	bool m_ShowDemoWindow = false;
-	bool m_ShowAnotherWindow = false;
 	ImVec4& m_ClearColor;
 };
 

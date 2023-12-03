@@ -19,7 +19,7 @@ void ComponentEditor::Render()
 		char buffer[64];
 		strcpy_s(buffer, field_value.c_str());
 
-		ImGui::SetNextItemWidth(100.0f);
+		ImGui::SetNextItemWidth(150.0f);
 		ImGui::InputText(field->GetFieldName().c_str(), buffer, 16);
 		field_value = buffer;
 		field->SetFieldValue(&m_Component, field_value);
