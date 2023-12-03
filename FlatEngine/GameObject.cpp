@@ -166,6 +166,16 @@ void GameObject::OnDestroy()
 	}
 }
 
+const std::string& GameObject::GetName() const
+{
+	return name;
+}
+
+void GameObject::SetName(const std::string& name)
+{
+	this->name = name;
+}
+
 const Vector& GameObject::GetSize() const 
 {
 	return size;
@@ -367,4 +377,54 @@ bool GameObject::IsEnabled() const
 void GameObject::SubscribeDestroyed(function<void(GameObject*)> handler) 
 {
 	onDestroyedChanged.push_back(handler);
+}
+
+std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab(PrefabCreationKey key)
+{
+	std::unique_ptr<GameObject> prefab = CreatePrefabSizePosition(key);
+
+	if (m_IsNameSet)
+	{
+		prefab->SetName(m_Name);
+	}
+
+	return prefab;
+}
+
+GameObjectFactory& GameObjectFactory::SetName(const std::string& name)
+{
+	m_Name = name;
+	m_IsNameSet = true;
+
+	return *this;
+}
+
+GameObjectFactory& GameObjectFactory::SetSize(const Vector& size)
+{
+	m_Size = size;
+	m_IsSizeSet = true;
+
+	return *this;
+}
+
+GameObjectFactory& GameObjectFactory::SetPosition(const Vector& position)
+{
+	m_Position = position;
+	m_IsPositionSet = true;
+
+	return *this;
+}
+
+std::unique_ptr<GameObject> GameObjectFactory::CreatePrefabSizePosition(PrefabCreationKey key)
+{
+	if (m_IsSizeSet && m_IsPositionSet)
+	{
+		return std::make_unique<GameObject>(m_Size, m_Position, key);
+	}
+	else if (m_IsSizeSet)
+	{
+		return std::make_unique<GameObject>(m_Size, key);
+	}
+
+	return std::make_unique<GameObject>(key);
 }

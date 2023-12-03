@@ -33,6 +33,8 @@ private:
 	void ApplyValuesToGameObject(GameObject& game_object);
 
 private:
+	static constexpr size_t s_NameMaxSize = 64;
+
 	std::unique_ptr<EditorGameObjectHandle> m_GameObjectHandle = nullptr;
 	std::vector<std::unique_ptr<ComponentEditor>> m_ComponentEditors;
 
@@ -41,6 +43,7 @@ private:
 
 	float m_GameObjectPosition[2];
 	float m_GameObjectSize[2];
+	char m_GameObjectName[s_NameMaxSize];
 
 	static constexpr float s_SlidersSpeed = 0.1f;
 };

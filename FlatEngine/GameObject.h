@@ -68,6 +68,9 @@ public:
 	void Awake();
 	void OnDestroy();
 
+	const std::string& GetName() const;
+	void SetName(const std::string& name);
+
 	const Vector& GetPosition() const;
 	const Vector& GetSize() const;
 	double GetRotation() const;
@@ -114,6 +117,7 @@ protected:
 private:
 	bool isEnabled = true;
 
+	std::string name = "GameObject";
 	Vector size;
 	Vector position;
 	double rotation = 0.0;
@@ -124,6 +128,30 @@ private:
 	std::list<GameObject*> children;
 
 	std::list<function<void(GameObject*)>> onDestroyedChanged;
+};
+
+
+class GameObjectFactory
+{
+public:
+	std::unique_ptr<GameObject> CreatePrefab(PrefabCreationKey);
+
+	GameObjectFactory& SetName(const std::string& name);
+	GameObjectFactory& SetSize(const Vector& size);
+	GameObjectFactory& SetPosition(const Vector& position);
+
+private:
+	std::unique_ptr<GameObject> CreatePrefabSizePosition(PrefabCreationKey);
+
+private:
+	std::string m_Name;
+	bool m_IsNameSet = false;
+
+	Vector m_Size;
+	bool m_IsSizeSet = false;
+
+	Vector m_Position;
+	bool m_IsPositionSet = false;
 };
 
 

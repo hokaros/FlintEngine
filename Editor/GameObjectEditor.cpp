@@ -44,6 +44,8 @@ void GameObjectEditor::LoadAddableComponents()
 
 void GameObjectEditor::RenderGameObjectEditor(GameObject& game_object)
 {
+    ImGui::InputText("Name", m_GameObjectName, s_NameMaxSize);
+
     ImGui::DragFloat2("Position", m_GameObjectPosition, s_SlidersSpeed);
     ImGui::DragFloat2("Size", m_GameObjectSize, s_SlidersSpeed);
 
@@ -107,6 +109,8 @@ void GameObjectEditor::InitValuesFromGameObject(const GameObject& game_object)
 
     m_GameObjectSize[0] = game_object.GetSize().x;
     m_GameObjectSize[1] = game_object.GetSize().y;
+
+    strcpy_s(m_GameObjectName, game_object.GetName().c_str());
 }
 
 void GameObjectEditor::ApplyValuesToGameObject(GameObject& game_object)
@@ -114,6 +118,9 @@ void GameObjectEditor::ApplyValuesToGameObject(GameObject& game_object)
     game_object.SetPosition(Vector(m_GameObjectPosition));
 
     game_object.SetSize(Vector(m_GameObjectSize));
+
+    std::string name_str = std::string(m_GameObjectName);
+    game_object.SetName(name_str);
 }
 
 
