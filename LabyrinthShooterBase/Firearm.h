@@ -25,11 +25,13 @@ public:
 protected:
 	const GameObject* bulletPrefab = nullptr;
 private:
-	float reloadTime;
+	float reloadTime = 1.0f;
+	DECLARE_FIELD(reloadTime);
+
+	FirearmType type = FirearmType::Basic; // TODO: make a field
+
 	float timeSinceLastShot = INFINITY;
 
 	bool isReloaded = true; // czy gotowy do strza³u
-
-	FirearmType type;
 };
 

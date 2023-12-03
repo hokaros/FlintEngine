@@ -2,6 +2,7 @@
 #include "../FlatEngine/GameObject.h"
 
 DEFINE_COMPONENT(ConstantMover);
+DEFINE_FIELD(ConstantMover, movementSpeed);
 
 ConstantMover::ConstantMover(float movementSpeed)
 	: movementSpeed(movementSpeed) {

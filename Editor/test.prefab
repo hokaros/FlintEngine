@@ -9,8 +9,10 @@
 	- BoxCollider:
 		- m_InsideOutCollision: 1
 		- m_Position: 0.000000, 0.000000
-		- m_Size: 0.000000, 0.000000
+		- m_Size: 1.000000, 1.000000
 	- BoxCollider:
 		- m_InsideOutCollision: 0
 		- m_Position: 10.000000, 0.000000
-		- m_Size: 0.000000, 0.000000
+		- m_Size: 5.000000, 5.000000
+	- ConstantMover:
+		- movementSpeed: 5.000000

@@ -3,6 +3,7 @@
 #include "../FlatEngine/GameObject.h"
 
 DEFINE_COMPONENT(Firearm);
+DEFINE_FIELD(Firearm, reloadTime);
 
 Firearm::Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type)
 	: bulletPrefab(&bulletPrefab)

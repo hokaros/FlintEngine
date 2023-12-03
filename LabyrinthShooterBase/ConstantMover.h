@@ -29,6 +29,8 @@ public:
 protected:
 	// Prêdkoœæ [piksele na sekundê]
 	float movementSpeed = 10.0f;
+	DECLARE_FIELD(movementSpeed);
+
 	Vector moveDir;
 
 private:

@@ -30,12 +30,12 @@ private:
 
 private:
 	int m_MaxHealth = 3;
+	DECLARE_FIELD(m_MaxHealth);
+
 	int m_CurrHealth;
 
 	std::list<std::function<void(Health*)>> m_OnDeath;
 
 	StatRenderer* m_HealthRenderer = nullptr;
-
-	DECLARE_FIELD(m_MaxHealth);
 };
 
