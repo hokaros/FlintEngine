@@ -2,7 +2,7 @@
 
 void GameObjectEditor::Render()
 {
-    ImGui::Begin("Game Object Editor");
+    ImGui::Begin("GameObject Editor");
 
     if (m_GameObjectHandle != nullptr && m_GameObjectHandle->GetGameObject() != nullptr)
     {
