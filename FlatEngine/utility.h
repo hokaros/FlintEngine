@@ -28,6 +28,11 @@
 	printf(message, __VA_ARGS__);		\
 	printf("\n");
 
+#define FE_WARN(message, ...)			\
+	printf("WARNING: ");				\
+	printf(message, __VA_ARGS__);		\
+	printf("\n");
+
 #define FE_DATA_ERROR(message, ...)		\
 	printf("ERROR: ");					\
 	printf(message, __VA_ARGS__);		\

@@ -47,8 +47,11 @@ public:
 	static void Destroy(GameObject* game_object);
 
 	void AddComponent(std::unique_ptr<ObjectComponent> component);
+	void RemoveComponent(ObjectComponent* component);
+	void RemoveComponent(size_t component_index);
 	std::list<ObjectComponent*> GetAllComponents();
 	std::list<const ObjectComponent*> GetAllComponents() const;
+	ObjectComponent* GetComponent(size_t idx);
 	// Znajduje komponent okreœlonego typu
 	template<class T>
 	T* FindComponent();

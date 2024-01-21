@@ -15,6 +15,7 @@ protected:
 };
 
 class GameObjectEditor
+	: protected IComponentActionObserver
 {
 public:
 	void Render();
@@ -32,6 +33,9 @@ private:
 	void InitValuesFromGameObject(const GameObject& game_object);
 	void ApplyValuesToGameObject(GameObject& game_object);
 
+	// IComponentActionObserver
+	virtual void OnComponentDeleted(size_t index_in_game_object) override;
+
 private:
 	static constexpr size_t s_NameMaxSize = 64;
 
@@ -44,6 +48,8 @@ private:
 	float m_GameObjectPosition[2];
 	float m_GameObjectSize[2];
 	char m_GameObjectName[s_NameMaxSize];
+
+	bool m_AreComponentEditorsValid = false;
 
 	static constexpr float s_SlidersSpeed = 0.1f;
 };

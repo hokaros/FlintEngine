@@ -90,6 +90,19 @@ void GameObject::AddComponent(std::unique_ptr<ObjectComponent> component)
 	components.push_back(std::move(component));
 }
 
+void GameObject::RemoveComponent(ObjectComponent* component)
+{
+	components.remove_if([&component](const std::unique_ptr<ObjectComponent>& go_comp) 
+	{
+		return go_comp.get() == component;
+	});
+}
+
+void GameObject::RemoveComponent(size_t component_index)
+{
+	RemoveComponent(GetComponent(component_index));
+}
+
 std::list<ObjectComponent*> GameObject::GetAllComponents()
 {
 	std::list<ObjectComponent*> out_components;
@@ -112,6 +125,22 @@ std::list<const ObjectComponent*> GameObject::GetAllComponents() const
 	}
 
 	return out_components;
+}
+
+ObjectComponent* GameObject::GetComponent(size_t idx)
+{
+	size_t i = 0;
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
+		if (i == idx)
+		{
+			return component.get();
+		}
+
+		i++;
+	}
+
+	return nullptr;
 }
 
 void GameObject::Update() 

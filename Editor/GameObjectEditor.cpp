@@ -55,11 +55,18 @@ void GameObjectEditor::RenderGameObjectEditor(GameObject& game_object)
     ApplyValuesToGameObject(game_object);
 
     if (ImGui::Button("Save"))
+    {
         m_GameObjectHandle->SaveGameObject();
+    }
 }
 
 void GameObjectEditor::RenderComponentEditors()
 {
+    if (!m_AreComponentEditorsValid)
+    {
+        LoadComponents(*m_GameObjectHandle->GetGameObject());
+    }
+
     for (std::unique_ptr<ComponentEditor>& comp_editor : m_ComponentEditors)
     {
         ImGui::Separator();
@@ -88,10 +95,13 @@ void GameObjectEditor::LoadComponents(GameObject& game_object)
     for (ObjectComponent* component : game_object.GetAllComponents())
     {
         std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(*component, component_idx);
+        comp_editor->RegisterActionObserver(this);
         m_ComponentEditors.push_back(std::move(comp_editor));
 
         component_idx++;
     }
+
+    m_AreComponentEditorsValid = true;
 }
 
 void GameObjectEditor::AddComponent(const ComponentDefinition* component)
@@ -99,7 +109,7 @@ void GameObjectEditor::AddComponent(const ComponentDefinition* component)
     GameObject& game_object = *m_GameObjectHandle->GetGameObject();
     game_object.AddComponent(component->GetConstructor()());
 
-    LoadComponents(game_object);
+    m_AreComponentEditorsValid = false;
 }
 
 void GameObjectEditor::InitValuesFromGameObject(const GameObject& game_object)
@@ -121,6 +131,14 @@ void GameObjectEditor::ApplyValuesToGameObject(GameObject& game_object)
 
     std::string name_str = std::string(m_GameObjectName);
     game_object.SetName(name_str);
+}
+
+void GameObjectEditor::OnComponentDeleted(size_t index_in_game_object)
+{
+    GameObject& game_object = *m_GameObjectHandle->GetGameObject();
+    game_object.RemoveComponent(index_in_game_object);
+
+    m_AreComponentEditorsValid = false;
 }
 
 
