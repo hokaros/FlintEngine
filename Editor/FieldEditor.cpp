@@ -9,6 +9,11 @@ FieldEditor::FieldEditor(ObjectComponent& component, const ComponentFieldDefinit
 	m_FieldLabel = field_label_ss.str();
 }
 
+const ComponentFieldDefinition& FieldEditor::GetField() const
+{
+	return m_Field;
+}
+
 void FieldEditorDefault::Render()
 {
 	std::string field_value = m_Field.GetFieldValue(&m_Component);

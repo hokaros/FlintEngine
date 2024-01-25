@@ -15,7 +15,7 @@ public:
 	const std::string& GetName() const;
 	RuntimeTypeCode GetTypeCode() const;
 	const ComponentConstructorT& GetConstructor() const;
-	const std::vector<const ComponentFieldDefinition*> GetFields() const;
+	const std::vector<const ComponentFieldDefinition*>& GetFields() const;
 
 	void AddField(const ComponentFieldDefinition& field);
 

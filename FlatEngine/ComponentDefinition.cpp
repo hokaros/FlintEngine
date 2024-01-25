@@ -26,7 +26,7 @@ const ComponentDefinition::ComponentConstructorT& ComponentDefinition::GetConstr
 	return m_Constructor;
 }
 
-const std::vector<const ComponentFieldDefinition*> ComponentDefinition::GetFields() const
+const std::vector<const ComponentFieldDefinition*>& ComponentDefinition::GetFields() const
 {
 	return m_Fields;
 }

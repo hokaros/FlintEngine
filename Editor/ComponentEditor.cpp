@@ -8,6 +8,7 @@ ComponentEditor::ComponentEditor(ObjectComponent& component, size_t index_in_gam
 		))
 	, m_IndexInGameObject(index_in_game_object)
 {
+	CreateFieldEditors();
 }
 
 void ComponentEditor::Render()
@@ -25,9 +26,9 @@ void ComponentEditor::Render()
 		}
 	}
 
-	for (const ComponentFieldDefinition* field : m_ComponentDefinition.GetFields())
+	for (std::unique_ptr<FieldEditor>& field : m_FieldEditors)
 	{
-		RenderField(field);
+		RenderField(*field);
 	}
 
 	ImGui::EndChild();
@@ -38,13 +39,20 @@ void ComponentEditor::RegisterActionObserver(IComponentActionObserver* observer)
 	m_Observer = observer;
 }
 
-void ComponentEditor::RenderField(const ComponentFieldDefinition* field)
+void ComponentEditor::CreateFieldEditors()
 {
-	// TODO: szykowanie edytorów fieldów w konstruktorze
+	m_FieldEditors.clear();
 
-	const char* field_name = field->GetFieldName().c_str();
-	std::unique_ptr<FieldEditor> field_editor = CreateFieldEditor(*field);
-	field_editor->Render();
+	for (const ComponentFieldDefinition* field : m_ComponentDefinition.GetFields())
+	{
+		m_FieldEditors.push_back(CreateFieldEditor(*field));
+	}
+}
+
+void ComponentEditor::RenderField(FieldEditor& field_editor)
+{
+	const char* field_name = field_editor.GetField().GetFieldName().c_str();
+	field_editor.Render();
 
 	ImGui::SameLine();
 	ImGui::Text(field_name);

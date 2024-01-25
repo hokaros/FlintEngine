@@ -9,6 +9,8 @@ public:
 
 	virtual void Render() = 0;
 
+	const ComponentFieldDefinition& GetField() const;
+
 	virtual ~FieldEditor() = default;
 
 protected:

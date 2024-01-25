@@ -20,7 +20,8 @@ public:
     void RegisterActionObserver(IComponentActionObserver* observer);
 
 private:
-    void RenderField(const ComponentFieldDefinition* field);
+    void CreateFieldEditors();
+    void RenderField(FieldEditor& field);
     std::unique_ptr<FieldEditor> CreateFieldEditor(const ComponentFieldDefinition& field);
     float CalculateHeight() const;
 
@@ -28,6 +29,8 @@ private:
     ObjectComponent& m_Component;
     ComponentDefinition& m_ComponentDefinition;
     size_t m_IndexInGameObject;
+
+    std::vector<std::unique_ptr<FieldEditor>> m_FieldEditors;
 
     IComponentActionObserver* m_Observer;
 };
