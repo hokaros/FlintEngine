@@ -1,6 +1,7 @@
 #pragma once
 #include "../FlatEngine/ComponentDefinition.h"
 #include "../FlatEngine/imgui/imgui.h"
+#include "FieldEditor.h"
 
 class IComponentActionObserver
 {
@@ -20,6 +21,7 @@ public:
 
 private:
     void RenderField(const ComponentFieldDefinition* field);
+    std::unique_ptr<FieldEditor> CreateFieldEditor(const ComponentFieldDefinition& field);
     float CalculateHeight() const;
 
 private:
