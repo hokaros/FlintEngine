@@ -4,6 +4,8 @@
 #include "../FlatEngine/PrefabLoader.h"
 #include "PrefabSaver.h"
 
+static constexpr const char* s_RootDirectory = "Test Assets";
+
 AssetExplorer::AssetExplorer()
 	: m_FilePathBuffer("test.prefab")
 {
@@ -30,7 +32,8 @@ void AssetExplorer::Render()
 	{
 		if (m_Listener != nullptr)
 		{
-			m_Listener->OnPrefabOpened(OpenPrefab(m_FilePathBuffer));
+			std::string full_path = AppendPathToRootDirectory(m_FilePathBuffer);
+			m_Listener->OnPrefabOpened(OpenPrefab(full_path));
 		}
 		else
 		{
@@ -51,4 +54,11 @@ std::unique_ptr<EditorPrefabHandle> AssetExplorer::OpenPrefab(const std::string&
 	}
 
 	return std::make_unique<EditorPrefabHandle>(std::move(prefab), prefab_path);
+}
+
+std::string AssetExplorer::AppendPathToRootDirectory(const std::string& path)
+{
+	std::stringstream ss;
+	ss << s_RootDirectory << '\\' << path;
+	return ss.str();
 }
