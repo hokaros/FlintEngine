@@ -5,7 +5,7 @@
 #include "PrefabSaver.h"
 
 AssetExplorer::AssetExplorer()
-	: m_FilePathBuffer("Hello there")
+	: m_FilePathBuffer("test.prefab")
 {
 
 }
