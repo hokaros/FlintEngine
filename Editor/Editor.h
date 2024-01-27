@@ -1,22 +1,23 @@
 #pragma once
 #include "../FlatEngine/imgui/imgui.h"
-#include "../FlatEngine/PrefabLoader.h"
 #include "GameObjectEditor.h"
-#include "PrefabSaver.h"
+#include "AssetExplorer.h"
 
 class Editor
+	: private IAssetListener
 {
 public:
 	Editor(ImVec4& clear_color);
 	void Render();
 
 private:
-	void RenderEditorConfigWindow();
+	virtual void OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab) override;
 
-	std::unique_ptr<EditorPrefabHandle> OpenPrefab(const std::string& prefab_path);
+	void RenderEditorConfigWindow();
 
 private:
 	GameObjectEditor m_GameObjectEditor;
+	AssetExplorer m_AssetExplorer;
 
 	ImVec4& m_ClearColor;
 };

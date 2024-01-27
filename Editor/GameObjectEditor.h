@@ -1,18 +1,7 @@
 #pragma once
 #include "../FlatEngine/GameObject.h"
 #include "ComponentEditor.h"
-
-class EditorGameObjectHandle
-{
-public:
-	EditorGameObjectHandle(GameObject* game_object);
-
-	GameObject* GetGameObject() const;
-	virtual void SaveGameObject();
-
-protected:
-	GameObject* m_GameObject;
-};
+#include "AssetHandles.h"
 
 class GameObjectEditor
 	: protected IComponentActionObserver

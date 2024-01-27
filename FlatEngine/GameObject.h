@@ -12,7 +12,7 @@
 
 class PrefabFactory;
 class GameObjectSerializer;
-class Editor;
+class AssetExplorer;
 
 class PrefabCreationKey
 {
@@ -25,7 +25,7 @@ private:
 
 	friend PrefabFactory;
 	friend GameObjectSerializer;
-	friend Editor;
+	friend AssetExplorer;
 };
 
 class GameObject

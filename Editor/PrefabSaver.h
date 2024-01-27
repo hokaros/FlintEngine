@@ -3,19 +3,6 @@
 #include "GameObjectEditor.h"
 
 
-class EditorPrefabHandle
-	: public EditorGameObjectHandle
-{
-public:
-	EditorPrefabHandle(std::unique_ptr<GameObject> prefab, const std::string& prefab_path);
-
-	virtual void SaveGameObject() override;
-
-private:
-	std::unique_ptr<GameObject> m_Prefab;
-	std::string m_PrefabPath;
-};
-
 
 class PrefabSaver
 {

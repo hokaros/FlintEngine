@@ -140,19 +140,3 @@ void GameObjectEditor::OnComponentDeleted(size_t index_in_game_object)
 
     m_AreComponentEditorsValid = false;
 }
-
-
-
-EditorGameObjectHandle::EditorGameObjectHandle(GameObject* game_object)
-    : m_GameObject(game_object)
-{
-}
-
-GameObject* EditorGameObjectHandle::GetGameObject() const
-{
-    return m_GameObject;
-}
-
-void EditorGameObjectHandle::SaveGameObject()
-{
-}
