@@ -1,5 +1,6 @@
 #include "RectangleRenderer.h"
-#include "DebugRenderer.h"
+#include "Window.h"
+#include "SceneRenderer.h"
 #include "GameObject.h"
 
 DEFINE_COMPONENT(RectangleRenderer);
@@ -14,7 +15,7 @@ RectangleRenderer::RectangleRenderer(const Rgb8& color)
 void RectangleRenderer::Render() 
 {
 	Rect rect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
-	DebugRenderer::DrawRect(rect, m_Color);
+	SceneRenderer::Main()->RenderRect(rect, m_Color);
 }
 
 std::unique_ptr<ObjectComponent> RectangleRenderer::Copy()

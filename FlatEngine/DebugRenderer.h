@@ -1,11 +1,10 @@
 #pragma once
-#include "Draw.h"
-#include "Vector.h"
+#include "SceneRenderer.h"
 
 class DebugRenderer
 {
 public:
-	DebugRenderer(SDL_Renderer* renderer);
+	DebugRenderer(SceneRenderer& renderer);
 
 	// TODO: let's delete this singleton and pass the DebugRenderer directly to IDebugRenderers
 	static void DrawLine(const Vector& start, const Vector& end, const Rgb8& color);
@@ -18,7 +17,7 @@ private:
 	void DrawWireRectImpl(const Rect& rect, const Rgb8& color);
 
 private:
-	SDL_Renderer* m_Renderer;
+	SceneRenderer& m_Renderer;
 
 	static DebugRenderer* s_Instance;
 };

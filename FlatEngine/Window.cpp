@@ -19,18 +19,18 @@ Window::~Window()
 {
 	DeinitImGui();
 
-	if (m_Window != nullptr) {
+	if (m_Window != nullptr) 
+	{
 		SDL_DestroyWindow(m_Window);
+	}
+	if (m_Renderer != nullptr)
+	{
+		SDL_DestroyRenderer(m_Renderer);
 	}
 	SDL_Quit();
 
 	if (s_MainWindow == this) {
 		s_MainWindow = nullptr;
-	}
-
-	if (m_DebugRenderer != nullptr)
-	{
-		delete m_DebugRenderer;
 	}
 }
 
@@ -56,7 +56,6 @@ bool Window::Init()
 		&m_Window, &m_Renderer);
 	if (rc != 0) 
 	{
-		SDL_Quit();
 		printf("SDL_CreateWindowAndRenderer error: %s\n", SDL_GetError());
 		return false;
 	};
@@ -66,17 +65,11 @@ bool Window::Init()
 
 	SDL_SetWindowTitle(m_Window, "Labyrinth Shooter");
 
-	m_Scrtex = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_STREAMING,
-		m_Width, m_Height);
-
-	m_DebugRenderer = new DebugRenderer(m_Renderer);
-
-	if (!LoadCharsets())
-		return false;
+	m_DebugRenderer = std::make_unique<DebugRenderer>(m_SceneRenderer);
 
 	InitImGui();
-	return true;
+
+	return m_SceneRenderer.Init(m_Renderer, {});
 }
 
 void Window::Present() 
@@ -93,32 +86,16 @@ void Window::Present()
 
 void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle) 
 {
-	SDL_Point mid;
-	mid.x = rect.w / 2;
-	mid.y = rect.h / 2;
-	SDL_RenderCopyEx(m_Renderer, texture, NULL, &(rect), angle, &mid, SDL_FLIP_NONE);
+	m_SceneRenderer.RenderTexture(texture, rect, angle);
+}
+
+void Window::RenderRect(const Rect& rect, const Rgb8& color)
+{
 }
 
 void Window::DrawString(int x, int y, const char* text, int fontSize) 
 {
-	SDL_Rect src, dest;
-	src.w = 8;
-	src.h = 8;
-	dest.w = fontSize;
-	dest.h = fontSize;
-
-	while (*text) 
-	{
-		VectorInt char_coords = GetCharCoordinates(*text);
-		src.x = char_coords.x;
-		src.y = char_coords.y;
-
-		dest.x = x;
-		dest.y = y;
-		SDL_RenderCopy(m_Renderer, m_CharsetTex, &src, &dest);
-		x += fontSize;
-		text++;
-	};
+	m_SceneRenderer.DrawStringScreenSpace(x, y, text, fontSize);
 }
 
 SDL_Renderer* Window::GetRenderer() const 
@@ -134,36 +111,6 @@ int Window::GetWidth() const
 int Window::GetHeight() const 
 {
 	return m_Height;
-}
-
-bool Window::LoadCharsets() 
-{
-	// wczytanie obrazka cs8x8.bmp
-	m_Charset = SDL_LoadBMP("resources/cs8x8.bmp");
-	if (m_Charset == nullptr) 
-	{
-		printf("SDL_LoadBMP(resources/cs8x8.bmp) error: %s\n", SDL_GetError());
-		SDL_DestroyTexture(m_Scrtex);
-		SDL_DestroyWindow(m_Window);
-		SDL_DestroyRenderer(m_Renderer);
-		SDL_Quit();
-		return false;
-	};
-
-	m_CharsetTex = SDL_CreateTextureFromSurface(m_Renderer, m_Charset);
-	SDL_SetColorKey(m_Charset, /*enable color key*/true, /*color key*/0x000000);
-
-	return true;
-}
-
-VectorInt Window::GetCharCoordinates(char c) const
-{
-	int c_int = c & 255;
-
-	int x = (c_int % 16) * 8;
-	int y = (c_int / 16) * 8;
-
-	return VectorInt(x, y);
 }
 
 void Window::InitImGui()

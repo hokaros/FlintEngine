@@ -50,6 +50,7 @@ std::unique_ptr<EditorPrefabHandle> AssetExplorer::OpenPrefab(const std::string&
 	std::unique_ptr<GameObject> prefab = PrefabLoader::LoadPrefab(prefab_path.c_str());
 	if (prefab == nullptr)
 	{ // Make new prefab if file not present
+		FE_LOG("Creating new prefab");
 		prefab = std::make_unique<GameObject>(PrefabCreationKey());
 	}
 

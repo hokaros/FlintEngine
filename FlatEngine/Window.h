@@ -1,20 +1,10 @@
 #pragma once
 #include <iostream>
-#include <SDL.h>
-#include <SDL_main.h>
 #include <list>
+#include "SceneRenderer.h"
 #include "DebugRenderer.h"
 
 #include "imgui/imgui.h"
-
-struct TextureRenderArgs {
-	SDL_Texture* texture;
-	SDL_Rect rect;
-	double angle;
-
-	TextureRenderArgs(SDL_Texture* texture, SDL_Rect rect, double angle)
-		: texture(texture), rect(rect), angle(angle) {}
-};
 
 // TODO: IDebugRenderer
 
@@ -30,6 +20,7 @@ public:
 	void Present();
 
 	void RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle);
+	void RenderRect(const Rect& rect, const Rgb8& color);
 
 	// narysowanie napisu txt na ekranie, zaczynaj¹c od punktu (x, y)
 	void DrawString(int x, int y, const char* text, int fontSize);
@@ -42,9 +33,6 @@ public:
 	static Window* Main();
 
 private:
-	bool LoadCharsets();
-	VectorInt GetCharCoordinates(char c) const;
-
 	void InitImGui();
 	void DeinitImGui();
 	void ImGuiNewFrame();
@@ -54,14 +42,12 @@ private:
 	int m_Width;
 	int m_Height;
 
-	SDL_Surface* m_Charset = nullptr; // TODO: remove
-	SDL_Surface* m_BigCharset = nullptr;
-	SDL_Texture* m_CharsetTex = nullptr;
-	SDL_Texture* m_Scrtex = nullptr;
 	SDL_Window* m_Window = nullptr;
 	SDL_Renderer* m_Renderer = nullptr;
 
-	DebugRenderer* m_DebugRenderer = nullptr;
+	SceneRenderer m_SceneRenderer;
+
+	std::unique_ptr<DebugRenderer> m_DebugRenderer = nullptr;
 
 	static Window* s_MainWindow;
 };
