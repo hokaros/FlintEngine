@@ -8,6 +8,7 @@ Window* Window::s_MainWindow = nullptr;
 Window::Window(int width, int height)
 	: m_Width(width)
 	, m_Height(height) 
+	, m_SceneRenderer(width, height)
 {
 	if (s_MainWindow == nullptr) 
 	{

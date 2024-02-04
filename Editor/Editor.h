@@ -2,12 +2,13 @@
 #include "../FlatEngine/imgui/imgui.h"
 #include "GameObjectEditor.h"
 #include "AssetExplorer.h"
+#include "SceneEditor.h"
 
 class Editor
 	: private IAssetListener
 {
 public:
-	Editor(ImVec4& clear_color);
+	Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int screenHeight);
 	void Render();
 
 private:
@@ -18,6 +19,7 @@ private:
 private:
 	GameObjectEditor m_GameObjectEditor;
 	AssetExplorer m_AssetExplorer;
+	SceneEditor m_SceneEditor;
 
 	ImVec4& m_ClearColor;
 };

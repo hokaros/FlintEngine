@@ -1,7 +1,8 @@
 #include "Editor.h"
 
-Editor::Editor(ImVec4& clear_color)
+Editor::Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int screenHeight)
     : m_ClearColor(clear_color)
+    , m_SceneEditor(renderer, screenWidth, screenHeight)
 {
     m_AssetExplorer.RegisterAssetListener(this);
 }
@@ -12,6 +13,7 @@ void Editor::Render()
 
     m_GameObjectEditor.Render();
     m_AssetExplorer.Render();
+    m_SceneEditor.Render();
 }
 
 void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
