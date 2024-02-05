@@ -1,44 +1,14 @@
 #include "ObjectManager.h"
 
-ObjectManager* ObjectManager::main{ NULL };
+ObjectManager* ObjectManager::s_Main = nullptr;
 
-ObjectManager* ObjectManager::Main() {
-	return main;
+ObjectManager* ObjectManager::Main() 
+{
+	return s_Main;
 }
 
-ObjectManager::ObjectManager() {
-	if (main == NULL) {
-		main = this;
-	}
-}
-
-ObjectManager::~ObjectManager() {
-	for (GameObject* go : destroyables) {
-		delete go;
-	}
-
-	if (main == this) {
-		main = NULL;
-	}
-}
-
-void ObjectManager::AddObject(GameObject* gameObject) {
-	newObjects.push_back(gameObject);
-	allObjects.push_back(gameObject);
-
-	destroyables.push_back(gameObject);
-
-	// Rekursywne dodanie dzieci
-	for (GameObject* child : gameObject->GetChildren()) {
-		AddObject(child);
-	}
-}
-
-void ObjectManager::AddUndestroyable(GameObject* gameObject) {
-	allObjects.push_back(gameObject);
-}
-
-void ObjectManager::DestroyObject(GameObject* gameObject, bool detach) {
+void ObjectManager::DestroyObjectImpl(GameObject* gameObject, bool detach)
+{
 	for (GameObject* destroyedObj : destroyed) {
 		if (destroyedObj == gameObject)
 			return;  // ju¿ usuniêty
@@ -50,18 +20,67 @@ void ObjectManager::DestroyObject(GameObject* gameObject, bool detach) {
 	gameObject->SetEnabled(false);
 
 	// Od³¹czenie od rodzica
-	if (detach && gameObject->GetParent() != NULL) {
+	if (detach && gameObject->GetParent() != nullptr) 
+	{
 		gameObject->GetParent()->RemoveChild(gameObject);
 	}
 
 	// Usuniêcie rekurencyjne dzieci
-	for (GameObject* child : gameObject->GetChildren()) {
-		DestroyObject(child, false);
+	for (GameObject* child : gameObject->GetChildren()) 
+	{
+		DestroyObjectImpl(child, false);
 	}
 }
 
-void ObjectManager::DisposeDestroyed() {
-	for (GameObject* go : destroyed) {
+ObjectManager::ObjectManager() 
+{
+	if (s_Main == nullptr) 
+	{
+		s_Main = this;
+	}
+}
+
+ObjectManager::~ObjectManager() 
+{
+	for (GameObject* go : destroyables) 
+	{
+		delete go;
+	}
+
+	if (s_Main == this) 
+	{
+		s_Main = nullptr;
+	}
+}
+
+void ObjectManager::AddObject(GameObject* gameObject) 
+{
+	newObjects.push_back(gameObject);
+	allObjects.push_back(gameObject);
+
+	destroyables.push_back(gameObject);
+
+	// Rekursywne dodanie dzieci
+	for (GameObject* child : gameObject->GetChildren()) 
+	{
+		AddObject(child);
+	}
+}
+
+void ObjectManager::AddUndestroyable(GameObject* gameObject) 
+{
+	allObjects.push_back(gameObject);
+}
+
+void ObjectManager::DestroyObject(GameObject* gameObject) 
+{
+	DestroyObjectImpl(gameObject, true);
+}
+
+void ObjectManager::DisposeDestroyed() 
+{
+	for (GameObject* go : destroyed) 
+	{
 		delete go;
 		destroyables.remove(go);
 		allObjects.remove(go);
@@ -84,12 +103,15 @@ void ObjectManager::ActivateNewObjects()
 	newObjects.clear();
 }
 
-const std::list<GameObject*>& ObjectManager::GetAllObjects() const {
+const std::list<GameObject*>& ObjectManager::GetAllObjects() const 
+{
 	return allObjects;
 }
 
-void ObjectManager::Clear() {
-	for (GameObject* go : destroyables) {
+void ObjectManager::Clear() 
+{
+	for (GameObject* go : destroyables) 
+	{
 		delete go;
 	}
 

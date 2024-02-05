@@ -11,7 +11,7 @@ public:
 	void AddObject(GameObject* object);
 	// Usuwanie obiektu jest zadaniem kogoœ innego
 	void AddUndestroyable(GameObject* object);
-	void DestroyObject(GameObject* object, bool detach=true);
+	void DestroyObject(GameObject* object);
 
 	void DisposeDestroyed();
 	void ActivateNewObjects();
@@ -25,11 +25,14 @@ public:
 
 	static ObjectManager* Main();
 private:
+	void DestroyObjectImpl(GameObject* gameObject, bool detach = true);
+
+private:
 	std::list<GameObject*> allObjects;
 	std::list<GameObject*> destroyables;
 	std::list<GameObject*> destroyed;
 	std::list<GameObject*> newObjects;
 
-	static ObjectManager* main;
+	static ObjectManager* s_Main;
 };
 
