@@ -9,14 +9,14 @@ ObjectManager* ObjectManager::Main()
 
 void ObjectManager::DestroyObjectImpl(GameObject* gameObject, bool detach)
 {
-	for (GameObject* destroyedObj : destroyed) {
+	for (GameObject* destroyedObj : m_DestroyedObjects) {
 		if (destroyedObj == gameObject)
 			return;  // ju¿ usuniêty
 	}
 
 	gameObject->OnDestroy();
 
-	destroyed.push_back(gameObject); // zakolejkowanie do usuniêcia
+	m_DestroyedObjects.push_back(gameObject); // zakolejkowanie do usuniêcia
 	gameObject->SetEnabled(false);
 
 	// Od³¹czenie od rodzica
@@ -42,34 +42,30 @@ ObjectManager::ObjectManager()
 
 ObjectManager::~ObjectManager() 
 {
-	for (GameObject* go : destroyables) 
-	{
-		delete go;
-	}
-
 	if (s_Main == this) 
 	{
 		s_Main = nullptr;
 	}
 }
 
-void ObjectManager::AddObject(GameObject* gameObject) 
+void ObjectManager::AddObject(std::unique_ptr<GameObject> gameObject) 
 {
-	newObjects.push_back(gameObject);
-	allObjects.push_back(gameObject);
-
-	destroyables.push_back(gameObject);
+	m_NewObjects.push_back(gameObject.get());
+	m_AllObjects.push_back(gameObject.get());
 
 	// Rekursywne dodanie dzieci
 	for (GameObject* child : gameObject->GetChildren()) 
 	{
-		AddObject(child);
+		AddObject(std::unique_ptr<GameObject>(child));
 	}
+
+	m_OwnedObjects.push_back(std::move(gameObject));
 }
 
 void ObjectManager::AddUndestroyable(GameObject* gameObject) 
 {
-	allObjects.push_back(gameObject);
+	m_NewObjects.push_back(gameObject);
+	m_AllObjects.push_back(gameObject);
 }
 
 void ObjectManager::DestroyObject(GameObject* gameObject) 
@@ -79,43 +75,42 @@ void ObjectManager::DestroyObject(GameObject* gameObject)
 
 void ObjectManager::DisposeDestroyed() 
 {
-	for (GameObject* go : destroyed) 
+	for (GameObject* go : m_DestroyedObjects) 
 	{
-		delete go;
-		destroyables.remove(go);
-		allObjects.remove(go);
+		m_NewObjects.remove(go);
+		m_AllObjects.remove(go);
+
+		m_OwnedObjects.remove_if([go](const std::unique_ptr<GameObject>& ownedGO) -> bool {
+			return ownedGO.get() == go;
+		});
 	}
 
-	destroyed.clear();
+	m_DestroyedObjects.clear();
 }
 
 void ObjectManager::ActivateNewObjects()
 {
-	for (GameObject* go : newObjects)
+	for (GameObject* go : m_NewObjects)
 	{
 		go->Awake();
 	}
-	for (GameObject* go : newObjects)
+	for (GameObject* go : m_NewObjects)
 	{
 		go->Start();
 	}
 
-	newObjects.clear();
+	m_NewObjects.clear();
 }
 
 const std::list<GameObject*>& ObjectManager::GetAllObjects() const 
 {
-	return allObjects;
+	return m_AllObjects;
 }
 
 void ObjectManager::Clear() 
 {
-	for (GameObject* go : destroyables) 
-	{
-		delete go;
-	}
+	m_AllObjects.clear();
+	m_DestroyedObjects.clear();
 
-	allObjects.clear();
-	destroyables.clear();
-	destroyed.clear();
+	m_OwnedObjects.clear();
 }

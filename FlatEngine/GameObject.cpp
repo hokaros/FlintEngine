@@ -56,7 +56,7 @@ GameObject* GameObject::Instantiate(const Vector& size)
 	ObjectManager* object_manager = ObjectManager::Main();
 
 	GameObject* game_object = new GameObject(size);
-	object_manager->AddObject(game_object);
+	object_manager->AddObject(std::unique_ptr<GameObject>(game_object));
 
 	return game_object;
 }
@@ -66,7 +66,7 @@ GameObject* GameObject::Instantiate(const Vector& size, const Vector& position)
 	ObjectManager* object_manager = ObjectManager::Main();
 
 	GameObject* game_object = new GameObject(size, position);
-	object_manager->AddObject(game_object);
+	object_manager->AddObject(std::unique_ptr<GameObject>(game_object));
 
 	return game_object;
 }
@@ -74,7 +74,7 @@ GameObject* GameObject::Instantiate(const Vector& size, const Vector& position)
 GameObject* GameObject::Instantiate(const GameObject& other)
 {
 	GameObject* game_object = new GameObject(other);
-	ObjectManager::Main()->AddObject(game_object);
+	ObjectManager::Main()->AddObject(std::unique_ptr<GameObject>(game_object));
 
 	return game_object;
 }

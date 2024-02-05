@@ -8,7 +8,7 @@ public:
 	ObjectManager();
 
 	// Dodaje obiekt do zarz¹dzanych wraz z ca³ym drzewem dzieci
-	void AddObject(GameObject* object);
+	void AddObject(std::unique_ptr<GameObject> object);
 	// Usuwanie obiektu jest zadaniem kogoœ innego
 	void AddUndestroyable(GameObject* object);
 	void DestroyObject(GameObject* object);
@@ -28,10 +28,10 @@ private:
 	void DestroyObjectImpl(GameObject* gameObject, bool detach = true);
 
 private:
-	std::list<GameObject*> allObjects;
-	std::list<GameObject*> destroyables;
-	std::list<GameObject*> destroyed;
-	std::list<GameObject*> newObjects;
+	std::list<GameObject*> m_AllObjects;
+	std::list<std::unique_ptr<GameObject>> m_OwnedObjects;
+	std::list<GameObject*> m_DestroyedObjects;
+	std::list<GameObject*> m_NewObjects;
 
 	static ObjectManager* s_Main;
 };
