@@ -75,15 +75,24 @@ void ObjectManager::DestroyObject(GameObject* gameObject)
 
 void ObjectManager::DisposeDestroyed() 
 {
-	for (GameObject* go : m_DestroyedObjects) 
+	auto should_dispose = [this](const GameObject* go) -> bool
 	{
-		m_NewObjects.remove(go);
-		m_AllObjects.remove(go);
+		for (GameObject* destroyedGO : m_DestroyedObjects)
+		{
+			if (destroyedGO == go)
+			{
+				return true;
+			}
+		}
+		return false; // Not found in destroyed objects
+	};
 
-		m_OwnedObjects.remove_if([go](const std::unique_ptr<GameObject>& ownedGO) -> bool {
-			return ownedGO.get() == go;
+	m_NewObjects.remove_if(should_dispose);
+	m_AllObjects.remove_if(should_dispose);
+	m_OwnedObjects.remove_if([&should_dispose](const std::unique_ptr<GameObject>& ptr) 
+		{
+			return should_dispose(ptr.get()); 
 		});
-	}
 
 	m_DestroyedObjects.clear();
 }
