@@ -52,7 +52,7 @@ private:
 
 	AssetManager m_AssetManager;
 
-	BMPStats* healthStats = NULL;
+	std::unique_ptr<BMPStats> m_HealthStats = nullptr;
 
 	PrefabFactory m_PrefabFactory;
 	std::mutex playersMutex;

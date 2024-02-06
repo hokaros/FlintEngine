@@ -10,7 +10,7 @@ Game::Game(Window* window, GameStartInfo&& gameInfo)
 	m_AssetManager.AddAsset(s_PlayerBitmapPath);
 	m_AssetManager.AddAsset(s_HeartBitmapPath);
 	SDL_Surface* heart_bitmap = m_AssetManager.GetSurfaceAsset(s_HeartBitmapPath);
-	healthStats = new  BMPStats(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
+	m_HealthStats = std::make_unique<BMPStats>(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
 }
 
 void Game::LoadStartingObjects() {
@@ -32,7 +32,7 @@ GameObject* Game::CreatePlayer(const Vector& position) {
 	delete firearms;
 
 	Health* player_health = player->FindComponent<Health>();
-	player_health->SetStatRenderer(healthStats);
+	player_health->SetStatRenderer(m_HealthStats.get());
 	player_health->SubscribeDeath(
 		[](Health* deadPlayer) {
 			printf("Dead\n");
@@ -79,7 +79,7 @@ void Game::PostRun()
 void Game::PrePresent()
 {
 	// Renderowanie nak³adek UI
-	healthStats->Render();
+	m_HealthStats->Render();
 
 	VectorInt player_label_pos = GetPlayer()->GetPosition() + Vector(-20, -20);
 	Window::Main()->DrawString(player_label_pos.x, player_label_pos.y, "Player", 10);
