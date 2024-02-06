@@ -6,7 +6,6 @@
 class Scene
 {
 public:
-	void PreFrame();
 	virtual void Update();
 	virtual void Render();
 	void PostFrame();

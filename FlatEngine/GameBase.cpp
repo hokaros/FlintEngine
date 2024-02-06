@@ -24,7 +24,6 @@ bool GameBase::Run()
 	// Pêtla gry
 	while (!quit) 
 	{
-		scene->PreFrame();
 		// Nowa klatka
 		timer.NextFrame();
 

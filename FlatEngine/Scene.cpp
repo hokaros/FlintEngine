@@ -1,12 +1,9 @@
 #include "Scene.h"
 
-void Scene::PreFrame()
-{
-	m_ObjectManager.ActivateNewObjects();
-}
-
 void Scene::Update()
 {
+	m_ObjectManager.ActivateNewObjects();
+
 	for (GameObject* go : m_ObjectManager.GetAllObjects()) {
 		go->Update();
 	}
