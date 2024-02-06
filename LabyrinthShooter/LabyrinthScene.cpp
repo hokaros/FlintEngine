@@ -3,7 +3,6 @@
 #include "../LabyrinthShooterBase/Firearm.h"
 #include "../LabyrinthShooterBase/Health.h"
 
-static constexpr const char* s_PlayerBitmapPath = "resources/player.bmp";
 static constexpr const char* s_HeartBitmapPath = "resources/heart.bmp";
 
 LabyrinthScene::LabyrinthScene(const Vector& player_pos, PrefabFactory& prefab_factory, AssetManager& asset_manager)
@@ -37,7 +36,6 @@ void LabyrinthScene::Render()
 
 void LabyrinthScene::LoadNeededAssets()
 {
-	m_AssetManager.AddAsset(s_PlayerBitmapPath);
 	m_AssetManager.AddAsset(s_HeartBitmapPath);
 }
 
