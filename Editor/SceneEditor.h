@@ -1,7 +1,7 @@
 #pragma once
 #include "../FlatEngine/SceneRenderer.h"
 #include "../FlatEngine/imgui/imgui.h"
-#include "Scene.h"
+#include "../FlatEngine/Scene.h"
 
 class SceneEditor
 {

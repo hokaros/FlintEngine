@@ -1,8 +1,7 @@
 #pragma once
-#include "../FlatEngine/GameObject.h"
-#include "../FlatEngine/SceneRenderer.h"
+#include "GameObject.h"
+#include "SceneRenderer.h"
 
-// TODO: move to the engine
 class Scene
 {
 public:
