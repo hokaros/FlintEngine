@@ -6,6 +6,7 @@
 #include "PhysicsSystem.h"
 #include "DebugRenderer.h"
 #include "DebugConfig.h"
+#include "Scene.h"
 
 
 class GameBase
@@ -17,15 +18,14 @@ public:
 	bool Run();
 	bool IsRunning();
 
-	// Usuwa wszystkie obiekty
-	void Clear();
-
 	void InvokeOnNextFrame(function<void()> fun);
+
+protected:
+	virtual std::unique_ptr<Scene> CreateScene();
 
 protected:
 	Window* window = nullptr;
 	Timer timer;
-	ObjectManager objectManager;
 	PhysicsSystem physicsSystem;
 	debug::DebugConfigWindow m_DebugConfigWindow;
 
@@ -48,7 +48,6 @@ private:
 	virtual void PreRun();
 	virtual void PostRun();
 	virtual void PrePresent();
-	virtual void PostObjectsUpdate();
-	virtual bool ShouldRender(GameObject* gameObject);
+	virtual void PostSceneUpdate();
 };
 

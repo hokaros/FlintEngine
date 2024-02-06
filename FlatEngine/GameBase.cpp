@@ -10,6 +10,8 @@ GameBase::GameBase(Window* window)
 
 bool GameBase::Run()
 {
+	std::unique_ptr<Scene> scene = CreateScene();
+
 	PreRun();
 
 	InputController* input = InputController::Main();
@@ -22,7 +24,7 @@ bool GameBase::Run()
 	// Pêtla gry
 	while (!quit) 
 	{
-		objectManager.ActivateNewObjects();
+		scene->PreFrame();
 		// Nowa klatka
 		timer.NextFrame();
 
@@ -36,10 +38,8 @@ bool GameBase::Run()
 		InvokePostponed();
 
 		// Zaktualizowanie stanu gry
-		for (GameObject* go : objectManager.GetAllObjects()) {
-			go->Update();
-		}
-		PostObjectsUpdate();
+		scene->Update();
+		PostSceneUpdate();
 
 		physicsSystem.Update();
 
@@ -47,6 +47,7 @@ bool GameBase::Run()
 		if (window != nullptr) 
 		{
 			m_DebugConfigWindow.Render();
+			scene->Render();
 			Render();
 			DebugRender();
 
@@ -54,7 +55,7 @@ bool GameBase::Run()
 			window->Present();
 		}
 
-		objectManager.DisposeDestroyed();
+		scene->PostFrame();
 	}
 
 	SetRunning(false);
@@ -69,32 +70,19 @@ bool GameBase::IsRunning()
 	return isRunning;
 }
 
-void GameBase::Clear()
-{
-	objectManager.Clear();
-}
-
 void GameBase::InvokeOnNextFrame(function<void()> fun)
 {
 	std::lock_guard<std::mutex> lock(invokesMutex);
 	invokes.push_back(std::move(fun));
 }
 
+std::unique_ptr<Scene> GameBase::CreateScene()
+{
+	return std::make_unique<Scene>();
+}
+
 void GameBase::Render()
 {
-	for (GameObject* go : objectManager.GetAllObjects()) {
-		if (go->renderUnseen) {
-			go->RenderUpdate();
-			continue;
-		}
-
-		// TODO: we can refactor vision a lot
-		bool canSee = ShouldRender(go);
-		if (canSee)
-		{
-			go->RenderUpdate();
-		}
-	}
 }
 
 void GameBase::DebugRender()
@@ -130,11 +118,6 @@ void GameBase::PrePresent()
 {
 }
 
-void GameBase::PostObjectsUpdate()
+void GameBase::PostSceneUpdate()
 {
-}
-
-bool GameBase::ShouldRender(GameObject* gameObject)
-{
-	return true;
 }

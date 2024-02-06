@@ -32,6 +32,11 @@ GameObject::GameObject(const Vector& size, const Vector& position, PrefabCreatio
 {
 }
 
+GameObject::GameObject(const GameObject& other, PrefabCreationKey)
+	: GameObject(other)
+{
+}
+
 GameObject::GameObject(const GameObject& other) 
 	: GameObject(other.size, other.position, {}) 
 {

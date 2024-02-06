@@ -40,6 +40,7 @@ public:
 	GameObject(PrefabCreationKey);
 	GameObject(const Vector& size, PrefabCreationKey);
 	GameObject(const Vector& size, const Vector& position, PrefabCreationKey);
+	GameObject(const GameObject& other, PrefabCreationKey);
 
 	static GameObject* Instantiate(const Vector& size);
 	static GameObject* Instantiate(const Vector& size, const Vector& position);
@@ -105,7 +106,7 @@ public:
 	const std::list<GameObject*>& GetChildren() const;
 	GameObject* GetParent() const;
 
-	~GameObject() = default;
+	~GameObject() = default; // TODO: we should also delete child objects
 
 protected:
 	GameObject();

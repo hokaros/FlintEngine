@@ -109,15 +109,15 @@ void PrefabFactory::CreatePlayerPrefab()
 	const GameObject& super_bullet = GetPrefab(PrefabFactory::EPrefabId::SuperBullet);
 
 	// Zwyk³a broñ
-	GameObject* basic_weapon = GameObject::Instantiate(
-		GetPrefab(PrefabFactory::EPrefabId::BasicFirearm)
+	GameObject* basic_weapon = new GameObject(
+		GetPrefab(PrefabFactory::EPrefabId::BasicFirearm), {}
 	);
 	basic_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
 	player->AddChild(basic_weapon);
 
 	// Silna broñ
-	GameObject* super_weapon = GameObject::Instantiate(
-		GetPrefab(PrefabFactory::EPrefabId::SuperFirearm)
+	GameObject* super_weapon = new GameObject(
+		GetPrefab(PrefabFactory::EPrefabId::SuperFirearm), {}
 	);
 	super_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
 	player->AddChild(super_weapon);

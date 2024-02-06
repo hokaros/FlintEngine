@@ -1,11 +1,15 @@
 #pragma once
 #include "GameObject.h"
 #include "SceneRenderer.h"
+#include "ObjectManager.h"
 
 class Scene
 {
 public:
-	void Render();
+	void PreFrame();
+	virtual void Update();
+	virtual void Render();
+	void PostFrame();
 	
 	void AddGameObject(std::unique_ptr<GameObject> game_object);
 	void SetBackgroundColor(const Rgb8& color);
@@ -13,8 +17,10 @@ public:
 private:
 	void RenderBackground();
 
-private:
-	std::vector<std::unique_ptr<GameObject>> m_GameObjects;
-	Rgb8 m_BackgroundColor = Rgb8(255, 255, 255);
+	virtual bool ShouldRender(GameObject* gameObject);
+
+protected:
+	ObjectManager m_ObjectManager;
+	Rgb8 m_BackgroundColor = Rgb8(200, 200, 200);
 };
 
