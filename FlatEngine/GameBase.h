@@ -38,7 +38,6 @@ protected:
 	std::mutex metadataMutex;
 
 private:
-	void Render();
 	void DebugRender();
 
 	void InvokePostponed();

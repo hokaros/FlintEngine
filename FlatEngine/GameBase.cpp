@@ -44,7 +44,6 @@ bool GameBase::Run()
 		{
 			m_DebugConfigWindow.Render();
 			scene->Render();
-			Render();
 			DebugRender();
 
 			window->Present();
@@ -73,10 +72,6 @@ void GameBase::InvokeOnNextFrame(function<void()> fun)
 std::unique_ptr<Scene> GameBase::CreateScene()
 {
 	return std::make_unique<Scene>();
-}
-
-void GameBase::Render()
-{
 }
 
 void GameBase::DebugRender()
