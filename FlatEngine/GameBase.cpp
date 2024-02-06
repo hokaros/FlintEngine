@@ -12,8 +12,6 @@ bool GameBase::Run()
 {
 	std::unique_ptr<Scene> scene = CreateScene();
 
-	PreRun();
-
 	InputController* input = InputController::Main();
 
 	int quit = 0;
@@ -38,7 +36,6 @@ bool GameBase::Run()
 
 		// Zaktualizowanie stanu gry
 		scene->Update();
-		PostSceneUpdate();
 
 		physicsSystem.Update();
 
@@ -50,7 +47,6 @@ bool GameBase::Run()
 			Render();
 			DebugRender();
 
-			PrePresent();
 			window->Present();
 		}
 
@@ -58,7 +54,6 @@ bool GameBase::Run()
 	}
 
 	SetRunning(false);
-	PostRun();
 
 	return true;
 }
@@ -103,20 +98,4 @@ void GameBase::SetRunning(bool running)
 {
 	std::lock_guard<std::mutex> lock(metadataMutex);
 	isRunning = running;
-}
-
-void GameBase::PreRun()
-{
-}
-
-void GameBase::PostRun()
-{
-}
-
-void GameBase::PrePresent()
-{
-}
-
-void GameBase::PostSceneUpdate()
-{
 }

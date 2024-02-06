@@ -44,10 +44,5 @@ private:
 	void InvokePostponed();
 
 	void SetRunning(bool running);
-
-	virtual void PreRun();
-	virtual void PostRun();
-	virtual void PrePresent();
-	virtual void PostSceneUpdate();
 };
 
