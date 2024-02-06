@@ -17,7 +17,6 @@
 static constexpr const char* s_PlayerBitmapPath = "resources/player.bmp";
 static constexpr const char* s_WeaponPrimaryBitmapPath = "resources/weapon_primary.bmp";
 static constexpr const char* s_WeaponSuperBitmapPath = "resources/weapon_super.bmp";
-static constexpr const char* s_HeartBitmapPath = "resources/heart.bmp";
 
 PrefabFactory::PrefabFactory()
 {
@@ -42,7 +41,6 @@ void PrefabFactory::LoadNeededAssets()
 	asset_manager->AddAsset(s_PlayerBitmapPath);
 	asset_manager->AddAsset(s_WeaponPrimaryBitmapPath);
 	asset_manager->AddAsset(s_WeaponSuperBitmapPath);
-	asset_manager->AddAsset(s_HeartBitmapPath);
 }
 
 void PrefabFactory::CreateBasicBulletPrefab()
