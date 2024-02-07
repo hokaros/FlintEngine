@@ -2,13 +2,12 @@
 
 #include "../FlatEngine/utility.h"
 #include "../FlatEngine/RectangleRenderer.h"
+#include "../FlatEngine/AssetManager.h"
 
 SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screenHeight)
 	: m_SceneRenderer(screenWidth, screenHeight)
 {
 	m_SceneRenderer.Init(&renderer, {});
-
-	m_Scene.SetBackgroundColor(Rgb8(0xff, 0xff, 0x00));
 
 	AddExampleObjectsToScene();
 }

@@ -21,7 +21,7 @@ bool SceneRenderer::Init(SDL_Renderer* renderer, RenderingKey)
 	m_Renderer = renderer;
 
 	m_OutTexture = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_STREAMING,
+		SDL_TEXTUREACCESS_TARGET,
 		m_Width, m_Height);
 
 	if (!LoadCharsets())
