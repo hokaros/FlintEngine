@@ -84,6 +84,14 @@ GameObject* GameObject::Instantiate(const GameObject& other)
 	return game_object;
 }
 
+GameObject* GameObject::Instantiate(IGameObjectContainer& container)
+{
+	GameObject* game_object = new GameObject();
+	container.AddGameObject(std::unique_ptr<GameObject>(game_object));
+
+	return game_object;
+}
+
 void GameObject::Destroy(GameObject* game_object)
 {
 	ObjectManager::Main()->DestroyObject(game_object);

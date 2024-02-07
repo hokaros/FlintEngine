@@ -31,7 +31,7 @@ void LabyrinthScene::Render()
 	m_HealthStats->Render();
 
 	VectorInt player_label_pos = m_Player->GetPosition() + Vector(-20, -20);
-	Window::Main()->DrawString(player_label_pos.x, player_label_pos.y, "Player", 10);
+	SceneRenderer::Main()->DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, "Player", 10);
 }
 
 void LabyrinthScene::LoadNeededAssets()

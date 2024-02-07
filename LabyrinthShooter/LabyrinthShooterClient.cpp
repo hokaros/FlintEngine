@@ -8,12 +8,12 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
-Game* CreateGame(Window& window)
+std::unique_ptr<Game> CreateGame(Window& window)
 {
 	Vector player_start_pos = Vector(260, 160);
 
 	GameStartInfo gameInfo = GameStartInfo(player_start_pos);
-	return new Game(&window, std::move(gameInfo));
+	return std::make_unique<Game>(&window, std::move(gameInfo));
 }
 
 // Należy tu dodać wszystkie klawisze, które chce się odczytywać podczas gry i menu
@@ -45,10 +45,9 @@ int main()
 
 	InputController input = InputController(steeringKeys, sizeof(steeringKeys) / sizeof(SDL_Keycode));
 
-	Game* game = CreateGame(window);
+	std::unique_ptr<Game> game = CreateGame(window);
 
 	game->Run();
 
-	delete game;
 	return 0;
 }

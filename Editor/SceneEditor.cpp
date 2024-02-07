@@ -1,11 +1,14 @@
 #include "SceneEditor.h"
 
 #include "../FlatEngine/utility.h"
+#include "../FlatEngine/RectangleRenderer.h"
 
 SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screenHeight)
 	: m_SceneRenderer(screenWidth, screenHeight)
 {
 	m_SceneRenderer.Init(&renderer, {});
+
+	m_Scene.SetBackgroundColor(Rgb8(0xff, 0xff, 0x00));
 
 	AddExampleObjectsToScene();
 }
@@ -19,7 +22,7 @@ void SceneEditor::Render()
 		if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())
 		{
 			ImVec2 renderSize = ImGui::GetContentRegionAvail();
-			ImGui::Image(renderedTex, renderSize);
+			ImGui::Image((void*)renderedTex, renderSize);
 		}
 		else
 		{
@@ -31,5 +34,9 @@ void SceneEditor::Render()
 
 void SceneEditor::AddExampleObjectsToScene()
 {
-	// TODO
+	GameObject* game_object = GameObject::Instantiate(m_Scene);
+
+	game_object->SetSize(Vector(10, 10));
+	game_object->SetPosition(Vector(50, 50));
+	game_object->AddComponent(std::make_unique<RectangleRenderer>(Rgb8(0xFF, 0x00, 0x00)));
 }

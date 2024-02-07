@@ -28,6 +28,16 @@ private:
 	friend AssetExplorer;
 };
 
+class GameObject;
+
+class IGameObjectContainer
+{
+public:
+	virtual void AddGameObject(std::unique_ptr<GameObject>) = 0;
+
+	virtual ~IGameObjectContainer() = default;
+};
+
 class GameObject
 {
 public:
@@ -45,6 +55,9 @@ public:
 	static GameObject* Instantiate(const Vector& size);
 	static GameObject* Instantiate(const Vector& size, const Vector& position);
 	static GameObject* Instantiate(const GameObject& other);
+
+	static GameObject* Instantiate(IGameObjectContainer& container);
+
 	static void Destroy(GameObject* game_object);
 
 	void AddComponent(std::unique_ptr<ObjectComponent> component);

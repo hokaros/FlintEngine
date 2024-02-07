@@ -20,10 +20,6 @@ public:
 	void Present();
 
 	void RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle);
-	void RenderRect(const Rect& rect, const Rgb8& color);
-
-	// narysowanie napisu txt na ekranie, zaczynaj¹c od punktu (x, y)
-	void DrawString(int x, int y, const char* text, int fontSize);
 
 	SDL_Renderer* GetRenderer() const;
 

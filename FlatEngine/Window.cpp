@@ -90,15 +90,6 @@ void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double an
 	m_SceneRenderer.RenderTexture(texture, rect, angle);
 }
 
-void Window::RenderRect(const Rect& rect, const Rgb8& color)
-{
-}
-
-void Window::DrawString(int x, int y, const char* text, int fontSize) 
-{
-	m_SceneRenderer.DrawStringScreenSpace(x, y, text, fontSize);
-}
-
 SDL_Renderer* Window::GetRenderer() const 
 {
 	return m_Renderer;

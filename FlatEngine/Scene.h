@@ -4,13 +4,14 @@
 #include "ObjectManager.h"
 
 class Scene
+	: public IGameObjectContainer
 {
 public:
 	virtual void Update();
 	virtual void Render();
 	void PostFrame();
 	
-	void AddGameObject(std::unique_ptr<GameObject> game_object);
+	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
 	void SetBackgroundColor(const Rgb8& color);
 
 private:

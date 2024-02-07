@@ -39,15 +39,9 @@ LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	labyrinth.PrintLab(); // wyœwietlenie w konsoli
 }
 
-LabyrinthSolidifier::~LabyrinthSolidifier() {
-	for (int i = 0; i < labyrinth.ActiveCount(); i++) {
-		delete walls[i];
-	}
+LabyrinthSolidifier::~LabyrinthSolidifier() 
+{
 	delete[] walls;
-
-	for (int i = 0; i < borderCount; i++) {
-		delete border[i];
-	}
 	delete[] border;
 }
 
