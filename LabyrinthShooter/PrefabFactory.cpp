@@ -60,11 +60,10 @@ void PrefabFactory::CreateSuperBulletPrefab()
 void PrefabFactory::CreateBasicFirearmPrefab()
 {
 	constexpr Vector basic_weapon_size = Vector(30, 10);
-	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_WeaponPrimaryBitmapPath);
 
 	std::unique_ptr<GameObject> basic_weapon = std::make_unique<GameObject>(basic_weapon_size, PrefabCreationKey());
 	basic_weapon->AddComponent(std::make_unique<Firearm>(GetPrefab(EPrefabId::BasicBullet), WPN_BASIC_RELOAD, FirearmType::Basic));
-	basic_weapon->AddComponent(std::make_unique<SpriteRenderer>(bitmap));
+	basic_weapon->AddComponent(std::make_unique<SpriteRenderer>(s_WeaponPrimaryBitmapPath));
 
 	InsertPrefab(EPrefabId::BasicFirearm, std::move(basic_weapon));
 }
@@ -72,11 +71,10 @@ void PrefabFactory::CreateBasicFirearmPrefab()
 void PrefabFactory::CreateSuperFirearmPrefab()
 {
 	constexpr Vector super_weapon_size = Vector(30, 10);
-	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_WeaponSuperBitmapPath);
 
 	std::unique_ptr<GameObject> super_weapon = std::make_unique<GameObject>(super_weapon_size, PrefabCreationKey());
 	super_weapon->AddComponent(std::make_unique<Firearm>(GetPrefab(EPrefabId::SuperBullet), WPN_SUPER_RELOAD, FirearmType::Super));
-	super_weapon->AddComponent(std::make_unique<SpriteRenderer>(bitmap));
+	super_weapon->AddComponent(std::make_unique<SpriteRenderer>(s_WeaponSuperBitmapPath));
 
 	InsertPrefab(EPrefabId::SuperFirearm, std::move(super_weapon));
 }
@@ -113,8 +111,7 @@ void PrefabFactory::CreatePlayerPrefab()
 	super_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
 	player->AddChild(super_weapon);
 
-	SDL_Surface* player_bitmap = AssetManager::GetInstance()->GetSurfaceAsset(s_PlayerBitmapPath);
-	player->AddComponent(std::make_unique<SpriteRenderer>(player_bitmap));
+	player->AddComponent(std::make_unique<SpriteRenderer>(s_PlayerBitmapPath));
 
 	InsertPrefab(EPrefabId::Player, std::move(player));
 }

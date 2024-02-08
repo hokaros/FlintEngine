@@ -51,7 +51,17 @@ SDL_Surface* AssetManager::GetSurfaceAsset(const std::string& path)
 {
 	auto it = m_PathToAssetDict.find(path);
 	if (it == m_PathToAssetDict.end())
-		return nullptr;
+	{
+		// Add asset anyway
+		// TODO: potentially insecure
+		AddAsset(path.c_str());
+
+		it = m_PathToAssetDict.find(path);
+		if (it == m_PathToAssetDict.end())
+		{
+			return nullptr;
+		}
+	}
 
 	return it->second;
 }

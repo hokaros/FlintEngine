@@ -9,14 +9,16 @@ class SpriteRenderer :
 	DECLARE_COMPONENT();
 public:
 	SpriteRenderer() = default;
-	SpriteRenderer(SDL_Surface* sprite);
+	SpriteRenderer(const std::string& bitmap_path);
 	~SpriteRenderer();
 
+	void Awake() override;
 	void Render() override;
 
 	virtual std::unique_ptr<ObjectComponent> Copy() override;
 protected:
-	SDL_Surface* m_Sprite = nullptr;
+	std::string m_BitmapPath = "";
+
 	SDL_Texture* m_Texture = nullptr;
 };
 

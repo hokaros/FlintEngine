@@ -1,7 +1,5 @@
 #pragma once
 #include "Bullet.h"
-// Liczba œcian, które mo¿e zniszczyæ jeden pocisk
-#define POWER_BULLET_HEALTH 2
 
 class PowerBullet 
 	: public Bullet
@@ -9,7 +7,7 @@ class PowerBullet
 	DECLARE_COMPONENT();
 public:
 	PowerBullet() = default;
-	PowerBullet(float speed, int damage);
+	PowerBullet(float speed, int damage, int health);
 
 	void Awake() override;
 	virtual std::unique_ptr<ObjectComponent> Copy() override;

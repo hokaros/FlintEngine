@@ -6,9 +6,9 @@ DEFINE_COMPONENT_DERIVED(PowerBullet, Bullet);
 
 DEFINE_FIELD(PowerBullet, health);
 
-PowerBullet::PowerBullet(float speed, int damage)
+PowerBullet::PowerBullet(float speed, int damage, int health)
 	: Bullet(speed, damage)
-	, health(POWER_BULLET_HEALTH) 
+	, health(health) 
 {
 
 }
@@ -20,7 +20,7 @@ void PowerBullet::Awake()
 
 std::unique_ptr<ObjectComponent> PowerBullet::Copy()
 {
-	return std::make_unique<PowerBullet>(speed, damage);
+	return std::make_unique<PowerBullet>(speed, damage, health);
 }
 
 void PowerBullet::OnCollision(BoxCollider& collider) 
