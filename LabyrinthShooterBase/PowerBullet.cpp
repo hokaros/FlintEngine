@@ -2,6 +2,10 @@
 #include "../FlatEngine/ObjectManager.h"
 #include "../FlatEngine/GameObject.h"
 
+DEFINE_COMPONENT_DERIVED(PowerBullet, Bullet);
+
+DEFINE_FIELD(PowerBullet, health);
+
 PowerBullet::PowerBullet(float speed, int damage)
 	: Bullet(speed, damage)
 	, health(POWER_BULLET_HEALTH) 

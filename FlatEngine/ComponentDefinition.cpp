@@ -4,11 +4,18 @@ ComponentDefinition::ComponentDefinition(const std::string& name, ComponentConst
 	: m_Name(name)
 	, m_TypeCode(RuntimeTypeCode::INVALID)
 	, m_Constructor(constructor)
+	, m_BaseComponentName(std::nullopt)
 {
 	std::unique_ptr<ObjectComponent> representing_component = constructor();
 	m_TypeCode = representing_component->GetTypeCode();
 
 	ComponentDefinitionManager::GetInstance().RegisterComponent(*this);
+}
+
+ComponentDefinition::ComponentDefinition(const std::string& name, ComponentConstructorT constructor, const std::string& base_comp_name)
+	: ComponentDefinition(name, constructor)
+{
+	m_BaseComponentName = base_comp_name;
 }
 
 const std::string& ComponentDefinition::GetName() const
@@ -26,14 +33,36 @@ const ComponentDefinition::ComponentConstructorT& ComponentDefinition::GetConstr
 	return m_Constructor;
 }
 
-const std::vector<const ComponentFieldDefinition*>& ComponentDefinition::GetFields() const
+std::vector<const ComponentFieldDefinition*> ComponentDefinition::GetFields() const
 {
-	return m_Fields;
+	std::vector<const ComponentFieldDefinition*> fields = GetBaseComponentFields();
+	Append(fields, m_Fields);
+
+	return fields;
 }
 
 void ComponentDefinition::AddField(const ComponentFieldDefinition& field)
 {
 	m_Fields.push_back(&field);
+}
+
+std::vector<const ComponentFieldDefinition*> ComponentDefinition::GetBaseComponentFields() const
+{
+	if(m_BaseComponentName.has_value() == false)
+		return std::vector<const ComponentFieldDefinition*>(); // No base component
+
+	ComponentDefinition* base_component = ComponentDefinitionManager::GetInstance().GetDefinitionFromName(m_BaseComponentName.value());
+	FE_ASSERT(base_component != nullptr, "%s - Cannot find base component: %s", GetName(), m_BaseComponentName.value());
+
+	return base_component->GetFields();
+}
+
+void ComponentDefinition::Append(std::vector<const ComponentFieldDefinition*>& out_vector, const std::vector<const ComponentFieldDefinition*>& in_vector)
+{
+	for (const ComponentFieldDefinition* c : in_vector)
+	{
+		out_vector.push_back(c);
+	}
 }
 
 ComponentDefinitionManager& ComponentDefinitionManager::GetInstance()
@@ -89,5 +118,3 @@ ComponentDefinition* ComponentDefinitionManager::GetDefinition(const ObjectCompo
 {
 	return GetDefinitionFromTypeCode(component.GetTypeCode());
 }
-
-

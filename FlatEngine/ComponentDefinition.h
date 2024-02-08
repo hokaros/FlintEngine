@@ -1,6 +1,8 @@
 #pragma once
 #include <map>
 #include <vector>
+#include <optional>
+#include <type_traits>
 
 #include "ObjectComponent.h"
 #include "ComponentFieldDefinition.h"
@@ -11,19 +13,27 @@ public:
 	using ComponentConstructorT = std::function<std::unique_ptr<ObjectComponent> ()>;
 
 	ComponentDefinition(const std::string& name, ComponentConstructorT constructor);
+	ComponentDefinition(const std::string& name, ComponentConstructorT constructor, const std::string& base_comp_name);
 
 	const std::string& GetName() const;
 	RuntimeTypeCode GetTypeCode() const;
 	const ComponentConstructorT& GetConstructor() const;
-	const std::vector<const ComponentFieldDefinition*>& GetFields() const;
+	std::vector<const ComponentFieldDefinition*> GetFields() const;
 
 	void AddField(const ComponentFieldDefinition& field);
+
+private:
+	std::vector<const ComponentFieldDefinition*> GetBaseComponentFields() const;
+
+	static void Append(std::vector<const ComponentFieldDefinition*>& out_vector, const std::vector<const ComponentFieldDefinition*>& in_vector);
 
 private:
 	std::string m_Name;
 	RuntimeTypeCode m_TypeCode;
 	ComponentConstructorT m_Constructor;
 	std::vector<const ComponentFieldDefinition*> m_Fields;
+
+	std::optional<std::string> m_BaseComponentName;
 };
 
 
@@ -59,6 +69,15 @@ ComponentDefinition clazz::s_ComponentDefinition =		\
 		{ return std::make_unique<clazz>(); }			\
 );														\
 														\
+DEFINE_RTC(clazz);
+
+#define DEFINE_COMPONENT_DERIVED(clazz, base_clazz)			\
+static_assert(std::is_base_of_v<base_clazz, clazz> == true);\
+ComponentDefinition clazz::s_ComponentDefinition =			\
+	ComponentDefinition(#clazz, []()						\
+		{ return std::make_unique<clazz>(); }				\
+, #base_clazz);												\
+															\
 DEFINE_RTC(clazz);
 
 

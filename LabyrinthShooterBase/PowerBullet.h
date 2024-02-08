@@ -6,7 +6,9 @@
 class PowerBullet 
 	: public Bullet
 {
+	DECLARE_COMPONENT();
 public:
+	PowerBullet() = default;
 	PowerBullet(float speed, int damage);
 
 	void Awake() override;
@@ -16,7 +18,8 @@ protected:
 	virtual void OnCollision(BoxCollider& collider) override;
 
 private:
-	int health; // TODO: let's add this field (component inheritance)
+	int health = 2;
+	DECLARE_FIELD(health);
 
 private:
 	void DecreaseHealth();
