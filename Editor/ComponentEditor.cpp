@@ -73,6 +73,10 @@ std::unique_ptr<FieldEditor> ComponentEditor::CreateFieldEditor(const ComponentF
 	{
 		return std::make_unique<FieldEditorVector>(m_Component, field);
 	}
+	else if (field_value_type_code == SerializableTypeInterface<Rgb8>::GetTypeCode())
+	{
+		return std::make_unique<FieldEditorRgb8>(m_Component, field);
+	}
 	else
 	{
 		return std::make_unique<FieldEditorDefault>(m_Component, field);

@@ -1,5 +1,12 @@
 #include "Draw.h"
 
+void Rgb8::ToFloat(float& r, float& g, float& b) const
+{
+	r = this->r / (float)0xFF;
+	g = this->g / (float)0xFF;
+	b = this->b / (float)0xFF;
+}
+
 SDL_Rect RectToSDLRect(const Rect& rect)
 {
 	SDL_Rect sdl_rect;

@@ -62,3 +62,14 @@ public:
 
 	virtual void Render() override;
 };
+
+class FieldEditorRgb8
+	: public FieldEditor
+{
+public:
+	FieldEditorRgb8(ObjectComponent& component, const ComponentFieldDefinition& field)
+		: FieldEditor(component, field)
+	{}
+
+	virtual void Render() override;
+};

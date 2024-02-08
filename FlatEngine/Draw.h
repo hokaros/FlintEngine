@@ -26,6 +26,13 @@ public:
 		, g(g)
 		, b(b)
 	{}
+
+	static constexpr Rgb8 FromFloat(float r, float g, float b)
+	{
+		return Rgb8(r * 0xFF, g * 0xFF, b * 0xFF);
+	}
+
+	void ToFloat(float& r, float& g, float& b) const;
 };
 
 SDL_Rect RectToSDLRect(const Rect& rect);

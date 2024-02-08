@@ -56,3 +56,16 @@ void FieldEditorVector::Render()
 	field_value.y = field_value_f[1];
 	m_Field.SetFieldValue(&m_Component, &field_value);
 }
+
+void FieldEditorRgb8::Render()
+{
+	Rgb8 field_value;
+	m_Field.GetFieldValue(&m_Component, &field_value);
+
+	float field_value_f[3];
+	field_value.ToFloat(field_value_f[0], field_value_f[1], field_value_f[2]);
+	ImGui::ColorEdit3(m_FieldLabel.c_str(), field_value_f);
+
+	field_value = Rgb8::FromFloat(field_value_f[0], field_value_f[1], field_value_f[2]);
+	m_Field.SetFieldValue(&m_Component, &field_value);
+}
