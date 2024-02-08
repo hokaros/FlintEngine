@@ -75,6 +75,8 @@ bool Window::Init()
 
 void Window::Present() 
 {
+	SDL_RenderCopy(m_Renderer, m_SceneRenderer.GetOutputTexture(), nullptr, nullptr);
+
 	RenderImGui();
 
 	SDL_RenderPresent(m_Renderer);
