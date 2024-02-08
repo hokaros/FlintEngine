@@ -5,6 +5,8 @@
 
 DEFINE_COMPONENT(SpriteRenderer);
 
+DEFINE_FIELD(SpriteRenderer, m_BitmapPath);
+
 SpriteRenderer::SpriteRenderer(const std::string& bitmap_path)
 	: m_BitmapPath(bitmap_path)
 {

@@ -18,6 +18,7 @@ public:
 	virtual std::unique_ptr<ObjectComponent> Copy() override;
 protected:
 	std::string m_BitmapPath = "";
+	DECLARE_FIELD(m_BitmapPath);
 
 	SDL_Texture* m_Texture = nullptr;
 };

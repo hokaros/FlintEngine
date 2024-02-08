@@ -39,6 +39,21 @@ static inline RuntimeTypeCode GetTypeCode()								\
 }
 
 
+template<>
+class SerializableTypeInterface<std::string>
+{
+public:
+	static inline void ParseString(const std::string& str, std::string& out_value)
+	{
+		out_value = str;
+	}
+	static inline std::string ToString(const std::string& value)
+	{
+		return value;
+	}
+
+	STI_DEFINE_TYPECODE_GETTER()
+};
 
 template<>
 class SerializableTypeInterface<float>
