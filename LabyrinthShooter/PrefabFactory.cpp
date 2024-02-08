@@ -52,14 +52,7 @@ void PrefabFactory::CreateBasicBulletPrefab()
 
 void PrefabFactory::CreateSuperBulletPrefab()
 {
-	constexpr Vector super_bullet_size = Vector(10, 10);
-	Rgb8 super_bullet_color = Rgb8(0xFF, 0x00, 0x00);
-
-	std::unique_ptr<GameObject> super_bullet = std::make_unique<GameObject>(super_bullet_size, PrefabCreationKey());
-
-	super_bullet->AddComponent(std::make_unique<PowerBullet>(BULLET_SUPER_SPEED, BULLET_SUPER_DAMAGE));
-	super_bullet->AddComponent(std::make_unique<BoxCollider>(Vector::ZERO, super_bullet_size));
-	super_bullet->AddComponent(std::make_unique<RectangleRenderer>(super_bullet_color));
+	std::unique_ptr<GameObject> super_bullet = PrefabLoader::LoadPrefab("resources/power_bullet.prefab");
 
 	InsertPrefab(EPrefabId::SuperBullet, std::move(super_bullet));
 }
