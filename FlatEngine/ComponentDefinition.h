@@ -50,18 +50,7 @@ private:
 #define DECLARE_COMPONENT()								\
 private:												\
 	static ComponentDefinition s_ComponentDefinition;	\
-														\
-public:													\
-	virtual RuntimeTypeCode GetTypeCode() const override;
-
-
-// TODO: move to RuntimeTypeCode.h
-#define DEFINE_RTC(clazz)											\
-RuntimeTypeCode clazz::GetTypeCode() const							\
-{																	\
-static RuntimeTypeCode s_TypeCode = RuntimeTypeCode::CreateNew();	\
-return s_TypeCode;													\
-}													
+DECLARE_RTC();
 
 
 #define DEFINE_COMPONENT(clazz)							\

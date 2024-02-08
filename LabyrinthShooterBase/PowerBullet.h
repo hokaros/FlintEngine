@@ -3,8 +3,8 @@
 // Liczba œcian, które mo¿e zniszczyæ jeden pocisk
 #define POWER_BULLET_HEALTH 2
 
-class PowerBullet :
-	public Bullet
+class PowerBullet 
+	: public Bullet
 {
 public:
 	PowerBullet(float speed, int damage);

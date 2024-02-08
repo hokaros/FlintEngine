@@ -16,3 +16,16 @@ public:
 private:
 	unsigned int m_Id;
 };
+
+
+#define DECLARE_RTC()												\
+public:																\
+	virtual RuntimeTypeCode GetTypeCode() const override;
+
+
+#define DEFINE_RTC(clazz)											\
+RuntimeTypeCode clazz::GetTypeCode() const							\
+{																	\
+static RuntimeTypeCode s_TypeCode = RuntimeTypeCode::CreateNew();	\
+return s_TypeCode;													\
+}	
