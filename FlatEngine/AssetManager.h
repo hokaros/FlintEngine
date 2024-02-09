@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Draw.h"
+#include "GameObject.h"
 
 class AssetManager
 {
@@ -11,11 +12,16 @@ public:
 	static AssetManager* GetInstance();
 	~AssetManager();
 
-	void AddAsset(const char* path);
+	GameObject* GetPrefab(const std::string& path);
+	void AddSurfaceAsset(const char* path);
 	SDL_Surface* GetSurfaceAsset(const std::string& path);
 
 private:
-	std::map<std::string, SDL_Surface*> m_PathToAssetDict;
+	void AddPrefab(const char* path);
+
+private:
+	std::map<std::string, SDL_Surface*> m_PathToSurfaceDict;
+	std::map<std::string, std::unique_ptr<GameObject>> m_PathToPrefabDict;
 
 	static AssetManager* s_Instance;
 };

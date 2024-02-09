@@ -36,7 +36,7 @@ void LabyrinthScene::Render()
 
 void LabyrinthScene::LoadNeededAssets()
 {
-	m_AssetManager.AddAsset(s_HeartBitmapPath);
+	m_AssetManager.AddSurfaceAsset(s_HeartBitmapPath);
 }
 
 void LabyrinthScene::LoadStartingObjects()

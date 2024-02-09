@@ -45,7 +45,7 @@ public:
 
 public:
 	Firearm() = default;
-	Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type);
+	Firearm(PrefabRef bulletPrefab, float reloadTime, FirearmType type);
 
 	void Update() override;
 	// Strzela, jeœli prze³adowano
@@ -56,13 +56,15 @@ public:
 	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 protected:
-	const GameObject* bulletPrefab = nullptr;
-private:
-	float reloadTime = 1.0f;
-	DECLARE_FIELD(reloadTime);
+	PrefabRef m_BulletPrefab;
+	DECLARE_FIELD(m_BulletPrefab);
 
-	FirearmType type = FirearmType::Basic;
-	DECLARE_FIELD(type);
+private:
+	float m_ReloadTime = 1.0f;
+	DECLARE_FIELD(m_ReloadTime);
+
+	FirearmType m_Type = FirearmType::Basic;
+	DECLARE_FIELD(m_Type);
 
 	float timeSinceLastShot = INFINITY;
 

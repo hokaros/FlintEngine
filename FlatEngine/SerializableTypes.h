@@ -191,4 +191,3 @@ public:
 	STI_DEFINE_TYPECODE_GETTER()
 };
 
-

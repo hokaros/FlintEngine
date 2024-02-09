@@ -15,13 +15,9 @@
 #include "../FlatEngine/GameObjectSerializer.h"
 
 static constexpr const char* s_PlayerBitmapPath = "resources/player.bmp";
-static constexpr const char* s_WeaponPrimaryBitmapPath = "resources/weapon_primary.bmp";
-static constexpr const char* s_WeaponSuperBitmapPath = "resources/weapon_super.bmp";
 
 PrefabFactory::PrefabFactory()
 {
-	LoadNeededAssets();
-
 	CreateBasicBulletPrefab();
 	CreateSuperBulletPrefab();
 	CreateBasicFirearmPrefab();
@@ -32,15 +28,6 @@ PrefabFactory::PrefabFactory()
 const GameObject& PrefabFactory::GetPrefab(EPrefabId prefab_id) const
 {
 	return *(m_PrefabDict.find(prefab_id)->second);
-}
-
-void PrefabFactory::LoadNeededAssets()
-{
-	AssetManager* asset_manager = AssetManager::GetInstance();
-
-	asset_manager->AddAsset(s_PlayerBitmapPath);
-	asset_manager->AddAsset(s_WeaponPrimaryBitmapPath);
-	asset_manager->AddAsset(s_WeaponSuperBitmapPath);
 }
 
 void PrefabFactory::CreateBasicBulletPrefab()
@@ -59,22 +46,14 @@ void PrefabFactory::CreateSuperBulletPrefab()
 
 void PrefabFactory::CreateBasicFirearmPrefab()
 {
-	constexpr Vector basic_weapon_size = Vector(30, 10);
-
-	std::unique_ptr<GameObject> basic_weapon = std::make_unique<GameObject>(basic_weapon_size, PrefabCreationKey());
-	basic_weapon->AddComponent(std::make_unique<Firearm>(GetPrefab(EPrefabId::BasicBullet), WPN_BASIC_RELOAD, FirearmType::Basic));
-	basic_weapon->AddComponent(std::make_unique<SpriteRenderer>(s_WeaponPrimaryBitmapPath));
+	std::unique_ptr<GameObject> basic_weapon = PrefabLoader::LoadPrefab("resources/basic_firearm.prefab");
 
 	InsertPrefab(EPrefabId::BasicFirearm, std::move(basic_weapon));
 }
 
 void PrefabFactory::CreateSuperFirearmPrefab()
 {
-	constexpr Vector super_weapon_size = Vector(30, 10);
-
-	std::unique_ptr<GameObject> super_weapon = std::make_unique<GameObject>(super_weapon_size, PrefabCreationKey());
-	super_weapon->AddComponent(std::make_unique<Firearm>(GetPrefab(EPrefabId::SuperBullet), WPN_SUPER_RELOAD, FirearmType::Super));
-	super_weapon->AddComponent(std::make_unique<SpriteRenderer>(s_WeaponSuperBitmapPath));
+	std::unique_ptr<GameObject> super_weapon = PrefabLoader::LoadPrefab("resources/super_firearm.prefab");
 
 	InsertPrefab(EPrefabId::SuperFirearm, std::move(super_weapon));
 }

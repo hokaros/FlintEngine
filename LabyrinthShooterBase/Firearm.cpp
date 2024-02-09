@@ -3,13 +3,14 @@
 #include "../FlatEngine/GameObject.h"
 
 DEFINE_COMPONENT(Firearm);
-DEFINE_FIELD(Firearm, reloadTime);
-DEFINE_FIELD(Firearm, type);
+DEFINE_FIELD(Firearm, m_BulletPrefab);
+DEFINE_FIELD(Firearm, m_ReloadTime);
+DEFINE_FIELD(Firearm, m_Type);
 
-Firearm::Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type)
-	: bulletPrefab(&bulletPrefab)
-	, reloadTime(reloadTime)
-	, type(type) 
+Firearm::Firearm(PrefabRef bulletPrefab, float reloadTime, FirearmType type)
+	: m_BulletPrefab(bulletPrefab)
+	, m_ReloadTime(reloadTime)
+	, m_Type(type) 
 {
 
 }
@@ -17,7 +18,7 @@ Firearm::Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType t
 void Firearm::Update() 
 {
 	timeSinceLastShot += Timer::Main()->GetDeltaTime();
-	if (timeSinceLastShot >= reloadTime) 
+	if (timeSinceLastShot >= m_ReloadTime) 
 	{
 		isReloaded = true;
 	}
@@ -29,7 +30,7 @@ bool Firearm::TryShoot()
 		return false;
 
 	// Stworzenie pocisku
-	GameObject* bullet = GameObject::Instantiate(*bulletPrefab);
+	GameObject* bullet = GameObject::Instantiate(*m_BulletPrefab.Get());
 
 	// Ustawienie pozycji
 	Vector relativePos = Vector(Direction::EAST) * m_GameObject->GetSize().x;
@@ -52,9 +53,9 @@ bool Firearm::TryShoot()
 }
 
 std::unique_ptr<ObjectComponent> Firearm::Copy() {
-	return std::make_unique<Firearm>(*bulletPrefab, reloadTime, type);
+	return std::make_unique<Firearm>(m_BulletPrefab, m_ReloadTime, m_Type);
 }
 
 FirearmType Firearm::GetType() const {
-	return type;
+	return m_Type;
 }

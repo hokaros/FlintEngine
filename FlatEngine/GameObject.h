@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include "Timer.h"
 #include "ObjectComponent.h"
+#include "SerializableTypes.h"
 #include <functional>
 #include <math.h>
 #include <mutex>
@@ -167,6 +168,41 @@ private:
 	std::optional<Vector> m_Size;
 
 	std::optional<Vector> m_Position;
+};
+
+
+class PrefabRef;
+template<>
+class SerializableTypeInterface<PrefabRef>;
+
+class PrefabRef
+{
+public:
+	PrefabRef() = default;
+	PrefabRef(const std::string& file_path);
+
+	const GameObject* Get() const;
+	
+private:
+	std::string m_FilePath;
+
+	friend SerializableTypeInterface<PrefabRef>;
+};
+
+template<>
+class SerializableTypeInterface<PrefabRef>
+{
+public:
+	static inline void ParseString(const std::string& str, PrefabRef& out_value)
+	{
+		out_value.m_FilePath = str;
+	}
+	static inline std::string ToString(const PrefabRef& value)
+	{
+		return value.m_FilePath;
+	}
+
+	STI_DEFINE_TYPECODE_GETTER()
 };
 
 

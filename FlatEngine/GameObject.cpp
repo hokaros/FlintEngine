@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "ObjectComponent.h"
 #include "ObjectManager.h"
+#include "AssetManager.h"
 
 GameObject::GameObject()
 	: size(1, 1) 
@@ -466,4 +467,14 @@ std::unique_ptr<GameObject> GameObjectFactory::CreatePrefabSizePosition(PrefabCr
 	}
 
 	return std::make_unique<GameObject>(key);
+}
+
+PrefabRef::PrefabRef(const std::string& file_path)
+	: m_FilePath(file_path)
+{
+}
+
+const GameObject* PrefabRef::Get() const
+{
+	return AssetManager::GetInstance()->GetPrefab(m_FilePath);
 }

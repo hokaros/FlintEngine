@@ -28,8 +28,6 @@ public:
 	const GameObject& GetPrefab(EPrefabId prefab_id) const;
 
 private:
-	void LoadNeededAssets();
-
 	void CreateBasicBulletPrefab();
 	void CreateSuperBulletPrefab();
 	void CreateBasicFirearmPrefab();
