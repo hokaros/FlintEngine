@@ -5,5 +5,3 @@
 #define LAB_Y 5
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 100
-
-enum class FirearmType { Basic, Super };

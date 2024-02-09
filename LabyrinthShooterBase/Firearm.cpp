@@ -4,6 +4,7 @@
 
 DEFINE_COMPONENT(Firearm);
 DEFINE_FIELD(Firearm, reloadTime);
+DEFINE_FIELD(Firearm, type);
 
 Firearm::Firearm(const GameObject& bulletPrefab, float reloadTime, FirearmType type)
 	: bulletPrefab(&bulletPrefab)

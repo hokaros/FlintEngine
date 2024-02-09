@@ -3,6 +3,39 @@
 #include "Bullet.h"
 #include "Shared.h"
 
+enum class FirearmType { Basic, Super };
+
+template<>
+class SerializableTypeInterface<FirearmType>
+{
+public:
+	static inline void ParseString(const std::string& str, FirearmType& out_value)
+	{
+		if (str == "Super")
+		{
+			out_value = FirearmType::Super;
+		}
+		else
+		{
+			out_value = FirearmType::Basic;
+		}
+	}
+
+	static inline std::string ToString(const FirearmType& value)
+	{
+		switch (value)
+		{
+		case FirearmType::Super:
+			return "Super";
+
+		default:
+			return "Basic";
+		}
+	}
+
+	STI_DEFINE_TYPECODE_GETTER()
+};
+
 class Firearm :
 	public ObjectComponent
 {
@@ -28,7 +61,8 @@ private:
 	float reloadTime = 1.0f;
 	DECLARE_FIELD(reloadTime);
 
-	FirearmType type = FirearmType::Basic; // TODO: make a field
+	FirearmType type = FirearmType::Basic;
+	DECLARE_FIELD(type);
 
 	float timeSinceLastShot = INFINITY;
 
