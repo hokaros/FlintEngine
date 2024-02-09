@@ -16,12 +16,14 @@ const ComponentFieldDefinition& FieldEditor::GetField() const
 
 void FieldEditorDefault::Render()
 {
+	constexpr size_t string_max_size = 64;
+
 	std::string field_value = m_Field.GetFieldValue(&m_Component);
-	char buffer[64];
+	char buffer[string_max_size];
 	strcpy_s(buffer, field_value.c_str());
 
 	ImGui::SetNextItemWidth(150.0f);
-	ImGui::InputText(m_FieldLabel.c_str(), buffer, 16);
+	ImGui::InputText(m_FieldLabel.c_str(), buffer, string_max_size);
 	field_value = buffer;
 	m_Field.SetFieldValue(&m_Component, field_value);
 }
