@@ -1,5 +1,21 @@
 #include "ComponentSerializer.h"
 
+std::unique_ptr<ComponentStringDesc> ComponentSerializer::SerializeComponent(const ObjectComponent& component)
+{
+	ComponentDefinition* comp_def = ComponentDefinitionManager::GetInstance().GetDefinition(component);
+
+	std::unique_ptr<ComponentStringDesc> comp_serialized = std::make_unique<ComponentStringDesc>();
+
+	comp_serialized->type = comp_def->GetName();
+
+	for (const ComponentFieldDefinition* field : comp_def->GetFields())
+	{
+		comp_serialized->fields.insert({ field->GetFieldName(), field->GetFieldValue(&component) });
+	}
+
+	return comp_serialized;
+}
+
 std::unique_ptr<ObjectComponent> ComponentSerializer::DeserializeComponent(const ComponentStringDesc& component_desc)
 {
 	FE_LOG("Loading component: %s", component_desc.type.c_str());

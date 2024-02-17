@@ -21,9 +21,17 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 	go_serialized->params.insert({ s_GameObjectSizeFieldName, STI<Vector>::ToString(game_object.GetSize()) });
 	go_serialized->params.insert({ s_GameObjectPositionFieldName, STI<Vector>::ToString(game_object.GetPosition()) });
 
-	// TODO: component serialization
+	SerializeComponents(game_object, *go_serialized);
 
 	return go_serialized;
+}
+
+void GameObjectSerializer::SerializeComponents(const GameObject& game_object, GameObjectStringDesc& desc)
+{
+	for (const ObjectComponent* component : game_object.GetAllComponents())
+	{
+		desc.components.push_back(ComponentSerializer::SerializeComponent(*component));
+	}
 }
 
 std::unique_ptr<GameObject> GameObjectSerializer::DeserializePureGameObject(const GameObjectStringDesc& desc)
@@ -59,9 +67,9 @@ std::unique_ptr<GameObject> GameObjectSerializer::DeserializePureGameObject(cons
 
 void GameObjectSerializer::DeserializeComponents(GameObject& game_object, const GameObjectStringDesc& desc)
 {
-	for (const ComponentStringDesc& component_desc : desc.components)
+	for (const std::unique_ptr<ComponentStringDesc>& component_desc : desc.components)
 	{
-		std::unique_ptr<ObjectComponent> component = ComponentSerializer::DeserializeComponent(component_desc);
+		std::unique_ptr<ObjectComponent> component = ComponentSerializer::DeserializeComponent(*component_desc);
 		if (component != nullptr)
 		{
 			game_object.AddComponent(std::move(component));

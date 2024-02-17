@@ -12,6 +12,7 @@ struct ComponentStringDesc
 class ComponentSerializer
 {
 public:
+	static std::unique_ptr<ComponentStringDesc> SerializeComponent(const ObjectComponent& component);
 	static std::unique_ptr<ObjectComponent> DeserializeComponent(const ComponentStringDesc& component_desc);
 
 private:

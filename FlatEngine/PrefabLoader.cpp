@@ -107,7 +107,7 @@ void PrefabLoader::ParseComponentFieldLine(const std::string& line)
 
 void PrefabLoader::FinalizeComponentLoading()
 {
-    m_GameObjectDesc.components.push_back(m_CurrComponentDesc);
+    m_GameObjectDesc.components.push_back(std::make_unique<ComponentStringDesc>(m_CurrComponentDesc));
 
     m_CurrComponentDesc.type = "";
     m_CurrComponentDesc.fields.clear();

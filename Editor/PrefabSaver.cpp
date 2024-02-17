@@ -30,36 +30,34 @@ void PrefabSaver::SavePrefab(const GameObject& prefab)
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = GameObjectSerializer::SerializeGameObject(prefab);
     SaveKeyValuePairs(prefab_serialized->params);
 
-    SaveComponents(prefab);
+    SaveComponents(prefab_serialized->components);
 }
 
-void PrefabSaver::SaveComponents(const GameObject& prefab)
+void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStringDesc>>& components)
 {
     m_PrefabFile << "- components:" << std::endl;
 
-    for (const ObjectComponent* component : prefab.GetAllComponents())
+    for (const std::unique_ptr<ComponentStringDesc>& component : components)
     {
-        ComponentDefinition* comp_def = ComponentDefinitionManager::GetInstance().GetDefinition(*component);
-
-        m_PrefabFile << "\t- " << comp_def->GetName();
-        if (comp_def->GetFields().size() > 0)
+        m_PrefabFile << "\t- " << component->type;
+        if (component->fields.size() > 0)
         {
             m_PrefabFile << ':';
         }
         m_PrefabFile << std::endl;
 
-        SaveFields(*component);
+        SaveFields(component->fields);
     }
 }
 
-void PrefabSaver::SaveFields(const ObjectComponent& component)
+void PrefabSaver::SaveFields(const std::map<std::string, std::string>& fields)
 {
-    ComponentDefinition* comp_def = ComponentDefinitionManager::GetInstance().GetDefinition(component);
-
-    for (const ComponentFieldDefinition* field : comp_def->GetFields())
+    for (auto& pair : fields)
     {
-        m_PrefabFile << "\t\t- ";
-        m_PrefabFile << field->GetFieldName() << ": " << field->GetFieldValue(&component) << std::endl;
+        const std::string& field_name = pair.first;
+        const std::string& value = pair.second;
+
+        m_PrefabFile << "\t\t- " << field_name << ": " << value << std::endl;
     }
 }
 

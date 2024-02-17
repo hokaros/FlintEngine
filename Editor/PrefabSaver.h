@@ -13,8 +13,8 @@ private:
 	PrefabSaver(std::fstream& prefab_file);
 
 	void SavePrefab(const GameObject& prefab);
-	void SaveComponents(const GameObject& prefab);
-	void SaveFields(const ObjectComponent& component);
+	void SaveComponents(const std::vector<std::unique_ptr<ComponentStringDesc>>& components);
+	void SaveFields(const std::map<std::string, std::string>& fields);
 	void SaveKeyValuePairs(const std::map<std::string, std::string>& dict);
 
 private:
