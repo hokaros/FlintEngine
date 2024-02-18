@@ -52,22 +52,22 @@ void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStri
 
 void PrefabSaver::SaveFields(const std::map<std::string, std::string>& fields)
 {
-    for (auto& pair : fields)
-    {
-        const std::string& field_name = pair.first;
-        const std::string& value = pair.second;
-
-        m_PrefabFile << "\t\t- " << field_name << ": " << value << std::endl;
-    }
+    SaveKeyValuePairs(fields, /*indent*/2);
 }
 
-void PrefabSaver::SaveKeyValuePairs(const std::map<std::string, std::string>& dict)
+void PrefabSaver::SaveKeyValuePairs(const std::map<std::string, std::string>& dict, size_t indent)
 {
+    std::string indent_str = "";
+    for (size_t i = 0; i < indent; i++)
+    {
+        indent_str += "\t";
+    }
+
     for (auto& pair : dict)
     {
         const std::string& key = pair.first;
         const std::string& value = pair.second;
 
-        m_PrefabFile << "- " << key << ": " << value << std::endl;
+        m_PrefabFile << indent_str << "- " << key << ": " << value << std::endl;
     }
 }
