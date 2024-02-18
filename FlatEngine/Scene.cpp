@@ -4,7 +4,7 @@ void Scene::Update()
 {
 	m_ObjectManager.ActivateNewObjects();
 
-	for (GameObject* go : m_ObjectManager.GetAllObjects()) {
+	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) {
 		go->Update();
 	}
 }
@@ -13,7 +13,7 @@ void Scene::Render()
 {
 	RenderBackground();
 
-	for (GameObject* go : m_ObjectManager.GetAllObjects()) 
+	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
 		if (go->renderUnseen) 
 		{
@@ -37,7 +37,7 @@ void Scene::PostFrame()
 
 void Scene::AddGameObject(std::unique_ptr<GameObject> game_object)
 {
-	m_ObjectManager.AddObject(std::move(game_object));
+	m_ObjectManager.AddNewObject(std::move(game_object));
 }
 
 void Scene::SetBackgroundColor(const Rgb8& color)

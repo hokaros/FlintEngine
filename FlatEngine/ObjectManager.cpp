@@ -22,7 +22,7 @@ void ObjectManager::DestroyObjectImpl(GameObject* gameObject, bool detach)
 	// Od³¹czenie od rodzica
 	if (detach && gameObject->GetParent() != nullptr) 
 	{
-		gameObject->GetParent()->RemoveChild(gameObject);
+		gameObject->GetParent()->MoveChild(gameObject, *this);
 	}
 }
 
@@ -42,18 +42,22 @@ ObjectManager::~ObjectManager()
 	}
 }
 
-void ObjectManager::AddObject(std::unique_ptr<GameObject> gameObject) 
+void ObjectManager::AddNewObject(std::unique_ptr<GameObject> gameObject)
 {
-	m_NewObjects.push_back(gameObject.get());
-	m_AllObjects.push_back(gameObject.get());
+	AddToMessageSubscribers(gameObject.get());
 
+	AddGameObject(std::move(gameObject));
+}
+
+void ObjectManager::AddGameObject(std::unique_ptr<GameObject> gameObject)
+{
 	m_OwnedObjects.push_back(std::move(gameObject));
 }
 
-void ObjectManager::AddUndestroyable(GameObject* gameObject) 
+void ObjectManager::AddToMessageSubscribers(GameObject* gameObject)
 {
-	m_NewObjects.push_back(gameObject);
-	m_AllObjects.push_back(gameObject);
+	m_NewMessageSubscribers.push_back(gameObject);
+	m_MessageSubscribers.push_back(gameObject);
 }
 
 void ObjectManager::DestroyObject(GameObject* gameObject) 
@@ -75,8 +79,8 @@ void ObjectManager::DisposeDestroyed()
 		return false; // Not found in destroyed objects
 	};
 
-	m_NewObjects.remove_if(should_dispose);
-	m_AllObjects.remove_if(should_dispose);
+	m_NewMessageSubscribers.remove_if(should_dispose);
+	m_MessageSubscribers.remove_if(should_dispose);
 	m_OwnedObjects.remove_if([&should_dispose](const std::unique_ptr<GameObject>& ptr) 
 		{
 			return should_dispose(ptr.get()); 
@@ -87,26 +91,26 @@ void ObjectManager::DisposeDestroyed()
 
 void ObjectManager::ActivateNewObjects()
 {
-	for (GameObject* go : m_NewObjects)
+	for (GameObject* go : m_NewMessageSubscribers)
 	{
 		go->Awake();
 	}
-	for (GameObject* go : m_NewObjects)
+	for (GameObject* go : m_NewMessageSubscribers)
 	{
 		go->Start();
 	}
 
-	m_NewObjects.clear();
+	m_NewMessageSubscribers.clear();
 }
 
-const std::list<GameObject*>& ObjectManager::GetAllObjects() const 
+const std::list<GameObject*>& ObjectManager::GetAllMessageSubscribers() const 
 {
-	return m_AllObjects;
+	return m_MessageSubscribers;
 }
 
 void ObjectManager::Clear() 
 {
-	m_AllObjects.clear();
+	m_MessageSubscribers.clear();
 	m_DestroyedObjects.clear();
 
 	m_OwnedObjects.clear();

@@ -62,7 +62,7 @@ GameObject* GameObject::Instantiate(const Vector& size)
 	ObjectManager* object_manager = ObjectManager::Main();
 
 	GameObject* game_object = new GameObject(size);
-	object_manager->AddObject(std::unique_ptr<GameObject>(game_object));
+	object_manager->AddNewObject(std::unique_ptr<GameObject>(game_object));
 
 	return game_object;
 }
@@ -72,7 +72,7 @@ GameObject* GameObject::Instantiate(const Vector& size, const Vector& position)
 	ObjectManager* object_manager = ObjectManager::Main();
 
 	GameObject* game_object = new GameObject(size, position);
-	object_manager->AddObject(std::unique_ptr<GameObject>(game_object));
+	object_manager->AddNewObject(std::unique_ptr<GameObject>(game_object));
 
 	return game_object;
 }
@@ -80,7 +80,7 @@ GameObject* GameObject::Instantiate(const Vector& size, const Vector& position)
 GameObject* GameObject::Instantiate(const GameObject& other)
 {
 	GameObject* game_object = new GameObject(other);
-	ObjectManager::Main()->AddObject(std::unique_ptr<GameObject>(game_object));
+	ObjectManager::Main()->AddNewObject(std::unique_ptr<GameObject>(game_object));
 
 	return game_object;
 }
@@ -379,7 +379,7 @@ void GameObject::AddChild(std::unique_ptr<GameObject> child)
 	children.push_back(std::move(child));
 }
 
-void GameObject::RemoveChild(GameObject* child) 
+void GameObject::MoveChild(GameObject* child, IGameObjectContainer& new_container) 
 {
 	child->parent = nullptr;
 
@@ -388,6 +388,7 @@ void GameObject::RemoveChild(GameObject* child)
 		std::unique_ptr<GameObject>& it_val = *it;
 		if (it_val.get() == child)
 		{
+			new_container.AddGameObject(std::move(it_val));
 			children.erase(it);
 			break;
 		}

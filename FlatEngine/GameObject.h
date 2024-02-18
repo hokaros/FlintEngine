@@ -116,7 +116,7 @@ public:
 	Vector LocalToWorld(const Vector& localPos) const;
 
 	void AddChild(std::unique_ptr<GameObject> child);
-	void RemoveChild(GameObject* child);
+	void MoveChild(GameObject* child, IGameObjectContainer& new_container);
 	const std::vector<std::unique_ptr<GameObject>>& GetChildren() const;
 	GameObject* GetParent() const;
 
