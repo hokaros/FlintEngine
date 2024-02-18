@@ -5,10 +5,11 @@
 	- Health:
 		- m_MaxHealth: 2
 	- Bullet:
-		- speed: 1.000000
 		- damage: 2
+		- speed: 1.000000
 	- ConstantMover:
 		- movementSpeed: 5.000000
 	- Firearm:
-		- reloadTime: 1.000000
-		- type: Super
+		- m_BulletPrefab: 
+		- m_ReloadTime: 1.000000
+		- m_Type: Basic

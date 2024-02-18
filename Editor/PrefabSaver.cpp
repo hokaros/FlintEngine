@@ -13,14 +13,16 @@ void PrefabSaver::SavePrefab(const GameObject& prefab, const char* file_path)
         return;
     }
 
-    PrefabSaver saver(prefab_file);
+    PrefabSaver saver(prefab_file, 0);
     saver.SavePrefab(prefab);
 
     prefab_file.close();
 }
 
-PrefabSaver::PrefabSaver(std::fstream& prefab_file)
+PrefabSaver::PrefabSaver(std::fstream& prefab_file, size_t start_indent)
     : m_PrefabFile(prefab_file)
+    , m_StartIndent(start_indent)
+    , m_IndentPrinter(prefab_file, start_indent)
 {
 
 }
@@ -35,39 +37,39 @@ void PrefabSaver::SavePrefab(const GameObject& prefab)
 
 void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStringDesc>>& components)
 {
-    m_PrefabFile << "- components:" << std::endl;
+    m_IndentPrinter.PrintLine("components:");
+    m_IndentPrinter.IncreaseIndent();
 
     for (const std::unique_ptr<ComponentStringDesc>& component : components)
     {
-        m_PrefabFile << "\t- " << component->type;
+        m_IndentPrinter.StartLine();
+        m_IndentPrinter.AddToLine(component->type);
+
         if (component->fields.size() > 0)
         {
-            m_PrefabFile << ':';
+            m_IndentPrinter.AddToLine(":");
         }
-        m_PrefabFile << std::endl;
+        m_IndentPrinter.EndLine();
 
-        SaveFields(component->fields);
-    }
-}
-
-void PrefabSaver::SaveFields(const std::map<std::string, std::string>& fields)
-{
-    SaveKeyValuePairs(fields, /*indent*/2);
-}
-
-void PrefabSaver::SaveKeyValuePairs(const std::map<std::string, std::string>& dict, size_t indent)
-{
-    std::string indent_str = "";
-    for (size_t i = 0; i < indent; i++)
-    {
-        indent_str += "\t";
+        m_IndentPrinter.IncreaseIndent();
+        SaveKeyValuePairs(component->fields);
+        m_IndentPrinter.DecreaseIndent();
     }
 
+    m_IndentPrinter.DecreaseIndent();
+}
+
+void PrefabSaver::SaveKeyValuePairs(const std::map<std::string, std::string>& dict)
+{
     for (auto& pair : dict)
     {
         const std::string& key = pair.first;
         const std::string& value = pair.second;
 
-        m_PrefabFile << indent_str << "- " << key << ": " << value << std::endl;
+        m_IndentPrinter.StartLine();
+        m_IndentPrinter.AddToLine(key);
+        m_IndentPrinter.AddToLine(": ");
+        m_IndentPrinter.AddToLine(value);
+        m_IndentPrinter.EndLine();
     }
 }
