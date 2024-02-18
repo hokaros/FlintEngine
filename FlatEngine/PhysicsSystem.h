@@ -27,8 +27,11 @@ private:
 
 	void DebugDrawColliders() const; // TODO: move out
 
+	void ApplyUnregisterColliders();
+
 private:
 	std::vector<BoxCollider*> m_Colliders;
+	std::vector<BoxCollider*> m_CollidersToUnregister;
 
 	static PhysicsSystem* s_Instance;
 };

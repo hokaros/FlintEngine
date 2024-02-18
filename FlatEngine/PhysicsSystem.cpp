@@ -15,6 +15,8 @@ PhysicsSystem::PhysicsSystem(SystemCreationKey)
 
 void PhysicsSystem::Update()
 {
+	ApplyUnregisterColliders();
+
 	// TODO: change to QuadTree
 	for (int i = 0; i < m_Colliders.size(); i++)
 	{
@@ -58,14 +60,7 @@ void PhysicsSystem::RegisterCollider(BoxCollider* collider)
 
 void PhysicsSystem::UnregisterCollider(BoxCollider* collider)
 {
-	for (auto it = m_Colliders.begin(); it != m_Colliders.end(); it++)
-	{
-		if (*it == collider)
-		{
-			m_Colliders.erase(it);
-			break;
-		}
-	}
+	m_CollidersToUnregister.push_back(collider);
 }
 
 void PhysicsSystem::OnCollision(BoxCollider& col1, BoxCollider& col2)
@@ -150,4 +145,21 @@ void PhysicsSystem::DebugDrawColliders() const
 		Rect rect = Rect(col_min, col_size);
 		DebugRenderer::DrawWireRect(rect, color);
 	}
+}
+
+void PhysicsSystem::ApplyUnregisterColliders()
+{
+	for (BoxCollider* collider : m_CollidersToUnregister)
+	{
+		for (auto it = m_Colliders.begin(); it != m_Colliders.end(); it++)
+		{
+			if (*it == collider)
+			{
+				m_Colliders.erase(it);
+				break;
+			}
+		}
+	}
+
+	m_CollidersToUnregister.clear();
 }

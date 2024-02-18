@@ -32,6 +32,9 @@ protected:
 
 private:
 	Vector direction = Direction::EAST;
+	float currentLifeTime = 0.0f;
+
+	static constexpr float s_MaxTimeToLive = 10.0f;
 
 	DECLARE_FIELD(speed);
 	DECLARE_FIELD(damage);

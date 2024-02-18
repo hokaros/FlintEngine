@@ -23,6 +23,8 @@ void Bullet::Awake()
 		[this](BoxCollider& c) {
 		OnCollision(c);
 	};
+
+	currentLifeTime = 0.0f;
 }
 
 void Bullet::Update() 
@@ -30,6 +32,12 @@ void Bullet::Update()
 	m_GameObject->Translate(
 		direction * speed * Timer::Main()->GetDeltaTime()
 	);
+
+	currentLifeTime += Timer::Main()->GetDeltaTime();
+	if (currentLifeTime >= s_MaxTimeToLive)
+	{
+		GameObject::Destroy(m_GameObject);
+	}
 }
 
 void Bullet::OnCollision(BoxCollider& collider) 
