@@ -30,9 +30,16 @@ PrefabSaver::PrefabSaver(std::fstream& prefab_file, size_t start_indent)
 void PrefabSaver::SavePrefab(const GameObject& prefab)
 {
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = GameObjectSerializer::SerializeGameObject(prefab);
-    SaveKeyValuePairs(prefab_serialized->params);
+    SaveGameObject(*prefab_serialized);
+}
 
-    SaveComponents(prefab_serialized->components);
+void PrefabSaver::SaveGameObject(const GameObjectStringDesc& game_object)
+{
+    SaveKeyValuePairs(game_object.params);
+
+    SaveComponents(game_object.components);
+
+    SaveChildren(game_object.children);
 }
 
 void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStringDesc>>& components)
@@ -54,6 +61,20 @@ void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStri
         m_IndentPrinter.IncreaseIndent();
         SaveKeyValuePairs(component->fields);
         m_IndentPrinter.DecreaseIndent();
+    }
+
+    m_IndentPrinter.DecreaseIndent();
+}
+
+void PrefabSaver::SaveChildren(const std::vector<std::unique_ptr<GameObjectStringDesc>>& children)
+{
+    m_IndentPrinter.PrintLine("children:");
+    m_IndentPrinter.IncreaseIndent();
+
+    for (const std::unique_ptr<GameObjectStringDesc>& child : children)
+    {
+        // TODO: we can just save the path in case of prefab-children
+        SaveGameObject(*child);
     }
 
     m_IndentPrinter.DecreaseIndent();

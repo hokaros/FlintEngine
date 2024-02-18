@@ -77,18 +77,18 @@ void PrefabFactory::CreatePlayerPrefab()
 	const GameObject& super_bullet = GetPrefab(PrefabFactory::EPrefabId::SuperBullet);
 
 	// Zwyk³a broñ
-	GameObject* basic_weapon = new GameObject(
-		GetPrefab(PrefabFactory::EPrefabId::BasicFirearm), {}
+	std::unique_ptr<GameObject> basic_weapon = std::make_unique<GameObject>(
+		GetPrefab(PrefabFactory::EPrefabId::BasicFirearm), PrefabCreationKey()
 	);
 	basic_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
-	player->AddChild(basic_weapon);
+	player->AddChild(std::move(basic_weapon));
 
 	// Silna broñ
-	GameObject* super_weapon = new GameObject(
-		GetPrefab(PrefabFactory::EPrefabId::SuperFirearm), {}
+	std::unique_ptr<GameObject> super_weapon = std::make_unique<GameObject>(
+		GetPrefab(PrefabFactory::EPrefabId::SuperFirearm), PrefabCreationKey()
 	);
 	super_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
-	player->AddChild(super_weapon);
+	player->AddChild(std::move(super_weapon));
 
 	player->AddComponent(std::make_unique<SpriteRenderer>(s_PlayerBitmapPath));
 

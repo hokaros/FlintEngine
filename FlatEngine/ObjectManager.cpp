@@ -24,12 +24,6 @@ void ObjectManager::DestroyObjectImpl(GameObject* gameObject, bool detach)
 	{
 		gameObject->GetParent()->RemoveChild(gameObject);
 	}
-
-	// Usuniêcie rekurencyjne dzieci
-	for (GameObject* child : gameObject->GetChildren()) 
-	{
-		DestroyObjectImpl(child, false);
-	}
 }
 
 ObjectManager::ObjectManager() 
@@ -52,12 +46,6 @@ void ObjectManager::AddObject(std::unique_ptr<GameObject> gameObject)
 {
 	m_NewObjects.push_back(gameObject.get());
 	m_AllObjects.push_back(gameObject.get());
-
-	// Rekursywne dodanie dzieci
-	for (GameObject* child : gameObject->GetChildren()) 
-	{
-		AddObject(std::unique_ptr<GameObject>(child));
-	}
 
 	m_OwnedObjects.push_back(std::move(gameObject));
 }

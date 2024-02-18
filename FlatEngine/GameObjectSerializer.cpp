@@ -9,6 +9,7 @@ std::unique_ptr<GameObject> GameObjectSerializer::DeserializeGameObject(const Ga
 {
 	std::unique_ptr<GameObject> game_object = DeserializePureGameObject(desc);
 	DeserializeComponents(*game_object, desc);
+	DeserializeChildren(*game_object, desc);
 
 	return game_object;
 }
@@ -22,6 +23,7 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 	go_serialized->params.insert({ s_GameObjectPositionFieldName, STI<Vector>::ToString(game_object.GetPosition()) });
 
 	SerializeComponents(game_object, *go_serialized);
+	SerializeChildren(game_object, *go_serialized);
 
 	return go_serialized;
 }
@@ -74,5 +76,21 @@ void GameObjectSerializer::DeserializeComponents(GameObject& game_object, const 
 		{
 			game_object.AddComponent(std::move(component));
 		}
+	}
+}
+
+void GameObjectSerializer::SerializeChildren(const GameObject& game_object, GameObjectStringDesc& desc)
+{
+	for (const std::unique_ptr<GameObject>& child : game_object.GetChildren())
+	{
+		desc.children.push_back(SerializeGameObject(*child));
+	}
+}
+
+void GameObjectSerializer::DeserializeChildren(GameObject& game_object, const GameObjectStringDesc& desc)
+{
+	for (const std::unique_ptr<GameObjectStringDesc>& child : desc.children)
+	{
+		// TODO
 	}
 }

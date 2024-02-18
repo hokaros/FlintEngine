@@ -49,11 +49,11 @@ GameObject::GameObject(const GameObject& other)
 	}
 
 	// Skopiowanie dzieci
-	for (GameObject* child : other.children) 
+	for (const std::unique_ptr<GameObject>& child : other.children) 
 	{
-		GameObject* childCopy = new GameObject(*child);
+		std::unique_ptr<GameObject> childCopy = std::make_unique<GameObject>(*child, PrefabCreationKey());
 
-		AddChild(childCopy);
+		AddChild(std::move(childCopy));
 	}
 }
 
@@ -166,6 +166,11 @@ void GameObject::Update()
 	{
 		component->Update();
 	}
+
+	for (std::unique_ptr<GameObject>& child : children)
+	{
+		child->Update();
+	}
 }
 
 void GameObject::RenderUpdate() 
@@ -176,6 +181,11 @@ void GameObject::RenderUpdate()
 	for (std::unique_ptr<ObjectComponent>& component : components)
 	{
 		component->RenderUpdate();
+	}
+
+	for (std::unique_ptr<GameObject>& child : children)
+	{
+		child->RenderUpdate();
 	}
 }
 
@@ -188,6 +198,11 @@ void GameObject::Start()
 	{
 		component->Start();
 	}
+
+	for (std::unique_ptr<GameObject>& child : children)
+	{
+		child->Start();
+	}
 }
 
 void GameObject::Awake()
@@ -199,6 +214,11 @@ void GameObject::Awake()
 	{
 		component->Awake();
 	}
+
+	for (std::unique_ptr<GameObject>& child : children)
+	{
+		child->Awake();
+	}
 }
 
 void GameObject::OnDestroy()
@@ -206,6 +226,11 @@ void GameObject::OnDestroy()
 	for (std::unique_ptr<ObjectComponent>& component : components)
 	{
 		component->OnDestroy();
+	}
+
+	for (std::unique_ptr<GameObject>& child : children)
+	{
+		child->OnDestroy();
 	}
 }
 
@@ -252,7 +277,7 @@ void GameObject::SetPosition(const Vector& newPosition)
 	Vector offset = newPosition - position;
 	position = newPosition;
 
-	for (GameObject* child : children) 
+	for (std::unique_ptr<GameObject>& child : children) 
 	{
 		child->Translate(offset);
 	}
@@ -262,7 +287,7 @@ void GameObject::Translate(const Vector& offset)
 {
 	position += offset;
 
-	for (GameObject* child : children) 
+	for (std::unique_ptr<GameObject>& child : children)
 	{
 		child->Translate(offset);
 	}
@@ -276,7 +301,7 @@ void GameObject::SetSize(const Vector& newSize)
 	size.y = newSize.y;
 
 	// Rozmiar dzieci
-	for (GameObject* child : children) 
+	for (std::unique_ptr<GameObject>& child : children)
 	{
 		Vector childNewSize(child->size.x * sizeChange.x, child->size.y * sizeChange.y);
 		child->SetSize(childNewSize);
@@ -291,7 +316,7 @@ void GameObject::Rotate(double angle)
 
 	Vector middle = GetMiddle();
 	
-	for (GameObject* child : children) 
+	for (std::unique_ptr<GameObject>& child : children)
 	{
 		child->Rotate(angle);
 
@@ -347,21 +372,29 @@ Vector GameObject::LocalToWorld(const Vector& localPos) const
 	//return unrotatedPos + position + rotatedSize / 2;
 }
 
-void GameObject::AddChild(GameObject* child) 
+void GameObject::AddChild(std::unique_ptr<GameObject> child)
 {
 	child->parent = this;
 
-	children.push_back(child);
+	children.push_back(std::move(child));
 }
 
 void GameObject::RemoveChild(GameObject* child) 
 {
-	child->parent = NULL;
+	child->parent = nullptr;
 
-	children.remove(child);
+	for (auto it = children.begin(); it != children.end(); it++)
+	{
+		std::unique_ptr<GameObject>& it_val = *it;
+		if (it_val.get() == child)
+		{
+			children.erase(it);
+			break;
+		}
+	}
 }
 
-const std::list<GameObject*>& GameObject::GetChildren() const 
+const std::vector<std::unique_ptr<GameObject>>& GameObject::GetChildren() const 
 {
 	return children;
 }
@@ -401,7 +434,7 @@ void GameObject::SetEnabled(bool enabled)
 {
 	isEnabled = enabled;
 
-	for (GameObject* child : children) 
+	for (std::unique_ptr<GameObject>& child : children)
 	{
 		child->SetEnabled(enabled);
 	}

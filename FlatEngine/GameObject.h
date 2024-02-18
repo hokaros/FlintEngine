@@ -14,6 +14,7 @@
 class PrefabFactory;
 class GameObjectSerializer;
 class AssetExplorer;
+class GameObject;
 
 class PrefabCreationKey
 {
@@ -27,9 +28,8 @@ private:
 	friend PrefabFactory;
 	friend GameObjectSerializer;
 	friend AssetExplorer;
+	friend GameObject;
 };
-
-class GameObject;
 
 class IGameObjectContainer
 {
@@ -115,9 +115,9 @@ public:
 
 	Vector LocalToWorld(const Vector& localPos) const;
 
-	void AddChild(GameObject* child);
+	void AddChild(std::unique_ptr<GameObject> child);
 	void RemoveChild(GameObject* child);
-	const std::list<GameObject*>& GetChildren() const;
+	const std::vector<std::unique_ptr<GameObject>>& GetChildren() const;
 	GameObject* GetParent() const;
 
 	~GameObject() = default; // TODO: we should also delete child objects
@@ -143,8 +143,8 @@ private:
 
 	double asyncRotation = 0.0;
 
-	GameObject* parent = NULL;
-	std::list<GameObject*> children;
+	GameObject* parent = nullptr;
+	std::vector<std::unique_ptr<GameObject>> children;
 
 	std::list<function<void(GameObject*)>> onDestroyedChanged;
 };
@@ -242,7 +242,7 @@ std::list<T*>* GameObject::FindComponentsInChildren()
 {
 	std::list<T*>* found = new std::list<T*>();
 
-	for (GameObject* child : children) 
+	for (std::unique_ptr<GameObject>& child : children) 
 	{
 		std::list<T*>* foundInChild = child->FindComponents<T>();
 
