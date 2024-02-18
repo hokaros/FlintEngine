@@ -11,19 +11,24 @@ private:
 	{
 		GameObjectParams,
 		ComponentDefinitions,
-		SpecificComponentDefinition
+		SpecificComponentDefinition,
+		ChildDefinitions
 	};
 
 private:
-	PrefabLoader() = default;
-	std::unique_ptr<GameObject> LoadPrefab(std::fstream& file);
-	void DispatchLine(const std::string& line);
+	PrefabLoader(std::fstream& prefab_file, size_t start_indent);
+	std::unique_ptr<GameObject> LoadPrefab();
+
+	std::unique_ptr<GameObjectStringDesc> LoadGameObject(std::string& first_unconsumed_line);
+	bool DispatchLine(const std::string& line);
 	void ParseGameObjectParamLine(const std::string& line);
 
 	void ParseComponentNameLine(const std::string& line);
 	void ParseComponentFieldLine(const std::string& line);
 
 	void FinalizeComponentLoading();
+
+	void ParseChildTypeLine(const std::string& line);
 
 	void SetParsingState(ParsingState state);
 	void SetParsingStateAfterIndent(ParsingState state);
@@ -36,8 +41,15 @@ private:
 private:
 	ParsingState m_ParsingState = ParsingState::GameObjectParams;
 	ParsingState m_ParsingStateAfterIndent = ParsingState::GameObjectParams;
-	GameObjectStringDesc m_GameObjectDesc;
+	std::unique_ptr<GameObjectStringDesc> m_GameObjectDesc;
 	ComponentStringDesc m_CurrComponentDesc;
-	size_t m_PrevIndent = 0;
+
+	std::fstream& m_PrefabFile;
+
+	std::string m_ReturnedLine;
+
+	size_t m_PrevIndent;
+	size_t m_CurrIndent;
+	size_t m_StartIndent;
 };
 

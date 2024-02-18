@@ -14,20 +14,62 @@ std::unique_ptr<GameObject> PrefabLoader::LoadPrefab(const char* file_path)
         return nullptr;
     }
 
-    PrefabLoader prefab_loader;
-    std::unique_ptr<GameObject> prefab = prefab_loader.LoadPrefab(prefab_file);
+    PrefabLoader prefab_loader(prefab_file, 0);
+    std::unique_ptr<GameObject> prefab = prefab_loader.LoadPrefab();
 
     prefab_file.close();
     return prefab;
 }
 
-std::unique_ptr<GameObject> PrefabLoader::LoadPrefab(std::fstream& file)
+PrefabLoader::PrefabLoader(std::fstream& prefab_file, size_t start_indent)
+    : m_PrefabFile(prefab_file)
+    , m_StartIndent(start_indent)
+    , m_PrevIndent(start_indent)
+    , m_CurrIndent(start_indent)
+    , m_ReturnedLine("")
 {
+
+}
+
+std::unique_ptr<GameObject> PrefabLoader::LoadPrefab()
+{
+    std::string first_unconsumed_line;
+
+    std::unique_ptr<GameObjectStringDesc> prefab_serialized = LoadGameObject(first_unconsumed_line);
+    FE_ASSERT(first_unconsumed_line == "", "All lines should be consumed");
+
+    return GameObjectSerializer::DeserializeGameObject(*prefab_serialized);
+}
+
+std::unique_ptr<GameObjectStringDesc> PrefabLoader::LoadGameObject(std::string& first_unconsumed_line)
+{
+    first_unconsumed_line = "";
+
+    FE_ASSERT(m_GameObjectDesc == nullptr, "Previous GameObject hasn't been moved");
+
+    m_GameObjectDesc = std::make_unique<GameObjectStringDesc>();
+
     char line[256];
-    while (!file.eof())
+    while (!m_PrefabFile.eof())
     {
-        file.getline(line, 256);
-        DispatchLine(line);
+        std::string line_str;
+        if (m_ReturnedLine.size() > 0)
+        {
+            line_str = m_ReturnedLine;
+            m_ReturnedLine = "";
+        }
+        else
+        {
+            m_PrefabFile.getline(line, 256);
+            line_str = line;
+        }
+
+        bool line_consumed = DispatchLine(line_str);
+        if (!line_consumed)
+        {
+            first_unconsumed_line = line_str;
+            break;
+        }
     }
 
     // Go to the most outer state
@@ -36,26 +78,38 @@ std::unique_ptr<GameObject> PrefabLoader::LoadPrefab(std::fstream& file)
         GoToOuterParsingState();
     }
 
-    return GameObjectSerializer::DeserializeGameObject(m_GameObjectDesc);
+    return std::move(m_GameObjectDesc);
 }
 
-void PrefabLoader::DispatchLine(const std::string& line)
+bool PrefabLoader::DispatchLine(const std::string& line)
 {
-    size_t curr_indent = line.find('-');
-    if (curr_indent >= line.size() - 1)
-        return;
+    m_CurrIndent = line.find('-');
+    if (m_CurrIndent >= line.size() - 1)
+    {
+        if (line.size() > 0)
+        {
+            FE_DATA_ERROR("No '-' at the start of line");
+        }
+        return true;
+    }
 
-    std::string line_unindented = line.substr(curr_indent + 1);
+    if (m_CurrIndent < m_StartIndent)
+    {
+        // Scope of the outer GameObject
+        return false;
+    }
+
+    std::string line_unindented = line.substr(m_CurrIndent + 1);
     
-    if (curr_indent == 0 && m_ParsingState != ParsingState::GameObjectParams)
+    if (m_CurrIndent == 0 && m_ParsingState != ParsingState::GameObjectParams)
     {
         SetParsingState(ParsingState::GameObjectParams);
     }
-    else if (curr_indent < m_PrevIndent)
+    else if (m_CurrIndent < m_PrevIndent)
     {
         GoToOuterParsingState();
     }
-    else if (curr_indent > m_PrevIndent)
+    else if (m_CurrIndent > m_PrevIndent)
     {
         SetParsingState(m_ParsingStateAfterIndent);
     }
@@ -66,7 +120,9 @@ void PrefabLoader::DispatchLine(const std::string& line)
 
     ParseLineForCurrentState(line_unindented);
 
-    m_PrevIndent = curr_indent;
+    m_PrevIndent = m_CurrIndent;
+
+    return true;
 }
 
 void PrefabLoader::ParseGameObjectParamLine(const std::string& line)
@@ -80,9 +136,13 @@ void PrefabLoader::ParseGameObjectParamLine(const std::string& line)
 
         SetParsingStateAfterIndent(ParsingState::ComponentDefinitions);
     }
+    else if (key == "children")
+    {
+        SetParsingStateAfterIndent(ParsingState::ChildDefinitions);
+    }
     else
     {
-        m_GameObjectDesc.params.insert({ key, value });
+        m_GameObjectDesc->params.insert({ key, value });
     }
 }
 
@@ -107,10 +167,25 @@ void PrefabLoader::ParseComponentFieldLine(const std::string& line)
 
 void PrefabLoader::FinalizeComponentLoading()
 {
-    m_GameObjectDesc.components.push_back(std::make_unique<ComponentStringDesc>(m_CurrComponentDesc));
+    m_GameObjectDesc->components.push_back(std::make_unique<ComponentStringDesc>(m_CurrComponentDesc));
 
     m_CurrComponentDesc.type = "";
     m_CurrComponentDesc.fields.clear();
+}
+
+void PrefabLoader::ParseChildTypeLine(const std::string& line)
+{
+    std::string line_trimmed = line;
+    TrimWhitespaces(line_trimmed);
+    if (line_trimmed == "GameObject")
+    {
+        PrefabLoader child_loader(m_PrefabFile, m_CurrIndent + 1);
+        m_GameObjectDesc->children.push_back(child_loader.LoadGameObject(m_ReturnedLine));
+    }
+    else // TODO: prefab reference
+    {
+        FE_DATA_ERROR("Unknown GameObject type");
+    }
 }
 
 void PrefabLoader::SetParsingState(ParsingState state)
@@ -135,6 +210,7 @@ void PrefabLoader::GoToOuterParsingState()
     switch (m_ParsingState)
     {
     case ParsingState::ComponentDefinitions:
+    case ParsingState::ChildDefinitions:
         SetParsingState(ParsingState::GameObjectParams);
         break;
     case ParsingState::SpecificComponentDefinition:
@@ -155,6 +231,9 @@ void PrefabLoader::ParseLineForCurrentState(const std::string& line)
         break;
     case ParsingState::SpecificComponentDefinition:
         ParseComponentFieldLine(line);
+        break;
+    case ParsingState::ChildDefinitions:
+        ParseChildTypeLine(line);
         break;
     default:
         FE_ASSERT(false, "Missing parsing state");

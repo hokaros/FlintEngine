@@ -91,6 +91,6 @@ void GameObjectSerializer::DeserializeChildren(GameObject& game_object, const Ga
 {
 	for (const std::unique_ptr<GameObjectStringDesc>& child : desc.children)
 	{
-		// TODO
+		game_object.AddChild(DeserializeGameObject(*child));
 	}
 }
