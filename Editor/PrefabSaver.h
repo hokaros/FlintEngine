@@ -21,7 +21,5 @@ private:
 
 private:
 	IndentPrinter m_IndentPrinter;
-	std::fstream& m_PrefabFile;
-	size_t m_StartIndent;
 };
 

@@ -20,9 +20,7 @@ void PrefabSaver::SavePrefab(const GameObject& prefab, const char* file_path)
 }
 
 PrefabSaver::PrefabSaver(std::fstream& prefab_file, size_t start_indent)
-    : m_PrefabFile(prefab_file)
-    , m_StartIndent(start_indent)
-    , m_IndentPrinter(prefab_file, start_indent)
+    : m_IndentPrinter(prefab_file, start_indent)
 {
 
 }
