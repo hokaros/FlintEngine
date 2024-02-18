@@ -51,7 +51,10 @@ void Bullet::OnCollision(BoxCollider& collider)
 		onPlayerCollision(other_game_object, damage);
 	}
 
-	GameObject::Destroy(m_GameObject); // zniszczenie pocisku
+	if (other_game_object.FindComponent<Bullet>() == nullptr)
+	{
+		GameObject::Destroy(m_GameObject); // zniszczenie pocisku
+	}
 }
 
 std::unique_ptr<ObjectComponent> Bullet::Copy()
