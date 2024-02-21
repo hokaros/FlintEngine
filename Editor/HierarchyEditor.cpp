@@ -1,45 +1,64 @@
 #include "HierarchyEditor.h"
 
+void HierarchyEditor::Init(SelectedGameObjectManager& selected_game_object_manager)
+{
+	m_SelectedGameObjectManager = &selected_game_object_manager;
+}
+
 void HierarchyEditor::SetGameObject(std::shared_ptr<EditorGameObjectHandle> handle)
 {
-	m_GameObjectHandle = handle;
+	m_GameObjectHandle = std::move(handle);
 }
 
 void HierarchyEditor::Render()
 {
 	if (ImGui::Begin("Hierarchy Editor"))
 	{
-		GameObject* go = GetGameObject();
-		if (go == nullptr)
+		if (m_GameObjectHandle == nullptr)
 		{
 			ImGui::Text("No game object selected");
 		}
 		else
 		{
-			RenderObjectHierarchy(*go);
+			RenderObjectHierarchy(m_GameObjectHandle);
 		}
 	}
 	ImGui::End();
 }
 
-void HierarchyEditor::RenderObjectHierarchy(GameObject& root_object)
+void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> root_object_handle)
 {
-	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	if (ImGui::TreeNode(root_object.GetName().c_str()))
+	if(root_object_handle == nullptr)
+		return;
+
+	GameObject* root_object = root_object_handle->GetGameObject();
+	if (root_object == nullptr)
+		return;
+
+	constexpr ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+	const bool is_selected = m_SelectedGameObjectManager->IsGameObjectSelected(*root_object);
+	ImGuiTreeNodeFlags node_flags = base_flags;
+	if (is_selected)
 	{
-		for (const std::unique_ptr<GameObject>& child : root_object.GetChildren())
+		node_flags |= ImGuiTreeNodeFlags_Selected;
+	}
+
+	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	const bool node_open = ImGui::TreeNodeEx(root_object->GetName().c_str(), node_flags);
+	if (ImGui::IsItemClicked())
+	{
+		m_SelectedGameObjectManager->SelectGameObject(root_object_handle);
+	}
+
+	if (node_open)
+	{
+		for (const std::unique_ptr<GameObject>& child : root_object->GetChildren())
 		{
-			RenderObjectHierarchy(*child);
+			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorGameObjectHandle>(child.get());
+			RenderObjectHierarchy(child_handle);
 		}
 
 		ImGui::TreePop();
 	}
-}
-
-GameObject* HierarchyEditor::GetGameObject() const
-{
-	if (m_GameObjectHandle == nullptr)
-		return nullptr;
-
-	return m_GameObjectHandle->GetGameObject();
 }

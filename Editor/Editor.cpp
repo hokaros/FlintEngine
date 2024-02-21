@@ -4,6 +4,9 @@ Editor::Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int
     : m_ClearColor(clear_color)
     , m_SceneEditor(renderer, screenWidth, screenHeight)
 {
+    m_GameObjectEditor.Init(m_SelectedGameObjectManager);
+    m_HierarchyEditor.Init(m_SelectedGameObjectManager);
+
     m_AssetExplorer.RegisterAssetListener(this);
 }
 
@@ -20,8 +23,8 @@ void Editor::Render()
 void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
 {
     std::shared_ptr<EditorPrefabHandle> prefab_shared = std::shared_ptr<EditorPrefabHandle>(std::move(prefab));
-    m_GameObjectEditor.SetGameObject(prefab_shared);
     m_HierarchyEditor.SetGameObject(prefab_shared);
+    m_SelectedGameObjectManager.SelectGameObject(prefab_shared);
 }
 
 void Editor::RenderEditorConfigWindow()

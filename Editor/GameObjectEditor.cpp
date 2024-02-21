@@ -1,5 +1,10 @@
 #include "GameObjectEditor.h"
 
+void GameObjectEditor::Init(SelectedGameObjectManager& selected_game_object_manager)
+{
+    selected_game_object_manager.SubscribeSelection(*this);
+}
+
 void GameObjectEditor::Render()
 {
     ImGui::Begin("GameObject Editor");
@@ -16,9 +21,9 @@ void GameObjectEditor::Render()
     ImGui::End();
 }
 
-void GameObjectEditor::SetGameObject(std::shared_ptr<EditorGameObjectHandle> game_object)
+void GameObjectEditor::OnGameObjectSelected(EditorGameObjectHandle* game_object)
 {
-    m_GameObjectHandle = std::move(game_object);
+    m_GameObjectHandle = game_object;
 
     if (m_GameObjectHandle == nullptr)
         return;
