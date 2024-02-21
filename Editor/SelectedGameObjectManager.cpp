@@ -25,6 +25,17 @@ void SelectedGameObjectManager::SubscribeSelection(IGameObjectSelectionObserver&
 	m_SelectionSubscribers.push_back(&subscriber);
 }
 
+void SelectedGameObjectManager::OnGameObjectDestroyed(GameObject& game_object)
+{
+	if (m_SelectedGameObject == nullptr)
+		return;
+
+	if (m_SelectedGameObject->GetGameObject() == &game_object)
+	{
+		SelectGameObject(nullptr);
+	}
+}
+
 void SelectedGameObjectManager::NotifyGameObjectSelected() const
 {
 	for (IGameObjectSelectionObserver* subscriber : m_SelectionSubscribers)

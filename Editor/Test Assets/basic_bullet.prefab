@@ -24,3 +24,9 @@
 			- RectangleRenderer:
 				- m_Color: 0,ff,0
 		- children:
+			- GameObject
+				- m_Name: Grand Child
+				- m_Pos: 0.000000, 0.000000
+				- m_Size: 1.000000, 1.000000
+				- components:
+				- children:

@@ -13,7 +13,8 @@ public:
 	void Render();
 
 private:
-	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> root_object);
+	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object, bool is_root);
+	void RenderObjectContextMenu(GameObject& game_object, bool is_root);
 
 private:
 	std::shared_ptr<EditorGameObjectHandle> m_GameObjectHandle;

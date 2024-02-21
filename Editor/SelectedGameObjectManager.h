@@ -18,6 +18,9 @@ public:
 
 	void SubscribeSelection(IGameObjectSelectionObserver& subscriber);
 
+	// Should be called when any GameObject in the editor is destroyed
+	void OnGameObjectDestroyed(GameObject& game_object);
+
 private:
 	void NotifyGameObjectSelected() const;
 

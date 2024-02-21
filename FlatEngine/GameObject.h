@@ -14,6 +14,7 @@
 class PrefabFactory;
 class GameObjectSerializer;
 class AssetExplorer;
+class HierarchyEditor;
 class GameObject;
 
 class PrefabCreationKey
@@ -28,6 +29,7 @@ private:
 	friend PrefabFactory;
 	friend GameObjectSerializer;
 	friend AssetExplorer;
+	friend HierarchyEditor;
 	friend GameObject;
 };
 
