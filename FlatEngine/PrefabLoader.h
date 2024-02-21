@@ -32,7 +32,7 @@ private:
 
 	void SetParsingState(ParsingState state);
 	void SetParsingStateAfterIndent(ParsingState state);
-	void GoToOuterParsingState();
+	void GoToOuterParsingState(size_t levels);
 	void ParseLineForCurrentState(const std::string& line);
 
 	static void SplitLineToKeyAndValue(const std::string& line, std::string& key, std::string& value);

@@ -75,7 +75,7 @@ std::unique_ptr<GameObjectStringDesc> PrefabLoader::LoadGameObject(std::string& 
     // Go to the most outer state
     while (m_ParsingState != ParsingState::GameObjectParams)
     {
-        GoToOuterParsingState();
+        GoToOuterParsingState(m_PrevIndent);
     }
 
     return std::move(m_GameObjectDesc);
@@ -107,7 +107,7 @@ bool PrefabLoader::DispatchLine(const std::string& line)
     }
     else if (m_CurrIndent < m_PrevIndent)
     {
-        GoToOuterParsingState();
+        GoToOuterParsingState(m_PrevIndent - m_CurrIndent);
     }
     else if (m_CurrIndent > m_PrevIndent)
     {
@@ -205,17 +205,20 @@ void PrefabLoader::SetParsingStateAfterIndent(ParsingState state)
     m_ParsingStateAfterIndent = state;
 }
 
-void PrefabLoader::GoToOuterParsingState()
+void PrefabLoader::GoToOuterParsingState(size_t levels)
 {
-    switch (m_ParsingState)
+    for (size_t i = 0; i < levels; i++)
     {
-    case ParsingState::ComponentDefinitions:
-    case ParsingState::ChildDefinitions:
-        SetParsingState(ParsingState::GameObjectParams);
-        break;
-    case ParsingState::SpecificComponentDefinition:
-        SetParsingState(ParsingState::ComponentDefinitions);
-        break;
+        switch (m_ParsingState)
+        {
+        case ParsingState::ComponentDefinitions:
+        case ParsingState::ChildDefinitions:
+            SetParsingState(ParsingState::GameObjectParams);
+            break;
+        case ParsingState::SpecificComponentDefinition:
+            SetParsingState(ParsingState::ComponentDefinitions);
+            break;
+        }
     }
 }
 

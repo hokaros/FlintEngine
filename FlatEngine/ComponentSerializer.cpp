@@ -23,7 +23,7 @@ std::unique_ptr<ObjectComponent> ComponentSerializer::DeserializeComponent(const
 	ComponentDefinition* comp_def = ComponentDefinitionManager::GetInstance().GetDefinitionFromName(component_desc.type);
 	if (comp_def == nullptr)
 	{
-		FE_DATA_ERROR("Invalid component name");
+		FE_DATA_ERROR("Invalid component name: %s", component_desc.type.c_str());
 		return nullptr;
 	}
 
