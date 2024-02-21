@@ -31,6 +31,11 @@ void SceneEditor::Render()
 	ImGui::End(); // Scene Editor
 }
 
+Scene& SceneEditor::GetScene()
+{
+	return m_Scene;
+}
+
 void SceneEditor::AddExampleObjectsToScene()
 {
 	GameObject* game_object = GameObject::Instantiate(m_Scene);

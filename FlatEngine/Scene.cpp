@@ -55,3 +55,8 @@ bool Scene::ShouldRender(GameObject* gameObject)
 {
 	return true;
 }
+
+ObjectManager& Scene::GetObjectManager()
+{
+	return m_ObjectManager;
+}

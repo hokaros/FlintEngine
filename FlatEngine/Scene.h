@@ -14,6 +14,8 @@ public:
 	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
 	void SetBackgroundColor(const Rgb8& color);
 
+	ObjectManager& GetObjectManager();
+
 private:
 	void RenderBackground();
 

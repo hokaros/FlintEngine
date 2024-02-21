@@ -10,6 +10,8 @@ public:
 
 	void Render();
 
+	Scene& GetScene();
+
 private:
 	void AddExampleObjectsToScene();
 

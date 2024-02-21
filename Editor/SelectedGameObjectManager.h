@@ -1,4 +1,7 @@
 #pragma once
+#include "../FlatEngine/ObjectManager.h"
+#include "../FlatEngine/Scene.h"
+
 #include "AssetHandles.h"
 
 class IGameObjectSelectionObserver
@@ -10,16 +13,18 @@ public:
 };
 
 class SelectedGameObjectManager
+	: public IObjectManagerObserver
 {
 public:
+	void OnSceneLoaded(Scene& new_scene);
+
 	void SelectGameObject(std::shared_ptr<EditorGameObjectHandle> game_object);
 	EditorGameObjectHandle* GetSelectedGameObject() const;
 	bool IsGameObjectSelected(const GameObject& game_object) const;
 
 	void SubscribeSelection(IGameObjectSelectionObserver& subscriber);
 
-	// Should be called when any GameObject in the editor is destroyed
-	void OnGameObjectDestroyed(GameObject& game_object);
+	virtual void OnObjectDestroying(GameObject& game_object) override;
 
 private:
 	void NotifyGameObjectSelected() const;

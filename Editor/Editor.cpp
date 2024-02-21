@@ -7,6 +7,8 @@ Editor::Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int
     m_GameObjectEditor.Init(m_SelectedGameObjectManager);
     m_HierarchyEditor.Init(m_SelectedGameObjectManager);
 
+    m_SelectedGameObjectManager.OnSceneLoaded(m_SceneEditor.GetScene()); // TODO: do this on every scene load
+
     m_AssetExplorer.RegisterAssetListener(this);
 }
 

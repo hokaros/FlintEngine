@@ -82,7 +82,6 @@ void HierarchyEditor::RenderObjectContextMenu(GameObject& game_object, bool is_r
 		if (ImGui::Button("Delete"))
 		{
 			GameObject::Destroy(&game_object);
-			m_SelectedGameObjectManager->OnGameObjectDestroyed(game_object); // TODO: Let's make a derived ObjectManager that would handle this
 		}
 	}
 	ImGui::EndDisabled();

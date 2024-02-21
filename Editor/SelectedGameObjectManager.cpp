@@ -1,5 +1,10 @@
 #include "SelectedGameObjectManager.h"
 
+void SelectedGameObjectManager::OnSceneLoaded(Scene& new_scene)
+{
+	new_scene.GetObjectManager().Subscribe(*this);
+}
+
 void SelectedGameObjectManager::SelectGameObject(std::shared_ptr<EditorGameObjectHandle> game_object)
 {
 	m_SelectedGameObject = game_object;
@@ -25,7 +30,7 @@ void SelectedGameObjectManager::SubscribeSelection(IGameObjectSelectionObserver&
 	m_SelectionSubscribers.push_back(&subscriber);
 }
 
-void SelectedGameObjectManager::OnGameObjectDestroyed(GameObject& game_object)
+void SelectedGameObjectManager::OnObjectDestroying(GameObject& game_object)
 {
 	if (m_SelectedGameObject == nullptr)
 		return;

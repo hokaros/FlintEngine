@@ -26,6 +26,17 @@ void ObjectManager::DestroyObjectImpl(GameObject* gameObject, bool detach)
 	}
 }
 
+void ObjectManager::NotifyObjectDestroying(GameObject* object)
+{
+	if (object == nullptr)
+		return;
+
+	for (IObjectManagerObserver* observer : m_Observers)
+	{
+		observer->OnObjectDestroying(*object);
+	}
+}
+
 ObjectManager::ObjectManager() 
 {
 	if (s_Main == nullptr) 
@@ -62,6 +73,8 @@ void ObjectManager::AddToMessageSubscribers(GameObject* gameObject)
 
 void ObjectManager::DestroyObject(GameObject* gameObject) 
 {
+	NotifyObjectDestroying(gameObject);
+
 	DestroyObjectImpl(gameObject, true);
 }
 
@@ -106,6 +119,11 @@ void ObjectManager::ActivateNewObjects()
 const std::list<GameObject*>& ObjectManager::GetAllMessageSubscribers() const 
 {
 	return m_MessageSubscribers;
+}
+
+void ObjectManager::Subscribe(IObjectManagerObserver& observer)
+{
+	m_Observers.push_back(&observer);
 }
 
 void ObjectManager::Clear() 
