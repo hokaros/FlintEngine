@@ -72,7 +72,12 @@ void PrefabSaver::SaveChildren(const std::vector<std::unique_ptr<GameObjectStrin
     for (const std::unique_ptr<GameObjectStringDesc>& child : children)
     {
         // TODO: we can just save the path in case of prefab-children
+        m_IndentPrinter.PrintLine("GameObject");
+        m_IndentPrinter.IncreaseIndent();
+
         SaveGameObject(*child);
+
+        m_IndentPrinter.DecreaseIndent();
     }
 
     m_IndentPrinter.DecreaseIndent();
