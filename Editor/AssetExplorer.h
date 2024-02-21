@@ -18,6 +18,8 @@ public:
 	void RegisterAssetListener(IAssetListener* listener);
 	void Render();
 
+	GameObject* GetPrefab(const std::string& path);
+
 private:
 	std::unique_ptr<EditorPrefabHandle> OpenPrefab(const std::string& prefab_path); // This will create a prefab if a directory exists
 	std::string AppendPathToRootDirectory(const std::string& path);

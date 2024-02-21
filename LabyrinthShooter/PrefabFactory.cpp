@@ -60,37 +60,7 @@ void PrefabFactory::CreateSuperFirearmPrefab()
 
 void PrefabFactory::CreatePlayerPrefab()
 {
-	constexpr float player_speed = 300.0f;
-	constexpr Vector player_size = Vector(20, 20);
-	constexpr int player_max_health = 3;
-
-	std::unique_ptr<GameObject> player = std::make_unique<GameObject>(player_size, PrefabCreationKey());
-
-	player->AddComponent(std::make_unique<ConstantMover>(player_speed));
-	player->AddComponent(std::make_unique<BoxCollider>(Vector::ZERO, player_size));
-	player->AddComponent(std::make_unique<PlayerEquipment>());
-	player->AddComponent(std::make_unique<Health>(player_max_health, nullptr));
-	player->AddComponent(std::make_unique<PlayerController>());
-
-	// Broñ
-	const GameObject& basic_bullet = GetPrefab(PrefabFactory::EPrefabId::BasicBullet);
-	const GameObject& super_bullet = GetPrefab(PrefabFactory::EPrefabId::SuperBullet);
-
-	// Zwyk³a broñ
-	std::unique_ptr<GameObject> basic_weapon = std::make_unique<GameObject>(
-		GetPrefab(PrefabFactory::EPrefabId::BasicFirearm), PrefabCreationKey()
-	);
-	basic_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
-	player->AddChild(std::move(basic_weapon));
-
-	// Silna broñ
-	std::unique_ptr<GameObject> super_weapon = std::make_unique<GameObject>(
-		GetPrefab(PrefabFactory::EPrefabId::SuperFirearm), PrefabCreationKey()
-	);
-	super_weapon->SetPosition(player->GetPosition() + Vector(Direction::EAST) * player->GetSize().x);
-	player->AddChild(std::move(super_weapon));
-
-	player->AddComponent(std::make_unique<SpriteRenderer>(s_PlayerBitmapPath));
+	std::unique_ptr<GameObject> player = PrefabLoader::LoadPrefab("resources/player.prefab");
 
 	InsertPrefab(EPrefabId::Player, std::move(player));
 }

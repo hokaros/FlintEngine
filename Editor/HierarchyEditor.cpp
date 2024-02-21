@@ -1,8 +1,9 @@
 #include "HierarchyEditor.h"
 
-void HierarchyEditor::Init(SelectedGameObjectManager& selected_game_object_manager)
+void HierarchyEditor::Init(SelectedGameObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer)
 {
 	m_SelectedGameObjectManager = &selected_game_object_manager;
+	m_AssetExplorer = &asset_explorer;
 }
 
 void HierarchyEditor::SetGameObject(std::shared_ptr<EditorGameObjectHandle> handle)
@@ -77,6 +78,21 @@ void HierarchyEditor::RenderObjectContextMenu(GameObject& game_object, bool is_r
 		ImGui::CloseCurrentPopup();
 	}
 
+	if (ImGui::Button("Add prefab child"))
+	{
+		ImGui::OpenPopup("Prefab path");
+	}
+	std::string prefab_path;
+	if (GetPrefabPathModal(prefab_path))
+	{
+		std::unique_ptr<GameObject> prefab_copy = CreatePrefabCopy(prefab_path);
+		if (prefab_copy != nullptr)
+		{
+			game_object.AddChild(std::move(prefab_copy));
+			ImGui::CloseCurrentPopup();
+		}
+	}
+
 	ImGui::BeginDisabled(is_root); // Child nodes only
 	{
 		if (ImGui::Button("Delete"))
@@ -85,4 +101,40 @@ void HierarchyEditor::RenderObjectContextMenu(GameObject& game_object, bool is_r
 		}
 	}
 	ImGui::EndDisabled();
+}
+
+bool HierarchyEditor::GetPrefabPathModal(std::string& path)
+{
+	bool has_accepted = false;
+
+	if (ImGui::BeginPopupModal("Prefab path", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::InputText("Prefab path", m_FilePathBuffer, s_FilePathSize);
+
+		if (ImGui::Button("Add"))
+		{
+			path = m_FilePathBuffer;
+			has_accepted = true;
+
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ImGui::Button("Cancel")) 
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	return has_accepted;
+}
+
+std::unique_ptr<GameObject> HierarchyEditor::CreatePrefabCopy(const std::string& prefab_path)
+{
+	GameObject* prefab = m_AssetExplorer->GetPrefab(prefab_path);
+	if (prefab == nullptr)
+		return nullptr;
+
+	return std::make_unique<GameObject>(*prefab, PrefabCreationKey());
 }

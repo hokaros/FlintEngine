@@ -2,6 +2,7 @@
 
 #include "../FlatEngine/utility.h"
 #include "../FlatEngine/PrefabLoader.h"
+#include "../FlatEngine/AssetManager.h"
 #include "PrefabSaver.h"
 
 static constexpr const char* s_RootDirectory = "Test Assets";
@@ -42,6 +43,12 @@ void AssetExplorer::Render()
 	}
 
 	ImGui::End();
+}
+
+GameObject* AssetExplorer::GetPrefab(const std::string& path)
+{
+	std::string full_path = AppendPathToRootDirectory(path);
+	return AssetManager::GetInstance()->GetPrefab(full_path);
 }
 
 
