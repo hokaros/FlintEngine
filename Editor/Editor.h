@@ -4,6 +4,7 @@
 #include "GameObjectEditor.h"
 #include "AssetExplorer.h"
 #include "SceneEditor.h"
+#include "HierarchyEditor.h"
 
 class Editor
 	: private IAssetListener
@@ -22,6 +23,7 @@ private:
 	AssetExplorer m_AssetExplorer;
 	AssetManager m_AssetManager;
 	SceneEditor m_SceneEditor;
+	HierarchyEditor m_HierarchyEditor;
 
 	ImVec4& m_ClearColor;
 };

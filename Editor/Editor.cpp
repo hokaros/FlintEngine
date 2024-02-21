@@ -14,11 +14,14 @@ void Editor::Render()
     m_GameObjectEditor.Render();
     m_AssetExplorer.Render();
     m_SceneEditor.Render();
+    m_HierarchyEditor.Render();
 }
 
 void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
 {
-    m_GameObjectEditor.SetGameObject(std::move(prefab));
+    std::shared_ptr<EditorPrefabHandle> prefab_shared = std::shared_ptr<EditorPrefabHandle>(std::move(prefab));
+    m_GameObjectEditor.SetGameObject(prefab_shared);
+    m_HierarchyEditor.SetGameObject(prefab_shared);
 }
 
 void Editor::RenderEditorConfigWindow()

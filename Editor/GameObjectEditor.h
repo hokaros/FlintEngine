@@ -8,7 +8,7 @@ class GameObjectEditor
 {
 public:
 	void Render();
-	void SetGameObject(std::unique_ptr<EditorGameObjectHandle> game_object);
+	void SetGameObject(std::shared_ptr<EditorGameObjectHandle> game_object);
 
 private:
 	void LoadAddableComponents();
@@ -28,7 +28,7 @@ private:
 private:
 	static constexpr size_t s_NameMaxSize = 64;
 
-	std::unique_ptr<EditorGameObjectHandle> m_GameObjectHandle = nullptr;
+	std::shared_ptr<EditorGameObjectHandle> m_GameObjectHandle = nullptr;
 	std::vector<std::unique_ptr<ComponentEditor>> m_ComponentEditors;
 
 	std::vector<const char*> m_AddableComponentNames;

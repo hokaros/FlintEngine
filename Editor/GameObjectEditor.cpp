@@ -16,7 +16,7 @@ void GameObjectEditor::Render()
     ImGui::End();
 }
 
-void GameObjectEditor::SetGameObject(std::unique_ptr<EditorGameObjectHandle> game_object)
+void GameObjectEditor::SetGameObject(std::shared_ptr<EditorGameObjectHandle> game_object)
 {
     m_GameObjectHandle = std::move(game_object);
 
