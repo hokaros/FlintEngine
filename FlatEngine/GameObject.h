@@ -115,7 +115,7 @@ public:
 	const std::vector<std::unique_ptr<GameObject>>& GetChildren() const;
 	GameObject* GetParent() const;
 
-	~GameObject() = default; // TODO: we should also delete child objects
+	~GameObject() = default;
 
 protected:
 	GameObject();
