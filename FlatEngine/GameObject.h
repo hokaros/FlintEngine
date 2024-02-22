@@ -94,7 +94,7 @@ public:
 	double GetRotation() const;
 	Vector LookingDirection() const;
 	Vector GetMiddle() const;
-	// Piksele, w których ten obiekt ma collidera
+	// Piksele, które zajmuje ten obiekt
 	std::vector<VectorInt>* GetPixels() const;
 
 	void SetEnabled(bool enabled);
