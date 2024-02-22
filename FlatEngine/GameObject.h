@@ -126,8 +126,6 @@ protected:
 protected:
 	std::list<std::unique_ptr<ObjectComponent>> components;
 
-	bool insideOutCollision = false;
-
 private:
 	bool isEnabled = true;
 
@@ -140,8 +138,6 @@ private:
 
 	GameObject* parent = nullptr;
 	std::vector<std::unique_ptr<GameObject>> children;
-
-	std::list<function<void(GameObject*)>> onDestroyedChanged;
 };
 
 
