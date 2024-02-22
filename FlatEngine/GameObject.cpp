@@ -420,17 +420,6 @@ std::vector<VectorInt>* GameObject::GetPixels() const
 	return pixels;
 }
 
-void GameObject::SetDestroyed(bool destroyed) 
-{
-	isEnabled = !destroyed;
-
-	for (function<void(GameObject*)> handler : onDestroyedChanged) 
-	{
-		if (handler)
-			handler(this);
-	}
-}
-
 void GameObject::SetEnabled(bool enabled) 
 {
 	isEnabled = enabled;
@@ -441,19 +430,9 @@ void GameObject::SetEnabled(bool enabled)
 	}
 }
 
-bool GameObject::IsDestroyed() const 
-{
-	return !isEnabled;
-}
-
 bool GameObject::IsEnabled() const 
 {
 	return isEnabled;
-}
-
-void GameObject::SubscribeDestroyed(function<void(GameObject*)> handler) 
-{
-	onDestroyedChanged.push_back(handler);
 }
 
 std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab(PrefabCreationKey key)

@@ -45,8 +45,6 @@ class GameObject
 {
 public:
 	bool renderUnseen = false;
-	// Czy obiekt mo¿e byæ niszczony przez pociski
-	bool isDestroyable = false;
 
 	std::function<void(GameObject& collider)> onCollision;
 public:
@@ -100,12 +98,8 @@ public:
 	// Piksele, w których ten obiekt ma collidera
 	std::vector<VectorInt>* GetPixels() const;
 
-	// Odwracalne zniszczenie obiektu
-	void SetDestroyed(bool destroyed);
 	void SetEnabled(bool enabled);
-	bool IsDestroyed() const;
 	bool IsEnabled() const;
-	void SubscribeDestroyed(function<void(GameObject*)> handler);
 
 	void SetPosition(const Vector& newPosition);
 	void Translate(const Vector& offset); // przesuniêcie

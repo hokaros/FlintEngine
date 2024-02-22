@@ -1,6 +1,8 @@
 #include "PowerBullet.h"
+
 #include "../FlatEngine/ObjectManager.h"
 #include "../FlatEngine/GameObject.h"
+#include "Destroyable.h"
 
 DEFINE_COMPONENT_DERIVED(PowerBullet, Bullet);
 
@@ -25,9 +27,10 @@ std::unique_ptr<ObjectComponent> PowerBullet::Copy()
 
 void PowerBullet::OnCollision(BoxCollider& collider) 
 {
-	if (collider.GetOwner().isDestroyable) 
+	Destroyable* destroyable = collider.GetOwner().FindComponent<Destroyable>();
+	if (destroyable != nullptr)
 	{
-		collider.GetOwner().SetDestroyed(true);
+		destroyable->SetDestroyed(true);
 
 		DecreaseHealth();
 	}

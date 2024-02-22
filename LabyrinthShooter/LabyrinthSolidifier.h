@@ -3,6 +3,7 @@
 #include "../FlatEngine/GameObject.h"
 #include "../FlatEngine/RectangleRenderer.h"
 #include "../LabyrinthShooterBase/Regenerable.h"
+#include "../LabyrinthShooterBase/Destroyable.h"
 #include "../FlatEngine/Window.h"
 #include "ColliderMemory.h"
 
@@ -68,6 +69,6 @@ private:
 	void BuildBorder();
 	GameObject** BuildGateWall(Direction side);
 
-	void OnWallDestroyedChanged(GameObject* wall);
+	void OnWallDestroyedChanged(Destroyable& wall);
 };
 

@@ -4,13 +4,20 @@
 DEFINE_COMPONENT(Regenerable);
 
 Regenerable::Regenerable(double regenerationTime)
-	: regenerationTime(regenerationTime) 
+	: m_RegenerationTime(regenerationTime) 
 {
 }
 
 void Regenerable::Awake()
 {
-	m_GameObject->SubscribeDestroyed([this](GameObject*) {OnDestroyed(); });
+	destroyable = m_GameObject->FindComponent<Destroyable>();
+	if (destroyable == nullptr)
+	{
+		FE_DATA_ERROR("Regenerable without destroyable: %s", m_GameObject->GetName().c_str());
+		return;
+	}
+
+	destroyable->SubscribeDestroyed([this](Destroyable&) {OnDestroyed(); });
 }
 
 void Regenerable::Update() 
@@ -20,18 +27,18 @@ void Regenerable::Update()
 
 void Regenerable::OnDestroyed() 
 {
-	if (!m_GameObject->IsDestroyed())
+	if (!destroyable->IsDestroyed())
 		return; // tylko zniszczenie
 
 	Timer::Main()->InvokeOnNextFrame([this]() 
 		{
-		m_GameObject->SetDestroyed(false);
+		destroyable->SetDestroyed(false);
 		},
-	regenerationTime
+	m_RegenerationTime
 	);
 }
 
 std::unique_ptr<ObjectComponent> Regenerable::Copy()
 {
-	return std::make_unique<Regenerable>(regenerationTime);
+	return std::make_unique<Regenerable>(m_RegenerationTime);
 }

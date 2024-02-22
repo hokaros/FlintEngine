@@ -1,5 +1,6 @@
 #pragma once
 #include "../FlatEngine/ComponentDefinition.h"
+#include "Destroyable.h"
 
 class Regenerable :
 	public ObjectComponent
@@ -15,9 +16,11 @@ public:
 	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 private:
-	double regenerationTime = 1.0f;
+	void OnDestroyed();
 
 private:
-	void OnDestroyed();
+	double m_RegenerationTime = 1.0f;
+
+	Destroyable* destroyable = nullptr;
 };
 

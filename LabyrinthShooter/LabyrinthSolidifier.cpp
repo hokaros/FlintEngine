@@ -20,11 +20,15 @@ LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	{
 	// Stworzenie œcian
 	walls = new GameObject * [labyrinth.ActiveCount()];
-	function<void(GameObject*)> destroyedHandler = [this](GameObject* source) {OnWallDestroyedChanged(source); };
+	function<void(Destroyable&)> destroyedHandler = [this](Destroyable& source) {OnWallDestroyedChanged(source); };
 	for (int i = 0; i < labyrinth.ActiveCount(); i++) {
 		walls[i] = BuildWall(Vector(wallWidth, wallLength));
-		walls[i]->isDestroyable = true;
-		walls[i]->SubscribeDestroyed(destroyedHandler);
+
+		std::unique_ptr<Destroyable> destroyable = std::make_unique<Destroyable>();
+		destroyable->SubscribeDestroyed(destroyedHandler);
+		walls[i]->AddComponent(std::move(destroyable));
+
+		walls[i]->AddComponent(std::make_unique<Regenerable>(WALL_REGEN));
 	}
 
 	PlaceWalls(); // wstawienie œcian w odpowiednie miejsca
@@ -136,7 +140,6 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color) {
 	GameObject* wall = GameObject::Instantiate(size);
 
-	wall->AddComponent(std::make_unique<Regenerable>(WALL_REGEN));
 	std::unique_ptr<BoxCollider> collider = std::make_unique<BoxCollider>(Vector::ZERO, size);
 	collider->m_IsStatic = true;
 	wall->AddComponent(std::move(collider));
@@ -238,11 +241,11 @@ void LabyrinthSolidifier::Update() {
 	}
 }
 
-void LabyrinthSolidifier::OnWallDestroyedChanged(GameObject* wall) {
-	if (wall->IsDestroyed()) {
-		colliderMemory.Free(wall);
+void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall) {
+	if (wall.IsDestroyed()) {
+		colliderMemory.Free(&wall.GetOwner());
 	}
 	else {
-		colliderMemory.Claim(wall);
+		colliderMemory.Claim(&wall.GetOwner());
 	}
 }

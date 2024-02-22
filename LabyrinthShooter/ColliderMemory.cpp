@@ -28,7 +28,7 @@ void ColliderMemory::Refresh(GameObject** objects, size_t count) {
 	Clear();
 
 	for (size_t i = 0; i < count; i++) {
-		if (!objects[i]->IsDestroyed()) {
+		if (objects[i]->IsEnabled()) {
 			Claim(objects[i]);
 		}
 	}
