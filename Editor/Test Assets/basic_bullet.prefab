@@ -27,6 +27,8 @@
 			- GameObject
 				- m_Name: Grand Child
 				- m_Pos: 0.000000, 0.000000
-				- m_Size: 1.000000, 1.000000
+				- m_Size: 4.900000, 4.400000
 				- components:
+					- RectangleRenderer:
+						- m_Color: 21,0,0
 				- children:

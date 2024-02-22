@@ -30,7 +30,7 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 
 void GameObjectSerializer::SerializeComponents(const GameObject& game_object, GameObjectStringDesc& desc)
 {
-	for (const ObjectComponent* component : game_object.GetAllComponents())
+	for (const std::unique_ptr<ObjectComponent>& component : game_object.GetAllComponents())
 	{
 		desc.components.push_back(ComponentSerializer::SerializeComponent(*component));
 	}

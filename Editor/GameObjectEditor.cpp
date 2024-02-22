@@ -97,7 +97,7 @@ void GameObjectEditor::LoadComponents(GameObject& game_object)
     m_ComponentEditors.clear();
 
     size_t component_idx = 0;
-    for (ObjectComponent* component : game_object.GetAllComponents())
+    for (std::unique_ptr<ObjectComponent>& component : game_object.GetAllComponents())
     {
         std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(*component, component_idx);
         comp_editor->RegisterActionObserver(this);

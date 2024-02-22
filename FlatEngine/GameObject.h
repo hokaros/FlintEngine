@@ -63,8 +63,8 @@ public:
 	void AddComponent(std::unique_ptr<ObjectComponent> component);
 	void RemoveComponent(ObjectComponent* component);
 	void RemoveComponent(size_t component_index);
-	std::list<ObjectComponent*> GetAllComponents();
-	std::list<const ObjectComponent*> GetAllComponents() const;
+	std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents();
+	const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const;
 	ObjectComponent* GetComponent(size_t idx);
 	// Znajduje komponent okreœlonego typu
 	template<class T>
@@ -124,7 +124,7 @@ protected:
 	GameObject(const GameObject& other);
 
 protected:
-	std::list<std::unique_ptr<ObjectComponent>> components;
+	std::vector<std::unique_ptr<ObjectComponent>> components;
 
 private:
 	bool isEnabled = true;
@@ -133,8 +133,6 @@ private:
 	Vector size;
 	Vector position;
 	double rotation = 0.0;
-
-	double asyncRotation = 0.0;
 
 	GameObject* parent = nullptr;
 	std::vector<std::unique_ptr<GameObject>> children;
