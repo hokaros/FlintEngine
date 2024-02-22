@@ -46,7 +46,6 @@ class GameObject
 public:
 	bool renderUnseen = false;
 
-	std::function<void(GameObject& collider)> onCollision;
 public:
 	GameObject(PrefabCreationKey);
 	GameObject(const Vector& size, PrefabCreationKey);
