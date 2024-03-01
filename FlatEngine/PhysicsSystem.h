@@ -2,6 +2,7 @@
 #include <vector>
 #include "SystemCreationKey.h"
 
+#define BUMPOUT_SPEED 10000.0
 
 class BoxCollider;
 

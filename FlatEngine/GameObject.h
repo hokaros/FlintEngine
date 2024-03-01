@@ -9,7 +9,6 @@
 #include <optional>
 
 #include <list>
-#define BUMPOUT_SPEED 10000.0
 
 class PrefabFactory;
 class GameObjectSerializer;
