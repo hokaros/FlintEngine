@@ -102,11 +102,7 @@ bool GameObjectLoader::DispatchLine(const std::string& line)
 
     std::string line_unindented = line.substr(m_CurrIndent + 1);
     
-    if (m_CurrIndent == 0 && m_ParsingState != ParsingState::GameObjectParams)
-    {
-        SetParsingState(ParsingState::GameObjectParams);
-    }
-    else if (m_CurrIndent < m_PrevIndent)
+    if (m_CurrIndent < m_PrevIndent)
     {
         GoToOuterParsingState(m_PrevIndent - m_CurrIndent);
     }
