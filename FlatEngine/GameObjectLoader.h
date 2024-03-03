@@ -1,7 +1,17 @@
 #pragma once
 #include "../FlatEngine/GameObjectSerializer.h"
+#include "IndentFileParser.h"
+
+enum class GameObjectParsingState
+{
+	GameObjectParams,
+	ComponentDefinitions,
+	SpecificComponentDefinition,
+	ChildDefinitions
+};
 
 class GameObjectLoader
+	: private IndentFileParser<GameObjectParsingState>
 {
 public:
 	GameObjectLoader(std::fstream& file, size_t start_indent);
@@ -11,17 +21,11 @@ public:
 
 	static std::unique_ptr<GameObject> LoadPrefab(const char* file_path);
 
-private:
-	enum class ParsingState
-	{
-		GameObjectParams,
-		ComponentDefinitions,
-		SpecificComponentDefinition,
-		ChildDefinitions
-	};
+protected:
+	virtual void GoToOuterParsingState(size_t levels) override;
+	virtual void ParseLineForCurrentState(const std::string& line) override;
 
 private:
-	bool DispatchLine(const std::string& line);
 	void ParseGameObjectParamLine(const std::string& line);
 
 	void ParseComponentNameLine(const std::string& line);
@@ -31,26 +35,10 @@ private:
 
 	void ParseChildTypeLine(const std::string& line);
 
-	void SetParsingState(ParsingState state);
-	void SetParsingStateAfterIndent(ParsingState state);
-	void GoToOuterParsingState(size_t levels);
-	void ParseLineForCurrentState(const std::string& line);
-
-	static void SplitLineToKeyAndValue(const std::string& line, std::string& key, std::string& value);
-	static void TrimWhitespaces(std::string& symbol);
+	void SetParsingState(GameObjectParsingState state);
 
 private:
-	ParsingState m_ParsingState = ParsingState::GameObjectParams;
-	ParsingState m_ParsingStateAfterIndent = ParsingState::GameObjectParams;
 	std::unique_ptr<GameObjectStringDesc> m_GameObjectDesc;
 	ComponentStringDesc m_CurrComponentDesc;
-
-	std::fstream& m_File;
-
-	std::string m_ReturnedLine;
-
-	size_t m_PrevIndent;
-	size_t m_CurrIndent;
-	size_t m_StartIndent;
 };
 
