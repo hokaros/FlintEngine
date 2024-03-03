@@ -5,6 +5,12 @@
 
 std::unique_ptr<Scene> SceneLoader::LoadScene(const char* file_path)
 {
+	std::unique_ptr<SceneStringDesc> scene_serialized = LoadSceneDesc(file_path);
+	return SceneSerializer::Deserialize(*scene_serialized);
+}
+
+std::unique_ptr<SceneStringDesc> SceneLoader::LoadSceneDesc(const char* file_path)
+{
 	std::fstream scene_file;
 	scene_file.open(file_path, std::ios::in);
 	if (!scene_file.is_open())
@@ -14,7 +20,7 @@ std::unique_ptr<Scene> SceneLoader::LoadScene(const char* file_path)
 	}
 
 	SceneLoader scene_loader(scene_file);
-	std::unique_ptr<Scene> scene = scene_loader.LoadScene();
+	std::unique_ptr<SceneStringDesc> scene = scene_loader.LoadScene();
 
 	scene_file.close();
 	return scene;
@@ -52,7 +58,7 @@ SceneLoader::SceneLoader(std::fstream& file)
 
 }
 
-std::unique_ptr<Scene> SceneLoader::LoadScene()
+std::unique_ptr<SceneStringDesc> SceneLoader::LoadScene()
 {
 	m_SceneDesc = std::make_unique<SceneStringDesc>();
 
@@ -61,7 +67,7 @@ std::unique_ptr<Scene> SceneLoader::LoadScene()
 
 	FE_ASSERT(m_ParsingState == SceneParsingState::SceneParams, "Should have reached most outer parsing state");
 
-	return SceneSerializer::Deserialize(*m_SceneDesc);
+	return std::move(m_SceneDesc);
 }
 
 void SceneLoader::ParseSceneParamsLine(const std::string& line)
@@ -83,15 +89,20 @@ void SceneLoader::ParseSceneParamsLine(const std::string& line)
 
 void SceneLoader::ParseGameObjectTypeLine(const std::string& line)
 {
-	// TODO: this is duplicated from GameObjectLoader
-	std::string line_trimmed = line;
-	TrimWhitespaces(line_trimmed);
-	if (line_trimmed == "GameObject")
+	std::string key, value;
+	SplitLineToKeyAndValue(line, key, value);
+
+	if (key == "GameObject")
 	{
 		GameObjectLoader go_loader(m_File, m_CurrIndent + 1);
 		m_SceneDesc->game_objects.push_back(go_loader.LoadGameObject(m_ReturnedLine));
 	}
-	else // TODO: prefab reference
+	else if (key == "Prefab")
+	{
+		std::unique_ptr<GameObjectStringDesc> prefab = GameObjectLoader::LoadPrefabDesc(value.c_str());
+		m_SceneDesc->game_objects.push_back(std::move(prefab));
+	}
+	else
 	{
 		FE_DATA_ERROR("Unknown GameObject type");
 	}

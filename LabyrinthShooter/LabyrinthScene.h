@@ -20,10 +20,12 @@ public:
 	virtual void Render() override;
 
 private:
-	void LoadNeededAssets();
+	void LoadFromFile(const char* file_path);
+
 	void LoadStartingObjects();
 
 	virtual bool ShouldRender(GameObject* gameObject);
+	GameObject* FindPlayer();
 	GameObject* CreatePlayer(const Vector& position);
 
 private:

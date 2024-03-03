@@ -29,6 +29,7 @@ public:
 
 	const std::list<GameObject*>& GetAllMessageSubscribers() const;
 	const std::list<std::unique_ptr<GameObject>>& GetOwnedObjects() const;
+	std::list<std::unique_ptr<GameObject>>& GetOwnedObjects();
 
 	void Subscribe(IObjectManagerObserver& observer);
 

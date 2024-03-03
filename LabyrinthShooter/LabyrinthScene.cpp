@@ -3,6 +3,8 @@
 #include "../LabyrinthShooterBase/Firearm.h"
 #include "../LabyrinthShooterBase/Health.h"
 
+#include "../FlatEngine/SceneLoader.h"
+
 static constexpr const char* s_HeartBitmapPath = "resources/heart.bmp";
 
 LabyrinthScene::LabyrinthScene(const Vector& player_pos, PrefabFactory& prefab_factory, AssetManager& asset_manager)
@@ -10,10 +12,8 @@ LabyrinthScene::LabyrinthScene(const Vector& player_pos, PrefabFactory& prefab_f
 	, m_PrefabFactory(prefab_factory)
 	, m_AssetManager(asset_manager)
 {
-	LoadNeededAssets();
+	LoadFromFile("resources/main.scene");
 	LoadStartingObjects();
-
-	m_BackgroundColor = Rgb8(0, 0, 0);
 }
 
 void LabyrinthScene::Update()
@@ -34,9 +34,15 @@ void LabyrinthScene::Render()
 	SceneRenderer::Main()->DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, "Player", 10);
 }
 
-void LabyrinthScene::LoadNeededAssets()
+void LabyrinthScene::LoadFromFile(const char* file_path)
 {
-	m_AssetManager.AddSurfaceAsset(s_HeartBitmapPath);
+	std::unique_ptr<Scene> scene = SceneLoader::LoadScene(file_path);
+	for (std::unique_ptr<GameObject>& go : scene->GetObjectManager().GetOwnedObjects())
+	{
+		GetObjectManager().AddNewObject(std::move(go));
+	}
+	
+	m_BackgroundColor = scene->GetBackgroundColor();
 }
 
 void LabyrinthScene::LoadStartingObjects()
@@ -60,7 +66,7 @@ void LabyrinthScene::LoadStartingObjects()
 
 GameObject* LabyrinthScene::CreatePlayer(const Vector& position)
 {
-	GameObject* player = GameObject::Instantiate(m_PrefabFactory.GetPrefab(PrefabFactory::EPrefabId::Player));
+	GameObject* player = FindPlayer();
 	player->SetPosition(position);
 
 	std::list<Firearm*>* firearms = player->FindComponentsInChildren<Firearm>();
@@ -94,4 +100,17 @@ bool LabyrinthScene::ShouldRender(GameObject* go)
 		go->GetMiddle(),
 		go
 	);
+}
+
+GameObject* LabyrinthScene::FindPlayer()
+{
+	for (std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
+	{
+		if (go->GetName() == "Player")
+		{
+			return go.get();
+		}
+	}
+
+	return nullptr;
 }

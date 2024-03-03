@@ -6,6 +6,11 @@
 
 std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab(const char* file_path)
 {
+    return GameObjectSerializer::DeserializeGameObject(*LoadPrefabDesc(file_path));
+}
+
+std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadPrefabDesc(const char* file_path)
+{
     std::fstream prefab_file;
     prefab_file.open(file_path, std::ios::in);
     if (!prefab_file.is_open())
@@ -15,7 +20,7 @@ std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab(const char* file_path)
     }
 
     GameObjectLoader prefab_loader(prefab_file, 0);
-    std::unique_ptr<GameObject> prefab = prefab_loader.LoadPrefab();
+    std::unique_ptr<GameObjectStringDesc> prefab = prefab_loader.LoadPrefabDesc();
 
     prefab_file.close();
     return prefab;
@@ -26,14 +31,14 @@ GameObjectLoader::GameObjectLoader(std::fstream& file, size_t start_indent)
 {
 }
 
-std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab()
+std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadPrefabDesc()
 {
     std::string first_unconsumed_line;
 
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = LoadGameObject(first_unconsumed_line);
     FE_ASSERT(first_unconsumed_line == "", "All lines should be consumed");
 
-    return GameObjectSerializer::DeserializeGameObject(*prefab_serialized);
+    return prefab_serialized;
 }
 
 std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadGameObject(std::string& first_unconsumed_line)
@@ -106,7 +111,7 @@ void GameObjectLoader::ParseChildTypeLine(const std::string& line)
         GameObjectLoader child_loader(m_File, m_CurrIndent + 1);
         m_GameObjectDesc->children.push_back(child_loader.LoadGameObject(m_ReturnedLine));
     }
-    else // TODO: prefab reference
+    else // TODO: prefab reference (already implemented in SceneLoader)
     {
         FE_DATA_ERROR("Unknown GameObject type");
     }

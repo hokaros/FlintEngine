@@ -15,11 +15,12 @@ class GameObjectLoader
 {
 public:
 	GameObjectLoader(std::fstream& file, size_t start_indent);
-	std::unique_ptr<GameObject> LoadPrefab();
+	std::unique_ptr<GameObjectStringDesc> LoadPrefabDesc();
 
 	std::unique_ptr<GameObjectStringDesc> LoadGameObject(std::string& first_unconsumed_line);
 
 	static std::unique_ptr<GameObject> LoadPrefab(const char* file_path);
+	static std::unique_ptr<GameObjectStringDesc> LoadPrefabDesc(const char* file_path);
 
 protected:
 	virtual GameObjectParsingState GetOuterParsingState(GameObjectParsingState current_state) override;

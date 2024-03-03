@@ -3,16 +3,21 @@
 std::unique_ptr<SceneStringDesc> SceneSerializer::Serialize(const Scene& scene)
 {
     std::unique_ptr<SceneStringDesc> scene_serialized = std::make_unique<SceneStringDesc>();
-    
-    SerializeGameObjects(scene, *scene_serialized);
+
     SerializeSceneParams(scene, *scene_serialized);
+    SerializeGameObjects(scene, *scene_serialized);
 
     return scene_serialized;
 }
 
 std::unique_ptr<Scene> SceneSerializer::Deserialize(const SceneStringDesc& scene_desc)
 {
-    return std::unique_ptr<Scene>();
+    std::unique_ptr<Scene> scene_deserialized = std::make_unique<Scene>();
+
+    DeserializeSceneParams(scene_desc, *scene_deserialized);
+    DeserializeGameObjects(scene_desc, *scene_deserialized);
+
+    return scene_deserialized;
 }
 
 void SceneSerializer::SerializeGameObjects(const Scene& scene, SceneStringDesc& scene_serialized)
@@ -34,7 +39,7 @@ void SceneSerializer::DeserializeGameObjects(const SceneStringDesc& scene_serial
     for (const std::unique_ptr<GameObjectStringDesc>& go_serialized : scene_serialized.game_objects)
     {
         std::unique_ptr<GameObject> go = GameObjectSerializer::DeserializeGameObject(*go_serialized);
-        scene.GetObjectManager().AddGameObject(std::move(go));
+        scene.GetObjectManager().AddNewObject(std::move(go));
     }
 }
 
