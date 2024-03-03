@@ -123,20 +123,19 @@ void GameObjectLoader::SetParsingState(GameObjectParsingState state)
     IndentFileParser<GameObjectParsingState>::SetParsingState(state);
 }
 
-void GameObjectLoader::GoToOuterParsingState(size_t levels)
+GameObjectParsingState GameObjectLoader::GetOuterParsingState(GameObjectParsingState current_state)
 {
-    for (size_t i = 0; i < levels; i++)
+    switch (current_state)
     {
-        switch (m_ParsingState)
-        {
-        case GameObjectParsingState::ComponentDefinitions:
-        case GameObjectParsingState::ChildDefinitions:
-            SetParsingState(GameObjectParsingState::GameObjectParams);
-            break;
-        case GameObjectParsingState::SpecificComponentDefinition:
-            SetParsingState(GameObjectParsingState::ComponentDefinitions);
-            break;
-        }
+    case GameObjectParsingState::ComponentDefinitions:
+    case GameObjectParsingState::ChildDefinitions:
+        return GameObjectParsingState::GameObjectParams;
+
+    case GameObjectParsingState::SpecificComponentDefinition:
+        return GameObjectParsingState::ComponentDefinitions;
+
+    default:
+        return GameObjectParsingState::GameObjectParams;
     }
 }
 

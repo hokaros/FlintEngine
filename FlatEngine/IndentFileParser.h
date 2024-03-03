@@ -17,7 +17,7 @@ protected:
     virtual void SetParsingState(ParsingStateT state);
     void SetParsingStateAfterIndent(ParsingStateT state);
 
-	virtual void GoToOuterParsingState(size_t levels) = 0;
+    virtual ParsingStateT GetOuterParsingState(ParsingStateT current_state) = 0;
 	virtual void ParseLineForCurrentState(const std::string& line) = 0;
 
 protected:
@@ -32,6 +32,7 @@ protected:
 
 private:
 	bool DispatchLine(const std::string& line);
+    void GoToOuterParsingState(size_t levels);
 
 private:
     size_t m_StartIndent;
@@ -135,4 +136,13 @@ inline bool IndentFileParser<ParsingStateT>::DispatchLine(const std::string& lin
     m_PrevIndent = m_CurrIndent;
 
     return true;
+}
+
+template<typename ParsingStateT>
+inline void IndentFileParser<ParsingStateT>::GoToOuterParsingState(size_t levels)
+{
+    for (size_t i = 0; i < levels; i++)
+    {
+        SetParsingState(GetOuterParsingState(m_ParsingState));
+    }
 }

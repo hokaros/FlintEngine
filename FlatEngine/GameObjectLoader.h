@@ -22,8 +22,9 @@ public:
 	static std::unique_ptr<GameObject> LoadPrefab(const char* file_path);
 
 protected:
-	virtual void GoToOuterParsingState(size_t levels) override;
+	virtual GameObjectParsingState GetOuterParsingState(GameObjectParsingState current_state) override;
 	virtual void ParseLineForCurrentState(const std::string& line) override;
+	virtual void SetParsingState(GameObjectParsingState state) override;
 
 private:
 	void ParseGameObjectParamLine(const std::string& line);
@@ -34,8 +35,6 @@ private:
 	void FinalizeComponentLoading();
 
 	void ParseChildTypeLine(const std::string& line);
-
-	void SetParsingState(GameObjectParsingState state);
 
 private:
 	std::unique_ptr<GameObjectStringDesc> m_GameObjectDesc;
