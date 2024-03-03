@@ -121,6 +121,11 @@ const std::list<GameObject*>& ObjectManager::GetAllMessageSubscribers() const
 	return m_MessageSubscribers;
 }
 
+const std::list<std::unique_ptr<GameObject>>& ObjectManager::GetOwnedObjects() const
+{
+	return m_OwnedObjects;
+}
+
 void ObjectManager::Subscribe(IObjectManagerObserver& observer)
 {
 	m_Observers.push_back(&observer);

@@ -45,6 +45,11 @@ void Scene::SetBackgroundColor(const Rgb8& color)
 	m_BackgroundColor = color;
 }
 
+const Rgb8& Scene::GetBackgroundColor() const
+{
+	return m_BackgroundColor;
+}
+
 void Scene::RenderBackground()
 {
 	SceneRenderer* renderer = SceneRenderer::Main();
@@ -57,6 +62,11 @@ bool Scene::ShouldRender(GameObject* gameObject)
 }
 
 ObjectManager& Scene::GetObjectManager()
+{
+	return m_ObjectManager;
+}
+
+const ObjectManager& Scene::GetObjectManager() const
 {
 	return m_ObjectManager;
 }
