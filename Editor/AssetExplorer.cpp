@@ -1,7 +1,7 @@
 #include "AssetExplorer.h"
 
 #include "../FlatEngine/utility.h"
-#include "../FlatEngine/PrefabLoader.h"
+#include "../FlatEngine/GameObjectLoader.h"
 #include "../FlatEngine/AssetManager.h"
 #include "PrefabSaver.h"
 
@@ -54,7 +54,7 @@ GameObject* AssetExplorer::GetPrefab(const std::string& path)
 
 std::unique_ptr<EditorPrefabHandle> AssetExplorer::OpenPrefab(const std::string& prefab_path)
 {
-	std::unique_ptr<GameObject> prefab = PrefabLoader::LoadPrefab(prefab_path.c_str());
+	std::unique_ptr<GameObject> prefab = GameObjectLoader::LoadPrefab(prefab_path.c_str());
 	if (prefab == nullptr)
 	{ // Make new prefab if file not present
 		FE_LOG("Creating new prefab");

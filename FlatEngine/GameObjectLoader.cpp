@@ -1,10 +1,11 @@
-#include "PrefabLoader.h"
+#include "GameObjectLoader.h"
+
 #include <fstream>
 #include <string>
 #include "../FlatEngine/utility.h"
 #include "../FlatEngine/GameObjectSerializer.h"
 
-std::unique_ptr<GameObject> PrefabLoader::LoadPrefab(const char* file_path)
+std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab(const char* file_path)
 {
     std::fstream prefab_file;
     prefab_file.open(file_path, std::ios::in);
@@ -14,15 +15,15 @@ std::unique_ptr<GameObject> PrefabLoader::LoadPrefab(const char* file_path)
         return nullptr;
     }
 
-    PrefabLoader prefab_loader(prefab_file, 0);
+    GameObjectLoader prefab_loader(prefab_file, 0);
     std::unique_ptr<GameObject> prefab = prefab_loader.LoadPrefab();
 
     prefab_file.close();
     return prefab;
 }
 
-PrefabLoader::PrefabLoader(std::fstream& prefab_file, size_t start_indent)
-    : m_PrefabFile(prefab_file)
+GameObjectLoader::GameObjectLoader(std::fstream& file, size_t start_indent)
+    : m_File(file)
     , m_StartIndent(start_indent)
     , m_PrevIndent(start_indent)
     , m_CurrIndent(start_indent)
@@ -31,7 +32,7 @@ PrefabLoader::PrefabLoader(std::fstream& prefab_file, size_t start_indent)
 
 }
 
-std::unique_ptr<GameObject> PrefabLoader::LoadPrefab()
+std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab()
 {
     std::string first_unconsumed_line;
 
@@ -41,7 +42,7 @@ std::unique_ptr<GameObject> PrefabLoader::LoadPrefab()
     return GameObjectSerializer::DeserializeGameObject(*prefab_serialized);
 }
 
-std::unique_ptr<GameObjectStringDesc> PrefabLoader::LoadGameObject(std::string& first_unconsumed_line)
+std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadGameObject(std::string& first_unconsumed_line)
 {
     first_unconsumed_line = "";
 
@@ -50,7 +51,7 @@ std::unique_ptr<GameObjectStringDesc> PrefabLoader::LoadGameObject(std::string& 
     m_GameObjectDesc = std::make_unique<GameObjectStringDesc>();
 
     char line[256];
-    while (!m_PrefabFile.eof())
+    while (!m_File.eof())
     {
         std::string line_str;
         if (m_ReturnedLine.size() > 0)
@@ -60,7 +61,7 @@ std::unique_ptr<GameObjectStringDesc> PrefabLoader::LoadGameObject(std::string& 
         }
         else
         {
-            m_PrefabFile.getline(line, 256);
+            m_File.getline(line, 256);
             line_str = line;
         }
 
@@ -81,7 +82,7 @@ std::unique_ptr<GameObjectStringDesc> PrefabLoader::LoadGameObject(std::string& 
     return std::move(m_GameObjectDesc);
 }
 
-bool PrefabLoader::DispatchLine(const std::string& line)
+bool GameObjectLoader::DispatchLine(const std::string& line)
 {
     m_CurrIndent = line.find('-');
     if (m_CurrIndent >= line.size() - 1)
@@ -125,7 +126,7 @@ bool PrefabLoader::DispatchLine(const std::string& line)
     return true;
 }
 
-void PrefabLoader::ParseGameObjectParamLine(const std::string& line)
+void GameObjectLoader::ParseGameObjectParamLine(const std::string& line)
 {
     std::string key, value;
     SplitLineToKeyAndValue(line, key, value);
@@ -146,7 +147,7 @@ void PrefabLoader::ParseGameObjectParamLine(const std::string& line)
     }
 }
 
-void PrefabLoader::ParseComponentNameLine(const std::string& line)
+void GameObjectLoader::ParseComponentNameLine(const std::string& line)
 {
     std::string key, value;
     SplitLineToKeyAndValue(line, key, value);
@@ -157,7 +158,7 @@ void PrefabLoader::ParseComponentNameLine(const std::string& line)
     SetParsingStateAfterIndent(ParsingState::SpecificComponentDefinition);
 }
 
-void PrefabLoader::ParseComponentFieldLine(const std::string& line)
+void GameObjectLoader::ParseComponentFieldLine(const std::string& line)
 {
     std::string key, value;
     SplitLineToKeyAndValue(line, key, value);
@@ -165,7 +166,7 @@ void PrefabLoader::ParseComponentFieldLine(const std::string& line)
     m_CurrComponentDesc.fields.insert({ key, value });
 }
 
-void PrefabLoader::FinalizeComponentLoading()
+void GameObjectLoader::FinalizeComponentLoading()
 {
     m_GameObjectDesc->components.push_back(std::make_unique<ComponentStringDesc>(m_CurrComponentDesc));
 
@@ -173,13 +174,13 @@ void PrefabLoader::FinalizeComponentLoading()
     m_CurrComponentDesc.fields.clear();
 }
 
-void PrefabLoader::ParseChildTypeLine(const std::string& line)
+void GameObjectLoader::ParseChildTypeLine(const std::string& line)
 {
     std::string line_trimmed = line;
     TrimWhitespaces(line_trimmed);
     if (line_trimmed == "GameObject")
     {
-        PrefabLoader child_loader(m_PrefabFile, m_CurrIndent + 1);
+        GameObjectLoader child_loader(m_File, m_CurrIndent + 1);
         m_GameObjectDesc->children.push_back(child_loader.LoadGameObject(m_ReturnedLine));
     }
     else // TODO: prefab reference
@@ -188,7 +189,7 @@ void PrefabLoader::ParseChildTypeLine(const std::string& line)
     }
 }
 
-void PrefabLoader::SetParsingState(ParsingState state)
+void GameObjectLoader::SetParsingState(ParsingState state)
 {
     bool is_loading_component = m_ParsingState == ParsingState::SpecificComponentDefinition || m_ParsingStateAfterIndent == ParsingState::SpecificComponentDefinition;
     if (state != ParsingState::SpecificComponentDefinition && is_loading_component)
@@ -200,12 +201,12 @@ void PrefabLoader::SetParsingState(ParsingState state)
     m_ParsingStateAfterIndent = state;
 }
 
-void PrefabLoader::SetParsingStateAfterIndent(ParsingState state)
+void GameObjectLoader::SetParsingStateAfterIndent(ParsingState state)
 {
     m_ParsingStateAfterIndent = state;
 }
 
-void PrefabLoader::GoToOuterParsingState(size_t levels)
+void GameObjectLoader::GoToOuterParsingState(size_t levels)
 {
     for (size_t i = 0; i < levels; i++)
     {
@@ -222,7 +223,7 @@ void PrefabLoader::GoToOuterParsingState(size_t levels)
     }
 }
 
-void PrefabLoader::ParseLineForCurrentState(const std::string& line)
+void GameObjectLoader::ParseLineForCurrentState(const std::string& line)
 {
     switch (m_ParsingState)
     {
@@ -243,7 +244,7 @@ void PrefabLoader::ParseLineForCurrentState(const std::string& line)
     }
 }
 
-void PrefabLoader::SplitLineToKeyAndValue(const std::string& line, std::string& key, std::string& value)
+void GameObjectLoader::SplitLineToKeyAndValue(const std::string& line, std::string& key, std::string& value)
 {
     size_t colon_pos = line.find(':');
 
@@ -260,7 +261,7 @@ void PrefabLoader::SplitLineToKeyAndValue(const std::string& line, std::string& 
     TrimWhitespaces(value);
 }
 
-void PrefabLoader::TrimWhitespaces(std::string& symbol)
+void GameObjectLoader::TrimWhitespaces(std::string& symbol)
 {
     // Trim from left
     symbol.erase(

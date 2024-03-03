@@ -1,7 +1,7 @@
 #include "AssetManager.h"
 
 #include "utility.h"
-#include "PrefabLoader.h"
+#include "GameObjectLoader.h"
 
 AssetManager* AssetManager::s_Instance = nullptr;
 
@@ -50,7 +50,7 @@ void AssetManager::AddSurfaceAsset(const char* path)
 
 void AssetManager::AddPrefab(const char* path)
 {
-	std::unique_ptr<GameObject> prefab = PrefabLoader::LoadPrefab(path);
+	std::unique_ptr<GameObject> prefab = GameObjectLoader::LoadPrefab(path);
 	if (prefab == nullptr)
 	{
 		FE_ASSERT(false, "Cannot load prefab: %s", path);

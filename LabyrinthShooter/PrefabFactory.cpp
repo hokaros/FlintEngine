@@ -9,7 +9,7 @@
 #include "../LabyrinthShooterBase/PlayerEquipment.h"
 #include "../LabyrinthShooterBase/PlayerController.h"
 
-#include "../FlatEngine/PrefabLoader.h"
+#include "../FlatEngine/GameObjectLoader.h"
 
 #include "../FlatEngine/ComponentSerializer.h"
 #include "../FlatEngine/GameObjectSerializer.h"
@@ -32,35 +32,35 @@ const GameObject& PrefabFactory::GetPrefab(EPrefabId prefab_id) const
 
 void PrefabFactory::CreateBasicBulletPrefab()
 {
-	std::unique_ptr<GameObject> basic_bullet = PrefabLoader::LoadPrefab("resources/basic_bullet.prefab");
+	std::unique_ptr<GameObject> basic_bullet = GameObjectLoader::LoadPrefab("resources/basic_bullet.prefab");
 
 	InsertPrefab(EPrefabId::BasicBullet, std::move(basic_bullet));
 }
 
 void PrefabFactory::CreateSuperBulletPrefab()
 {
-	std::unique_ptr<GameObject> super_bullet = PrefabLoader::LoadPrefab("resources/power_bullet.prefab");
+	std::unique_ptr<GameObject> super_bullet = GameObjectLoader::LoadPrefab("resources/power_bullet.prefab");
 
 	InsertPrefab(EPrefabId::SuperBullet, std::move(super_bullet));
 }
 
 void PrefabFactory::CreateBasicFirearmPrefab()
 {
-	std::unique_ptr<GameObject> basic_weapon = PrefabLoader::LoadPrefab("resources/basic_firearm.prefab");
+	std::unique_ptr<GameObject> basic_weapon = GameObjectLoader::LoadPrefab("resources/basic_firearm.prefab");
 
 	InsertPrefab(EPrefabId::BasicFirearm, std::move(basic_weapon));
 }
 
 void PrefabFactory::CreateSuperFirearmPrefab()
 {
-	std::unique_ptr<GameObject> super_weapon = PrefabLoader::LoadPrefab("resources/super_firearm.prefab");
+	std::unique_ptr<GameObject> super_weapon = GameObjectLoader::LoadPrefab("resources/super_firearm.prefab");
 
 	InsertPrefab(EPrefabId::SuperFirearm, std::move(super_weapon));
 }
 
 void PrefabFactory::CreatePlayerPrefab()
 {
-	std::unique_ptr<GameObject> player = PrefabLoader::LoadPrefab("resources/player.prefab");
+	std::unique_ptr<GameObject> player = GameObjectLoader::LoadPrefab("resources/player.prefab");
 
 	InsertPrefab(EPrefabId::Player, std::move(player));
 }

@@ -1,9 +1,14 @@
 #pragma once
 #include "../FlatEngine/GameObjectSerializer.h"
 
-class PrefabLoader
+class GameObjectLoader
 {
 public:
+	GameObjectLoader(std::fstream& file, size_t start_indent);
+	std::unique_ptr<GameObject> LoadPrefab();
+
+	std::unique_ptr<GameObjectStringDesc> LoadGameObject(std::string& first_unconsumed_line);
+
 	static std::unique_ptr<GameObject> LoadPrefab(const char* file_path);
 
 private:
@@ -16,10 +21,6 @@ private:
 	};
 
 private:
-	PrefabLoader(std::fstream& prefab_file, size_t start_indent);
-	std::unique_ptr<GameObject> LoadPrefab();
-
-	std::unique_ptr<GameObjectStringDesc> LoadGameObject(std::string& first_unconsumed_line);
 	bool DispatchLine(const std::string& line);
 	void ParseGameObjectParamLine(const std::string& line);
 
@@ -44,7 +45,7 @@ private:
 	std::unique_ptr<GameObjectStringDesc> m_GameObjectDesc;
 	ComponentStringDesc m_CurrComponentDesc;
 
-	std::fstream& m_PrefabFile;
+	std::fstream& m_File;
 
 	std::string m_ReturnedLine;
 
