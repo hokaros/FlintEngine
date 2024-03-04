@@ -47,8 +47,6 @@ void LabyrinthScene::LoadStartingObjects()
 	SDL_Surface* heart_bitmap = m_AssetManager.GetSurfaceAsset(s_HeartBitmapPath);
 	m_HealthStats = std::make_unique<BMPStats>(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
 
-	constexpr Vector mapStart(10, 10);
-
 	m_Lab = FindLabyrinth()->FindComponent<LabyrinthSolidifier>();
 	m_Player = CreatePlayer(m_PlayerStartingPos);
 }
