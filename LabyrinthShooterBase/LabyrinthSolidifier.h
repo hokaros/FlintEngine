@@ -1,11 +1,11 @@
 #pragma once
-#include "Labirynt.h"
 #include "../FlatEngine/GameObject.h"
 #include "../FlatEngine/RectangleRenderer.h"
+#include "../FlatEngine/Window.h"
+#include "../LabyrinthShooterBase/ColliderMemory.h"
 #include "../LabyrinthShooterBase/Regenerable.h"
 #include "../LabyrinthShooterBase/Destroyable.h"
-#include "../FlatEngine/Window.h"
-#include "ColliderMemory.h"
+#include "../LabyrinthShooterBase/Labirynt.h"
 
 #define WALL_REGEN 5.0
 

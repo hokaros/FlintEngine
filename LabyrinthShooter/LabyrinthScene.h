@@ -2,7 +2,7 @@
 #include "../FlatEngine/Scene.h"
 #include "../FlatEngine/AssetManager.h"
 #include "../LabyrinthShooterBase/StatRenderer.h"
-#include "LabyrinthSolidifier.h"
+#include "../LabyrinthShooterBase/LabyrinthSolidifier.h"
 
 // Czas, co jaki zmienia siê labirynt
 #define LAB_TIME 2
