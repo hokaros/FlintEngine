@@ -71,3 +71,15 @@ void FieldEditorRgb8::Render()
 	field_value = Rgb8::FromFloat(field_value_f[0], field_value_f[1], field_value_f[2]);
 	m_Field.SetFieldValue(&m_Component, &field_value);
 }
+
+void FieldEditorDouble::Render()
+{
+	double field_value;
+	m_Field.GetFieldValue(&m_Component, &field_value);
+
+	float field_float = field_value;
+	ImGui::DragFloat(m_FieldLabel.c_str(), &field_float);
+	field_value = field_float;
+
+	m_Field.SetFieldValue(&m_Component, &field_value);
+}

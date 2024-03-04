@@ -6,7 +6,11 @@
 
 std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab(const char* file_path)
 {
-    return GameObjectSerializer::DeserializeGameObject(*LoadPrefabDesc(file_path));
+    std::unique_ptr<GameObjectStringDesc> prefab_serialized = LoadPrefabDesc(file_path);
+    if (prefab_serialized == nullptr)
+        return nullptr;
+
+    return GameObjectSerializer::DeserializeGameObject(*prefab_serialized);
 }
 
 std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadPrefabDesc(const char* file_path)

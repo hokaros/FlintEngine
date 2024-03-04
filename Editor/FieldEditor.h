@@ -41,6 +41,18 @@ public:
 	virtual void Render() override;
 };
 
+
+class FieldEditorDouble
+	: public FieldEditor
+{
+public:
+	FieldEditorDouble(ObjectComponent& component, const ComponentFieldDefinition& field)
+		: FieldEditor(component, field)
+	{}
+
+	virtual void Render() override;
+};
+
 class FieldEditorBool
 	: public FieldEditor
 {
