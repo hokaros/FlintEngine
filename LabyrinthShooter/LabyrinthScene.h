@@ -24,12 +24,13 @@ private:
 	void LoadStartingObjects();
 
 	virtual bool ShouldRender(GameObject* gameObject);
+	GameObject* FindLabyrinth();
 	GameObject* FindPlayer();
 	GameObject* CreatePlayer(const Vector& position);
 
 private:
 	GameObject* m_Player;
-	std::unique_ptr<LabyrinthSolidifier> m_Lab;
+	LabyrinthSolidifier* m_Lab;
 	Vector m_PlayerStartingPos;
 
 	std::unique_ptr<BMPStats> m_HealthStats = nullptr;

@@ -7,7 +7,7 @@
 #include "../LabyrinthShooterBase/Destroyable.h"
 #include "../LabyrinthShooterBase/Labirynt.h"
 
-#define WALL_REGEN 5.0
+#define WALL_REGEN 5.0 // TODO: make this a field
 
 // Zamienia informacje o labiryncie na obiekty w grze i zarz¹dza nimi
 class LabyrinthSolidifier 
@@ -81,7 +81,6 @@ private:
 	DECLARE_FIELD(changeTime);
 
 	double timeSinceLastChange = 0.0;
-	DECLARE_FIELD(timeSinceLastChange);
 
 	std::unique_ptr<Labirynt> labyrinth;
 	std::unique_ptr<ColliderMemory> colliderMemory;

@@ -11,7 +11,6 @@ DEFINE_FIELD(LabyrinthSolidifier, m_WallColor);
 DEFINE_FIELD(LabyrinthSolidifier, m_GateColor);
 DEFINE_FIELD(LabyrinthSolidifier, shouldChange);
 DEFINE_FIELD(LabyrinthSolidifier, changeTime);
-DEFINE_FIELD(LabyrinthSolidifier, timeSinceLastChange);
 
 LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	int wallWidth, int wallLength,

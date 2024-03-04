@@ -18,8 +18,6 @@ LabyrinthScene::LabyrinthScene(const Vector& player_pos, AssetManager& asset_man
 void LabyrinthScene::Update()
 {
 	Scene::Update();
-
-	m_Lab->Update();
 }
 
 void LabyrinthScene::Render()
@@ -50,9 +48,8 @@ void LabyrinthScene::LoadStartingObjects()
 	m_HealthStats = std::make_unique<BMPStats>(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
 
 	constexpr Vector mapStart(10, 10);
-	m_Lab = std::make_unique<LabyrinthSolidifier>(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, LAB_TIME, true);
-	m_Lab->Awake();
 
+	m_Lab = FindLabyrinth()->FindComponent<LabyrinthSolidifier>();
 	m_Player = CreatePlayer(m_PlayerStartingPos);
 }
 
@@ -92,6 +89,19 @@ bool LabyrinthScene::ShouldRender(GameObject* go)
 		go->GetMiddle(),
 		go
 	);
+}
+
+GameObject* LabyrinthScene::FindLabyrinth()
+{
+	for (std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
+	{
+		if (go->GetName() == "Labyrinth")
+		{
+			return go.get();
+		}
+	}
+
+	return nullptr;
 }
 
 GameObject* LabyrinthScene::FindPlayer()

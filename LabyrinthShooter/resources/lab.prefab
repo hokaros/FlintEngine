@@ -1,0 +1,15 @@
+- m_Name: Labyrinth
+- m_Pos: 0.000000, 0.000000
+- m_Size: 1.000000, 1.000000
+- components:
+	- LabyrinthSolidifier:
+		- changeTime: 2.000000
+		- m_GateColor: 0,cc,aa
+		- m_WallColor: 0,0,aa
+		- position: 10.000000, 10.000000
+		- shouldChange: 1
+		- wallLength: 100
+		- wallWidth: 10
+		- xCount: 7
+		- yCount: 5
+- children:
