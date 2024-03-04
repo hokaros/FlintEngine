@@ -2,7 +2,6 @@
 #include "../FlatEngine/Scene.h"
 #include "../FlatEngine/AssetManager.h"
 #include "../LabyrinthShooterBase/StatRenderer.h"
-#include "PrefabFactory.h"
 #include "LabyrinthSolidifier.h"
 
 // Czas, co jaki zmienia siê labirynt
@@ -14,7 +13,7 @@ class LabyrinthScene
     : public Scene
 {
 public:
-	LabyrinthScene(const Vector& player_pos, PrefabFactory& prefab_factory, AssetManager& asset_manager);
+	LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager);
 
 	virtual void Update() override;
 	virtual void Render() override;
@@ -35,7 +34,6 @@ private:
 
 	std::unique_ptr<BMPStats> m_HealthStats = nullptr;
 
-	PrefabFactory& m_PrefabFactory;
 	AssetManager& m_AssetManager;
 };
 

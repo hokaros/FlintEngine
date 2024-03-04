@@ -9,7 +9,6 @@
 #include "../LabyrinthShooterBase/Firearm.h"
 #include "../LabyrinthShooterBase/Health.h"
 #include "LabyrinthScene.h"
-#include "PrefabFactory.h"
 
 #include "../FlatEngine/GameBase.h"
 
@@ -38,5 +37,4 @@ private:
 	GameStartInfo startInfo;
 
 	AssetManager m_AssetManager;
-	PrefabFactory m_PrefabFactory;
 };

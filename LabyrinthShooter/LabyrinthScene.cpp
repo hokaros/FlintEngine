@@ -7,9 +7,8 @@
 
 static constexpr const char* s_HeartBitmapPath = "resources/heart.bmp";
 
-LabyrinthScene::LabyrinthScene(const Vector& player_pos, PrefabFactory& prefab_factory, AssetManager& asset_manager)
+LabyrinthScene::LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager)
 	: m_PlayerStartingPos(player_pos)
-	, m_PrefabFactory(prefab_factory)
 	, m_AssetManager(asset_manager)
 {
 	LoadFromFile("resources/main.scene");

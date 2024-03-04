@@ -8,7 +8,7 @@ Game::Game(Window* window, GameStartInfo&& gameInfo)
 
 std::unique_ptr<Scene> Game::CreateScene()
 {
-	return std::make_unique<LabyrinthScene>(startInfo.GetPlayerPosition(), m_PrefabFactory, m_AssetManager);
+	return std::make_unique<LabyrinthScene>(startInfo.GetPlayerPosition(), m_AssetManager);
 }
 
 

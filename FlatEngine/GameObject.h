@@ -10,7 +10,6 @@
 
 #include <list>
 
-class PrefabFactory;
 class GameObjectSerializer;
 class AssetExplorer;
 class HierarchyEditor;
@@ -25,7 +24,6 @@ public:
 private:
 	PrefabCreationKey() = default;
 
-	friend PrefabFactory;
 	friend GameObjectSerializer;
 	friend AssetExplorer;
 	friend HierarchyEditor;
