@@ -1,6 +1,13 @@
 #include "LabyrinthSolidifier.h"
 #include "../FlatEngine/BoxCollider.h"
 
+DEFINE_COMPONENT(LabyrinthSolidifier);
+
+LabyrinthSolidifier::LabyrinthSolidifier()
+	: LabyrinthSolidifier(Vector::ZERO, 0,0,0,0,0,false) // TODO
+{
+}
+
 LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	int wallWidth, int wallLength,
 	int xCount, int yCount,
@@ -17,30 +24,8 @@ LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	, colliderMemory(LabyrinthSize(wallWidth, wallLength, xCount, yCount).x + pos.x, LabyrinthSize(wallWidth, wallLength, xCount, yCount).y + pos.y)
 	, m_WallColor(0x00, 0x00, 0xAA)
 	, m_GateColor(0x00, 0xCC, 0xAA)
-	{
-	// Stworzenie œcian
-	walls = new GameObject * [labyrinth.ActiveCount()];
-	function<void(Destroyable&)> destroyedHandler = [this](Destroyable& source) {OnWallDestroyedChanged(source); };
-	for (int i = 0; i < labyrinth.ActiveCount(); i++) {
-		walls[i] = BuildWall(Vector(wallWidth, wallLength));
+{
 
-		std::unique_ptr<Destroyable> destroyable = std::make_unique<Destroyable>();
-		destroyable->SubscribeDestroyed(destroyedHandler);
-		walls[i]->AddComponent(std::move(destroyable));
-
-		walls[i]->AddComponent(std::make_unique<Regenerable>(WALL_REGEN));
-	}
-
-	PlaceWalls(); // wstawienie œcian w odpowiednie miejsca
-	BuildBorder();
-
-	// Skrajne œciany zawsze widoczne
-	for (int i = 0; i < borderCount; i++) {
-		border[i]->renderUnseen = true;
-	}
-
-	colliderMemory.Refresh(walls, labyrinth.ActiveCount());
-	labyrinth.PrintLab(); // wyœwietlenie w konsoli
 }
 
 LabyrinthSolidifier::~LabyrinthSolidifier() 
@@ -219,6 +204,33 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 	return w;
 }
 
+void LabyrinthSolidifier::Start()
+{
+	// Stworzenie œcian
+	walls = new GameObject * [labyrinth.ActiveCount()];
+	function<void(Destroyable&)> destroyedHandler = [this](Destroyable& source) {OnWallDestroyedChanged(source); };
+	for (int i = 0; i < labyrinth.ActiveCount(); i++) {
+		walls[i] = BuildWall(Vector(wallWidth, wallLength));
+
+		std::unique_ptr<Destroyable> destroyable = std::make_unique<Destroyable>();
+		destroyable->SubscribeDestroyed(destroyedHandler);
+		walls[i]->AddComponent(std::move(destroyable));
+
+		walls[i]->AddComponent(std::make_unique<Regenerable>(WALL_REGEN));
+	}
+
+	PlaceWalls(); // wstawienie œcian w odpowiednie miejsca
+	BuildBorder();
+
+	// Skrajne œciany zawsze widoczne
+	for (int i = 0; i < borderCount; i++) {
+		border[i]->renderUnseen = true;
+	}
+
+	colliderMemory.Refresh(walls, labyrinth.ActiveCount());
+	labyrinth.PrintLab(); // wyœwietlenie w konsoli
+}
+
 void LabyrinthSolidifier::Update() {
 	if (!shouldChange)
 		return;
@@ -228,6 +240,11 @@ void LabyrinthSolidifier::Update() {
 		ChangeLab();
 		timeSinceLastChange = 0;
 	}
+}
+
+std::unique_ptr<ObjectComponent> LabyrinthSolidifier::Copy()
+{
+	return std::make_unique<LabyrinthSolidifier>(position, wallWidth, wallLength, xCount, yCount, changeTime, shouldChange);
 }
 
 void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall) {

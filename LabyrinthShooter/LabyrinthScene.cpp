@@ -49,8 +49,9 @@ void LabyrinthScene::LoadStartingObjects()
 	SDL_Surface* heart_bitmap = m_AssetManager.GetSurfaceAsset(s_HeartBitmapPath);
 	m_HealthStats = std::make_unique<BMPStats>(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
 
-	Vector mapStart(10, 10);
+	constexpr Vector mapStart(10, 10);
 	m_Lab = std::make_unique<LabyrinthSolidifier>(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, LAB_TIME, true);
+	m_Lab->Start();
 	for (int i = 0; i < m_Lab->WallsCount(); i++)
 	{
 		m_ObjectManager.AddToMessageSubscribers(m_Lab->GetWalls()[i]);

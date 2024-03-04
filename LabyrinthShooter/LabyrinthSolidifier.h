@@ -10,9 +10,12 @@
 #define WALL_REGEN 5.0
 
 // Zamienia informacje o labiryncie na obiekty w grze i zarz¹dza nimi
-class LabyrinthSolidifier : public IUpdateable
+class LabyrinthSolidifier 
+	: public ObjectComponent
 {
+	DECLARE_COMPONENT();
 public:
+	LabyrinthSolidifier();
 	LabyrinthSolidifier(const Vector& pos,
 		int wallWidth, int wallLength,
 		int xCount, int yCount,
@@ -32,7 +35,10 @@ public:
 	void ChangeLab();
 	const ColliderMemory& GetColliderMemory() const;
 
-	void Update() override;
+	virtual void Start() override;
+	virtual void Update() override;
+
+	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 	static Vector LabyrinthSize(int wallWidth, int wallLength, int xCount, int yCount);
 private:
