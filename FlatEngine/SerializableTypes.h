@@ -72,6 +72,22 @@ public:
 };
 
 template<>
+class SerializableTypeInterface<double>
+{
+public:
+	static inline void ParseString(const std::string& str, double& out_value)
+	{
+		out_value = std::stod(str);
+	}
+	static inline std::string ToString(const double& value)
+	{
+		return std::to_string(value);
+	}
+
+	STI_DEFINE_TYPECODE_GETTER()
+};
+
+template<>
 class SerializableTypeInterface<int>
 {
 public:

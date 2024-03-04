@@ -322,6 +322,11 @@ VectorInt Labirynt::GetExit(Direction side) const {
 	}
 }
 
+bool Labirynt::WallAtIndex(int index)
+{
+	return walls[index];
+}
+
 bool Labirynt::operator[](int index) {
 	return walls[index];
 }

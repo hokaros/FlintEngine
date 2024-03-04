@@ -51,7 +51,7 @@ void LabyrinthScene::LoadStartingObjects()
 
 	constexpr Vector mapStart(10, 10);
 	m_Lab = std::make_unique<LabyrinthSolidifier>(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, LAB_TIME, true);
-	m_Lab->Start();
+	m_Lab->Awake();
 
 	m_Player = CreatePlayer(m_PlayerStartingPos);
 }

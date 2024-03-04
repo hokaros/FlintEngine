@@ -34,6 +34,7 @@ public:
 
 	VectorInt GetExit(Direction side) const;
 
+	bool WallAtIndex(int index);
 	bool operator[](int index);
 
 	~Labirynt();
