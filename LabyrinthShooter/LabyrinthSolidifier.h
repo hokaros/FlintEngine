@@ -13,10 +13,6 @@
 class LabyrinthSolidifier : public IUpdateable
 {
 public:
-	// Po wymieszaniu labiryntu
-	function<void(bool*)> onChanged;
-
-public:
 	LabyrinthSolidifier(const Vector& pos,
 		int wallWidth, int wallLength,
 		int xCount, int yCount,
@@ -36,7 +32,6 @@ public:
 	void ChangeLab();
 	const ColliderMemory& GetColliderMemory() const;
 
-	void Start() override;
 	void Update() override;
 
 	static Vector LabyrinthSize(int wallWidth, int wallLength, int xCount, int yCount);

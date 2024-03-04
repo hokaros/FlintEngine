@@ -124,9 +124,6 @@ void LabyrinthSolidifier::ChangeLab() {
 	PlaceWalls();
 
 	colliderMemory.Refresh(walls, labyrinth.ActiveCount());
-
-	if (onChanged)
-		onChanged(labyrinth.getWalls());
 }
 
 const ColliderMemory& LabyrinthSolidifier::GetColliderMemory() const {
@@ -220,14 +217,6 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 	}
 
 	return w;
-}
-
-void LabyrinthSolidifier::Start() {
-	if (!shouldChange)
-		return;
-
-	if (onChanged)
-		onChanged(labyrinth.getWalls());
 }
 
 void LabyrinthSolidifier::Update() {
