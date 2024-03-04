@@ -52,14 +52,6 @@ void LabyrinthScene::LoadStartingObjects()
 	constexpr Vector mapStart(10, 10);
 	m_Lab = std::make_unique<LabyrinthSolidifier>(mapStart, WALL_THICKNESS, WALL_LENGTH, LAB_X, LAB_Y, LAB_TIME, true);
 	m_Lab->Start();
-	for (int i = 0; i < m_Lab->WallsCount(); i++)
-	{
-		m_ObjectManager.AddToMessageSubscribers(m_Lab->GetWalls()[i]);
-	}
-	for (int i = 0; i < m_Lab->BorderElements(); i++)
-	{
-		m_ObjectManager.AddToMessageSubscribers(m_Lab->GetBorder()[i]);
-	}
 
 	m_Player = CreatePlayer(m_PlayerStartingPos);
 }
