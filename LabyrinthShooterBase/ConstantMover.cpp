@@ -5,21 +5,20 @@ DEFINE_COMPONENT(ConstantMover);
 DEFINE_FIELD(ConstantMover, movementSpeed);
 
 ConstantMover::ConstantMover(float movementSpeed)
-	: movementSpeed(movementSpeed) {
+	: movementSpeed(movementSpeed) 
+{
 
 }
 
-std::unique_ptr<ObjectComponent> ConstantMover::Copy() {
-	return std::make_unique<ConstantMover>(movementSpeed);
-}
-
-void ConstantMover::Update() {
+void ConstantMover::Update() 
+{
 	// Ruch
 	Vector dPos = moveDir * movementSpeed * Timer::Main()->GetDeltaTime();
 	m_GameObject->SetPosition(m_GameObject->GetPosition() + dPos);
 }
 
-void ConstantMover::SetDirection(const Vector& newDir) {
+void ConstantMover::SetDirection(const Vector& newDir) 
+{
 	std::lock_guard<std::mutex> lock(mutex);
 
 	moveDir = newDir;
@@ -30,12 +29,14 @@ void ConstantMover::SetDirection(const Vector& newDir) {
 		onDirectionChanged(moveDir);
 }
 
-const Vector& ConstantMover::GetDirection() {
+const Vector& ConstantMover::GetDirection() 
+{
 	std::lock_guard<std::mutex> lock(mutex);
 	return moveDir;
 }
 
-bool ConstantMover::IsSameDirection(const Vector& otherDir) const {
+bool ConstantMover::IsSameDirection(const Vector& otherDir) const 
+{
 	bool isAnyZero = (otherDir.x == 0 && otherDir.y == 0) || (moveDir.x == 0 && moveDir.y == 0);
 	bool areBothZero = otherDir.x == 0 && otherDir.y == 0 && moveDir.x == 0 && moveDir.y == 0;
 	if (isAnyZero && !areBothZero)

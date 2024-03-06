@@ -13,8 +13,6 @@ public:
 	virtual void Awake() override;
 	virtual void Update() override;
 
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
-
 private:
 	void OnDestroyed();
 

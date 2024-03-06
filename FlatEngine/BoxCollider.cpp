@@ -74,11 +74,6 @@ void BoxCollider::OnDestroy()
 	PhysicsSystem::GetInstance()->UnregisterCollider(this);
 }
 
-std::unique_ptr<ObjectComponent> BoxCollider::Copy()
-{
-	return std::make_unique<BoxCollider>(m_Position, m_Size);
-}
-
 bool BoxCollider::DoesIntersect(const BoxCollider& other) const
 {
 	Vector my_pos = GetWorldPos();

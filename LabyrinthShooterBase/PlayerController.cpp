@@ -36,11 +36,6 @@ void PlayerController::Update()
 	}
 }
 
-std::unique_ptr<ObjectComponent> PlayerController::Copy() 
-{
-	return std::make_unique<PlayerController>();
-}
-
 void PlayerController::ProcessMovement() 
 {
 	// Odczytanie wciœniêtych klawiszy ruchu

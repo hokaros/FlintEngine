@@ -52,10 +52,6 @@ bool Firearm::TryShoot()
 	return true;
 }
 
-std::unique_ptr<ObjectComponent> Firearm::Copy() {
-	return std::make_unique<Firearm>(m_BulletPrefab, m_ReloadTime, m_Type);
-}
-
 FirearmType Firearm::GetType() const {
 	return m_Type;
 }

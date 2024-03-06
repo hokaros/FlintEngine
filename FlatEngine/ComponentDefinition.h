@@ -22,6 +22,8 @@ public:
 
 	void AddField(const ComponentFieldDefinition& field);
 
+	std::unique_ptr<ObjectComponent> CopyComponent(const ObjectComponent& comp) const;
+
 private:
 	std::vector<const ComponentFieldDefinition*> GetBaseComponentFields() const;
 

@@ -21,8 +21,6 @@ public:
 
 	void SetDirection(const Vector& direction);
 
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
-
 protected:
 	float speed = 1.0f;
 	int damage = 1;

@@ -43,8 +43,3 @@ void SpriteRenderer::Render()
 
 	SceneRenderer::Main()->RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
 }
-
-std::unique_ptr<ObjectComponent> SpriteRenderer::Copy() 
-{
-	return std::make_unique<SpriteRenderer>(m_BitmapPath);
-}

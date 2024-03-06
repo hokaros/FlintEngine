@@ -15,11 +15,6 @@ void PlayerEquipment::Start()
 	}
 }
 
-std::unique_ptr<ObjectComponent> PlayerEquipment::Copy()
-{
-	return std::make_unique<PlayerEquipment>();
-}
-
 void PlayerEquipment::EquipWeapon(FirearmType weaponType) 
 {
 	if (weaponType == FirearmType::Basic) 

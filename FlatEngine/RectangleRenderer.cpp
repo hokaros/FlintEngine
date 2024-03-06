@@ -17,8 +17,3 @@ void RectangleRenderer::Render()
 	Rect rect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
 	SceneRenderer::Main()->RenderRect(rect, m_Color);
 }
-
-std::unique_ptr<ObjectComponent> RectangleRenderer::Copy()
-{
-	return std::make_unique<RectangleRenderer>(m_Color);
-}

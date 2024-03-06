@@ -53,8 +53,6 @@ public:
 
 	FirearmType GetType() const;
 
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
-
 protected:
 	PrefabRef m_BulletPrefab;
 	DECLARE_FIELD(m_BulletPrefab);

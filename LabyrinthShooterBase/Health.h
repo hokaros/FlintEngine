@@ -23,8 +23,6 @@ public:
 	// Obs³ugiwanie œmierci z argumentem tego komponentu
 	void SubscribeDeath(std::function<void(Health*)> handler);
 
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
-
 private:
 	void OnDeath();
 

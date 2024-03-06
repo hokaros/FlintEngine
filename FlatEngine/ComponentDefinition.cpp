@@ -46,6 +46,20 @@ void ComponentDefinition::AddField(const ComponentFieldDefinition& field)
 	m_Fields.push_back(&field);
 }
 
+std::unique_ptr<ObjectComponent> ComponentDefinition::CopyComponent(const ObjectComponent& comp) const
+{
+	std::unique_ptr<ObjectComponent> copy = m_Constructor();
+	
+	// Copy fields
+	for (const ComponentFieldDefinition* field : GetFields())
+	{
+		std::string value = field->GetFieldValue(&comp);
+		field->SetFieldValue(copy.get(), value);
+	}
+
+	return copy;
+}
+
 std::vector<const ComponentFieldDefinition*> ComponentDefinition::GetBaseComponentFields() const
 {
 	if(m_BaseComponentName.has_value() == false)

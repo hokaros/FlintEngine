@@ -10,7 +10,6 @@ public:
 	PowerBullet(float speed, int damage, int health);
 
 	void Awake() override;
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
 
 protected:
 	virtual void OnCollision(BoxCollider& collider) override;

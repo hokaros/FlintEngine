@@ -23,8 +23,3 @@ void Destroyable::SetDestroyed(bool destroyed)
 			handler(*this);
 	}
 }
-
-std::unique_ptr<ObjectComponent> Destroyable::Copy()
-{
-	return std::make_unique<Destroyable>();
-}

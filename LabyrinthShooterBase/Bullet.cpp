@@ -57,11 +57,6 @@ void Bullet::OnCollision(BoxCollider& collider)
 	}
 }
 
-std::unique_ptr<ObjectComponent> Bullet::Copy()
-{
-	return std::make_unique<Bullet>(speed, damage);
-}
-
 void Bullet::SetDirection(const Vector& direction) 
 {
 	this->direction = Vector(direction);

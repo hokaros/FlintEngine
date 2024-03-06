@@ -38,8 +38,6 @@ public:
 	virtual void Awake() override;
 	virtual void Update() override;
 
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
-
 	static Vector LabyrinthSize(int wallWidth, int wallLength, int xCount, int yCount);
 
 private:

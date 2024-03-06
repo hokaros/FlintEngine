@@ -37,8 +37,3 @@ void Regenerable::OnDestroyed()
 	m_RegenerationTime
 	);
 }
-
-std::unique_ptr<ObjectComponent> Regenerable::Copy()
-{
-	return std::make_unique<Regenerable>(m_RegenerationTime);
-}

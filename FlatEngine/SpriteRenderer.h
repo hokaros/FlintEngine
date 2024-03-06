@@ -15,7 +15,6 @@ public:
 	void Awake() override;
 	void Render() override;
 
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
 protected:
 	std::string m_BitmapPath = "";
 	DECLARE_FIELD(m_BitmapPath);

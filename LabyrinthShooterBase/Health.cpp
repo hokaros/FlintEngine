@@ -24,16 +24,6 @@ void Health::Start()
 	}
 }
 
-std::unique_ptr<ObjectComponent> Health::Copy()
-{
-	std::unique_ptr<Health> health = std::make_unique<Health>(m_MaxHealth, nullptr);
-	// Dodanie funkcji obs³ugi œmierci
-	for (std::function<void(Health*)> deathHandler : m_OnDeath) {
-		health->SubscribeDeath(deathHandler);
-	}
-	return health;
-}
-
 void Health::Hurt(int hp) 
 {
 	m_CurrHealth -= hp;

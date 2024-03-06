@@ -11,7 +11,7 @@ class ObjectComponent : public IUpdateable
 public:
 	GameObject& GetOwner() const;
 
-	virtual std::unique_ptr<ObjectComponent> Copy() = 0;
+	std::unique_ptr<ObjectComponent> Copy();
 	virtual RuntimeTypeCode GetTypeCode() const = 0;
 
 protected:

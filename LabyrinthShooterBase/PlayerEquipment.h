@@ -18,8 +18,6 @@ public:
 
 	Firearm* GetCurrentWeapon();
 
-	virtual std::unique_ptr<ObjectComponent> Copy() override;
-
 private:
 	Firearm* basicWpn = nullptr;
 	Firearm* superWpn = nullptr;

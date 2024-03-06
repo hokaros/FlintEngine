@@ -245,11 +245,6 @@ void LabyrinthSolidifier::Update() {
 	}
 }
 
-std::unique_ptr<ObjectComponent> LabyrinthSolidifier::Copy()
-{
-	return std::make_unique<LabyrinthSolidifier>(position, wallWidth, wallLength, xCount, yCount, changeTime, shouldChange);
-}
-
 void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall) {
 	if (wall.IsDestroyed()) {
 		colliderMemory->Free(&wall.GetOwner());

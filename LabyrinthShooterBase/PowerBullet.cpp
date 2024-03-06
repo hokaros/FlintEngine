@@ -20,11 +20,6 @@ void PowerBullet::Awake()
 	Bullet::Awake();
 }
 
-std::unique_ptr<ObjectComponent> PowerBullet::Copy()
-{
-	return std::make_unique<PowerBullet>(speed, damage, health);
-}
-
 void PowerBullet::OnCollision(BoxCollider& collider) 
 {
 	Destroyable* destroyable = collider.GetOwner().FindComponent<Destroyable>();
