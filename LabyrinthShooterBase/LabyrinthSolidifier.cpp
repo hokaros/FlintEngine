@@ -11,6 +11,7 @@ DEFINE_FIELD(LabyrinthSolidifier, m_WallColor);
 DEFINE_FIELD(LabyrinthSolidifier, m_GateColor);
 DEFINE_FIELD(LabyrinthSolidifier, shouldChange);
 DEFINE_FIELD(LabyrinthSolidifier, changeTime);
+DEFINE_FIELD(LabyrinthSolidifier, wallPrefab);
 
 LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 	int wallWidth, int wallLength,
@@ -120,14 +121,12 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
 }
 
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color) {
-	GameObject* wall = GameObject::Instantiate(size);
+	GameObject* wall = GameObject::Instantiate(*wallPrefab.Get());
 
-	std::unique_ptr<BoxCollider> collider = std::make_unique<BoxCollider>(Vector::ZERO, size);
-	collider->m_IsStatic = true;
-	wall->AddComponent(std::move(collider));
+	wall->SetSize(size);
+	wall->FindComponent<BoxCollider>()->SetSize(size);
 
-	if (Window::Main() != nullptr)
-		wall->AddComponent(std::make_unique<RectangleRenderer>(color));
+	wall->FindComponent<RectangleRenderer>()->SetColor(color);
 
 	return wall;
 }

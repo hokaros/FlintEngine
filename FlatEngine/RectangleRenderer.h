@@ -12,6 +12,8 @@ public:
 	RectangleRenderer(const Rgb8& color);
 	void Render() override;
 
+	void SetColor(Rgb8 color);
+
 private:
 	Rgb8 m_Color;
 

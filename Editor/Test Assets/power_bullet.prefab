@@ -3,12 +3,14 @@
 - m_Size: 10.000000, 10.000000
 - components:
 	- PowerBullet:
-		- speed: 2000.000000
 		- damage: 2
 		- health: 2
+		- speed: 2000.000000
 	- BoxCollider:
 		- m_InsideOutCollision: 0
+		- m_IsStatic: 1
 		- m_Position: 0.000000, 0.000000
 		- m_Size: 10.000000, 10.000000
 	- RectangleRenderer:
 		- m_Color: ff,0,0
+- children:

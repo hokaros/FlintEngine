@@ -1,22 +1,36 @@
 - m_Name: Basic Bullet
-- m_Size: 4, 4
+- m_Pos: 0.000000, 0.000000
+- m_Size: 4.000000, 4.000000
 - components:
 	- Bullet:
-		- speed: 1000
 		- damage: 1
+		- speed: 1000.000000
 	- BoxCollider:
-		- m_Position: 0, 0
-		- m_Size: 4, 4
+		- m_InsideOutCollision: 0
+		- m_IsStatic: 1
+		- m_Position: 0.000000, 0.000000
+		- m_Size: 4.000000, 4.000000
 	- RectangleRenderer:
-		- m_Color: 0xFF, 0xFF, 0x00
+		- m_Color: ff,ff,0
 - children:
 	- GameObject
 		- m_Name: Basic Bullet Child
-		- m_Pos: 5, 5
-		- m_Size: 4, 4
+		- m_Pos: 5.000000, 5.000000
+		- m_Size: 5.200000, 4.000000
 		- components:
 			- BoxCollider:
-				- m_Position: 0, 0
-				- m_Size: 4, 4
+				- m_InsideOutCollision: 0
+				- m_IsStatic: 0
+				- m_Position: 0.000000, 0.000000
+				- m_Size: 4.000000, 4.000000
 			- RectangleRenderer:
-				- m_Color: 0x00, 0xFF, 0x00
+				- m_Color: 0,ff,0
+		- children:
+			- GameObject
+				- m_Name: Grand Child
+				- m_Pos: 0.000000, 0.000000
+				- m_Size: 4.900000, 4.400000
+				- components:
+					- RectangleRenderer:
+						- m_Color: 21,0,0
+				- children:

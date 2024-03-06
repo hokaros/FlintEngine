@@ -17,3 +17,8 @@ void RectangleRenderer::Render()
 	Rect rect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
 	SceneRenderer::Main()->RenderRect(rect, m_Color);
 }
+
+void RectangleRenderer::SetColor(Rgb8 color)
+{
+	m_Color = color;
+}

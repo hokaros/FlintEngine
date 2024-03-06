@@ -12,6 +12,7 @@ public:
 
 	bool DoesCollide(const BoxCollider& other) const;
 	Rect GetIntersection(const BoxCollider& other) const;
+	bool IsStatic() const;
 
 	void OnCollision(BoxCollider& other);
 
@@ -25,7 +26,6 @@ public:
 	virtual void OnDestroy() override;
 
 public:
-	bool m_IsStatic = false;
 	std::function<void(BoxCollider& collider)> onCollision;
 
 private:
@@ -39,11 +39,15 @@ private:
 
 private:
 	bool m_InsideOutCollision = false;
-	Vector m_Position = Vector(0,0);
-	Vector m_Size = Vector(0,0);
-
 	DECLARE_FIELD(m_InsideOutCollision);
+
+	Vector m_Position = Vector(0,0);
 	DECLARE_FIELD(m_Position);
+
+	Vector m_Size = Vector(0,0);
 	DECLARE_FIELD(m_Size);
+
+	bool m_IsStatic = false;
+	DECLARE_FIELD(m_IsStatic);
 };
 

@@ -17,7 +17,6 @@ Bullet::Bullet(float speed, int damage)
 void Bullet::Awake()
 {
 	BoxCollider* collider = m_GameObject->FindComponent<BoxCollider>();
-	collider->m_IsStatic = true;
 
 	collider->onCollision =
 		[this](BoxCollider& c) {

@@ -73,7 +73,7 @@ void PhysicsSystem::OnCollision(BoxCollider& col1, BoxCollider& col2)
 
 void PhysicsSystem::Discollide(BoxCollider& col1, BoxCollider& col2)
 {
-	if (col1.m_IsStatic && col2.m_IsStatic)
+	if (col1.IsStatic() && col2.IsStatic())
 		return;
 
 	Rect intersection = col1.GetIntersection(col2);
@@ -100,11 +100,11 @@ void PhysicsSystem::Discollide(BoxCollider& col1, BoxCollider& col2)
 	Vector to_col2 = col2.GetWorldMiddle() - intersection_mid;
 	clamp_to_half_size(to_col2, intersection.size);
 
-	if (!col1.m_IsStatic)
+	if (!col1.IsStatic())
 	{
 		col1.GetOwner().Translate(to_col1);
 	}
-	if (!col2.m_IsStatic)
+	if (!col2.IsStatic())
 	{
 		col2.GetOwner().Translate(to_col2);
 	}
@@ -131,7 +131,7 @@ void PhysicsSystem::DebugDrawColliders() const
 	for (BoxCollider* collider : m_Colliders)
 	{
 		Rgb8 color = Rgb8(0x00, 0x00, 0xFF);
-		if (collider->m_IsStatic)
+		if (collider->IsStatic())
 		{
 			color = Rgb8(0xFF, 0x00, 0x00);
 		}

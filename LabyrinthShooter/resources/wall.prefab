@@ -1,0 +1,12 @@
+- m_Name: Labyrinth Wall
+- m_Pos: 0.000000, 0.000000
+- m_Size: 10.000000, 100.000000
+- components:
+	- BoxCollider:
+		- m_InsideOutCollision: 0
+		- m_IsStatic: 1
+		- m_Position: 0.000000, 0.000000
+		- m_Size: 10.000000, 100.000000
+	- RectangleRenderer:
+		- m_Color: 0,0,aa
+- children:

@@ -7,6 +7,7 @@ DEFINE_COMPONENT(BoxCollider);
 DEFINE_FIELD(BoxCollider, m_InsideOutCollision);
 DEFINE_FIELD(BoxCollider, m_Position);
 DEFINE_FIELD(BoxCollider, m_Size);
+DEFINE_FIELD(BoxCollider, m_IsStatic);
 
 BoxCollider::BoxCollider(Vector local_pos, Vector size, bool inside_out)
 	: m_Position(local_pos)
@@ -177,4 +178,9 @@ Rect BoxCollider::GetIntersection(const BoxCollider& other) const {
 		Vector(xIntersection.x, yIntersection.x),
 		size
 	);
+}
+
+bool BoxCollider::IsStatic() const
+{
+	return m_IsStatic;
 }

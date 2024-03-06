@@ -9,6 +9,7 @@
 		- position: 10.000000, 10.000000
 		- shouldChange: 1
 		- wallLength: 100
+		- wallPrefab: resources/wall.prefab
 		- wallWidth: 10
 		- xCount: 7
 		- yCount: 5

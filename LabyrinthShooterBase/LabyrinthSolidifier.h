@@ -78,6 +78,9 @@ private:
 	double changeTime = 2.0;
 	DECLARE_FIELD(changeTime);
 
+	PrefabRef wallPrefab;
+	DECLARE_FIELD(wallPrefab);
+
 	double timeSinceLastChange = 0.0;
 
 	std::unique_ptr<Labirynt> labyrinth;
