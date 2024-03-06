@@ -9,6 +9,7 @@ class Scene
 public:
 	virtual void Update();
 	virtual void Render();
+	void ResetScene();
 	void PostFrame();
 	
 	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;

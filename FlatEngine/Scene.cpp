@@ -30,6 +30,12 @@ void Scene::Render()
 	}
 }
 
+void Scene::ResetScene()
+{
+	m_ObjectManager.DestroyAll();
+	m_ObjectManager.Clear();
+}
+
 void Scene::PostFrame()
 {
 	m_ObjectManager.DisposeDestroyed();

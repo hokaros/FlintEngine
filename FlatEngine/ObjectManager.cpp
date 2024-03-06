@@ -78,6 +78,14 @@ void ObjectManager::DestroyObject(GameObject* gameObject)
 	DestroyObjectImpl(gameObject, true);
 }
 
+void ObjectManager::DestroyAll()
+{
+	for (std::unique_ptr<GameObject>& go : m_OwnedObjects)
+	{
+		DestroyObject(go.get());
+	}
+}
+
 void ObjectManager::DisposeDestroyed() 
 {
 	auto should_dispose = [this](const GameObject* go) -> bool
@@ -139,6 +147,7 @@ void ObjectManager::Subscribe(IObjectManagerObserver& observer)
 void ObjectManager::Clear() 
 {
 	m_MessageSubscribers.clear();
+	m_NewMessageSubscribers.clear();
 	m_DestroyedObjects.clear();
 
 	m_OwnedObjects.clear();

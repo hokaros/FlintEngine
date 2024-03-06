@@ -23,6 +23,7 @@ public:
 
 	void AddNewObject(std::unique_ptr<GameObject> object);
 	void DestroyObject(GameObject* object);
+	void DestroyAll();
 
 	void DisposeDestroyed();
 	void ActivateNewObjects();

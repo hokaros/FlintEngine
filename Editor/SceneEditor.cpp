@@ -12,8 +12,22 @@ SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screen
 	AddExampleObjectsToScene();
 }
 
+void SceneEditor::SetRootObject(std::weak_ptr<EditorPrefabHandle> root_object)
+{
+	m_Scene.ResetScene();
+
+	m_RootObject = root_object;
+
+	m_Scene.GetObjectManager().AddToMessageSubscribers(root_object.lock()->GetGameObject());
+}
+
 void SceneEditor::Render()
 {
+	if (m_RootObject.expired())
+	{
+		ResetRootObject();
+	}
+
 	if (ImGui::Begin("Scene Editor"))
 	{
 		m_Scene.Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
@@ -43,4 +57,11 @@ void SceneEditor::AddExampleObjectsToScene()
 	game_object->SetSize(Vector(10, 10));
 	game_object->SetPosition(Vector(50, 50));
 	game_object->AddComponent(std::make_unique<RectangleRenderer>(Rgb8(0xFF, 0x00, 0x00)));
+}
+
+void SceneEditor::ResetRootObject()
+{
+	m_Scene.ResetScene();
+
+	m_RootObject = std::weak_ptr<EditorPrefabHandle>();
 }
