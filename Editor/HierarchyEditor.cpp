@@ -46,7 +46,8 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	}
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	const bool node_open = ImGui::TreeNodeEx(node_object->GetName().c_str(), node_flags);
+	const char* node_id = node_object->GetName().empty() == false ? node_object->GetName().c_str() : "?";
+	const bool node_open = ImGui::TreeNodeEx(node_id, node_flags);
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{
 		m_SelectedGameObjectManager->SelectGameObject(node_object_handle);
