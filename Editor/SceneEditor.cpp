@@ -24,8 +24,6 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorPrefabHandle> root_object)
 
 void SceneEditor::Render()
 {
-	viewportController.Update(m_SceneRenderer.GetViewport());
-
 	if (m_RootObject.expired())
 	{
 		ResetRootObject();
@@ -33,6 +31,11 @@ void SceneEditor::Render()
 
 	if (ImGui::Begin("Scene Editor"))
 	{
+		if (ImGui::IsWindowFocused())
+		{
+			viewportController.Update(m_SceneRenderer.GetViewport());
+		}
+
 		m_Scene.Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
 
 		if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())
