@@ -3,6 +3,7 @@
 #include "../FlatEngine/imgui/imgui.h"
 #include "../FlatEngine/Scene.h"
 #include "AssetHandles.h"
+#include "ViewportController.h"
 
 class SceneEditor
 {
@@ -22,6 +23,8 @@ private:
 private:
 	SceneRenderer m_SceneRenderer;
 	Scene m_Scene; // TODO: transform into Asset Handle
+
+	ViewportController viewportController;
 
 	std::weak_ptr<EditorPrefabHandle> m_RootObject;
 };

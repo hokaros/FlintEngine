@@ -24,6 +24,8 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorPrefabHandle> root_object)
 
 void SceneEditor::Render()
 {
+	viewportController.Update(m_SceneRenderer.GetViewport());
+
 	if (m_RootObject.expired())
 	{
 		ResetRootObject();
