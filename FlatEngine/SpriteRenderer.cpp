@@ -35,11 +35,7 @@ void SpriteRenderer::Awake()
 
 void SpriteRenderer::Render()
 {
-	SDL_Rect dstRect;
-	dstRect.x = m_GameObject->GetPosition().x;
-	dstRect.y = m_GameObject->GetPosition().y;
-	dstRect.w = m_GameObject->GetSize().x;
-	dstRect.h = m_GameObject->GetSize().y;
+	Rect dstRect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
 
 	SceneRenderer::Main()->RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
 }

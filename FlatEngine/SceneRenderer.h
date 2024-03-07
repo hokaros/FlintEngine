@@ -26,18 +26,23 @@ public:
 
 	SDL_Texture* GetOutputTexture() const;
 
-	void RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle);
+	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle);
 	void RenderRect(const Rect& rect, const Rgb8& color);
 	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color);
 	void RenderWireRect(const Rect& rect, const Rgb8& color);
 
-	Rect GetRenderedRect() const;
+	void SetViewport(const Rect& viewport);
+	const Rect& GetRenderedRect() const;
+	Rect& GetViewport();
 
 	// narysowanie napisu txt na ekranie, zaczynaj¹c od punktu (x, y)
 	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize);
 
 	~SceneRenderer();
 private:
+	Rect GetRectViewportSpace(const Rect& worldSpace) const;
+	Vector GetPointViewportSpace(const Vector& worldSpace) const;
+
 	bool LoadCharsets();
 	VectorInt GetCharCoordinates(char c) const;
 
@@ -49,8 +54,7 @@ private:
 	SDL_Surface* m_BigCharset = nullptr;
 	SDL_Texture* m_CharsetTex = nullptr;
 
-	int m_Width;
-	int m_Height;
+	Rect m_CurrentViewport;
 
 	static SceneRenderer* s_Instance;
 };

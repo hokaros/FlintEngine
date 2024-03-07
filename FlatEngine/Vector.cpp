@@ -92,6 +92,10 @@ double Vector::GetAngle(const Vector& v1, const Vector& v2) {
 	return v1.GetAngle() - v2.GetAngle();
 }
 
+Vector Vector::Scale(const Vector& v1, const Vector& v2) {
+	return Vector(v1.x * v2.x, v1.y * v2.y);
+}
+
 
 
 VectorInt::VectorInt()

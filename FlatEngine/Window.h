@@ -8,8 +8,6 @@
 
 // TODO: IDebugRenderer
 
-// TODO: FRenderer jako API do renderowania
-
 class Window
 {
 public:
@@ -18,8 +16,6 @@ public:
 
 	bool Init();
 	void Present();
-
-	void RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle);
 
 	SDL_Renderer* GetRenderer() const;
 

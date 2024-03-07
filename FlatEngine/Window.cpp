@@ -87,11 +87,6 @@ void Window::Present()
 	ImGuiNewFrame();
 }
 
-void Window::RenderTexture(SDL_Texture* texture, const SDL_Rect& rect, double angle) 
-{
-	m_SceneRenderer.RenderTexture(texture, rect, angle);
-}
-
 SDL_Renderer* Window::GetRenderer() const 
 {
 	return m_Renderer;

@@ -42,6 +42,11 @@ public:
         , y(other.y) 
     {}
 
+    constexpr Vector(const Vector& other)
+        : x(other.x)
+        , y(other.y)
+    {}
+
     constexpr Vector(Direction direction) : x(0), y(0) {
         switch (direction) {
         case Direction::EAST:
@@ -88,6 +93,8 @@ public:
 
     // K¹t w radianach miêdzy dwoma wektorami
     static double GetAngle(const Vector& v1, const Vector& v2);
+    // Component-wise multiplication
+    static Vector Scale(const Vector& v1, const Vector& v2);
 
     // Sta³e
     static const Vector ZERO;
