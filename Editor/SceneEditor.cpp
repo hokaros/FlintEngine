@@ -8,6 +8,7 @@ SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screen
 	: m_SceneRenderer(screenWidth, screenHeight)
 {
 	m_SceneRenderer.Init(&renderer, {});
+	m_SceneRenderer.SetViewport(Rect(Vector(0, 0), Vector(10, 10)));
 
 	AddExampleObjectsToScene();
 }

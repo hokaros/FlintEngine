@@ -13,7 +13,8 @@ SceneRenderer* SceneRenderer::Main()
 SceneRenderer::SceneRenderer(int windowWidth, int windowHeight)
 	: m_CurrentViewport(s_RenderStart,
 		Vector(windowWidth, windowHeight)
-	)
+	),
+	m_RTSize(windowWidth, windowHeight)
 {
 }
 
@@ -23,7 +24,7 @@ bool SceneRenderer::Init(SDL_Renderer* renderer, RenderingKey)
 
 	m_OutTexture = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888,
 		SDL_TEXTUREACCESS_TARGET,
-		m_CurrentViewport.size.x, m_CurrentViewport.size.y);
+		m_RTSize.x, m_RTSize.y);
 
 	if (!LoadCharsets())
 		return false;
@@ -58,19 +59,8 @@ Rect& SceneRenderer::GetViewport()
 
 void SceneRenderer::RenderTexture(SDL_Texture* texture, const Rect& rect, double angle)
 {
-	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
-	SDL_SetRenderTarget(m_Renderer, m_OutTexture); // TODO: don't replace RTs every Render
-
-	FE_ASSERT(m_Renderer != nullptr, "No renderer set");
-
-	SDL_Rect vsRect = RectToSDLRect(GetRectViewportSpace(rect));
-
-	SDL_Point mid;
-	mid.x = vsRect.w / 2;
-	mid.y = vsRect.h / 2;
-	SDL_RenderCopyEx(m_Renderer, texture, NULL, &(vsRect), angle, &mid, SDL_FLIP_NONE);
-
-	SDL_SetRenderTarget(m_Renderer, originalRT);
+	Rect screen_space_rect = WorldSpaceToScreenSpace(rect);
+	RenderTextureScreenSpace(texture, screen_space_rect, angle);
 }
 
 void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color)
@@ -78,11 +68,11 @@ void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color)
 	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
 	SDL_SetRenderTarget(m_Renderer, m_OutTexture);
 
-	SDL_Rect vsRect = RectToSDLRect(GetRectViewportSpace(rect));
+	SDL_Rect ssRect = RectToSDLRect(WorldSpaceToScreenSpace(rect));
 
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
 
-	int result = SDL_RenderFillRect(m_Renderer, &vsRect);
+	int result = SDL_RenderFillRect(m_Renderer, &ssRect);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 
 	SDL_SetRenderTarget(m_Renderer, originalRT);
@@ -93,12 +83,12 @@ void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb
 	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
 	SDL_SetRenderTarget(m_Renderer, m_OutTexture);
 
-	Vector vsStart = GetPointViewportSpace(start);
-	Vector vsEnd = GetPointViewportSpace(end);
+	Vector ssStart = WorldSpaceToScreenSpace(start);
+	Vector ssEnd = WorldSpaceToScreenSpace(end);
 
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
 
-	int result = SDL_RenderDrawLine(m_Renderer, vsStart.x, vsStart.y, vsEnd.x, vsEnd.y);
+	int result = SDL_RenderDrawLine(m_Renderer, ssStart.x, ssStart.y, ssEnd.x, ssEnd.y);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 
 	SDL_SetRenderTarget(m_Renderer, originalRT);
@@ -109,11 +99,11 @@ void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color)
 	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
 	SDL_SetRenderTarget(m_Renderer, m_OutTexture);
 
-	SDL_Rect vsRect = RectToSDLRect(GetRectViewportSpace(rect));
+	SDL_Rect ssRect = RectToSDLRect(WorldSpaceToScreenSpace(rect));
 
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
 
-	int result = SDL_RenderDrawRect(m_Renderer, &vsRect);
+	int result = SDL_RenderDrawRect(m_Renderer, &ssRect);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 
 	SDL_SetRenderTarget(m_Renderer, originalRT);
@@ -146,20 +136,60 @@ void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fo
 	SDL_SetRenderTarget(m_Renderer, originalRT);
 }
 
+void SceneRenderer::RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle)
+{
+	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
+	SDL_SetRenderTarget(m_Renderer, m_OutTexture); // TODO: don't replace RTs every Render
+
+	FE_ASSERT(m_Renderer != nullptr, "No renderer set");
+
+	SDL_Rect ssRect = RectToSDLRect(rect);
+
+	SDL_Point mid;
+	mid.x = ssRect.w / 2;
+	mid.y = ssRect.h / 2;
+	SDL_RenderCopyEx(m_Renderer, texture, NULL, &(ssRect), angle, &mid, SDL_FLIP_NONE);
+
+	SDL_SetRenderTarget(m_Renderer, originalRT);
+}
+
 SceneRenderer::~SceneRenderer()
 {
 	SDL_DestroyTexture(m_CharsetTex);
 	SDL_DestroyTexture(m_OutTexture);
 }
 
-Rect SceneRenderer::GetRectViewportSpace(const Rect& worldSpace) const
+Rect SceneRenderer::WorldSpaceToScreenSpace(const Rect& worldSpace) const
 {
-	return Rect(GetPointViewportSpace(worldSpace.pos), worldSpace.size);
+	return ViewportSpaceToScreenSpace(WorldSpaceToViewportSpace(worldSpace));
 }
 
-Vector SceneRenderer::GetPointViewportSpace(const Vector& worldSpace) const
+Vector SceneRenderer::WorldSpaceToScreenSpace(const Vector& worldSpace) const
+{
+	return ViewportSpaceToScreenSpace(WorldSpaceToViewportSpace(worldSpace));
+}
+
+Rect SceneRenderer::WorldSpaceToViewportSpace(const Rect& worldSpace) const
+{
+	return Rect(WorldSpaceToViewportSpace(worldSpace.pos), worldSpace.size);
+}
+
+Vector SceneRenderer::WorldSpaceToViewportSpace(const Vector& worldSpace) const
 {
 	return worldSpace - m_CurrentViewport.pos;
+}
+
+Rect SceneRenderer::ViewportSpaceToScreenSpace(const Rect& viewportSpace) const
+{
+	Vector screenSpaceSize = Vector(viewportSpace.size.x * m_RTSize.x / m_CurrentViewport.size.x,
+		viewportSpace.size.y * m_RTSize.y / m_CurrentViewport.size.y);
+	return Rect(ViewportSpaceToScreenSpace(viewportSpace.pos), screenSpaceSize);
+}
+
+Vector SceneRenderer::ViewportSpaceToScreenSpace(const Vector& viewportSpace) const
+{
+	return Vector(viewportSpace.x * m_RTSize.x / m_CurrentViewport.size.x,
+		viewportSpace.y * m_RTSize.y / m_CurrentViewport.size.y);
 }
 
 bool SceneRenderer::LoadCharsets()
