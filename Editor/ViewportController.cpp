@@ -2,16 +2,46 @@
 
 void ViewportController::Update(Rect& viewport)
 {
+    ProcessTranslation(viewport);
+    ProcessZooming(viewport);
+}
+
+void ViewportController::ProcessTranslation(Rect& viewport)
+{
     constexpr float normalSpeed = 0.01f;
     constexpr float boostedSpeed = 0.1f;
     float speed = normalSpeed;
-    
+
     if (ImGui::IsKeyDown(ImGuiKey_LeftShift))
     {
         speed = boostedSpeed;
     }
-    
-    viewport.pos += GetMoveDirection() *speed;
+
+    viewport.pos += GetMoveDirection() * speed;
+}
+
+void ViewportController::ProcessZooming(Rect& viewport)
+{
+    // TODO: zooming relative to the mouse pos
+    constexpr float normalSpeed = 1.2f;
+    constexpr float boostedSpeed = 2.0f;
+    float speed = normalSpeed;
+
+    if (ImGui::IsKeyDown(ImGuiKey_LeftShift))
+    {
+        speed = boostedSpeed;
+    }
+
+    float wheel = ImGui::GetIO().MouseWheel;
+
+    if (wheel < 0)
+    {
+        viewport.size = viewport.size * speed;
+    }
+    else if (wheel > 0)
+    {
+        viewport.size = viewport.size / speed;
+    }
 }
 
 Vector ViewportController::GetMoveDirection()

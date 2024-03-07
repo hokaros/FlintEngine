@@ -8,6 +8,9 @@ public:
 	void Update(Rect& viewport);
 
 private:
+	void ProcessTranslation(Rect& viewport);
+	void ProcessZooming(Rect& viewport);
+
 	Vector GetMoveDirection();
 };
 
