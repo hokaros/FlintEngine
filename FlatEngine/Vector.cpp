@@ -88,12 +88,25 @@ std::ostream& operator<<(std::ostream& ostr, const Vector& v)
 	return ostr;
 }
 
+Vector& operator*=(Vector& left, float multiplier)
+{
+	left.x *= multiplier;
+	left.y *= multiplier;
+
+	return left;
+}
+
 double Vector::GetAngle(const Vector& v1, const Vector& v2) {
 	return v1.GetAngle() - v2.GetAngle();
 }
 
 Vector Vector::Scale(const Vector& v1, const Vector& v2) {
 	return Vector(v1.x * v2.x, v1.y * v2.y);
+}
+
+Vector Vector::Divide(const Vector& v1, const Vector& v2)
+{
+	return Vector(v1.x / v2.x, v1.y / v2.y);
 }
 
 

@@ -1,5 +1,11 @@
 #include "ViewportController.h"
 
+Vector ImVecToVec(ImVec2 imVec)
+{
+    return Vector(imVec.x, imVec.y);
+}
+
+
 void ViewportController::Update(Rect& viewport)
 {
     ProcessTranslation(viewport);
@@ -22,26 +28,18 @@ void ViewportController::ProcessTranslation(Rect& viewport)
 
 void ViewportController::ProcessZooming(Rect& viewport)
 {
-    // TODO: zooming relative to the mouse pos
-    constexpr float normalSpeed = 1.2f;
-    constexpr float boostedSpeed = 2.0f;
-    float speed = normalSpeed;
+    const float multip = GetZoomMultiplier();
 
-    if (ImGui::IsKeyDown(ImGuiKey_LeftShift))
-    {
-        speed = boostedSpeed;
-    }
+    Vector mousePosScreenSpace = ImVecToVec(ImGui::GetIO().MousePos);
+    Vector mousePosOutputSpace = mousePosScreenSpace - ImVecToVec(ImGui::GetCursorScreenPos());
 
-    float wheel = ImGui::GetIO().MouseWheel;
+    Vector outputSize = ImVecToVec(ImGui::GetContentRegionAvail());
+    Vector viewportSizeToOutputSize = Vector::Divide( viewport.size, outputSize );
 
-    if (wheel < 0)
-    {
-        viewport.size = viewport.size * speed;
-    }
-    else if (wheel > 0)
-    {
-        viewport.size = viewport.size / speed;
-    }
+    Vector toMouseViewport = Vector::Scale(viewportSizeToOutputSize, mousePosOutputSpace);
+    viewport.pos = viewport.pos - (toMouseViewport * multip - toMouseViewport);
+
+    viewport.size *= multip;
 }
 
 Vector ViewportController::GetMoveDirection()
@@ -66,4 +64,33 @@ Vector ViewportController::GetMoveDirection()
     }
 
     return direction;
+}
+
+float ViewportController::GetZoomMultiplier()
+{
+    constexpr float normalSpeed = 1.2f;
+    constexpr float boostedSpeed = 2.0f;
+    float speed = normalSpeed;
+
+    if (ImGui::IsKeyDown(ImGuiKey_LeftShift))
+    {
+        speed = boostedSpeed;
+    }
+
+    float wheel = ImGui::GetIO().MouseWheel;
+    float multip = 0.0f;
+    if (wheel < 0)
+    {
+        multip = speed;
+    }
+    else if (wheel > 0)
+    {
+        multip = 1 / speed;
+    }
+    else
+    {
+        multip = 1.0f;
+    }
+
+    return multip;
 }

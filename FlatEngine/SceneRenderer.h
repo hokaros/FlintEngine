@@ -39,11 +39,12 @@ public:
 	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize);
 	void RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle);
 
-	~SceneRenderer();
-private:
 	Rect WorldSpaceToScreenSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToScreenSpace(const Vector& worldSpace) const;
 
+	~SceneRenderer();
+
+private:
 	Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
 

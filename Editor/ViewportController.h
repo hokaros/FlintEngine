@@ -12,5 +12,6 @@ private:
 	void ProcessZooming(Rect& viewport);
 
 	Vector GetMoveDirection();
+	float GetZoomMultiplier();
 };
 

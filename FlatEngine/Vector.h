@@ -88,6 +88,7 @@ public:
     friend Vector& operator+=(Vector& left, const Vector& right);
     friend Vector operator-(const Vector& left, const Vector& right);
     friend Vector operator*(const Vector& left, float multiplier);
+    friend Vector& operator*=(Vector& left, float multiplier);
     friend Vector operator/(const Vector& left, float dividor);
     friend std::ostream& operator<<(std::ostream& ostr, const Vector& v);
 
@@ -95,6 +96,7 @@ public:
     static double GetAngle(const Vector& v1, const Vector& v2);
     // Component-wise multiplication
     static Vector Scale(const Vector& v1, const Vector& v2);
+    static Vector Divide(const Vector& v1, const Vector& v2);
 
     // Sta³e
     static const Vector ZERO;
