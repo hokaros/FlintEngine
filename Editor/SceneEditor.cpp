@@ -35,6 +35,7 @@ void SceneEditor::Render()
 		{
 			viewportController.Update(m_SceneRenderer.GetViewport());
 		}
+		// WARNING: do not render anything between viewportController's update and displaying the scene
 
 		m_Scene.Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
 
