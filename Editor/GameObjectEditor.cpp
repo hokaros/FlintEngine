@@ -25,12 +25,12 @@ void GameObjectEditor::OnGameObjectSelected(EditorGameObjectHandle* game_object)
 {
     m_GameObjectHandle = game_object;
 
-    if (m_GameObjectHandle == nullptr)
+    if (m_GameObjectHandle == nullptr || m_GameObjectHandle->GetGameObject() == nullptr)
         return;
 
     GameObject& go = m_GameObjectHandle->GetGameObject()->GetResult();
     InitValuesFromGameObject(go);
-    LoadComponents(go);
+    LoadComponents(*m_GameObjectHandle->GetGameObject());
 
     LoadAddableComponents();
 }
@@ -69,7 +69,7 @@ void GameObjectEditor::RenderComponentEditors()
 {
     if (!m_AreComponentEditorsValid)
     {
-        LoadComponents(m_GameObjectHandle->GetGameObject()->GetResult());
+        LoadComponents(*m_GameObjectHandle->GetGameObject());
     }
 
     for (std::unique_ptr<ComponentEditor>& comp_editor : m_ComponentEditors)
@@ -92,14 +92,14 @@ void GameObjectEditor::RenderComponentAddSection()
     }
 }
 
-void GameObjectEditor::LoadComponents(GameObject& game_object)
+void GameObjectEditor::LoadComponents(IEditableGameObject& game_object)
 {
     m_ComponentEditors.clear();
 
     size_t component_idx = 0;
-    for (std::unique_ptr<ObjectComponent>& component : game_object.GetAllComponents())
+    for (std::unique_ptr<ObjectComponent>& component : game_object.GetResult().GetAllComponents())
     {
-        std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(*component, component_idx);
+        std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(game_object, *component, component_idx);
         comp_editor->RegisterActionObserver(this);
         m_ComponentEditors.push_back(std::move(comp_editor));
 

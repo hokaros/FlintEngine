@@ -1,7 +1,8 @@
 #include "ComponentEditor.h"
 
-ComponentEditor::ComponentEditor(ObjectComponent& component, size_t index_in_game_object)
-	: m_Component(component)
+ComponentEditor::ComponentEditor(IEditableGameObject& game_object, ObjectComponent& component, size_t index_in_game_object)
+	: m_GameObject(game_object)
+	, m_Component(component)
 	, m_ComponentDefinition(
 		*ComponentDefinitionManager::GetInstance().GetDefinitionFromTypeCode(
 			component.GetTypeCode()
@@ -63,23 +64,23 @@ std::unique_ptr<FieldEditor> ComponentEditor::CreateFieldEditor(const ComponentF
 	RuntimeTypeCode field_value_type_code = field.GetValueRTC();
 	if (field_value_type_code == SerializableTypeInterface<float>::GetTypeCode())
 	{
-		return std::make_unique<FieldEditorFloat>(m_Component, field);
+		return std::make_unique<FieldEditorFloat>(m_GameObject, m_Component, field);
 	}
 	else if (field_value_type_code == SerializableTypeInterface<bool>::GetTypeCode())
 	{
-		return std::make_unique<FieldEditorBool>(m_Component, field);
+		return std::make_unique<FieldEditorBool>(m_GameObject, m_Component, field);
 	}
 	else if (field_value_type_code == SerializableTypeInterface<Vector>::GetTypeCode())
 	{
-		return std::make_unique<FieldEditorVector>(m_Component, field);
+		return std::make_unique<FieldEditorVector>(m_GameObject, m_Component, field);
 	}
 	else if (field_value_type_code == SerializableTypeInterface<Rgb8>::GetTypeCode())
 	{
-		return std::make_unique<FieldEditorRgb8>(m_Component, field);
+		return std::make_unique<FieldEditorRgb8>(m_GameObject, m_Component, field);
 	}
 	else
 	{
-		return std::make_unique<FieldEditorDefault>(m_Component, field);
+		return std::make_unique<FieldEditorDefault>(m_GameObject, m_Component, field);
 	}
 }
 

@@ -14,7 +14,7 @@ public:
 class ComponentEditor
 {
 public:
-    ComponentEditor(ObjectComponent& component, size_t index_in_game_object);
+    ComponentEditor(IEditableGameObject& game_object, ObjectComponent& component, size_t index_in_game_object);
     void Render();
 
     void RegisterActionObserver(IComponentActionObserver* observer);
@@ -26,6 +26,7 @@ private:
     float CalculateHeight() const;
 
 private:
+    IEditableGameObject& m_GameObject;
     ObjectComponent& m_Component;
     ComponentDefinition& m_ComponentDefinition;
     size_t m_IndexInGameObject;

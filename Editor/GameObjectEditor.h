@@ -27,7 +27,7 @@ private:
 	void RenderGameObjectEditor(IEditableGameObject& game_object);
 	void RenderComponentEditors();
 	void RenderComponentAddSection();
-	void LoadComponents(GameObject& game_object);
+	void LoadComponents(IEditableGameObject& game_object);
 	void AddComponent(const ComponentDefinition* component);
 
 	void InitValuesFromGameObject(const GameObject& game_object);

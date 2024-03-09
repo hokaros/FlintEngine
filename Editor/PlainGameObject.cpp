@@ -45,8 +45,9 @@ void PlainGameObject::RemoveComponent(size_t index)
 	m_GameObject.RemoveComponent(index);
 }
 
-void PlainGameObject::ModifyComponentField(const ComponentFieldChange& change)
+void PlainGameObject::ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
 {
-	ObjectComponent* comp = m_GameObject.GetComponent(change.componentIndex);
-	change.field->SetFieldValue(comp, change.GetValue());
+	FE_ASSERT(change != nullptr, "No change passed");
+
+	change->field->SetFieldValue(change->component, change->GetValue());
 }

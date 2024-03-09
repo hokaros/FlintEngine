@@ -5,7 +5,7 @@
 struct ComponentFieldChange
 {
 public:
-	size_t componentIndex;
+	ObjectComponent* component;
 	const ComponentFieldDefinition* field;
 
 	void* GetValue() const { return valuePtr; }
@@ -22,7 +22,7 @@ struct ComponentFieldChangeContained
 	: public ComponentFieldChange
 {
 public:
-	void SetValue(ValueT value);
+	void SetValue(const ValueT& value);
 
 private:
 	ValueT value;
@@ -44,13 +44,13 @@ public:
 
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) = 0;
 	virtual void RemoveComponent(size_t index) = 0;
-	virtual void ModifyComponentField(const ComponentFieldChange& change) = 0;
+	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;
 
 	virtual ~IEditableGameObject() = default;
 };
 
 template<typename ValueT>
-inline void ComponentFieldChangeContained<ValueT>::SetValue(ValueT value)
+inline void ComponentFieldChangeContained<ValueT>::SetValue(const ValueT& value)
 {
 	this->value = value;
 

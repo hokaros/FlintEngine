@@ -19,7 +19,7 @@ public:
 
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
 	virtual void RemoveComponent(size_t index) override;
-	virtual void ModifyComponentField(const ComponentFieldChange& change) override;
+	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) override;
 
 private:
 	GameObject& m_GameObject;
