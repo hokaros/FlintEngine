@@ -3,6 +3,7 @@
 #include "ComponentEditor.h"
 #include "AssetHandles.h"
 #include "SelectedGameObjectManager.h"
+#include "IEditableGameObject.h"
 
 class GameObjectEditor
 	: protected IComponentActionObserver
@@ -23,14 +24,14 @@ protected:
 private:
 	void LoadAddableComponents();
 
-	void RenderGameObjectEditor(GameObject& game_object);
+	void RenderGameObjectEditor(IEditableGameObject& game_object);
 	void RenderComponentEditors();
 	void RenderComponentAddSection();
 	void LoadComponents(GameObject& game_object);
 	void AddComponent(const ComponentDefinition* component);
 
 	void InitValuesFromGameObject(const GameObject& game_object);
-	void ApplyValuesToGameObject(GameObject& game_object);
+	void ApplyValuesToGameObject(IEditableGameObject& game_object);
 
 private:
 	static constexpr size_t s_NameMaxSize = 64;

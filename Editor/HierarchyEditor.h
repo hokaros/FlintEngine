@@ -15,7 +15,7 @@ public:
 
 private:
 	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object, bool is_root);
-	void RenderObjectContextMenu(GameObject& game_object, bool is_root);
+	void RenderObjectContextMenu(IEditableGameObject& game_object, bool is_root);
 
 	bool GetPrefabPathModal(std::string& path);
 

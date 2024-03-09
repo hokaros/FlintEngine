@@ -19,7 +19,7 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorPrefabHandle> root_object)
 
 	m_RootObject = root_object;
 
-	m_Scene.GetObjectManager().AddToMessageSubscribers(root_object.lock()->GetGameObject());
+	m_Scene.GetObjectManager().AddToMessageSubscribers(&root_object.lock()->GetGameObject()->GetResult());
 }
 
 void SceneEditor::Render()

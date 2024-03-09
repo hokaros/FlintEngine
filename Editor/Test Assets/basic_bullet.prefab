@@ -1,6 +1,6 @@
 - m_Name: Basic Bullet
-- m_Pos: 0.000000, 0.000000
-- m_Size: 4.000000, 4.000000
+- m_Pos: 1.800000, 0.000000
+- m_Size: 2.800000, 4.000000
 - components:
 	- Bullet:
 		- damage: 1
@@ -15,8 +15,8 @@
 - children:
 	- GameObject
 		- m_Name: Basic Bullet Child
-		- m_Pos: 5.000000, 5.000000
-		- m_Size: 5.200000, 4.000000
+		- m_Pos: 6.799999, 5.000000
+		- m_Size: 3.640000, 4.000000
 		- components:
 			- BoxCollider:
 				- m_InsideOutCollision: 0
@@ -28,8 +28,8 @@
 		- children:
 			- GameObject
 				- m_Name: Grand Child
-				- m_Pos: 0.000000, 0.000000
-				- m_Size: 4.900000, 4.400000
+				- m_Pos: 1.800000, 0.000000
+				- m_Size: 3.430001, 4.400000
 				- components:
 					- RectangleRenderer:
 						- m_Color: 21,0,0

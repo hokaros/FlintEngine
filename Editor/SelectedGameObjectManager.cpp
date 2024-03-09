@@ -19,10 +19,10 @@ EditorGameObjectHandle* SelectedGameObjectManager::GetSelectedGameObject() const
 
 bool SelectedGameObjectManager::IsGameObjectSelected(const GameObject& game_object) const
 {
-	if (m_SelectedGameObject == nullptr)
+	if (m_SelectedGameObject == nullptr || m_SelectedGameObject->GetGameObject() == nullptr)
 		return false;
 
-	return &game_object == m_SelectedGameObject->GetGameObject();
+	return &game_object == &m_SelectedGameObject->GetGameObject()->GetResult();
 }
 
 void SelectedGameObjectManager::SubscribeSelection(IGameObjectSelectionObserver& subscriber)
@@ -32,10 +32,10 @@ void SelectedGameObjectManager::SubscribeSelection(IGameObjectSelectionObserver&
 
 void SelectedGameObjectManager::OnObjectDestroying(GameObject& game_object)
 {
-	if (m_SelectedGameObject == nullptr)
+	if (m_SelectedGameObject == nullptr || m_SelectedGameObject->GetGameObject() == nullptr)
 		return;
 
-	if (m_SelectedGameObject->GetGameObject() == &game_object)
+	if (&m_SelectedGameObject->GetGameObject()->GetResult() == &game_object)
 	{
 		SelectGameObject(nullptr);
 	}

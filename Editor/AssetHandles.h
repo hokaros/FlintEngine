@@ -1,16 +1,11 @@
 #pragma once
-#include "../FlatEngine/GameObject.h"
+#include "PlainGameObject.h"
 
 class EditorGameObjectHandle
 {
 public:
-	EditorGameObjectHandle(GameObject* game_object);
-
-	GameObject* GetGameObject() const;
-	virtual void SaveGameObject();
-
-protected:
-	GameObject* m_GameObject;
+	virtual IEditableGameObject* GetGameObject() const = 0;
+	virtual void SaveGameObject() = 0;
 };
 
 class EditorPrefabHandle
@@ -19,9 +14,26 @@ class EditorPrefabHandle
 public:
 	EditorPrefabHandle(std::unique_ptr<GameObject> prefab, const std::string& prefab_path);
 
+	virtual IEditableGameObject* GetGameObject() const override;
 	virtual void SaveGameObject() override;
 
 private:
 	std::unique_ptr<GameObject> m_Prefab;
+	std::unique_ptr<PlainGameObject> m_EditablePrefab;
 	std::string m_PrefabPath;
+
+
+};
+
+class EditorPlainGameObjectHandle
+	: public EditorGameObjectHandle
+{
+public:
+	EditorPlainGameObjectHandle(GameObject* game_object);
+
+	virtual IEditableGameObject* GetGameObject() const override;
+	virtual void SaveGameObject() override;
+
+private:
+	std::unique_ptr<IEditableGameObject> m_EditableObject;
 };

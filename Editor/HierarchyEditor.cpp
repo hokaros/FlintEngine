@@ -32,13 +32,14 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	if(node_object_handle == nullptr)
 		return;
 
-	GameObject* node_object = node_object_handle->GetGameObject();
+	IEditableGameObject* node_object = node_object_handle->GetGameObject();
 	if (node_object == nullptr)
 		return;
 
 	constexpr ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-	const bool is_selected = m_SelectedGameObjectManager->IsGameObjectSelected(*node_object);
+	GameObject& runtime_object = node_object->GetResult();
+	const bool is_selected = m_SelectedGameObjectManager->IsGameObjectSelected(runtime_object);
 	ImGuiTreeNodeFlags node_flags = base_flags;
 	if (is_selected)
 	{
@@ -46,7 +47,7 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	}
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	const char* node_id = node_object->GetName().empty() == false ? node_object->GetName().c_str() : "?";
+	const char* node_id = runtime_object.GetName().empty() == false ? runtime_object.GetName().c_str() : "?";
 	const bool node_open = ImGui::TreeNodeEx(node_id, node_flags);
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{
@@ -61,9 +62,9 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 
 	if (node_open)
 	{
-		for (const std::unique_ptr<GameObject>& child : node_object->GetChildren())
+		for (const std::unique_ptr<GameObject>& child : runtime_object.GetChildren())
 		{
-			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorGameObjectHandle>(child.get());
+			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorPlainGameObjectHandle>(child.get());
 			RenderObjectHierarchy(child_handle, /*is_root*/ false);
 		}
 
@@ -71,7 +72,7 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	}
 }
 
-void HierarchyEditor::RenderObjectContextMenu(GameObject& game_object, bool is_root)
+void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, bool is_root)
 {
 	if (ImGui::Button("Add child"))
 	{
@@ -98,7 +99,7 @@ void HierarchyEditor::RenderObjectContextMenu(GameObject& game_object, bool is_r
 	{
 		if (ImGui::Button("Delete"))
 		{
-			GameObject::Destroy(&game_object);
+			game_object.Destroy();
 		}
 	}
 	ImGui::EndDisabled();
