@@ -41,5 +41,20 @@ IEditableGameObject* EditorPlainGameObjectHandle::GetGameObject() const
 
 void EditorPlainGameObjectHandle::SaveGameObject()
 {
-    // Pass
+
+}
+
+EditorIEditableGameObjectHandle::EditorIEditableGameObjectHandle(IEditableGameObject* game_object)
+    : m_EditableObject(game_object)
+{
+}
+
+IEditableGameObject* EditorIEditableGameObjectHandle::GetGameObject() const
+{
+    return m_EditableObject;
+}
+
+void EditorIEditableGameObjectHandle::SaveGameObject()
+{
+
 }

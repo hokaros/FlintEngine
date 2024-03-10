@@ -30,9 +30,12 @@ void PlainGameObject::SetPosition(const Vector& position)
 	m_GameObject.SetPosition(position);
 }
 
-void PlainGameObject::AddChild(std::unique_ptr<GameObject> child)
+void PlainGameObject::AddChild(std::unique_ptr<IEditableGameObject> child, std::unique_ptr<GameObject> real_child)
 {
-	m_GameObject.AddChild(std::move(child));
+	FE_ASSERT(&child->GetResult() == real_child.get(), "Editor version should contain the passed object");
+
+	m_GameObject.AddChild(std::move(real_child));
+	m_ChildrenEditables.push_back(std::move(child));
 }
 
 void PlainGameObject::AddComponent(std::unique_ptr<ObjectComponent> component)
@@ -50,4 +53,9 @@ void PlainGameObject::ModifyComponentField(std::unique_ptr<ComponentFieldChange>
 	FE_ASSERT(change != nullptr, "No change passed");
 
 	change->field->SetFieldValue(change->component, change->GetValue());
+}
+
+std::vector<std::unique_ptr<IEditableGameObject>>& PlainGameObject::GetChildren()
+{
+	return m_ChildrenEditables;
 }

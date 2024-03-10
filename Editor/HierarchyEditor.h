@@ -3,6 +3,7 @@
 #include "AssetHandles.h"
 #include "SelectedGameObjectManager.h"
 #include "AssetExplorer.h"
+#include "PrefabInstance.h"
 
 class HierarchyEditor
 {
@@ -19,7 +20,7 @@ private:
 
 	bool GetPrefabPathModal(std::string& path);
 
-	std::unique_ptr<GameObject> CreatePrefabCopy(const std::string& prefab_path);
+	std::pair<std::unique_ptr<PrefabInstance>, std::unique_ptr<GameObject>> CreatePrefabInstance(const std::string& prefab_path);
 
 private:
 	std::shared_ptr<EditorGameObjectHandle> m_GameObjectHandle;

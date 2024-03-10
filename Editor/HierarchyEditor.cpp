@@ -62,7 +62,7 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 
 	if (node_open)
 	{
-		for (const std::unique_ptr<GameObject>& child : runtime_object.GetChildren())
+		for (const std::unique_ptr<GameObject>& child : node_object->GetResult().GetChildren())
 		{
 			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorPlainGameObjectHandle>(child.get());
 			RenderObjectHierarchy(child_handle, /*is_root*/ false);
@@ -76,7 +76,9 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 {
 	if (ImGui::Button("Add child"))
 	{
-		game_object.AddChild(std::make_unique<GameObject>(PrefabCreationKey()));
+		std::unique_ptr<GameObject> child = std::make_unique<GameObject>(PrefabCreationKey());
+		std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<PlainGameObject>(*child);
+		game_object.AddChild(std::move(editor_child), std::move(child));
 		ImGui::CloseCurrentPopup();
 	}
 
@@ -87,10 +89,10 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 	std::string prefab_path;
 	if (GetPrefabPathModal(prefab_path))
 	{
-		std::unique_ptr<GameObject> prefab_copy = CreatePrefabCopy(prefab_path);
-		if (prefab_copy != nullptr)
+		std::pair<std::unique_ptr<PrefabInstance>, std::unique_ptr<GameObject>> prefab_instance = CreatePrefabInstance(prefab_path);
+		if (prefab_instance.first != nullptr)
 		{
-			game_object.AddChild(std::move(prefab_copy));
+			game_object.AddChild(std::move(prefab_instance.first), std::move(prefab_instance.second));
 			ImGui::CloseCurrentPopup();
 		}
 	}
@@ -132,11 +134,13 @@ bool HierarchyEditor::GetPrefabPathModal(std::string& path)
 	return has_accepted;
 }
 
-std::unique_ptr<GameObject> HierarchyEditor::CreatePrefabCopy(const std::string& prefab_path)
+std::pair<std::unique_ptr<PrefabInstance>, std::unique_ptr<GameObject>> HierarchyEditor::CreatePrefabInstance(const std::string& prefab_path)
 {
 	GameObject* prefab = m_AssetExplorer->GetPrefab(prefab_path);
 	if (prefab == nullptr)
-		return nullptr;
+		return { nullptr, nullptr };
 
-	return std::make_unique<GameObject>(*prefab, PrefabCreationKey());
+	std::unique_ptr<GameObject> game_object = std::make_unique<GameObject>(*prefab, PrefabCreationKey());
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(*game_object, prefab);
+	return { std::move(prefab_instance), std::move(game_object) };
 }

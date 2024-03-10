@@ -40,11 +40,13 @@ public:
 	virtual void SetSize(const Vector& size) = 0;
 	virtual void SetPosition(const Vector& position) = 0;
 
-	virtual void AddChild(std::unique_ptr<GameObject> child) = 0;
+	virtual void AddChild(std::unique_ptr<IEditableGameObject> child, std::unique_ptr<GameObject> real_child) = 0;
 
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) = 0;
 	virtual void RemoveComponent(size_t index) = 0;
 	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;
+
+	virtual std::vector<std::unique_ptr<IEditableGameObject>>& GetChildren() = 0;
 
 	virtual ~IEditableGameObject() = default;
 };
