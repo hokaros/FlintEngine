@@ -1,5 +1,5 @@
 #pragma once
-#include "PlainGameObject.h"
+#include "../FlatEngine/PlainGameObject.h"
 
 class EditorGameObjectHandle
 {

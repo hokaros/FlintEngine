@@ -1,7 +1,7 @@
 #pragma once
 #include "../FlatEngine/ComponentFieldDefinition.h"
 #include "../FlatEngine/imgui/imgui.h"
-#include "IEditableGameObject.h"
+#include "../FlatEngine/IEditableGameObject.h"
 
 class FieldEditor
 {

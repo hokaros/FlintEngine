@@ -3,7 +3,7 @@
 #include "ComponentEditor.h"
 #include "AssetHandles.h"
 #include "SelectedGameObjectManager.h"
-#include "IEditableGameObject.h"
+#include "../FlatEngine/IEditableGameObject.h"
 
 class GameObjectEditor
 	: protected IComponentActionObserver

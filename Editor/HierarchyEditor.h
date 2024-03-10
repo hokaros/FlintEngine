@@ -1,9 +1,9 @@
 #pragma once
 #include "../FlatEngine/imgui/imgui.h"
+#include "../FlatEngine/PrefabInstance.h"
 #include "AssetHandles.h"
 #include "SelectedGameObjectManager.h"
 #include "AssetExplorer.h"
-#include "PrefabInstance.h"
 
 class HierarchyEditor
 {
