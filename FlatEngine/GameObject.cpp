@@ -39,7 +39,9 @@ GameObject::GameObject(const GameObject& other, PrefabCreationKey)
 }
 
 GameObject::GameObject(const GameObject& other) 
-	: GameObject(other.size, other.position, {}) 
+	: size(other.size)
+	, position(other.position)
+	, name(other.name)
 {
 	// Skopiowanie komponentów
 	for (const std::unique_ptr<ObjectComponent>& component : other.components)
