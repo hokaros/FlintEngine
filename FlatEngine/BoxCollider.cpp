@@ -67,12 +67,18 @@ Vector BoxCollider::GetWorldSize() const
 
 void BoxCollider::Awake()
 {
-	PhysicsSystem::GetInstance()->RegisterCollider(this);
+	if (PhysicsSystem* physics_system = PhysicsSystem::GetInstance())
+	{
+		PhysicsSystem::GetInstance()->RegisterCollider(this);
+	}
 }
 
 void BoxCollider::OnDestroy()
 {
-	PhysicsSystem::GetInstance()->UnregisterCollider(this);
+	if (PhysicsSystem* physics_system = PhysicsSystem::GetInstance())
+	{
+		physics_system->UnregisterCollider(this);
+	}
 }
 
 bool BoxCollider::DoesIntersect(const BoxCollider& other) const
