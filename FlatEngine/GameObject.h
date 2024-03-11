@@ -146,9 +146,6 @@ public:
 	GameObjectFactory& SetPosition(const Vector& position);
 
 private:
-	std::unique_ptr<GameObject> CreatePrefabSizePosition(PrefabCreationKey);
-
-private:
 	std::optional<std::string> m_Name;
 
 	std::optional<Vector> m_Size;

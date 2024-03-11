@@ -430,7 +430,17 @@ bool GameObject::IsEnabled() const
 
 std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab(PrefabCreationKey key)
 {
-	std::unique_ptr<GameObject> prefab = CreatePrefabSizePosition(key);
+	std::unique_ptr<GameObject> prefab = std::make_unique<GameObject>(key);
+
+	if (m_Position.has_value())
+	{
+		prefab->SetPosition(m_Position.value());
+	}
+
+	if (m_Size.has_value())
+	{
+		prefab->SetSize(m_Size.value());
+	}
 
 	if (m_Name.has_value())
 	{
@@ -459,20 +469,6 @@ GameObjectFactory& GameObjectFactory::SetPosition(const Vector& position)
 	m_Position = position;
 
 	return *this;
-}
-
-std::unique_ptr<GameObject> GameObjectFactory::CreatePrefabSizePosition(PrefabCreationKey key)
-{
-	if (m_Size.has_value() && m_Position.has_value())
-	{
-		return std::make_unique<GameObject>(m_Size.value(), m_Position.value(), key);
-	}
-	else if (m_Size.has_value())
-	{
-		return std::make_unique<GameObject>(m_Size.value(), key);
-	}
-
-	return std::make_unique<GameObject>(key);
 }
 
 PrefabRef::PrefabRef(const std::string& file_path)
