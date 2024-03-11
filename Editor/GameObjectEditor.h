@@ -1,9 +1,9 @@
 #pragma once
 #include "../FlatEngine/GameObject.h"
+#include "../FlatEngine/IEditableGameObject.h"
 #include "ComponentEditor.h"
 #include "AssetHandles.h"
 #include "SelectedGameObjectManager.h"
-#include "../FlatEngine/IEditableGameObject.h"
 
 class GameObjectEditor
 	: protected IComponentActionObserver
