@@ -1,11 +1,11 @@
 #pragma once
 #include "IEditableGameObject.h"
 
-class PlainGameObject :
+class InlineGameObject :
     public IEditableGameObject
 {
 public:
-	PlainGameObject(GameObject& game_object);
+	InlineGameObject(GameObject& game_object);
 
 	virtual GameObject& GetResult() override;
 

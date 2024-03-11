@@ -1,5 +1,5 @@
 #pragma once
-#include "../FlatEngine/PlainGameObject.h"
+#include "../FlatEngine/InlineGameObject.h"
 
 class EditorGameObjectHandle
 {
@@ -19,7 +19,7 @@ public:
 
 private:
 	std::unique_ptr<GameObject> m_Prefab;
-	std::unique_ptr<PlainGameObject> m_EditablePrefab;
+	std::unique_ptr<InlineGameObject> m_EditablePrefab;
 	std::string m_PrefabPath;
 };
 

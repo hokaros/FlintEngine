@@ -6,7 +6,7 @@ EditorPrefabHandle::EditorPrefabHandle(std::unique_ptr<GameObject> prefab, const
     : m_Prefab(std::move(prefab))
     , m_PrefabPath(prefab_path)
 {
-    m_EditablePrefab = std::make_unique<PlainGameObject>(*m_Prefab);
+    m_EditablePrefab = std::make_unique<InlineGameObject>(*m_Prefab);
 }
 
 IEditableGameObject* EditorPrefabHandle::GetGameObject() const
@@ -30,7 +30,7 @@ EditorPlainGameObjectHandle::EditorPlainGameObjectHandle(GameObject* game_object
     }
     else
     {
-        m_EditableObject = std::make_unique<PlainGameObject>(*game_object);
+        m_EditableObject = std::make_unique<InlineGameObject>(*game_object);
     }
 }
 

@@ -77,7 +77,7 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 	if (ImGui::Button("Add child"))
 	{
 		std::unique_ptr<GameObject> child = std::make_unique<GameObject>(PrefabCreationKey());
-		std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<PlainGameObject>(*child);
+		std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>(*child);
 		game_object.AddChild(std::move(editor_child), std::move(child));
 		ImGui::CloseCurrentPopup();
 	}

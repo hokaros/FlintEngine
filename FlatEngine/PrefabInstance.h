@@ -1,5 +1,5 @@
 #pragma once
-#include "PlainGameObject.h"
+#include "InlineGameObject.h"
 
 class PrefabInstance :
     public IEditableGameObject
@@ -24,7 +24,7 @@ public:
 	virtual std::vector<std::unique_ptr<IEditableGameObject>>& GetChildren() override;
 
 private:
-	PlainGameObject m_ResultGameObject;
+	InlineGameObject m_ResultGameObject;
 	const GameObject* m_Prefab;
 
 	std::optional<std::string> m_Name;
