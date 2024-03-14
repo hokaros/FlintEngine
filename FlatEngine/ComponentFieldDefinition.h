@@ -62,7 +62,9 @@ private:
 #define DECLARE_FIELD(name)															\
 private:																			\
 	using name##_fieldType = decltype(name);										\
-	static ComponentFieldDefinitionTyped<name##_fieldType> name##_fieldDefinition;
+	static ComponentFieldDefinitionTyped<name##_fieldType> name##_fieldDefinition;	\
+public:																				\
+	const ComponentFieldDefinitionTyped<name##_fieldType>& GetFieldDefinition_##name() const; \
 
 #define FIELD_TYPE(component, field) component##::##field##_fieldType
 
@@ -82,7 +84,12 @@ clazz::field_name##_fieldDefinition =												\
 			clazz* component_specific = static_cast<clazz*>(component);				\
 			component_specific->field_name = value;									\
 		}																			\
-);
+);																					\
+																					\
+const ComponentFieldDefinitionTyped<clazz##::field_name##_fieldType>& clazz##::GetFieldDefinition_##field_name() const \
+{																					\
+	return field_name##_fieldDefinition;											\
+}
 
 
 

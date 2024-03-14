@@ -8,12 +8,17 @@ public:
 	ObjectComponent* component;
 	const ComponentFieldDefinition* field;
 
-	void* GetValue() const { return valuePtr; }
+	void* GetValue() const { return m_ValuePtr; }
 
 protected:
-	ComponentFieldChange() = default;
 
-	void* valuePtr;
+	ComponentFieldChange(void* valuePtr)
+		: m_ValuePtr(valuePtr)
+		, component(nullptr)
+		, field(nullptr)
+	{}
+
+	void* m_ValuePtr;
 };
 
 template<typename ValueT>
@@ -22,10 +27,12 @@ struct ComponentFieldChangeContained
 	: public ComponentFieldChange
 {
 public:
+	ComponentFieldChangeContained();
+
 	void SetValue(const ValueT& value);
 
 private:
-	ValueT value;
+	ValueT m_Value;
 };
 
 enum class EditableGameObjectType
@@ -64,7 +71,13 @@ public:
 template<typename ValueT>
 inline void ComponentFieldChangeContained<ValueT>::SetValue(const ValueT& value)
 {
-	this->value = value;
+	m_Value = value;
 
-	this->valuePtr = &(this->value);
+	m_ValuePtr = &m_Value;
 }
+
+template<typename ValueT>
+inline ComponentFieldChangeContained<ValueT>::ComponentFieldChangeContained()
+	: ComponentFieldChange(&m_Value)
+{}
+	

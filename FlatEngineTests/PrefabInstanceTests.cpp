@@ -94,5 +94,33 @@ TEST(SUITE_NAME, KeepsOriginalComponentsWhenAddingNew)
 	ASSERT_NE(nullptr, result_original_component);
 }
 
+TEST(SUITE_NAME, ModifiesComponent)
+{
+	// Arrange
+	const Vector original_size = Vector(10, 1);
+	std::unique_ptr<BoxCollider> original_component = std::make_unique<BoxCollider>();
+	original_component->SetSize(original_size);
+	GameObject dummy_prefab;
+	dummy_prefab.AddComponent(std::move(original_component));
+
+	const Vector overriding_size = Vector(5, 3);
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+
+	// Act
+	using FieldChangeT = ComponentFieldChangeContained<Vector>;
+	std::unique_ptr<FieldChangeT> field_change = std::make_unique<FieldChangeT>();
+	BoxCollider* instance_component = prefab_instance->GetResult().FindComponent<BoxCollider>();
+	field_change->component = instance_component;
+	field_change->field = &instance_component->GetFieldDefinition_m_Size();
+	field_change->SetValue(overriding_size);
+	prefab_instance->ModifyComponentField(std::move(field_change));
+
+	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
+
+	// Assert
+	BoxCollider* result_component = result_object->FindComponent<BoxCollider>();
+	ASSERT_EQ(overriding_size, result_component->GetWorldSize());
+}
+
 
 #undef SUITE_NAME
