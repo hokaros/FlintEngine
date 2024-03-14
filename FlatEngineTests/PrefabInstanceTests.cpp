@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "../FlatEngine/PrefabInstance.h"
+#include "../FlatEngine/RectangleRenderer.h"
+#include "../FlatEngine/BoxCollider.h"
 
 #ifdef SUITE_NAME
 #error Cannot redefine suite name
@@ -54,14 +56,42 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 	ASSERT_EQ(overriding_size, result_object->GetSize());
 }
 
-TEST(SUITE, AddsComponent)
+TEST(SUITE_NAME, AddsComponent)
 {
+	// Arrange
+	GameObject dummy_prefab;
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
 
+	// Act
+	prefab_instance->AddComponent(std::move(added_component));
+	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
+
+	// Assert
+	RectangleRenderer* result_component = result_object->FindComponent<RectangleRenderer>();
+	ASSERT_NE(nullptr, result_component);
 }
 
-TEST(SUITE, KeepsOriginalComponentsWhenAddingNew)
+TEST(SUITE_NAME, KeepsOriginalComponentsWhenAddingNew)
 {
+	// Arrange
+	std::unique_ptr<BoxCollider> original_component = std::make_unique<BoxCollider>();
+	GameObject dummy_prefab;
+	dummy_prefab.AddComponent(std::move(original_component));
 
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
+
+	// Act
+	prefab_instance->AddComponent(std::move(added_component));
+	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
+
+	// Assert
+	RectangleRenderer* result_added_component = result_object->FindComponent<RectangleRenderer>();
+	ASSERT_NE(nullptr, result_added_component);
+
+	BoxCollider* result_original_component = result_object->FindComponent<BoxCollider>();
+	ASSERT_NE(nullptr, result_original_component);
 }
 
 
