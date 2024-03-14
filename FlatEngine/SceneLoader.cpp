@@ -3,7 +3,7 @@
 #include <fstream>
 #include "GameObjectLoader.h"
 
-std::unique_ptr<Scene> SceneLoader::LoadScene(const char* file_path)
+std::unique_ptr<EditableScene> SceneLoader::LoadScene(const char* file_path)
 {
 	std::unique_ptr<SceneStringDesc> scene_serialized = LoadSceneDesc(file_path);
 	if (scene_serialized == nullptr)
@@ -95,18 +95,9 @@ void SceneLoader::ParseGameObjectTypeLine(const std::string& line)
 	std::string key, value;
 	SplitLineToKeyAndValue(line, key, value);
 
-	if (key == "GameObject")
+	std::unique_ptr<GameObjectStringDescProxy> game_object_desc = GameObjectLoader::ParseChildByKey(key.c_str(), m_File, m_CurrIndent, m_ReturnedLine);
+	if (game_object_desc != nullptr)
 	{
-		GameObjectLoader go_loader(m_File, m_CurrIndent + 1);
-		m_SceneDesc->game_objects.push_back(go_loader.LoadGameObject(m_ReturnedLine));
-	}
-	else if (key == "Prefab")
-	{
-		std::unique_ptr<GameObjectStringDesc> prefab = GameObjectLoader::LoadPrefabDesc(value.c_str());
-		m_SceneDesc->game_objects.push_back(std::move(prefab));
-	}
-	else
-	{
-		FE_DATA_ERROR("Unknown GameObject type");
+		m_SceneDesc->game_objects.push_back(std::move(game_object_desc));
 	}
 }

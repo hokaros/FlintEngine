@@ -1,10 +1,11 @@
 #include "GameObjectLoader.h"
 
 #include <string>
-#include "../FlatEngine/utility.h"
-#include "../FlatEngine/GameObjectSerializer.h"
+#include "utility.h"
+#include "GameObjectSerializer.h"
+#include "PrefabInstanceLoader.h"
 
-std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab(const char* file_path)
+std::unique_ptr<InlineGameObject> GameObjectLoader::LoadPrefab(const char* file_path)
 {
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = LoadPrefabDesc(file_path);
     if (prefab_serialized == nullptr)
@@ -28,6 +29,27 @@ std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadPrefabDesc(const cha
 
     prefab_file.close();
     return prefab;
+}
+
+std::unique_ptr<GameObjectStringDescProxy> GameObjectLoader::ParseChildByKey(const char* key, std::fstream& file, size_t start_indent, std::string& first_unconsumed_line)
+{
+    if (key == "GameObject")
+    {
+        GameObjectLoader child_loader(file, start_indent + 1);
+        std::unique_ptr<GameObjectStringDesc> child_desc = child_loader.LoadGameObject(first_unconsumed_line);
+        return std::make_unique<InlineGameObjectStringDescEndpoint>(std::move(child_desc));
+    }
+    else if (key == "PrefabInstance")
+    {
+        PrefabInstanceLoader child_loader(file, start_indent + 1);
+        std::unique_ptr<PrefabInstanceStringDesc> child_desc = child_loader.LoadPrefabInstanceDesc(first_unconsumed_line);
+        return std::make_unique<PrefabInstanceStringDescEndpoint>(std::move(child_desc));
+    }
+    else
+    {
+        FE_DATA_ERROR("Unknown GameObject type");
+        return nullptr;
+    }
 }
 
 GameObjectLoader::GameObjectLoader(std::fstream& file, size_t start_indent)
@@ -110,14 +132,11 @@ void GameObjectLoader::ParseChildTypeLine(const std::string& line)
 {
     std::string line_trimmed = line;
     TrimWhitespaces(line_trimmed);
-    if (line_trimmed == "GameObject")
+
+    std::unique_ptr<GameObjectStringDescProxy> child_desc = ParseChildByKey(line_trimmed.c_str(), m_File, m_CurrIndent, m_ReturnedLine);
+    if (child_desc != nullptr)
     {
-        GameObjectLoader child_loader(m_File, m_CurrIndent + 1);
-        m_GameObjectDesc->children.push_back(child_loader.LoadGameObject(m_ReturnedLine));
-    }
-    else // TODO: prefab reference (already implemented in SceneLoader)
-    {
-        FE_DATA_ERROR("Unknown GameObject type");
+        m_GameObjectDesc->children.push_back(std::move(child_desc));
     }
 }
 

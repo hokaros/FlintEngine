@@ -33,7 +33,7 @@ void LabyrinthScene::Render()
 
 void LabyrinthScene::LoadFromFile(const char* file_path)
 {
-	std::unique_ptr<Scene> scene = SceneLoader::LoadScene(file_path);
+	std::unique_ptr<Scene> scene = SceneLoader::LoadScene(file_path)->CreateRuntimeObject();
 	for (std::unique_ptr<GameObject>& go : scene->GetObjectManager().GetOwnedObjects())
 	{
 		GetObjectManager().AddNewObject(std::move(go));

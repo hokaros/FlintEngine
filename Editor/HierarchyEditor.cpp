@@ -62,9 +62,9 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 
 	if (node_open)
 	{
-		for (const std::unique_ptr<GameObject>& child : node_object->GetResult().GetChildren())
+		for (const std::unique_ptr<IEditableGameObject>& child : node_object->GetChildren())
 		{
-			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorPlainGameObjectHandle>(child.get());
+			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(child.get());
 			RenderObjectHierarchy(child_handle, /*is_root*/ false);
 		}
 
@@ -76,9 +76,8 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 {
 	if (ImGui::Button("Add child"))
 	{
-		std::unique_ptr<GameObject> child = std::make_unique<GameObject>(PrefabCreationKey());
-		std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>(*child);
-		game_object.AddChild(std::move(editor_child), std::move(child));
+		std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>();
+		game_object.AddChild(std::move(editor_child));
 		ImGui::CloseCurrentPopup();
 	}
 
@@ -89,10 +88,10 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 	std::string prefab_path;
 	if (GetPrefabPathModal(prefab_path))
 	{
-		std::pair<std::unique_ptr<PrefabInstance>, std::unique_ptr<GameObject>> prefab_instance = CreatePrefabInstance(prefab_path);
-		if (prefab_instance.first != nullptr)
+		std::unique_ptr<PrefabInstance> prefab_instance = CreatePrefabInstance(prefab_path);
+		if (prefab_instance != nullptr)
 		{
-			game_object.AddChild(std::move(prefab_instance.first), std::move(prefab_instance.second));
+			game_object.AddChild(std::move(prefab_instance));
 			ImGui::CloseCurrentPopup();
 		}
 	}
@@ -134,13 +133,12 @@ bool HierarchyEditor::GetPrefabPathModal(std::string& path)
 	return has_accepted;
 }
 
-std::pair<std::unique_ptr<PrefabInstance>, std::unique_ptr<GameObject>> HierarchyEditor::CreatePrefabInstance(const std::string& prefab_path)
+std::unique_ptr<PrefabInstance> HierarchyEditor::CreatePrefabInstance(const std::string& prefab_path)
 {
 	GameObject* prefab = m_AssetExplorer->GetPrefab(prefab_path);
 	if (prefab == nullptr)
-		return { nullptr, nullptr };
+		return nullptr;
 
-	std::unique_ptr<GameObject> game_object = std::make_unique<GameObject>(*prefab, PrefabCreationKey());
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(*game_object, prefab);
-	return { std::move(prefab_instance), std::move(game_object) };
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(*prefab);
+	return prefab_instance;
 }

@@ -10,26 +10,6 @@
 
 #include <list>
 
-class GameObjectSerializer;
-class AssetExplorer;
-class HierarchyEditor;
-class GameObject;
-
-class PrefabCreationKey
-{
-public:
-	PrefabCreationKey(const PrefabCreationKey&) = default;
-	PrefabCreationKey(PrefabCreationKey&&) = default;
-
-private:
-	PrefabCreationKey() = default;
-
-	friend GameObjectSerializer;
-	friend AssetExplorer;
-	friend HierarchyEditor;
-	friend GameObject;
-};
-
 class IGameObjectContainer
 {
 public:
@@ -44,10 +24,10 @@ public:
 	bool renderUnseen = false;
 
 public:
-	GameObject(PrefabCreationKey);
-	GameObject(const Vector& size, PrefabCreationKey);
-	GameObject(const Vector& size, const Vector& position, PrefabCreationKey);
-	GameObject(const GameObject& other, PrefabCreationKey);
+	GameObject();
+	GameObject(const Vector& size);
+	GameObject(const Vector& size, const Vector& position);
+	GameObject(const GameObject& other);
 
 	static GameObject* Instantiate(const Vector& size);
 	static GameObject* Instantiate(const Vector& size, const Vector& position);
@@ -115,12 +95,6 @@ public:
 	~GameObject() = default;
 
 protected:
-	GameObject();
-	GameObject(const Vector& size);
-	GameObject(const Vector& size, const Vector& position);
-	GameObject(const GameObject& other);
-
-protected:
 	std::vector<std::unique_ptr<ObjectComponent>> components;
 
 private:
@@ -139,7 +113,7 @@ private:
 class GameObjectFactory
 {
 public:
-	std::unique_ptr<GameObject> CreatePrefab(PrefabCreationKey);
+	std::unique_ptr<GameObject> CreatePrefab();
 
 	GameObjectFactory& SetName(const std::string& name);
 	GameObjectFactory& SetSize(const Vector& size);

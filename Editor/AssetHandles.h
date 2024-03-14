@@ -5,21 +5,20 @@ class EditorGameObjectHandle
 {
 public:
 	virtual IEditableGameObject* GetGameObject() const = 0;
-	virtual void SaveGameObject() = 0;
+	virtual void SaveInlineGameObject() = 0;
 };
 
 class EditorPrefabHandle
 	: public EditorGameObjectHandle
 {
 public:
-	EditorPrefabHandle(std::unique_ptr<GameObject> prefab, const std::string& prefab_path);
+	EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab, const std::string& prefab_path);
 
 	virtual IEditableGameObject* GetGameObject() const override;
-	virtual void SaveGameObject() override;
+	virtual void SaveInlineGameObject() override;
 
 private:
-	std::unique_ptr<GameObject> m_Prefab;
-	std::unique_ptr<InlineGameObject> m_EditablePrefab;
+	std::unique_ptr<InlineGameObject> m_Prefab;
 	std::string m_PrefabPath;
 };
 
@@ -30,21 +29,8 @@ public:
 	EditorIEditableGameObjectHandle(IEditableGameObject* game_object);
 
 	virtual IEditableGameObject* GetGameObject() const override;
-	virtual void SaveGameObject() override;
+	virtual void SaveInlineGameObject() override;
 
 private:
 	IEditableGameObject* m_EditableObject;
-};
-
-class EditorPlainGameObjectHandle
-	: public EditorGameObjectHandle
-{
-public:
-	EditorPlainGameObjectHandle(GameObject* game_object);
-
-	virtual IEditableGameObject* GetGameObject() const override;
-	virtual void SaveGameObject() override;
-
-private:
-	std::unique_ptr<IEditableGameObject> m_EditableObject;
 };

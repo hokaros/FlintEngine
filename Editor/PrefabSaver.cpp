@@ -3,7 +3,7 @@
 
 
 
-void PrefabSaver::SavePrefab(const GameObject& prefab, const char* file_path)
+void PrefabSaver::SavePrefab(const InlineGameObject& prefab, const char* file_path)
 {
     std::fstream prefab_file;
     prefab_file.open(file_path, std::ios::out);
@@ -25,19 +25,51 @@ PrefabSaver::PrefabSaver(std::fstream& prefab_file, size_t start_indent)
 
 }
 
-void PrefabSaver::SavePrefab(const GameObject& prefab)
+void PrefabSaver::SavePrefab(const InlineGameObject& prefab)
 {
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = GameObjectSerializer::SerializeGameObject(prefab);
-    SaveGameObject(*prefab_serialized);
+    SaveInlineGameObject(*prefab_serialized);
 }
 
-void PrefabSaver::SaveGameObject(const GameObjectStringDesc& game_object)
+void PrefabSaver::SaveGameObject(const GameObjectStringDescProxy& game_object)
+{
+    switch (game_object.GetType())
+    {
+    case EditableGameObjectType::InlineGameObject:
+        m_IndentPrinter.PrintLine("GameObject");
+        m_IndentPrinter.IncreaseIndent();
+
+        SaveInlineGameObject(static_cast<const InlineGameObjectStringDescEndpoint&>(game_object).GetDesc());
+
+        m_IndentPrinter.DecreaseIndent();
+        break;
+
+    case EditableGameObjectType::PrefabInstance:
+        m_IndentPrinter.PrintLine("PrefabInstance");
+        m_IndentPrinter.IncreaseIndent();
+
+        SavePrefabInstance(static_cast<const PrefabInstanceStringDescEndpoint&>(game_object).GetDesc());
+
+        m_IndentPrinter.DecreaseIndent();
+        break;
+
+    default:
+        FE_ASSERT(false, "Incomplete proxying");
+    }
+}
+
+void PrefabSaver::SaveInlineGameObject(const GameObjectStringDesc& game_object)
 {
     SaveKeyValuePairs(game_object.params);
 
     SaveComponents(game_object.components);
 
     SaveChildren(game_object.children);
+}
+
+void PrefabSaver::SavePrefabInstance(const PrefabInstanceStringDesc& prefab_instance)
+{
+    FE_ASSERT(false, "Unimplemented");
 }
 
 void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStringDesc>>& components)
@@ -64,20 +96,14 @@ void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStri
     m_IndentPrinter.DecreaseIndent();
 }
 
-void PrefabSaver::SaveChildren(const std::vector<std::unique_ptr<GameObjectStringDesc>>& children)
+void PrefabSaver::SaveChildren(const std::vector<std::unique_ptr<GameObjectStringDescProxy>>& children)
 {
     m_IndentPrinter.PrintLine("children:");
     m_IndentPrinter.IncreaseIndent();
 
-    for (const std::unique_ptr<GameObjectStringDesc>& child : children)
+    for (const std::unique_ptr<GameObjectStringDescProxy>& child : children)
     {
-        // TODO: we can just save the path in case of prefab-children
-        m_IndentPrinter.PrintLine("GameObject");
-        m_IndentPrinter.IncreaseIndent();
-
         SaveGameObject(*child);
-
-        m_IndentPrinter.DecreaseIndent();
     }
 
     m_IndentPrinter.DecreaseIndent();

@@ -7,6 +7,13 @@ void Rgb8::ToFloat(float& r, float& g, float& b) const
 	b = this->b / (float)0xFF;
 }
 
+bool Rgb8::operator==(const Rgb8& other) const
+{
+	return r == other.r
+		&& g == other.g
+		&& b == other.b;
+}
+
 SDL_Rect RectToSDLRect(const Rect& rect)
 {
 	SDL_Rect sdl_rect;

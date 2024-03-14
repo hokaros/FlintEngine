@@ -33,6 +33,8 @@ public:
 	}
 
 	void ToFloat(float& r, float& g, float& b) const;
+
+	bool operator==(const Rgb8& other) const;
 };
 
 SDL_Rect RectToSDLRect(const Rect& rect);

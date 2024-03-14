@@ -18,26 +18,6 @@ GameObject::GameObject(const Vector& size, const Vector& position)
 {
 }
 
-GameObject::GameObject(PrefabCreationKey)
-	: GameObject() 
-{
-}
-
-GameObject::GameObject(const Vector& size, PrefabCreationKey)
-	: GameObject(size) 
-{
-}
-
-GameObject::GameObject(const Vector& size, const Vector& position, PrefabCreationKey)
-	: GameObject(size, position) 
-{
-}
-
-GameObject::GameObject(const GameObject& other, PrefabCreationKey)
-	: GameObject(other)
-{
-}
-
 GameObject::GameObject(const GameObject& other) 
 	: size(other.size)
 	, position(other.position)
@@ -53,7 +33,7 @@ GameObject::GameObject(const GameObject& other)
 	// Skopiowanie dzieci
 	for (const std::unique_ptr<GameObject>& child : other.children) 
 	{
-		std::unique_ptr<GameObject> childCopy = std::make_unique<GameObject>(*child, PrefabCreationKey());
+		std::unique_ptr<GameObject> childCopy = std::make_unique<GameObject>(*child);
 
 		AddChild(std::move(childCopy));
 	}
@@ -428,9 +408,9 @@ bool GameObject::IsEnabled() const
 	return isEnabled;
 }
 
-std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab(PrefabCreationKey key)
+std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab()
 {
-	std::unique_ptr<GameObject> prefab = std::make_unique<GameObject>(key);
+	std::unique_ptr<GameObject> prefab = std::make_unique<GameObject>();
 
 	if (m_Position.has_value())
 	{
