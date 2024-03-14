@@ -3,7 +3,7 @@
 PrefabInstance::PrefabInstance(const GameObject& prefab)
 	: m_Prefab(&prefab)
 	, m_OriginalComponentCount(prefab.GetAllComponents().size())
-	, m_ResultGameObject(std::make_unique<InlineGameObject>())
+	, m_ResultGameObject(std::make_unique<InlineGameObject>(prefab))
 {
 }
 

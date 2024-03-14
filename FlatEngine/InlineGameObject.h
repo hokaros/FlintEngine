@@ -6,6 +6,7 @@ class InlineGameObject :
 {
 public:
 	InlineGameObject();
+	InlineGameObject(const GameObject& other);
 
 	virtual GameObject& GetResult() override;
 	virtual const GameObject& GetResult() const override;

@@ -5,6 +5,11 @@ InlineGameObject::InlineGameObject()
 {
 }
 
+InlineGameObject::InlineGameObject(const GameObject& other)
+	: m_GameObject(std::make_unique<GameObject>(other))
+{
+}
+
 GameObject& InlineGameObject::GetResult()
 {
 	return *m_GameObject;
