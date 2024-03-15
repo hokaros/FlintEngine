@@ -2,6 +2,7 @@
 #include "../FlatEngine/PrefabInstance.h"
 #include "../FlatEngine/RectangleRenderer.h"
 #include "../FlatEngine/BoxCollider.h"
+#include "FakeAssetManager.h"
 
 #ifdef SUITE_NAME
 #error Cannot redefine suite name
@@ -18,8 +19,10 @@ TEST(SUITE_NAME, SetsNamePositionAndSize)
 
 	GameObject dummy_prefab;
 	dummy_prefab.SetName("My holy prefab");
+	FakeAssetManager asset_manager;
+	asset_manager.SetPrefabToReturn(&dummy_prefab);
 
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 
 	// Act
 	prefab_instance->SetName(overriding_name);
@@ -43,8 +46,10 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 	GameObject dummy_prefab;
 	dummy_prefab.SetName(original_name);
 	dummy_prefab.SetPosition(original_pos);
+	FakeAssetManager asset_manager;
+	asset_manager.SetPrefabToReturn(&dummy_prefab);
 
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 
 	// Act
 	prefab_instance->SetSize(overriding_size);
@@ -60,7 +65,10 @@ TEST(SUITE_NAME, AddsComponent)
 {
 	// Arrange
 	GameObject dummy_prefab;
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	FakeAssetManager asset_manager;
+	asset_manager.SetPrefabToReturn(&dummy_prefab);
+
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
 
 	// Act
@@ -79,7 +87,10 @@ TEST(SUITE_NAME, KeepsOriginalComponentsWhenAddingNew)
 	GameObject dummy_prefab;
 	dummy_prefab.AddComponent(std::move(original_component));
 
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	FakeAssetManager asset_manager;
+	asset_manager.SetPrefabToReturn(&dummy_prefab);
+
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
 
 	// Act
@@ -103,8 +114,11 @@ TEST(SUITE_NAME, ModifiesComponent)
 	GameObject dummy_prefab;
 	dummy_prefab.AddComponent(std::move(original_component));
 
+	FakeAssetManager asset_manager;
+	asset_manager.SetPrefabToReturn(&dummy_prefab);
+
 	const Vector overriding_size = Vector(5, 3);
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 
 	// Act
 	using FieldChangeT = ComponentFieldChangeContained<Vector>;

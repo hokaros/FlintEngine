@@ -5,7 +5,7 @@ class PrefabInstance :
     public IEditableGameObject
 {
 public:
-	PrefabInstance(const GameObject& prefab);
+	PrefabInstance(const std::string& prefab_path);
 
 	virtual GameObject& GetResult() override;
 	virtual const GameObject& GetResult() const override;
@@ -29,9 +29,16 @@ public:
 
 	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object);
 
+	const std::string& GetPrefabPath() const;
+	const std::optional<std::string>& GetNameOverride() const;
+	const std::optional<Vector>& GetSizeOverride() const;
+	const std::optional<Vector>& GetPositionOverride() const;
+	
+	const std::vector<ObjectComponent*>& GetAdditionalComponents() const;
+
 private:
 	std::unique_ptr<InlineGameObject> m_ResultGameObject;
-	const GameObject* m_Prefab;
+	std::string m_PrefabPath;
 
 	std::optional<std::string> m_Name;
 	std::optional<Vector> m_Size;

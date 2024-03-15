@@ -31,7 +31,7 @@ std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadPrefabDesc(const cha
     return prefab;
 }
 
-std::unique_ptr<GameObjectStringDescProxy> GameObjectLoader::ParseChildByKey(const char* key, std::fstream& file, size_t start_indent, std::string& first_unconsumed_line)
+std::unique_ptr<GameObjectStringDescProxy> GameObjectLoader::ParseChildByKey(const std::string& key, std::fstream& file, size_t start_indent, std::string& first_unconsumed_line)
 {
     if (key == "GameObject")
     {
@@ -47,7 +47,7 @@ std::unique_ptr<GameObjectStringDescProxy> GameObjectLoader::ParseChildByKey(con
     }
     else
     {
-        FE_DATA_ERROR("Unknown GameObject type");
+        FE_DATA_ERROR("Unknown GameObject type: %s", key);
         return nullptr;
     }
 }

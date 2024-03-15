@@ -2,14 +2,85 @@
 
 std::unique_ptr<PrefabInstanceStringDesc> PrefabInstanceSerializer::Serialize(const PrefabInstance& prefab_instance)
 {
-	FE_ASSERT(false, "Unimplemented");
-	return std::make_unique<PrefabInstanceStringDesc>();
+	std::unique_ptr<PrefabInstanceStringDesc> desc = std::make_unique<PrefabInstanceStringDesc>();
+
+	desc->m_PrefabPath = prefab_instance.GetPrefabPath();
+	SerializeParamOverrides(prefab_instance, *desc);
+	SerializeAdditionalComponents(prefab_instance, *desc);
+
+	return desc;
 }
 
 std::unique_ptr<PrefabInstance> PrefabInstanceSerializer::Deserialize(const PrefabInstanceStringDesc& desc)
 {
-	FE_ASSERT(false, "Unimplemented");
-	return std::unique_ptr<PrefabInstance>();
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(desc.m_PrefabPath);
+
+	DeserializeParamOverrides(desc, *prefab_instance);
+	DeserializeAdditionalComponents(desc, *prefab_instance);
+
+	return prefab_instance;
+}
+
+void PrefabInstanceSerializer::SerializeParamOverrides(const PrefabInstance& prefab_instance, PrefabInstanceStringDesc& desc)
+{
+	if (prefab_instance.GetNameOverride().has_value())
+	{
+		desc.m_OverridenParams[s_PrefabInstanceNameKey] = prefab_instance.GetNameOverride().value();
+	}
+	if (prefab_instance.GetPositionOverride().has_value())
+	{
+		desc.m_OverridenParams[s_PrefabInstancePositionKey] = SerializableTypeInterface<Vector>::ToString(prefab_instance.GetPositionOverride().value());
+	}
+	if (prefab_instance.GetSizeOverride().has_value())
+	{
+		desc.m_OverridenParams[s_PrefabInstanceSizeKey] = SerializableTypeInterface<Vector>::ToString(prefab_instance.GetSizeOverride().value());
+	}
+}
+
+void PrefabInstanceSerializer::DeserializeParamOverrides(const PrefabInstanceStringDesc& desc, PrefabInstance& prefab_instance)
+{
+	for (auto& entry : desc.m_OverridenParams)
+	{
+		const std::string& key = entry.first;
+		const std::string& value = entry.second;
+
+		if (key == s_PrefabInstanceNameKey)
+		{
+			prefab_instance.SetName(value);
+		}
+		else if (key == s_PrefabInstancePositionKey)
+		{
+			Vector pos;
+			SerializableTypeInterface<Vector>::ParseString(value, pos);
+			prefab_instance.SetPosition(pos);
+		}
+		else if (key == s_PrefabInstanceSizeKey)
+		{
+			Vector size;
+			SerializableTypeInterface<Vector>::ParseString(value, size);
+			prefab_instance.SetSize(size);
+		}
+		else
+		{
+			FE_DATA_ERROR("Unknown PrefabInstance param key: %s", key.c_str());
+		}
+	}
+}
+
+void PrefabInstanceSerializer::SerializeAdditionalComponents(const PrefabInstance& prefab_instance, PrefabInstanceStringDesc& desc)
+{
+	for (const ObjectComponent* comp : prefab_instance.GetAdditionalComponents())
+	{
+		desc.m_AdditionalComponents.push_back(ComponentSerializer::SerializeComponent(*comp));
+	}
+}
+
+void PrefabInstanceSerializer::DeserializeAdditionalComponents(const PrefabInstanceStringDesc& desc, PrefabInstance& prefab_instance)
+{
+	for (const std::unique_ptr<ComponentStringDesc>& comp_desc : desc.m_AdditionalComponents)
+	{
+		prefab_instance.AddComponent(ComponentSerializer::DeserializeComponent(*comp_desc));
+	}
 }
 
 

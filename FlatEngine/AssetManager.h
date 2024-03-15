@@ -12,7 +12,7 @@ public:
 	static AssetManager* GetInstance();
 	~AssetManager();
 
-	GameObject* GetPrefab(const std::string& path);
+	virtual GameObject* GetPrefab(const std::string& path);
 	void AddSurfaceAsset(const char* path);
 	SDL_Surface* GetSurfaceAsset(const std::string& path);
 

@@ -20,8 +20,6 @@ private:
 
 	bool GetPrefabPathModal(std::string& path);
 
-	std::unique_ptr<PrefabInstance> CreatePrefabInstance(const std::string& prefab_path);
-
 private:
 	std::shared_ptr<EditorGameObjectHandle> m_GameObjectHandle;
 

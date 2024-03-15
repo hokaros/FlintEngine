@@ -3,6 +3,8 @@
 #include "../FlatEngine/InlineGameObject.h"
 #include "../FlatEngine/PrefabInstance.h"
 
+#include "FakeAssetManager.h"
+
 #ifdef SUITE_NAME
 	#error Cannot redefine suite name
 #endif
@@ -54,7 +56,10 @@ TEST(SUITE_NAME, AddsSinglePrefabInstance)
 	GameObject dummy_prefab;
 	dummy_prefab.SetName("My holy prefab");
 
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(dummy_prefab);
+	FakeAssetManager asset_manager;
+	asset_manager.SetPrefabToReturn(&dummy_prefab);
+
+	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 	prefab_instance->SetName(object_name);
 
 	EditableScene editable_scene;
@@ -111,11 +116,13 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	const std::string child_object_name = "Sweet instance o' thine";
 	GameObject dummy_prefab;
 	dummy_prefab.SetName("My holy prefab");
+	FakeAssetManager asset_manager;
+	asset_manager.SetPrefabToReturn(&dummy_prefab);
 
 	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
 	editable_root_object->SetName(root_object_name);
 
-	std::unique_ptr<PrefabInstance> prefab_instance_child = std::make_unique<PrefabInstance>(dummy_prefab);
+	std::unique_ptr<PrefabInstance> prefab_instance_child = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 	prefab_instance_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(prefab_instance_child));
 

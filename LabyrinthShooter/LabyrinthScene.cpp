@@ -47,13 +47,17 @@ void LabyrinthScene::LoadStartingObjects()
 	SDL_Surface* heart_bitmap = m_AssetManager.GetSurfaceAsset(s_HeartBitmapPath);
 	m_HealthStats = std::make_unique<BMPStats>(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
 
-	m_Lab = FindLabyrinth()->FindComponent<LabyrinthSolidifier>();
+	GameObject* lab_object = FindLabyrinth();
+	FE_ASSERT(lab_object != nullptr, "No labyrinth object loaded");
+	m_Lab = lab_object->FindComponent<LabyrinthSolidifier>();
 	m_Player = CreatePlayer(m_PlayerStartingPos);
 }
 
 GameObject* LabyrinthScene::CreatePlayer(const Vector& position)
 {
 	GameObject* player = FindPlayer();
+	FE_ASSERT(player != nullptr, "No Player loaded");
+
 	player->SetPosition(position);
 
 	std::list<Firearm*>* firearms = player->FindComponentsInChildren<Firearm>();

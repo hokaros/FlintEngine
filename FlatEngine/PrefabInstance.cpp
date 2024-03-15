@@ -1,10 +1,14 @@
 #include "PrefabInstance.h"
+#include "AssetManager.h"
 
-PrefabInstance::PrefabInstance(const GameObject& prefab)
-	: m_Prefab(&prefab)
-	, m_OriginalComponentCount(prefab.GetAllComponents().size())
-	, m_ResultGameObject(std::make_unique<InlineGameObject>(prefab))
+PrefabInstance::PrefabInstance(const std::string& prefab_path)
+	: m_PrefabPath(prefab_path)
 {
+	const GameObject* prefab = AssetManager::GetInstance()->GetPrefab(m_PrefabPath);
+	FE_ASSERT(prefab != nullptr, "No prefab");
+
+	m_OriginalComponentCount = prefab->GetAllComponents().size();
+	m_ResultGameObject = std::make_unique<InlineGameObject>(*prefab);
 }
 
 GameObject& PrefabInstance::GetResult()
@@ -95,4 +99,29 @@ EditableGameObjectType PrefabInstance::GetType() const
 std::unique_ptr<GameObject> PrefabInstance::ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object)
 {
 	return InlineGameObject::ToRuntimeObject(std::move(editable_object->m_ResultGameObject));
+}
+
+const std::string& PrefabInstance::GetPrefabPath() const
+{
+	return m_PrefabPath;
+}
+
+const std::optional<std::string>& PrefabInstance::GetNameOverride() const
+{
+	return m_Name;
+}
+
+const std::optional<Vector>& PrefabInstance::GetSizeOverride() const
+{
+	return m_Size;
+}
+
+const std::optional<Vector>& PrefabInstance::GetPositionOverride() const
+{
+	return m_Position;
+}
+
+const std::vector<ObjectComponent*>& PrefabInstance::GetAdditionalComponents() const
+{
+	return m_AdditionalComponents;
 }

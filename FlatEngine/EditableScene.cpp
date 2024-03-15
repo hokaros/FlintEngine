@@ -37,20 +37,8 @@ void EditableScene::CopyObjectsToScene(Scene& scene) const
 	{
 		std::unique_ptr<GameObject> runtime_object = std::make_unique<GameObject>(editable_object->GetResult()); // copy
 
-		CopyChildrenToRuntimeObject(*editable_object, *runtime_object);
+		IEditableGameObject::CopyChildrenToRuntimeObject(*editable_object, *runtime_object);
 
 		scene.AddGameObject(std::move(runtime_object));
-	}
-}
-
-void EditableScene::CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest)
-{
-	for (const std::unique_ptr<IEditableGameObject>& editable_child : src.GetChildren())
-	{
-		std::unique_ptr<GameObject> runtime_child = std::make_unique<GameObject>(editable_child->GetResult());
-		
-		CopyChildrenToRuntimeObject(*editable_child, *runtime_child);
-
-		dest.AddChild(std::move(runtime_child));
 	}
 }

@@ -4,7 +4,7 @@
 
 enum class PrefabInstanceParsingState
 {
-	GameObjectParams
+	GeneralParams,
 	// TODO
 };
 
@@ -20,5 +20,11 @@ public:
 protected:
 	virtual PrefabInstanceParsingState GetOuterParsingState(PrefabInstanceParsingState current_state) override;
 	virtual void ParseLineForCurrentState(const std::string& line) override;
+
+private:
+	void ParseLineGeneralParams(const std::string& line);
+
+private:
+	std::unique_ptr<PrefabInstanceStringDesc> m_PrefabInstanceDesc;
 };
 

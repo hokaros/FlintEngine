@@ -79,5 +79,6 @@ EditableGameObjectType InlineGameObject::GetType() const
 
 std::unique_ptr<GameObject> InlineGameObject::ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object)
 {
+	CopyChildrenToRuntimeObject(*editable_object, editable_object->GetResult());
 	return std::move(editable_object->m_GameObject);
 }
