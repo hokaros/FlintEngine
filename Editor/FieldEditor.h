@@ -39,6 +39,15 @@ public:
 	virtual void Render() override;
 };
 
+class FieldEditorInt
+	: public FieldEditor
+{
+public:
+	FIELD_EDITOR_DELEGATING_CONSTRUCTOR(FieldEditorInt);
+
+	virtual void Render() override;
+};
+
 class FieldEditorFloat
 	: public FieldEditor
 {
@@ -84,7 +93,6 @@ public:
 
 	virtual void Render() override;
 };
-
 
 
 template<typename ValueT>

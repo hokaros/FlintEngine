@@ -61,10 +61,19 @@ void ComponentEditor::RenderField(FieldEditor& field_editor)
 
 std::unique_ptr<FieldEditor> ComponentEditor::CreateFieldEditor(const ComponentFieldDefinition& field)
 {
+	// TODO: refactor
 	RuntimeTypeCode field_value_type_code = field.GetValueRTC();
 	if (field_value_type_code == SerializableTypeInterface<float>::GetTypeCode())
 	{
 		return std::make_unique<FieldEditorFloat>(m_GameObject, m_Component, field);
+	}
+	else if (field_value_type_code == SerializableTypeInterface<double>::GetTypeCode())
+	{
+		return std::make_unique<FieldEditorDouble>(m_GameObject, m_Component, field);
+	}
+	else if (field_value_type_code == SerializableTypeInterface<int>::GetTypeCode())
+	{
+		return std::make_unique<FieldEditorInt>(m_GameObject, m_Component, field);
 	}
 	else if (field_value_type_code == SerializableTypeInterface<bool>::GetTypeCode())
 	{

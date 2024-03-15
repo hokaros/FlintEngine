@@ -34,9 +34,19 @@ void FieldEditorDefault::Render()
 		}
 		else
 		{
-			FE_WARN("Cannot use IEditableGameObject due to unspecialized field type");
+			FE_WARN("Cannot use IEditableGameObject due to unspecialized FieldEditor");
 			m_Field.SetFieldValue(&m_Component, field_value);
 		}
+	}
+}
+
+void FieldEditorInt::Render()
+{
+	int field_value;
+	m_Field.GetFieldValue(&m_Component, &field_value);
+	if (ImGui::DragInt(m_FieldLabel.c_str(), &field_value))
+	{
+		ApplyToGameObject(field_value);
 	}
 }
 
