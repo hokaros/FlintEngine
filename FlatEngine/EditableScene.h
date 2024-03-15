@@ -5,6 +5,8 @@
 class EditableScene
 {
 public:
+	void Render();
+	
 	std::unique_ptr<Scene> CreateRuntimeObject() const;
 
 	void AddRootObject(std::unique_ptr<IEditableGameObject> game_object);

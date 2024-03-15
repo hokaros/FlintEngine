@@ -69,7 +69,13 @@ void PrefabSaver::SaveInlineGameObject(const GameObjectStringDesc& game_object)
 
 void PrefabSaver::SavePrefabInstance(const PrefabInstanceStringDesc& prefab_instance)
 {
-    FE_ASSERT(false, "Unimplemented");
+    SaveKeyValuePair(PrefabInstanceSerializer::s_PrefabKey, prefab_instance.m_PrefabPath);
+
+    SaveKeyValuePairs(prefab_instance.m_OverridenParams);
+
+    // TODO: additional children
+
+    //SaveComponents(prefab_instance.m_AdditionalComponents);
 }
 
 void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStringDesc>>& components)
@@ -109,6 +115,15 @@ void PrefabSaver::SaveChildren(const std::vector<std::unique_ptr<GameObjectStrin
     m_IndentPrinter.DecreaseIndent();
 }
 
+void PrefabSaver::SaveKeyValuePair(const std::string& key, const std::string& value)
+{
+    m_IndentPrinter.StartLine();
+    m_IndentPrinter.AddToLine(key);
+    m_IndentPrinter.AddToLine(": ");
+    m_IndentPrinter.AddToLine(value);
+    m_IndentPrinter.EndLine();
+}
+
 void PrefabSaver::SaveKeyValuePairs(const std::map<std::string, std::string>& dict)
 {
     for (auto& pair : dict)
@@ -116,10 +131,6 @@ void PrefabSaver::SaveKeyValuePairs(const std::map<std::string, std::string>& di
         const std::string& key = pair.first;
         const std::string& value = pair.second;
 
-        m_IndentPrinter.StartLine();
-        m_IndentPrinter.AddToLine(key);
-        m_IndentPrinter.AddToLine(": ");
-        m_IndentPrinter.AddToLine(value);
-        m_IndentPrinter.EndLine();
+        SaveKeyValuePair(key, value);
     }
 }

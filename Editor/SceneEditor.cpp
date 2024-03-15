@@ -19,7 +19,7 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorPrefabHandle> root_object)
 
 	m_RootObject = root_object;
 
-	m_Scene.GetObjectManager().AddToMessageSubscribers(&root_object.lock()->GetGameObject()->GetResult());
+	//m_Scene.GetObjectManager().AddToMessageSubscribers(&root_object.lock()->GetGameObject()->GetResult());
 }
 
 void SceneEditor::Render()
@@ -38,6 +38,11 @@ void SceneEditor::Render()
 		// WARNING: do not render anything between viewportController's update and displaying the scene
 
 		m_Scene.Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
+
+		if (std::shared_ptr<EditorPrefabHandle> handle = m_RootObject.lock(); handle != nullptr && handle->GetGameObject() != nullptr)
+		{
+			IEditableGameObject::RenderUpdate(*handle->GetGameObject());
+		}
 
 		if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())
 		{

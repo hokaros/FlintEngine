@@ -1,5 +1,13 @@
 #include "EditableScene.h"
 
+void EditableScene::Render()
+{
+	for (std::unique_ptr<IEditableGameObject>& root_object : m_RootObjects)
+	{
+		IEditableGameObject::RenderUpdate(*root_object);
+	}
+}
+
 std::unique_ptr<Scene> EditableScene::CreateRuntimeObject() const
 {
 	std::unique_ptr<Scene> runtime_scene = std::make_unique<Scene>();

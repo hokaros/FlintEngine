@@ -11,3 +11,14 @@ void IEditableGameObject::CopyChildrenToRuntimeObject(const IEditableGameObject&
 		dest.AddChild(std::move(runtime_child));
 	}
 }
+
+void IEditableGameObject::RenderUpdate(IEditableGameObject& editable)
+{
+	editable.GetResult().RenderUpdate();
+
+	for (const std::unique_ptr<IEditableGameObject>& editable_child : editable.GetChildren())
+	{
+		editable_child->GetResult().RenderUpdate();
+		RenderUpdate(*editable_child);
+	}
+}

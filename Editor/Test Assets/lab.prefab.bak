@@ -15,9 +15,3 @@
 		- yCount: 5
 - children:
 	- PrefabInstance
-		- Prefab: Test Assets/wall.prefab
-	- PrefabInstance
-		- Prefab: Test Assets/wall.prefab
-		- name: Labyrinth Wall
-		- pos: 0.000000, 102.000000
-		- size: 10.000000, 100.000000

@@ -25,15 +25,15 @@ void PrefabInstanceSerializer::SerializeParamOverrides(const PrefabInstance& pre
 {
 	if (prefab_instance.GetNameOverride().has_value())
 	{
-		desc.m_OverridenParams[s_PrefabInstanceNameKey] = prefab_instance.GetNameOverride().value();
+		desc.m_OverridenParams[s_NameKey] = prefab_instance.GetNameOverride().value();
 	}
 	if (prefab_instance.GetPositionOverride().has_value())
 	{
-		desc.m_OverridenParams[s_PrefabInstancePositionKey] = SerializableTypeInterface<Vector>::ToString(prefab_instance.GetPositionOverride().value());
+		desc.m_OverridenParams[s_PositionKey] = SerializableTypeInterface<Vector>::ToString(prefab_instance.GetPositionOverride().value());
 	}
 	if (prefab_instance.GetSizeOverride().has_value())
 	{
-		desc.m_OverridenParams[s_PrefabInstanceSizeKey] = SerializableTypeInterface<Vector>::ToString(prefab_instance.GetSizeOverride().value());
+		desc.m_OverridenParams[s_SizeKey] = SerializableTypeInterface<Vector>::ToString(prefab_instance.GetSizeOverride().value());
 	}
 }
 
@@ -44,17 +44,17 @@ void PrefabInstanceSerializer::DeserializeParamOverrides(const PrefabInstanceStr
 		const std::string& key = entry.first;
 		const std::string& value = entry.second;
 
-		if (key == s_PrefabInstanceNameKey)
+		if (key == s_NameKey)
 		{
 			prefab_instance.SetName(value);
 		}
-		else if (key == s_PrefabInstancePositionKey)
+		else if (key == s_PositionKey)
 		{
 			Vector pos;
 			SerializableTypeInterface<Vector>::ParseString(value, pos);
 			prefab_instance.SetPosition(pos);
 		}
-		else if (key == s_PrefabInstanceSizeKey)
+		else if (key == s_SizeKey)
 		{
 			Vector size;
 			SerializableTypeInterface<Vector>::ParseString(value, size);

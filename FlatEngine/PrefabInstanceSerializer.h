@@ -34,9 +34,10 @@ public:
 	static std::unique_ptr<PrefabInstance> Deserialize(const PrefabInstanceStringDesc& desc);
 
 public:
-	static constexpr const char* s_PrefabInstanceNameKey = "name";
-	static constexpr const char* s_PrefabInstancePositionKey = "pos";
-	static constexpr const char* s_PrefabInstanceSizeKey = "size";
+	static constexpr const char* s_NameKey = "name";
+	static constexpr const char* s_PositionKey = "pos";
+	static constexpr const char* s_SizeKey = "size";
+	static constexpr const char* s_PrefabKey = "Prefab";
 
 private:
 	static void SerializeParamOverrides(const PrefabInstance& prefab_instance, PrefabInstanceStringDesc& desc);

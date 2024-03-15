@@ -51,7 +51,7 @@ void PrefabInstanceLoader::ParseLineGeneralParams(const std::string& line)
     std::string key, value;
     SplitLineToKeyAndValue(line, key, value);
 
-    if (key == "Prefab")
+    if (key == PrefabInstanceSerializer::s_PrefabKey)
     {
         m_PrefabInstanceDesc->m_PrefabPath = value;
     } // TODO: components

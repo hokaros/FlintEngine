@@ -21,6 +21,7 @@ private:
 	void SaveComponents(const std::vector<std::unique_ptr<ComponentStringDesc>>& components);
 	void SaveChildren(const std::vector< std::unique_ptr<GameObjectStringDescProxy>>& children);
 
+	void SaveKeyValuePair(const std::string& key, const std::string& value);
 	void SaveKeyValuePairs(const std::map<std::string, std::string>& dict);
 
 private:
