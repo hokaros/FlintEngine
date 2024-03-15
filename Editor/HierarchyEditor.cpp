@@ -88,7 +88,9 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 	std::string prefab_path;
 	if (GetPrefabPathModal(prefab_path))
 	{
-		std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
+		std::stringstream ss;
+		ss << "Test Assets/" << prefab_path;
+		std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(ss.str());
 		if (prefab_instance != nullptr)
 		{
 			game_object.AddChild(std::move(prefab_instance));

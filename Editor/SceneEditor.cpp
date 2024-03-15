@@ -48,6 +48,9 @@ void SceneEditor::Render()
 		{
 			FE_ASSERT(false, "No scene rendered");
 		}
+
+		ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
+		RenderOverlay();
 	}
 	ImGui::End(); // Scene Editor
 }
@@ -71,4 +74,13 @@ void SceneEditor::ResetRootObject()
 	m_Scene.ResetScene();
 
 	m_RootObject = std::weak_ptr<EditorPrefabHandle>();
+}
+
+void SceneEditor::RenderOverlay()
+{
+	Vector viewport_pos = m_SceneRenderer.GetViewport().pos;
+
+	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 0xFF));
+	ImGui::Text("(%0.2f, %0.2f)", viewport_pos.x, viewport_pos.y);
+	ImGui::PopStyleColor();
 }

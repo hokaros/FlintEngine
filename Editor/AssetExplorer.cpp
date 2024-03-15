@@ -8,7 +8,7 @@
 static constexpr const char* s_RootDirectory = "Test Assets";
 
 AssetExplorer::AssetExplorer()
-	: m_FilePathBuffer("basic_bullet.prefab")
+	: m_FilePathBuffer("lab.prefab")
 {
 
 }

@@ -20,6 +20,8 @@ private:
 	void AddExampleObjectsToScene();
 	void ResetRootObject();
 
+	void RenderOverlay();
+
 private:
 	SceneRenderer m_SceneRenderer;
 	Scene m_Scene; // TODO: transform into Asset Handle
