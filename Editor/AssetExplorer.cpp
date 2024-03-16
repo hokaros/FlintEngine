@@ -27,6 +27,12 @@ void AssetExplorer::Render()
 {
 	ImGui::Begin("Assets");
 
+	// Sekcja wypisuj¹ca foldery g³ówne
+
+	ImGui::SameLine();
+	// Sekcja pokazuj¹ca zawartoœæ obecnego folderu
+
+
 	ImGui::InputText("File path", m_FilePathBuffer, s_FilePathSize);
 
 	if (ImGui::Button("Open"))

@@ -5,13 +5,13 @@
 
 #include "../FlatEngine/SceneLoader.h"
 
-static constexpr const char* s_HeartBitmapPath = "resources/heart.bmp";
+static constexpr const char* s_HeartBitmapPath = "heart.bmp";
 
 LabyrinthScene::LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager)
 	: m_PlayerStartingPos(player_pos)
 	, m_AssetManager(asset_manager)
 {
-	LoadFromFile("resources/main.scene");
+	LoadFromFile("Assets/main.scene"); // TODO: get from asset manager
 	LoadStartingObjects();
 }
 

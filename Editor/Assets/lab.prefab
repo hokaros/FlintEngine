@@ -9,15 +9,8 @@
 		- position: 10.000000, 10.000000
 		- shouldChange: 1
 		- wallLength: 100
-		- wallPrefab: resources/wall.prefab
+		- wallPrefab: wall.prefab
 		- wallWidth: 10
 		- xCount: 7
 		- yCount: 5
 - children:
-	- PrefabInstance
-		- Prefab: Test Assets/wall.prefab
-	- PrefabInstance
-		- Prefab: Test Assets/wall.prefab
-		- name: Labyrinth Wall
-		- pos: 0.000000, 102.000000
-		- size: 10.000000, 100.000000

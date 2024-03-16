@@ -1,4 +1,0 @@
-- background_color: 0x00, 0x00, 0x00
-- game_objects:
-	- Prefab: resources/player.prefab
-	- Prefab: resources/lab.prefab

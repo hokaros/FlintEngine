@@ -195,10 +195,10 @@ Vector SceneRenderer::ViewportSpaceToScreenSpace(const Vector& viewportSpace) co
 bool SceneRenderer::LoadCharsets()
 {
 	// wczytanie obrazka cs8x8.bmp
-	m_Charset = SDL_LoadBMP("resources/cs8x8.bmp");
+	m_Charset = SDL_LoadBMP("Assets/cs8x8.bmp"); // TODO: get from AssetManager
 	if (m_Charset == nullptr)
 	{
-		printf("SDL_LoadBMP(resources/cs8x8.bmp) error: %s\n", SDL_GetError());
+		printf("SDL_LoadBMP(Assets/cs8x8.bmp) error: %s\n", SDL_GetError());
 		return false;
 	};
 

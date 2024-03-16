@@ -31,7 +31,7 @@ AssetManager::~AssetManager()
 
 void AssetManager::AddSurfaceAsset(const char* path)
 {
-	SDL_Surface* asset = SDL_LoadBMP(path);
+	SDL_Surface* asset = SDL_LoadBMP(GetFullPath(path).c_str());
 	if (asset == nullptr)
 	{
 		FE_ASSERT(false, "Cannot load surface: %s", path);
@@ -50,7 +50,8 @@ void AssetManager::AddSurfaceAsset(const char* path)
 
 void AssetManager::AddPrefab(const char* path)
 {
-	std::unique_ptr<GameObject> prefab = InlineGameObject::ToRuntimeObject(GameObjectLoader::LoadPrefab(path));
+	std::string full_path = GetFullPath(path);
+	std::unique_ptr<GameObject> prefab = InlineGameObject::ToRuntimeObject(GameObjectLoader::LoadPrefab(full_path.c_str()));
 	if (prefab == nullptr)
 	{
 		FE_ASSERT(false, "Cannot load prefab: %s", path);
@@ -64,6 +65,13 @@ void AssetManager::AddPrefab(const char* path)
 	}
 
 	m_PathToPrefabDict.insert({ std::string(path), std::move(prefab) });
+}
+
+std::string AssetManager::GetFullPath(const char* relative_path) const
+{
+	std::stringstream ss;
+	ss << s_RootFolder << '/' << relative_path;
+	return ss.str();
 }
 
 GameObject* AssetManager::GetPrefab(const std::string& path)
