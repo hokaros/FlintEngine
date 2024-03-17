@@ -28,8 +28,11 @@ private:
 	void RenderDirectoryElement(const files::DirectoryElement& elem);
 
 	void OpenDirectoryElement(const files::DirectoryElement& elem);
-	void EnterDirectory(const files::Directory& dir);
+	void RequestEnterDirectory(const files::Directory& dir);
 	void OpenAssetFile(const files::AssetFile& file);
+
+	void ProcessEnterDirectoryRequest();
+	void EnterDirectory(const files::Directory& dir);
 
 	void UpdateCurrentDirectoryContents();
 
@@ -37,6 +40,8 @@ private:
 	std::string m_CurrDirPath;
 	std::vector<std::unique_ptr<files::DirectoryElement>> m_CurrDirectoryContents;
 	const files::DirectoryElement* m_CurrSelectedFile = nullptr;
+
+	const files::Directory* m_RequestedDirectory = nullptr;
 
 	IAssetListener* m_Listener;
 };

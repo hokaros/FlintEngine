@@ -59,6 +59,8 @@ void AssetExplorer::RenderMainFolders()
 
 void AssetExplorer::RenderCurrentFolderContent()
 {
+	ProcessEnterDirectoryRequest();
+
 	if (ImGui::BeginChild("Current folder"))
 	{
 		ImGui::Text("Contents of %s:", m_CurrDirPath.c_str());
@@ -84,7 +86,6 @@ void AssetExplorer::RenderDirectoryElement(const files::DirectoryElement& elem)
 		if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 		{
 			OpenDirectoryElement(elem);
-			m_CurrSelectedFile = &elem;
 		}
 	}
 }
@@ -93,12 +94,27 @@ void AssetExplorer::OpenDirectoryElement(const files::DirectoryElement& elem)
 {
 	if (elem.GetType() == files::DirectoryElement::Type::Directory)
 	{
-		EnterDirectory(files::Directory::SpecificCast(elem));
+		RequestEnterDirectory(files::Directory::SpecificCast(elem));
 	}
 	else
 	{
 		OpenAssetFile(files::AssetFile::SpecificCast(elem));
 	}
+}
+
+void AssetExplorer::RequestEnterDirectory(const files::Directory& dir)
+{
+	m_RequestedDirectory = &dir;
+}
+
+void AssetExplorer::ProcessEnterDirectoryRequest()
+{
+	if (m_RequestedDirectory != nullptr)
+	{
+		EnterDirectory(*m_RequestedDirectory);
+	}
+
+	m_RequestedDirectory = nullptr;
 }
 
 void AssetExplorer::EnterDirectory(const files::Directory& dir)
@@ -109,6 +125,8 @@ void AssetExplorer::EnterDirectory(const files::Directory& dir)
 
 void AssetExplorer::OpenAssetFile(const files::AssetFile& file)
 {
+	m_CurrSelectedFile = &file;
+
 	if (m_Listener == nullptr)
 	{
 		FE_WARN("No asset listener");
