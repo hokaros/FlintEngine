@@ -88,10 +88,10 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 
 	if (ImGui::Button("Add prefab child"))
 	{
-		ImGui::OpenPopup(m_PrefabPathPrompt.GetModalId());
+		m_PrefabPathPrompt.Open();
 	}
 	std::string prefab_path;
-	if (m_PrefabPathPrompt.GetResult(prefab_path))
+	if (m_PrefabPathPrompt.Update(prefab_path))
 	{
 		std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
 		if (prefab_instance != nullptr)
@@ -109,43 +109,4 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 		}
 	}
 	ImGui::EndDisabled();
-}
-
-
-ModalStringPrompt::ModalStringPrompt(const char* modal_id, const char* label)
-	: m_ModalId(modal_id)
-	, m_Label(label)
-{
-}
-
-const char* ModalStringPrompt::GetModalId() const
-{
-	return m_ModalId.c_str();
-}
-
-bool ModalStringPrompt::GetResult(std::string& response)
-{
-	bool has_accepted = false;
-
-	if (ImGui::BeginPopupModal(m_ModalId.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-	{
-		ImGui::InputText(m_Label.c_str(), m_Buffer, s_BufferSize);
-
-		if (ImGui::Button("Add"))
-		{
-			response = m_Buffer;
-			has_accepted = true;
-
-			ImGui::CloseCurrentPopup();
-		}
-
-		if (ImGui::Button("Cancel"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	return has_accepted;
 }

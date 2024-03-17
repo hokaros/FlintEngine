@@ -3,6 +3,7 @@
 #include "AssetHandles.h"
 #include "AssetMiner.h"
 #include "DirectoryTreeExplorer.h"
+#include "Widgets.h"
 
 class IAssetListener
 {
@@ -39,6 +40,11 @@ private:
 
 	void UpdateCurrentDirectoryContents();
 
+	void UpdateAddFilePrompt();
+
+	std::string GetPathToCurrDir() const;
+	const files::DirectoryElement* FindElementInCurrentDirectory(const std::string& filename) const;
+
 	// IDirectoryOpenedObserver
 	virtual void OnDirectoryOpened(const files::Directory& dir) override;
 
@@ -50,6 +56,7 @@ private:
 	std::optional<files::Directory> m_RequestedDirectory = std::nullopt;
 
 	DirectoryTreeExplorer m_TreeExplorer;
+	ModalStringPrompt m_AddPrefabPrompt;
 
 	IAssetListener* m_Listener;
 };

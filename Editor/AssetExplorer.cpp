@@ -9,6 +9,7 @@
 AssetExplorer::AssetExplorer()
 	: m_CurrDirPath(s_RootDirectory)
 	, m_TreeExplorer(s_RootDirectory)
+	, m_AddPrefabPrompt("Add prefab", "Prefab name")
 {
 	UpdateCurrentDirectoryContents();
 
@@ -55,8 +56,9 @@ void AssetExplorer::RenderCurrentFolderContent()
 		ImGui::Text("Contents of %s:", m_CurrDirPath.c_str());
 		if (ImGui::Button("+"))
 		{
-			std::cout << "Adding" << std::endl;
+			m_AddPrefabPrompt.Open();
 		}
+		UpdateAddFilePrompt();
 
 		if (ImGui::BeginChild("Current folder contents"))
 		{
@@ -144,6 +146,49 @@ void AssetExplorer::UpdateCurrentDirectoryContents()
 	files::AssetMiner::GetDirectoryContents(dir, m_CurrDirectoryContents);
 
 	m_CurrSelectedFile = nullptr;
+}
+
+void AssetExplorer::UpdateAddFilePrompt()
+{
+	std::string filename;
+	if (m_AddPrefabPrompt.Update(filename) && !filename.empty())
+	{
+		std::string filename_extended = filename + ".prefab";
+		// TODO: find if filename exists
+
+		std::string full_path = m_CurrDirPath + "\\" + filename_extended;
+		std::unique_ptr<EditorPrefabHandle> prefab_handle = AssetOpener::OpenPrefab(full_path);
+		prefab_handle->SaveInlineGameObject();
+		UpdateCurrentDirectoryContents();
+
+		const files::DirectoryElement* new_file = FindElementInCurrentDirectory(filename_extended);
+		if (new_file == nullptr)
+		{
+			FE_LOG("Cannot find new file");
+		}
+		else
+		{
+			OpenAssetFile(files::AssetFile::SpecificCast(*new_file));
+		}
+	}
+}
+
+std::string AssetExplorer::GetPathToCurrDir() const
+{
+	return m_CurrDirPath;
+}
+
+const files::DirectoryElement* AssetExplorer::FindElementInCurrentDirectory(const std::string& filename) const
+{
+	for (const std::unique_ptr<files::DirectoryElement>& dir_elem : m_CurrDirectoryContents)
+	{
+		if (dir_elem->GetFileName() == filename)
+		{
+			return dir_elem.get();
+		}
+	}
+
+	return nullptr;
 }
 
 void AssetExplorer::OnDirectoryOpened(const files::Directory& dir)
