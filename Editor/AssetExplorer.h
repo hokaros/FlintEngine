@@ -21,6 +21,9 @@ public:
 	void RegisterAssetListener(IAssetListener* listener);
 	void Render();
 
+public:
+	static constexpr const char* s_RootDirectory = "Assets";
+
 private:
 	void RenderMainFolders();
 

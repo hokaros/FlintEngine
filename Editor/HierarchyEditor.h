@@ -5,9 +5,27 @@
 #include "SelectedGameObjectManager.h"
 #include "AssetExplorer.h"
 
+class ModalStringPrompt
+{
+public:
+	ModalStringPrompt(const char* modal_id, const char* label);
+
+	const char* GetModalId() const;
+	bool GetResult(std::string& response);
+
+private:
+	static constexpr size_t s_BufferSize = 256;
+
+	char m_Buffer[s_BufferSize];
+	std::string m_ModalId;
+	std::string m_Label;
+};
+
 class HierarchyEditor
 {
 public:
+	HierarchyEditor();
+
 	void Init(SelectedGameObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer);
 
 	void SetGameObject(std::shared_ptr<EditorGameObjectHandle> handle);
@@ -18,15 +36,12 @@ private:
 	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object, bool is_root);
 	void RenderObjectContextMenu(IEditableGameObject& game_object, bool is_root);
 
-	bool GetPrefabPathModal(std::string& path);
-
 private:
 	std::shared_ptr<EditorGameObjectHandle> m_GameObjectHandle;
 
 	SelectedGameObjectManager* m_SelectedGameObjectManager;
 	AssetExplorer* m_AssetExplorer;
 
-	static constexpr size_t s_FilePathSize = 256;
-	char m_FilePathBuffer[s_FilePathSize];
+	ModalStringPrompt m_PrefabPathPrompt;
 };
 

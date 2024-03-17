@@ -1,5 +1,10 @@
 #include "HierarchyEditor.h"
 
+HierarchyEditor::HierarchyEditor()
+	: m_PrefabPathPrompt("Prefab path", "Prefab path")
+{
+}
+
 void HierarchyEditor::Init(SelectedGameObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer)
 {
 	m_SelectedGameObjectManager = &selected_game_object_manager;
@@ -83,14 +88,12 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 
 	if (ImGui::Button("Add prefab child"))
 	{
-		ImGui::OpenPopup("Prefab path");
+		ImGui::OpenPopup(m_PrefabPathPrompt.GetModalId());
 	}
 	std::string prefab_path;
-	if (GetPrefabPathModal(prefab_path))
+	if (m_PrefabPathPrompt.GetResult(prefab_path))
 	{
-		std::stringstream ss;
-		ss << "Test Assets/" << prefab_path;
-		std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(ss.str());
+		std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
 		if (prefab_instance != nullptr)
 		{
 			game_object.AddChild(std::move(prefab_instance));
@@ -108,23 +111,35 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 	ImGui::EndDisabled();
 }
 
-bool HierarchyEditor::GetPrefabPathModal(std::string& path)
+
+ModalStringPrompt::ModalStringPrompt(const char* modal_id, const char* label)
+	: m_ModalId(modal_id)
+	, m_Label(label)
+{
+}
+
+const char* ModalStringPrompt::GetModalId() const
+{
+	return m_ModalId.c_str();
+}
+
+bool ModalStringPrompt::GetResult(std::string& response)
 {
 	bool has_accepted = false;
 
-	if (ImGui::BeginPopupModal("Prefab path", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::BeginPopupModal(m_ModalId.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
 	{
-		ImGui::InputText("Prefab path", m_FilePathBuffer, s_FilePathSize);
+		ImGui::InputText(m_Label.c_str(), m_Buffer, s_BufferSize);
 
 		if (ImGui::Button("Add"))
 		{
-			path = m_FilePathBuffer;
+			response = m_Buffer;
 			has_accepted = true;
 
 			ImGui::CloseCurrentPopup();
 		}
 
-		if (ImGui::Button("Cancel")) 
+		if (ImGui::Button("Cancel"))
 		{
 			ImGui::CloseCurrentPopup();
 		}

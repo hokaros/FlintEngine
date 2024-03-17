@@ -6,8 +6,6 @@
 #include "PrefabSaver.h"
 #include "AssetOpener.h"
 
-static constexpr const char* s_RootDirectory = "Assets";
-
 AssetExplorer::AssetExplorer()
 	: m_CurrDirPath(s_RootDirectory)
 	, m_TreeExplorer(s_RootDirectory)
@@ -55,6 +53,10 @@ void AssetExplorer::RenderCurrentFolderContent()
 	if (ImGui::BeginChild("Current folder"))
 	{
 		ImGui::Text("Contents of %s:", m_CurrDirPath.c_str());
+		if (ImGui::Button("+"))
+		{
+			std::cout << "Adding" << std::endl;
+		}
 
 		if (ImGui::BeginChild("Current folder contents"))
 		{
