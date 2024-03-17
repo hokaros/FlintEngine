@@ -20,7 +20,6 @@ std::unique_ptr<GameObjectStringDesc> GameObjectLoader::LoadPrefabDesc(const cha
     prefab_file.open(file_path, std::ios::in);
     if (!prefab_file.is_open())
     {
-        FE_LOG("Couldn't open prefab file: %s", file_path);
         return nullptr;
     }
 
