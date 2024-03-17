@@ -18,7 +18,7 @@ ComponentDefinition::ComponentDefinition(const std::string& name, ComponentConst
 	m_BaseComponentName = base_comp_name;
 }
 
-const std::string& ComponentDefinition::GetName() const
+const std::string& ComponentDefinition::GetFileName() const
 {
 	return m_Name;
 }
@@ -66,7 +66,7 @@ std::vector<const ComponentFieldDefinition*> ComponentDefinition::GetBaseCompone
 		return std::vector<const ComponentFieldDefinition*>(); // No base component
 
 	ComponentDefinition* base_component = ComponentDefinitionManager::GetInstance().GetDefinitionFromName(m_BaseComponentName.value());
-	FE_ASSERT(base_component != nullptr, "%s - Cannot find base component: %s", GetName(), m_BaseComponentName.value());
+	FE_ASSERT(base_component != nullptr, "%s - Cannot find base component: %s", GetFileName(), m_BaseComponentName.value());
 
 	return base_component->GetFields();
 }
@@ -89,7 +89,7 @@ ComponentDefinitionManager& ComponentDefinitionManager::GetInstance()
 
 void ComponentDefinitionManager::RegisterComponent(ComponentDefinition& definition)
 {
-	m_ComponentNameToDefinition.insert({ definition.GetName(), &definition });
+	m_ComponentNameToDefinition.insert({ definition.GetFileName(), &definition });
 	m_ComponentTypeCodeToDefinition.insert({ definition.GetTypeCode(), &definition });
 }
 

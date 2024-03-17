@@ -13109,7 +13109,7 @@ ImGuiWindowSettings* ImGui::CreateNewWindowSettings(const char* name)
     ImGuiWindowSettings* settings = g.SettingsWindows.alloc_chunk(chunk_size);
     IM_PLACEMENT_NEW(settings) ImGuiWindowSettings();
     settings->ID = ImHashStr(name, name_len);
-    memcpy(settings->GetName(), name, name_len + 1);   // Store with zero terminator
+    memcpy(settings->GetFileName(), name, name_len + 1);   // Store with zero terminator
 
     return settings;
 }
@@ -13223,7 +13223,7 @@ static void WindowSettingsHandler_WriteAll(ImGuiContext* ctx, ImGuiSettingsHandl
     {
         if (settings->WantDelete)
             continue;
-        const char* settings_name = settings->GetName();
+        const char* settings_name = settings->GetFileName();
         buf->appendf("[%s][%s]\n", handler->TypeName, settings_name);
         buf->appendf("Pos=%d,%d\n", settings->Pos.x, settings->Pos.y);
         buf->appendf("Size=%d,%d\n", settings->Size.x, settings->Size.y);
@@ -14563,7 +14563,7 @@ void ImGui::DebugNodeWindowSettings(ImGuiWindowSettings* settings)
     if (settings->WantDelete)
         BeginDisabled();
     Text("0x%08X \"%s\" Pos (%d,%d) Size (%d,%d) Collapsed=%d",
-        settings->ID, settings->GetName(), settings->Pos.x, settings->Pos.y, settings->Size.x, settings->Size.y, settings->Collapsed);
+        settings->ID, settings->GetFileName(), settings->Pos.x, settings->Pos.y, settings->Size.x, settings->Size.y, settings->Collapsed);
     if (settings->WantDelete)
         EndDisabled();
 }

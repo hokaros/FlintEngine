@@ -17,7 +17,7 @@ void ComponentEditor::Render()
 	std::string id_str = std::to_string(m_IndexInGameObject);
 	ImGui::BeginChild(id_str.c_str(), ImVec2(0, CalculateHeight()));
 
-	ImGui::Text("Component: %s", m_ComponentDefinition.GetName().c_str());
+	ImGui::Text("Component: %s", m_ComponentDefinition.GetFileName().c_str());
 	ImGui::SameLine();
 	if (ImGui::Button("-"))
 	{

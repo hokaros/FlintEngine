@@ -6,7 +6,7 @@ std::unique_ptr<ComponentStringDesc> ComponentSerializer::SerializeComponent(con
 
 	std::unique_ptr<ComponentStringDesc> comp_serialized = std::make_unique<ComponentStringDesc>();
 
-	comp_serialized->type = comp_def->GetName();
+	comp_serialized->type = comp_def->GetFileName();
 
 	for (const ComponentFieldDefinition* field : comp_def->GetFields())
 	{

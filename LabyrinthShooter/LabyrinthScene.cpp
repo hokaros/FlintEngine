@@ -97,7 +97,7 @@ GameObject* LabyrinthScene::FindLabyrinth()
 {
 	for (std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
 	{
-		if (go->GetName() == "Labyrinth")
+		if (go->GetFileName() == "Labyrinth")
 		{
 			return go.get();
 		}
@@ -110,7 +110,7 @@ GameObject* LabyrinthScene::FindPlayer()
 {
 	for (std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
 	{
-		if (go->GetName() == "Player")
+		if (go->GetFileName() == "Player")
 		{
 			return go.get();
 		}

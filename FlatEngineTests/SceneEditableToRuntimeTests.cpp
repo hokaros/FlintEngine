@@ -46,7 +46,7 @@ TEST(SUITE_NAME, AddsSingleInlineObject)
 	ASSERT_TRUE(runtime_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_object = runtime_objects.front();
-	ASSERT_EQ(object_name, runtime_object->GetName());
+	ASSERT_EQ(object_name, runtime_object->GetFileName());
 }
 
 TEST(SUITE_NAME, AddsSinglePrefabInstance)
@@ -73,7 +73,7 @@ TEST(SUITE_NAME, AddsSinglePrefabInstance)
 	ASSERT_TRUE(runtime_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_object = runtime_objects.front();
-	ASSERT_EQ(object_name, runtime_object->GetName());
+	ASSERT_EQ(object_name, runtime_object->GetFileName());
 }
 
 TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
@@ -100,13 +100,13 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	ASSERT_TRUE(runtime_root_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_root_object = runtime_root_objects.front();
-	ASSERT_EQ(root_object_name, runtime_root_object->GetName());
+	ASSERT_EQ(root_object_name, runtime_root_object->GetFileName());
 
 	const std::vector<std::unique_ptr<GameObject>>& runtime_root_object_children = runtime_root_object->GetChildren();
 	ASSERT_TRUE(runtime_root_object_children.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_child = runtime_root_object_children.front();
-	ASSERT_EQ(child_object_name, runtime_child->GetName());
+	ASSERT_EQ(child_object_name, runtime_child->GetFileName());
 }
 
 TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
@@ -137,13 +137,13 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	ASSERT_TRUE(runtime_root_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_root_object = runtime_root_objects.front();
-	ASSERT_EQ(root_object_name, runtime_root_object->GetName());
+	ASSERT_EQ(root_object_name, runtime_root_object->GetFileName());
 
 	const std::vector<std::unique_ptr<GameObject>>& runtime_root_object_children = runtime_root_object->GetChildren();
 	ASSERT_TRUE(runtime_root_object_children.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_child = runtime_root_object_children.front();
-	ASSERT_EQ(child_object_name, runtime_child->GetName());
+	ASSERT_EQ(child_object_name, runtime_child->GetFileName());
 }
 
 

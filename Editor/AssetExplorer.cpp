@@ -5,10 +5,11 @@
 #include "../FlatEngine/AssetManager.h"
 #include "PrefabSaver.h"
 
-static constexpr const char* s_RootDirectory = "Test Assets";
+static constexpr const char* s_RootDirectory = "Assets";
 
 AssetExplorer::AssetExplorer()
 	: m_FilePathBuffer("lab.prefab")
+	, m_CurrDirPath(s_RootDirectory)
 {
 
 }
@@ -25,29 +26,12 @@ void AssetExplorer::RegisterAssetListener(IAssetListener* listener)
 
 void AssetExplorer::Render()
 {
-	ImGui::Begin("Assets");
-
-	// Sekcja wypisuj¹ca foldery g³ówne
-
-	ImGui::SameLine();
-	// Sekcja pokazuj¹ca zawartoœæ obecnego folderu
-
-
-	ImGui::InputText("File path", m_FilePathBuffer, s_FilePathSize);
-
-	if (ImGui::Button("Open"))
+	if (ImGui::Begin("Assets"))
 	{
-		if (m_Listener != nullptr)
-		{
-			std::string full_path = AppendPathToRootDirectory(m_FilePathBuffer);
-			m_Listener->OnPrefabOpened(OpenPrefab(full_path));
-		}
-		else
-		{
-			FE_WARN("No asset listener");
-		}
+		RenderMainFolders();
+		ImGui::SameLine();
+		RenderCurrentFolderContent();
 	}
-
 	ImGui::End();
 }
 
@@ -75,4 +59,61 @@ std::string AssetExplorer::AppendPathToRootDirectory(const std::string& path)
 	std::stringstream ss;
 	ss << s_RootDirectory << '\\' << path;
 	return ss.str();
+}
+
+void AssetExplorer::RenderMainFolders()
+{
+	ImVec2 panel_size = ImVec2(ImGui::GetContentRegionAvail().x * 0.2f, ImGui::GetContentRegionAvail().y);
+	if (ImGui::BeginChild("Main folders", panel_size, true))
+	{
+		ImGui::Text("Main");
+	}
+	ImGui::EndChild();
+}
+
+void AssetExplorer::RenderCurrentFolderContent()
+{
+	if (ImGui::BeginChild("Current folder"))
+	{
+		UpdateCurrentDirectoryContents(); // TODO: do this only when navigating into a directory OR adding/removing new elements
+
+		ImGui::Text("Contents of %s:", m_CurrDirPath.c_str());
+
+		for (const std::unique_ptr<files::DirectoryElement>& elem : m_CurrDirectoryContents)
+		{
+			if (elem->GetType() == files::DirectoryElement::Type::Directory)
+			{
+				ImGui::BulletText("[Dir] %s", elem->GetFileName().c_str());
+			}
+			else
+			{
+				ImGui::BulletText("%s", elem->GetFileName().c_str());
+			}
+		}
+
+		// Temporary opening
+		ImGui::InputText("File path", m_FilePathBuffer, s_FilePathSize);
+
+		if (ImGui::Button("Open"))
+		{
+			if (m_Listener != nullptr)
+			{
+				std::string full_path = AppendPathToRootDirectory(m_FilePathBuffer);
+				m_Listener->OnPrefabOpened(OpenPrefab(full_path));
+			}
+			else
+			{
+				FE_WARN("No asset listener");
+			}
+		}
+	}
+	ImGui::EndChild();
+}
+
+void AssetExplorer::UpdateCurrentDirectoryContents()
+{
+	files::Directory dir = files::Directory(m_CurrDirPath);
+
+	m_CurrDirectoryContents.clear();
+	files::AssetMiner::GetDirectoryContents(dir, m_CurrDirectoryContents);
 }

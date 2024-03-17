@@ -47,7 +47,7 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	}
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	const char* node_id = runtime_object.GetName().empty() == false ? runtime_object.GetName().c_str() : "?";
+	const char* node_id = runtime_object.GetFileName().empty() == false ? runtime_object.GetFileName().c_str() : "?";
 	const bool node_open = ImGui::TreeNodeEx(node_id, node_flags);
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{

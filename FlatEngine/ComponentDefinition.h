@@ -15,7 +15,7 @@ public:
 	ComponentDefinition(const std::string& name, ComponentConstructorT constructor);
 	ComponentDefinition(const std::string& name, ComponentConstructorT constructor, const std::string& base_comp_name);
 
-	const std::string& GetName() const;
+	const std::string& GetFileName() const;
 	RuntimeTypeCode GetTypeCode() const;
 	const ComponentConstructorT& GetConstructor() const;
 	std::vector<const ComponentFieldDefinition*> GetFields() const;

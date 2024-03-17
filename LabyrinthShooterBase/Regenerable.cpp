@@ -13,7 +13,7 @@ void Regenerable::Awake()
 	destroyable = m_GameObject->FindComponent<Destroyable>();
 	if (destroyable == nullptr)
 	{
-		FE_DATA_ERROR("Regenerable without destroyable: %s", m_GameObject->GetName().c_str());
+		FE_DATA_ERROR("Regenerable without destroyable: %s", m_GameObject->GetFileName().c_str());
 		return;
 	}
 
