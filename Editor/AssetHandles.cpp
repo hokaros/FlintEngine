@@ -37,3 +37,29 @@ void EditorIEditableGameObjectHandle::SaveInlineGameObject()
 {
 
 }
+
+
+
+EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorGameObjectHandle> game_object)
+    : m_EditableGameObject(std::move(game_object))
+    , m_PrefabHandle(nullptr)
+{
+    m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+}
+
+EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorPrefabHandle> prefab)
+    : m_PrefabHandle(std::move(prefab))
+    , m_EditableGameObject(prefab)
+{
+    m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+}
+
+IHierarchyEditable* EditorUniversalHandle::GetHierarchyEditable() const
+{
+    return m_HierarchyEditable;
+}
+
+std::shared_ptr<EditorGameObjectHandle> EditorUniversalHandle::GetGameObjectHandle() const
+{
+    return m_EditableGameObject;
+}

@@ -13,7 +13,7 @@ SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screen
 	AddExampleObjectsToScene();
 }
 
-void SceneEditor::SetRootObject(std::weak_ptr<EditorPrefabHandle> root_object)
+void SceneEditor::SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object)
 {
 	m_Scene.ResetScene();
 
@@ -39,9 +39,12 @@ void SceneEditor::Render()
 
 		m_Scene.Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
 
-		if (std::shared_ptr<EditorPrefabHandle> handle = m_RootObject.lock(); handle != nullptr && handle->GetGameObject() != nullptr)
+		if (std::shared_ptr<EditorUniversalHandle> handle = m_RootObject.lock(); 
+			handle != nullptr 
+			&& handle->GetGameObjectHandle() != nullptr
+			&& handle->GetGameObjectHandle()->GetGameObject() != nullptr)
 		{
-			IEditableGameObject::RenderUpdate(*handle->GetGameObject());
+			IEditableGameObject::RenderUpdate(*handle->GetGameObjectHandle()->GetGameObject());
 		}
 
 		if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())
@@ -78,7 +81,7 @@ void SceneEditor::ResetRootObject()
 {
 	m_Scene.ResetScene();
 
-	m_RootObject = std::weak_ptr<EditorPrefabHandle>();
+	m_RootObject = std::weak_ptr<EditorUniversalHandle>();
 }
 
 void SceneEditor::RenderOverlay()

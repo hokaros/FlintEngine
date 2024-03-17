@@ -10,7 +10,7 @@ class SceneEditor
 public:
 	SceneEditor(SDL_Renderer& renderer, float screenWidth, float screenHeight);
 
-	void SetRootObject(std::weak_ptr<EditorPrefabHandle> root_object); // TODO: make this for scenes also
+	void SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object); // TODO: make this for scenes also
 
 	void Render();
 
@@ -28,6 +28,6 @@ private:
 
 	ViewportController viewportController;
 
-	std::weak_ptr<EditorPrefabHandle> m_RootObject;
+	std::weak_ptr<EditorUniversalHandle> m_RootObject;
 };
 

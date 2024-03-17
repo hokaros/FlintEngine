@@ -13,16 +13,16 @@ public:
 
 	void Init(SelectedGameObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer);
 
-	void SetGameObject(std::shared_ptr<EditorGameObjectHandle> handle);
+	void SetEditedObject(std::shared_ptr<EditorUniversalHandle> handle);
 
 	void Render();
 
 private:
-	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object, bool is_root);
+	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, bool is_root);
 	void RenderObjectContextMenu(IEditableGameObject& game_object, bool is_root);
 
 private:
-	std::shared_ptr<EditorGameObjectHandle> m_GameObjectHandle;
+	std::shared_ptr<EditorUniversalHandle> m_EditedObjectHandle;
 
 	SelectedGameObjectManager* m_SelectedGameObjectManager;
 	AssetExplorer* m_AssetExplorer;

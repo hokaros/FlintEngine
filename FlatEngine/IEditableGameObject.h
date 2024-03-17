@@ -1,6 +1,7 @@
 #pragma once
-#include "../FlatEngine/GameObject.h"
-#include "../FlatEngine/ComponentFieldDefinition.h"
+#include "GameObject.h"
+#include "ComponentFieldDefinition.h"
+#include "IHierarchyEditable.h"
 
 struct ComponentFieldChange
 {
@@ -43,6 +44,7 @@ enum class EditableGameObjectType
 
 // Interface for GameObject wrappers suited for editing within the Editor
 class IEditableGameObject
+	: public IHierarchyEditable
 {
 public:
 	virtual GameObject& GetResult() = 0; // Please don't recalculate it on every GetResult() call.
@@ -69,6 +71,10 @@ public:
 
 	static void CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest);
 	static void RenderUpdate(IEditableGameObject& editable);
+
+private:
+	// IHierarchyEditable
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects();
 };
 
 template<typename ValueT>

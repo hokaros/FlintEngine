@@ -22,3 +22,8 @@ void IEditableGameObject::RenderUpdate(IEditableGameObject& editable)
 		RenderUpdate(*editable_child);
 	}
 }
+
+const std::vector<std::unique_ptr<IEditableGameObject>>& IEditableGameObject::GetSubRootObjects()
+{
+	return GetChildren();
+}

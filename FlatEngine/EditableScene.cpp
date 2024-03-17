@@ -50,3 +50,8 @@ void EditableScene::CopyObjectsToScene(Scene& scene) const
 		scene.AddGameObject(std::move(runtime_object));
 	}
 }
+
+const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetSubRootObjects()
+{
+	return m_RootObjects;
+}

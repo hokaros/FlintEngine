@@ -1,8 +1,10 @@
 #pragma once
 #include "Scene.h"
 #include "IEditableGameObject.h"
+#include "IHierarchyEditable.h"
 
 class EditableScene
+	: public IHierarchyEditable
 {
 public:
 	void Render();
@@ -17,6 +19,9 @@ public:
 
 private:
 	void CopyObjectsToScene(Scene& scene) const;
+
+	// IHierarchyEditable
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects();
 
 private:
 	std::vector<std::unique_ptr<IEditableGameObject>> m_RootObjects;

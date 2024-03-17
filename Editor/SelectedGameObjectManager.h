@@ -18,7 +18,7 @@ class SelectedGameObjectManager
 public:
 	void OnSceneLoaded(Scene& new_scene);
 
-	void SelectGameObject(std::shared_ptr<EditorGameObjectHandle> game_object);
+	void SelectGameObject(std::shared_ptr<EditorUniversalHandle> game_object);
 	EditorGameObjectHandle* GetSelectedGameObject() const;
 	bool IsGameObjectSelected(const GameObject& game_object) const;
 
@@ -32,6 +32,6 @@ private:
 private:
 	std::vector<IGameObjectSelectionObserver*> m_SelectionSubscribers;
 
-	std::shared_ptr<EditorGameObjectHandle> m_SelectedGameObject;
+	std::shared_ptr<EditorUniversalHandle> m_SelectedGameObject;
 };
 

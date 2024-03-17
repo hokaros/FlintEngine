@@ -11,22 +11,35 @@ void HierarchyEditor::Init(SelectedGameObjectManager& selected_game_object_manag
 	m_AssetExplorer = &asset_explorer;
 }
 
-void HierarchyEditor::SetGameObject(std::shared_ptr<EditorGameObjectHandle> handle)
+void HierarchyEditor::SetEditedObject(std::shared_ptr<EditorUniversalHandle> handle)
 {
-	m_GameObjectHandle = std::move(handle);
+	FE_ASSERT(handle == nullptr || handle->GetHierarchyEditable() != nullptr, "No HierarchyEditable passed");
+
+	m_EditedObjectHandle = std::move(handle);
 }
 
 void HierarchyEditor::Render()
 {
 	if (ImGui::Begin("Hierarchy Editor"))
 	{
-		if (m_GameObjectHandle == nullptr)
+		if (m_EditedObjectHandle == nullptr)
 		{
-			ImGui::Text("No game object selected");
+			ImGui::Text("Nothing to show");
 		}
 		else
 		{
-			RenderObjectHierarchy(m_GameObjectHandle, /*is_root*/ true);
+			if (std::shared_ptr<EditorGameObjectHandle> root_game_object = m_EditedObjectHandle->GetGameObjectHandle(); root_game_object != nullptr)
+			{
+				RenderObjectHierarchy(root_game_object, /*is_root*/ true);
+			}
+			else
+			{
+				for (const std::unique_ptr<IEditableGameObject>& subroot_object : m_EditedObjectHandle->GetHierarchyEditable()->GetSubRootObjects())
+				{
+
+					RenderObjectHierarchy(std::make_shared<EditorIEditableGameObjectHandle>(subroot_object.get()), /*is_root*/false);
+				}
+			}
 		}
 	}
 	ImGui::End();
@@ -34,7 +47,7 @@ void HierarchyEditor::Render()
 
 void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, bool is_root)
 {
-	if(node_object_handle == nullptr)
+	if (node_object_handle == nullptr)
 		return;
 
 	IEditableGameObject* node_object = node_object_handle->GetGameObject();
@@ -56,7 +69,7 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	const bool node_open = ImGui::TreeNodeEx(node_id, node_flags);
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{
-		m_SelectedGameObjectManager->SelectGameObject(node_object_handle);
+		m_SelectedGameObjectManager->SelectGameObject(std::make_shared<EditorUniversalHandle>(node_object_handle));
 	}
 
 	if (ImGui::BeginPopupContextItem("Tree node context menu"))
