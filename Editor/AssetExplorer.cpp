@@ -8,10 +8,9 @@
 static constexpr const char* s_RootDirectory = "Assets";
 
 AssetExplorer::AssetExplorer()
-	: m_FilePathBuffer("lab.prefab")
-	, m_CurrDirPath(s_RootDirectory)
+	: m_CurrDirPath(s_RootDirectory)
 {
-
+	UpdateCurrentDirectoryContents();
 }
 
 void AssetExplorer::RegisterAssetListener(IAssetListener* listener)
@@ -28,8 +27,6 @@ void AssetExplorer::Render()
 {
 	if (ImGui::Begin("Assets"))
 	{
-		UpdateCurrentDirectoryContents(); // TODO: do this only when navigating into a directory OR adding/removing new elements
-
 		RenderMainFolders();
 		ImGui::SameLine();
 		RenderCurrentFolderContent();
@@ -80,11 +77,14 @@ void AssetExplorer::RenderCurrentFolderContent()
 
 void AssetExplorer::RenderDirectoryElement(const files::DirectoryElement& elem)
 {
-	if (ImGui::Selectable(elem.GetFileName().c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+	const bool is_selected = m_CurrSelectedFile != nullptr && m_CurrSelectedFile == &elem;
+
+	if (ImGui::Selectable(elem.GetFileName().c_str(), is_selected, ImGuiSelectableFlags_AllowDoubleClick))
 	{
 		if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 		{
 			OpenDirectoryElement(elem);
+			m_CurrSelectedFile = &elem;
 		}
 	}
 }
@@ -103,8 +103,8 @@ void AssetExplorer::OpenDirectoryElement(const files::DirectoryElement& elem)
 
 void AssetExplorer::EnterDirectory(const files::Directory& dir)
 {
-	// TODO
-	std::cout << "Trying to enter: " << dir.GetPath() << std::endl;
+	m_CurrDirPath = dir.GetPath();
+	UpdateCurrentDirectoryContents();
 }
 
 void AssetExplorer::OpenAssetFile(const files::AssetFile& file)
@@ -131,4 +131,6 @@ void AssetExplorer::UpdateCurrentDirectoryContents()
 
 	m_CurrDirectoryContents.clear();
 	files::AssetMiner::GetDirectoryContents(dir, m_CurrDirectoryContents);
+
+	m_CurrSelectedFile = nullptr;
 }

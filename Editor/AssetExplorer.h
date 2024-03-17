@@ -34,12 +34,9 @@ private:
 	void UpdateCurrentDirectoryContents();
 
 private:
-	static constexpr size_t s_FilePathSize = 256;
-	char m_FilePathBuffer[s_FilePathSize];
-
 	std::string m_CurrDirPath;
 	std::vector<std::unique_ptr<files::DirectoryElement>> m_CurrDirectoryContents;
-	std::vector<bool> m_CurrDirectoryContentsSelectionStates;
+	const files::DirectoryElement* m_CurrSelectedFile = nullptr;
 
 	IAssetListener* m_Listener;
 };
