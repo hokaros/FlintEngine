@@ -19,14 +19,17 @@ public:
 	void RegisterAssetListener(IAssetListener* listener);
 	void Render();
 
-	GameObject* GetPrefab(const std::string& path);
-
 private:
 	std::unique_ptr<EditorPrefabHandle> OpenPrefab(const std::string& prefab_path); // This will create a prefab if a directory exists
-	std::string AppendPathToRootDirectory(const std::string& path);
 
 	void RenderMainFolders();
+
 	void RenderCurrentFolderContent();
+	void RenderDirectoryElement(const files::DirectoryElement& elem);
+
+	void OpenDirectoryElement(const files::DirectoryElement& elem);
+	void EnterDirectory(const files::Directory& dir);
+	void OpenAssetFile(const files::AssetFile& file);
 
 	void UpdateCurrentDirectoryContents();
 
@@ -36,6 +39,7 @@ private:
 
 	std::string m_CurrDirPath;
 	std::vector<std::unique_ptr<files::DirectoryElement>> m_CurrDirectoryContents;
+	std::vector<bool> m_CurrDirectoryContentsSelectionStates;
 
 	IAssetListener* m_Listener;
 };

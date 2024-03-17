@@ -3,6 +3,10 @@
 
 namespace files
 {
+    static constexpr const char* s_PrefabFileExtension = ".prefab";
+    static constexpr const char* s_BitmapFileExtension = ".bmp";
+    static constexpr const char* s_SceneFileExtension = ".scene";
+
     Directory::Directory(const std::filesystem::path& path)
         : DirectoryElement(path)
     {
@@ -10,11 +14,16 @@ namespace files
 
     Directory& Directory::SpecificCast(DirectoryElement& directory_elem)
     {
-        FE_ASSERT(directory_elem.GetType() == Type::Directory, "Invalid cast");
-        return static_cast<Directory&>(directory_elem);
+        return const_cast<Directory&>(SpecificCast(const_cast<const DirectoryElement&>(directory_elem)));
     }
 
-    DirectoryElement::Type Directory::GetType()
+    const Directory& Directory::SpecificCast(const DirectoryElement& directory_elem)
+    {
+        FE_ASSERT(directory_elem.GetType() == Type::Directory, "Invalid cast");
+        return static_cast<const Directory&>(directory_elem);
+    }
+
+    DirectoryElement::Type Directory::GetType() const
     {
         return Type::Directory;
     }
@@ -26,11 +35,37 @@ namespace files
 
     AssetFile& AssetFile::SpecificCast(DirectoryElement& directory_elem)
     {
-        FE_ASSERT(directory_elem.GetType() == Type::AssetFile, "Invalid cast");
-        return static_cast<AssetFile&>(directory_elem);
+        return const_cast<AssetFile&>(SpecificCast(const_cast<const DirectoryElement&>(directory_elem)));
     }
 
-    DirectoryElement::Type AssetFile::GetType()
+    const AssetFile& AssetFile::SpecificCast(const DirectoryElement& directory_elem)
+    {
+        FE_ASSERT(directory_elem.GetType() == Type::AssetFile, "Invalid cast");
+        return static_cast<const AssetFile&>(directory_elem);
+    }
+
+    AssetType AssetFile::GetAssetType() const
+    {
+        std::string ext = m_Path.extension().string();
+        if (ext == s_PrefabFileExtension)
+        {
+            return AssetType::Prefab;
+        }
+        else if (ext == s_BitmapFileExtension)
+        {
+            return AssetType::Bitmap;
+        }
+        else if (ext == s_SceneFileExtension)
+        {
+            return AssetType::Scene;
+        }
+        else
+        {
+            return AssetType::Unknown;
+        }
+    }
+
+    DirectoryElement::Type AssetFile::GetType() const
     {
         return Type::AssetFile;
     }

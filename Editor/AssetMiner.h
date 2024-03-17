@@ -18,7 +18,7 @@ namespace files
 		const std::string GetFileName() const;
 		const std::string GetPath() const;
 
-		virtual Type GetType() = 0;
+		virtual Type GetType() const = 0;
 
 	protected:
 		DirectoryElement(const std::filesystem::path& path);
@@ -34,9 +34,18 @@ namespace files
 		Directory(const std::filesystem::path& path);
 
 		static Directory& SpecificCast(DirectoryElement& directory_elem);
+		static const Directory& SpecificCast(const DirectoryElement& directory_elem);
 
 	private:
-		virtual Type GetType() override;
+		virtual Type GetType() const override;
+	};
+
+	enum class AssetType
+	{
+		Unknown,
+		Prefab,
+		Bitmap,
+		Scene
 	};
 
 	class AssetFile
@@ -46,9 +55,12 @@ namespace files
 		AssetFile(const std::filesystem::path& path);
 
 		static AssetFile& SpecificCast(DirectoryElement& directory_elem);
+		static const AssetFile& SpecificCast(const DirectoryElement& directory_elem);
+
+		AssetType GetAssetType() const;
 
 	private:
-		virtual Type GetType() override;
+		virtual Type GetType() const override;
 	};
 
 	// Responsible for extracting all assets/directories from a given directory

@@ -28,17 +28,13 @@ void AssetExplorer::Render()
 {
 	if (ImGui::Begin("Assets"))
 	{
+		UpdateCurrentDirectoryContents(); // TODO: do this only when navigating into a directory OR adding/removing new elements
+
 		RenderMainFolders();
 		ImGui::SameLine();
 		RenderCurrentFolderContent();
 	}
 	ImGui::End();
-}
-
-GameObject* AssetExplorer::GetPrefab(const std::string& path)
-{
-	std::string full_path = AppendPathToRootDirectory(path);
-	return AssetManager::GetInstance()->GetPrefab(full_path);
 }
 
 
@@ -52,13 +48,6 @@ std::unique_ptr<EditorPrefabHandle> AssetExplorer::OpenPrefab(const std::string&
 	}
 
 	return std::make_unique<EditorPrefabHandle>(std::move(prefab), prefab_path);
-}
-
-std::string AssetExplorer::AppendPathToRootDirectory(const std::string& path)
-{
-	std::stringstream ss;
-	ss << s_RootDirectory << '\\' << path;
-	return ss.str();
 }
 
 void AssetExplorer::RenderMainFolders()
@@ -75,39 +64,65 @@ void AssetExplorer::RenderCurrentFolderContent()
 {
 	if (ImGui::BeginChild("Current folder"))
 	{
-		UpdateCurrentDirectoryContents(); // TODO: do this only when navigating into a directory OR adding/removing new elements
-
 		ImGui::Text("Contents of %s:", m_CurrDirPath.c_str());
 
-		for (const std::unique_ptr<files::DirectoryElement>& elem : m_CurrDirectoryContents)
+		if (ImGui::BeginChild("Current folder contents"))
 		{
-			if (elem->GetType() == files::DirectoryElement::Type::Directory)
+			for (const std::unique_ptr<files::DirectoryElement>& elem : m_CurrDirectoryContents)
 			{
-				ImGui::BulletText("[Dir] %s", elem->GetFileName().c_str());
-			}
-			else
-			{
-				ImGui::BulletText("%s", elem->GetFileName().c_str());
+				RenderDirectoryElement(*elem);
 			}
 		}
-
-		// Temporary opening
-		ImGui::InputText("File path", m_FilePathBuffer, s_FilePathSize);
-
-		if (ImGui::Button("Open"))
-		{
-			if (m_Listener != nullptr)
-			{
-				std::string full_path = AppendPathToRootDirectory(m_FilePathBuffer);
-				m_Listener->OnPrefabOpened(OpenPrefab(full_path));
-			}
-			else
-			{
-				FE_WARN("No asset listener");
-			}
-		}
+		ImGui::EndChild();
 	}
 	ImGui::EndChild();
+}
+
+void AssetExplorer::RenderDirectoryElement(const files::DirectoryElement& elem)
+{
+	if (ImGui::Selectable(elem.GetFileName().c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+	{
+		if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+		{
+			OpenDirectoryElement(elem);
+		}
+	}
+}
+
+void AssetExplorer::OpenDirectoryElement(const files::DirectoryElement& elem)
+{
+	if (elem.GetType() == files::DirectoryElement::Type::Directory)
+	{
+		EnterDirectory(files::Directory::SpecificCast(elem));
+	}
+	else
+	{
+		OpenAssetFile(files::AssetFile::SpecificCast(elem));
+	}
+}
+
+void AssetExplorer::EnterDirectory(const files::Directory& dir)
+{
+	// TODO
+	std::cout << "Trying to enter: " << dir.GetPath() << std::endl;
+}
+
+void AssetExplorer::OpenAssetFile(const files::AssetFile& file)
+{
+	if (m_Listener == nullptr)
+	{
+		FE_WARN("No asset listener");
+		return;
+	}
+
+	switch (file.GetAssetType())
+	{
+	case files::AssetType::Prefab:
+		m_Listener->OnPrefabOpened(OpenPrefab(file.GetPath()));
+		break;
+	default:
+		FE_LOG("Unimplemented asset opening");
+	}
 }
 
 void AssetExplorer::UpdateCurrentDirectoryContents()
