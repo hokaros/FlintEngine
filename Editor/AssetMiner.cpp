@@ -106,4 +106,17 @@ namespace files
             out_contents.push_back(std::move(elem));
         }
     }
+
+    void AssetMiner::GetDirectoriesInside(const Directory& src_dir, std::vector<Directory>& out_directories)
+    {
+        namespace fs = std::filesystem;
+
+        for (auto& entry : fs::directory_iterator(src_dir.GetPath()))
+        {
+            if (!entry.is_directory())
+                continue;
+
+            out_directories.emplace_back(entry.path().string());
+        }
+    }
 }

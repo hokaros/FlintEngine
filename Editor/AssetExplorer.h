@@ -2,6 +2,7 @@
 #include "../FlatEngine/imgui/imgui.h"
 #include "AssetHandles.h"
 #include "AssetMiner.h"
+#include "DirectoryTreeExplorer.h"
 
 class IAssetListener
 {
@@ -12,6 +13,7 @@ public:
 };
 
 class AssetExplorer
+	: private IDirectoryOpenedObserver
 {
 public:
 	AssetExplorer();
@@ -20,8 +22,6 @@ public:
 	void Render();
 
 private:
-	std::unique_ptr<EditorPrefabHandle> OpenPrefab(const std::string& prefab_path); // This will create a prefab if a directory exists
-
 	void RenderMainFolders();
 
 	void RenderCurrentFolderContent();
@@ -36,12 +36,17 @@ private:
 
 	void UpdateCurrentDirectoryContents();
 
+	// IDirectoryOpenedObserver
+	virtual void OnDirectoryOpened(const files::Directory& dir) override;
+
 private:
 	std::string m_CurrDirPath;
 	std::vector<std::unique_ptr<files::DirectoryElement>> m_CurrDirectoryContents;
 	const files::DirectoryElement* m_CurrSelectedFile = nullptr;
 
-	const files::Directory* m_RequestedDirectory = nullptr;
+	std::optional<files::Directory> m_RequestedDirectory = std::nullopt;
+
+	DirectoryTreeExplorer m_TreeExplorer;
 
 	IAssetListener* m_Listener;
 };

@@ -4,13 +4,17 @@
 #include "../FlatEngine/GameObjectLoader.h"
 #include "../FlatEngine/AssetManager.h"
 #include "PrefabSaver.h"
+#include "AssetOpener.h"
 
 static constexpr const char* s_RootDirectory = "Assets";
 
 AssetExplorer::AssetExplorer()
 	: m_CurrDirPath(s_RootDirectory)
+	, m_TreeExplorer(s_RootDirectory)
 {
 	UpdateCurrentDirectoryContents();
+
+	m_TreeExplorer.SubscribeEvents(*this);
 }
 
 void AssetExplorer::RegisterAssetListener(IAssetListener* listener)
@@ -34,25 +38,12 @@ void AssetExplorer::Render()
 	ImGui::End();
 }
 
-
-std::unique_ptr<EditorPrefabHandle> AssetExplorer::OpenPrefab(const std::string& prefab_path)
-{
-	std::unique_ptr<InlineGameObject> prefab = GameObjectLoader::LoadPrefab(prefab_path.c_str());
-	if (prefab == nullptr)
-	{ // Make new prefab if file not present
-		FE_LOG("Creating new prefab");
-		prefab = std::make_unique<InlineGameObject>();
-	}
-
-	return std::make_unique<EditorPrefabHandle>(std::move(prefab), prefab_path);
-}
-
 void AssetExplorer::RenderMainFolders()
 {
 	ImVec2 panel_size = ImVec2(ImGui::GetContentRegionAvail().x * 0.2f, ImGui::GetContentRegionAvail().y);
 	if (ImGui::BeginChild("Main folders", panel_size, true))
 	{
-		ImGui::Text("Main");
+		m_TreeExplorer.RenderEmbedded();
 	}
 	ImGui::EndChild();
 }
@@ -104,17 +95,17 @@ void AssetExplorer::OpenDirectoryElement(const files::DirectoryElement& elem)
 
 void AssetExplorer::RequestEnterDirectory(const files::Directory& dir)
 {
-	m_RequestedDirectory = &dir;
+	m_RequestedDirectory = dir;
 }
 
 void AssetExplorer::ProcessEnterDirectoryRequest()
 {
-	if (m_RequestedDirectory != nullptr)
+	if (m_RequestedDirectory.has_value())
 	{
-		EnterDirectory(*m_RequestedDirectory);
+		EnterDirectory(m_RequestedDirectory.value());
 	}
 
-	m_RequestedDirectory = nullptr;
+	m_RequestedDirectory.reset();
 }
 
 void AssetExplorer::EnterDirectory(const files::Directory& dir)
@@ -136,7 +127,7 @@ void AssetExplorer::OpenAssetFile(const files::AssetFile& file)
 	switch (file.GetAssetType())
 	{
 	case files::AssetType::Prefab:
-		m_Listener->OnPrefabOpened(OpenPrefab(file.GetPath()));
+		m_Listener->OnPrefabOpened(AssetOpener::OpenPrefab(file.GetPath()));
 		break;
 	default:
 		FE_LOG("Unimplemented asset opening");
@@ -151,4 +142,9 @@ void AssetExplorer::UpdateCurrentDirectoryContents()
 	files::AssetMiner::GetDirectoryContents(dir, m_CurrDirectoryContents);
 
 	m_CurrSelectedFile = nullptr;
+}
+
+void AssetExplorer::OnDirectoryOpened(const files::Directory& dir)
+{
+	RequestEnterDirectory(dir);
 }
