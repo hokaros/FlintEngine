@@ -54,7 +54,7 @@ void EditableScene::CopyObjectsToScene(Scene& scene) const
 	}
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetSubRootObjects()
+const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetSubRootObjects() const
 {
 	return m_RootObjects;
 }
@@ -70,4 +70,9 @@ void EditableScene::DeleteChild(IEditableGameObject& child)
 			return;
 		}
 	}
+}
+
+const char* EditableScene::GetName() const
+{
+	return "Scene";
 }

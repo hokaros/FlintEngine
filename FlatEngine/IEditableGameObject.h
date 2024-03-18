@@ -72,7 +72,9 @@ public:
 
 private:
 	// IHierarchyEditable
-	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects();
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects() const override;
+
+	virtual const char* GetName() const override;
 };
 
 template<typename ValueT>

@@ -23,7 +23,12 @@ void IEditableGameObject::RenderUpdate(IEditableGameObject& editable)
 	}
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& IEditableGameObject::GetSubRootObjects()
+const std::vector<std::unique_ptr<IEditableGameObject>>& IEditableGameObject::GetSubRootObjects() const
 {
 	return GetChildren();
+}
+
+const char* IEditableGameObject::GetName() const
+{
+	return GetResult().GetName().c_str();
 }

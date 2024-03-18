@@ -21,8 +21,10 @@ private:
 	void CopyObjectsToScene(Scene& scene) const;
 
 	// IHierarchyEditable
-	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects() override;
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects() const override;
 	virtual void DeleteChild(IEditableGameObject& child) override;
+
+	virtual const char* GetName() const override;
 
 private:
 	std::vector<std::unique_ptr<IEditableGameObject>> m_RootObjects;

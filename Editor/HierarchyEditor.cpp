@@ -72,7 +72,7 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	ImGui::PushID(index_in_parent);
 
-	const bool node_open = ImGui::TreeNodeEx(runtime_object.GetName().c_str(), node_flags);
+	const bool node_open = ImGui::TreeNodeEx(static_cast<IHierarchyEditable*>(node_object)->GetName(), node_flags);
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{
 		m_SelectedGameObjectManager->SelectGameObject(std::make_shared<EditorUniversalHandle>(node_object_handle));
