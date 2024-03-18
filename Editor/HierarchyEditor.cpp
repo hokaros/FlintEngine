@@ -32,14 +32,17 @@ void HierarchyEditor::Render()
 		{
 			if (std::shared_ptr<EditorGameObjectHandle> root_game_object = m_EditedObjectHandle->GetGameObjectHandle(); root_game_object != nullptr)
 			{
-				RenderObjectHierarchy(root_game_object, /*parent*/nullptr);
+				RenderObjectHierarchy(root_game_object, /*parent*/nullptr, 0);
 			}
 			else
 			{
-				for (const std::unique_ptr<IEditableGameObject>& subroot_object : m_EditedObjectHandle->GetHierarchyEditable()->GetSubRootObjects())
+				IHierarchyEditable* parent = m_EditedObjectHandle->GetHierarchyEditable();
+				size_t i = 0;
+				for (const std::unique_ptr<IEditableGameObject>& subroot_object : parent->GetSubRootObjects())
 				{
 
-					RenderObjectHierarchy(std::make_shared<EditorIEditableGameObjectHandle>(subroot_object.get()), m_EditedObjectHandle->GetHierarchyEditable());
+					std::shared_ptr<EditorIEditableGameObjectHandle> handle = std::make_shared<EditorIEditableGameObjectHandle>(subroot_object.get());
+					RenderObjectHierarchy(handle, parent, i++);
 				}
 			}
 		}
@@ -47,7 +50,7 @@ void HierarchyEditor::Render()
 	ImGui::End();
 }
 
-void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, IHierarchyEditable* parent)
+void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, IHierarchyEditable* parent, size_t index_in_parent)
 {
 	if (node_object_handle == nullptr)
 		return;
@@ -67,8 +70,9 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	}
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	const char* node_id = runtime_object.GetName().empty() == false ? runtime_object.GetName().c_str() : "?";
-	const bool node_open = ImGui::TreeNodeEx(node_id, node_flags);
+	ImGui::PushID(index_in_parent);
+
+	const bool node_open = ImGui::TreeNodeEx(runtime_object.GetName().c_str(), node_flags);
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{
 		m_SelectedGameObjectManager->SelectGameObject(std::make_shared<EditorUniversalHandle>(node_object_handle));
@@ -79,13 +83,15 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 		RenderObjectContextMenu(*node_object, parent);
 		ImGui::EndPopup();
 	}
+	ImGui::PopID();
 
 	if (node_open)
 	{
+		size_t i = 0;
 		for (const std::unique_ptr<IEditableGameObject>& child : node_object->GetChildren())
 		{
 			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(child.get());
-			RenderObjectHierarchy(child_handle, node_object);
+			RenderObjectHierarchy(child_handle, node_object, i++);
 		}
 
 		ImGui::TreePop();
@@ -121,6 +127,7 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 		if (ImGui::Button("Delete"))
 		{
 			m_RequestedRemove.emplace(game_object, *parent);
+			m_SelectedGameObjectManager->OnObjectDestroying(game_object.GetResult());
 		}
 	}
 	ImGui::EndDisabled();
