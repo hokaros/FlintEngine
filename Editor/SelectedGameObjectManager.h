@@ -16,8 +16,6 @@ class SelectedGameObjectManager
 	: public IObjectManagerObserver
 {
 public:
-	void OnSceneLoaded(Scene& new_scene);
-
 	void SelectGameObject(std::shared_ptr<EditorUniversalHandle> game_object);
 	EditorGameObjectHandle* GetSelectedGameObject() const;
 	bool IsGameObjectSelected(const GameObject& game_object) const;

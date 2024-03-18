@@ -10,20 +10,30 @@ SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screen
 	m_SceneRenderer.Init(&renderer, {});
 	m_SceneRenderer.SetViewport(Rect(Vector(0, 0), Vector(10, 10)));
 
-	AddExampleObjectsToScene();
+	m_CurrentScene = &m_PrefabScene;
+	m_PrefabScene.SetBackgroundColor(Rgb8(200, 200, 200));
 }
 
 void SceneEditor::SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object)
 {
-	m_Scene.ResetScene();
-
 	m_RootObject = root_object;
 
-	//m_Scene.GetObjectManager().AddToMessageSubscribers(&root_object.lock()->GetGameObject()->GetResult());
+	std::shared_ptr<EditorUniversalHandle> handle = root_object.lock();
+	std::shared_ptr<EditorSceneHandle> scene = handle->GetSceneHandle();
+	if (scene != nullptr)
+	{
+		m_CurrentScene = scene->GetScene();
+	}
+	else
+	{
+		m_CurrentScene = &m_PrefabScene;
+	}
 }
 
 void SceneEditor::Render()
 {
+	FE_ASSERT(m_CurrentScene != nullptr, "Scene should be present. Consider using the default one");
+
 	if (m_RootObject.expired())
 	{
 		ResetRootObject();
@@ -37,7 +47,7 @@ void SceneEditor::Render()
 		}
 		// WARNING: do not render anything between viewportController's update and displaying the scene
 
-		m_Scene.Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
+		m_CurrentScene->Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
 
 		if (std::shared_ptr<EditorUniversalHandle> handle = m_RootObject.lock(); 
 			handle != nullptr 
@@ -63,24 +73,8 @@ void SceneEditor::Render()
 	ImGui::End(); // Scene Editor
 }
 
-Scene& SceneEditor::GetScene()
-{
-	return m_Scene;
-}
-
-void SceneEditor::AddExampleObjectsToScene()
-{
-	GameObject* game_object = GameObject::Instantiate(m_Scene);
-
-	game_object->SetSize(Vector(10, 10));
-	game_object->SetPosition(Vector(50, 50));
-	game_object->AddComponent(std::make_unique<RectangleRenderer>(Rgb8(0xFF, 0x00, 0x00)));
-}
-
 void SceneEditor::ResetRootObject()
 {
-	m_Scene.ResetScene();
-
 	m_RootObject = std::weak_ptr<EditorUniversalHandle>();
 }
 
@@ -91,4 +85,9 @@ void SceneEditor::RenderOverlay()
 	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 0xFF));
 	ImGui::Text("(%0.2f, %0.2f)", viewport_pos.x, viewport_pos.y);
 	ImGui::PopStyleColor();
+}
+
+Rgb8 SceneEditor::GetNegativeColor(const Rgb8& color)
+{
+	return Rgb8();
 }

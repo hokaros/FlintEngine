@@ -2,6 +2,8 @@
 
 void EditableScene::Render()
 {
+	m_ResultScene.Render();
+
 	for (std::unique_ptr<IEditableGameObject>& root_object : m_RootObjects)
 	{
 		IEditableGameObject::RenderUpdate(*root_object);
@@ -32,6 +34,7 @@ const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetRootO
 void EditableScene::SetBackgroundColor(const Rgb8& color)
 {
 	m_BackgroundColor = color;
+	m_ResultScene.SetBackgroundColor(color);
 }
 
 const Rgb8& EditableScene::GetBackgroundColor() const

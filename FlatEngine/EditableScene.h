@@ -27,5 +27,7 @@ private:
 private:
 	std::vector<std::unique_ptr<IEditableGameObject>> m_RootObjects;
 	Rgb8 m_BackgroundColor = Rgb8(200, 200, 200);
+
+	Scene m_ResultScene;
 };
 

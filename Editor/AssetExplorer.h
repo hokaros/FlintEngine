@@ -9,6 +9,7 @@ class IAssetListener
 {
 public:
 	virtual void OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab) = 0;
+	virtual void OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene) = 0;
 	
 	virtual ~IAssetListener() = default;
 };

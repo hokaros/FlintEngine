@@ -1,10 +1,5 @@
 #include "SelectedGameObjectManager.h"
 
-void SelectedGameObjectManager::OnSceneLoaded(Scene& new_scene)
-{
-	new_scene.GetObjectManager().Subscribe(*this);
-}
-
 void SelectedGameObjectManager::SelectGameObject(std::shared_ptr<EditorUniversalHandle> game_object)
 {
 	FE_ASSERT(game_object == nullptr || game_object->GetGameObjectHandle() != nullptr, "No GameObjectHandle passed");

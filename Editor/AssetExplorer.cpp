@@ -133,6 +133,9 @@ void AssetExplorer::OpenAssetFile(const files::AssetFile& file)
 	case files::AssetType::Prefab:
 		m_Listener->OnPrefabOpened(AssetOpener::OpenPrefab(file.GetPath()));
 		break;
+	case files::AssetType::Scene:
+		m_Listener->OnSceneOpened(AssetOpener::OpenScene(file.GetPath()));
+		break;
 	default:
 		FE_LOG("Unimplemented asset opening");
 	}

@@ -39,19 +39,41 @@ void EditorIEditableGameObjectHandle::SaveInlineGameObject()
 }
 
 
+EditorSceneHandle::EditorSceneHandle(std::unique_ptr<EditableScene> scene, const std::string& scene_path)
+    : m_Scene(std::move(scene))
+    , m_ScenePath(scene_path)
+{
+}
+
+EditableScene* EditorSceneHandle::GetScene() const
+{
+    return m_Scene.get();
+}
+
+void EditorSceneHandle::SaveScene()
+{
+    FE_ASSERT(false, "Unimplemented");
+}
+
+
+
 
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorGameObjectHandle> game_object)
     : m_EditableGameObject(std::move(game_object))
-    , m_PrefabHandle(nullptr)
 {
     m_HierarchyEditable = m_EditableGameObject->GetGameObject();
 }
 
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorPrefabHandle> prefab)
-    : m_PrefabHandle(std::move(prefab))
-    , m_EditableGameObject(prefab)
+    : m_EditableGameObject(std::dynamic_pointer_cast<EditorGameObjectHandle>(prefab))
 {
     m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+}
+
+EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorSceneHandle> scene)
+    : m_SceneHandle(std::move(scene))
+{
+    m_HierarchyEditable = m_SceneHandle->GetScene();
 }
 
 IHierarchyEditable* EditorUniversalHandle::GetHierarchyEditable() const
@@ -62,4 +84,9 @@ IHierarchyEditable* EditorUniversalHandle::GetHierarchyEditable() const
 std::shared_ptr<EditorGameObjectHandle> EditorUniversalHandle::GetGameObjectHandle() const
 {
     return m_EditableGameObject;
+}
+
+std::shared_ptr<EditorSceneHandle> EditorUniversalHandle::GetSceneHandle() const
+{
+    return m_SceneHandle;
 }

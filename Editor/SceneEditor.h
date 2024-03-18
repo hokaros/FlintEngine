@@ -14,17 +14,19 @@ public:
 
 	void Render();
 
-	Scene& GetScene();
-
 private:
-	void AddExampleObjectsToScene();
 	void ResetRootObject();
 
 	void RenderOverlay();
 
+	static Rgb8 GetNegativeColor(const Rgb8& color);
+
 private:
 	SceneRenderer m_SceneRenderer;
-	Scene m_Scene; // TODO: transform into Asset Handle
+
+	EditableScene* m_CurrentScene;
+
+	EditableScene m_PrefabScene;
 
 	ViewportController viewportController;
 

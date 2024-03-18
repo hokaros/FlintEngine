@@ -1,5 +1,6 @@
 #pragma once
 #include "../FlatEngine/InlineGameObject.h"
+#include "../FlatEngine/EditableScene.h"
 #include "../FlatEngine/IHierarchyEditable.h"
 
 class EditorGameObjectHandle
@@ -37,18 +38,35 @@ private:
 };
 
 
+class EditorSceneHandle
+{
+public:
+	EditorSceneHandle(std::unique_ptr<EditableScene> scene, const std::string& scene_path);
+
+	EditableScene* GetScene() const;
+	void SaveScene();
+
+private:
+	std::unique_ptr<EditableScene> m_Scene;
+	std::string m_ScenePath;
+
+};
+
+
 
 class EditorUniversalHandle
 {
 public:
 	EditorUniversalHandle(std::shared_ptr<EditorGameObjectHandle> game_object);
 	EditorUniversalHandle(std::shared_ptr<EditorPrefabHandle> prefab);
+	EditorUniversalHandle(std::shared_ptr<EditorSceneHandle> scene);
 
 	IHierarchyEditable* GetHierarchyEditable() const;
 	std::shared_ptr<EditorGameObjectHandle> GetGameObjectHandle() const;
+	std::shared_ptr<EditorSceneHandle> GetSceneHandle() const;
 
 private:
-	IHierarchyEditable* m_HierarchyEditable;
-	std::shared_ptr<EditorGameObjectHandle> m_EditableGameObject;
-	std::shared_ptr<EditorPrefabHandle> m_PrefabHandle;
+	IHierarchyEditable* m_HierarchyEditable = nullptr;
+	std::shared_ptr<EditorGameObjectHandle> m_EditableGameObject = nullptr;
+	std::shared_ptr<EditorSceneHandle> m_SceneHandle = nullptr;
 };
