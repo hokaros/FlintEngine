@@ -207,7 +207,7 @@ void GameObject::OnDestroy()
 	}
 }
 
-const std::string& GameObject::GetFileName() const
+const std::string& GameObject::GetName() const
 {
 	return name;
 }

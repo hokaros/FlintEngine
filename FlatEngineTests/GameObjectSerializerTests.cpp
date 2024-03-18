@@ -19,5 +19,5 @@ TEST(GameObjectSerializer, DeserializesSizePositionAndName)
 	// Assert
 	EXPECT_EQ(deserialized->GetResult().GetPosition(), pos);
 	EXPECT_EQ(deserialized->GetResult().GetSize(), size);
-	EXPECT_EQ(deserialized->GetResult().GetFileName(), name);
+	EXPECT_EQ(deserialized->GetResult().GetName(), name);
 }

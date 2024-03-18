@@ -31,7 +31,7 @@ TEST(SUITE_NAME, SetsNamePositionAndSize)
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
-	ASSERT_EQ(overriding_name, result_object->GetFileName());
+	ASSERT_EQ(overriding_name, result_object->GetName());
 	ASSERT_EQ(overriding_pos, result_object->GetPosition());
 	ASSERT_EQ(overriding_size, result_object->GetSize());
 }
@@ -56,7 +56,7 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
-	ASSERT_EQ(original_name, result_object->GetFileName());
+	ASSERT_EQ(original_name, result_object->GetName());
 	ASSERT_EQ(original_pos, result_object->GetPosition());
 	ASSERT_EQ(overriding_size, result_object->GetSize());
 }

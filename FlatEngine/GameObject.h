@@ -63,7 +63,7 @@ public:
 	void Awake();
 	void OnDestroy();
 
-	const std::string& GetFileName() const;
+	const std::string& GetName() const;
 	void SetName(const std::string& name);
 
 	const Vector& GetPosition() const;

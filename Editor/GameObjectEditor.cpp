@@ -125,7 +125,7 @@ void GameObjectEditor::InitValuesFromGameObject(const GameObject& game_object)
     m_GameObjectSize[0] = game_object.GetSize().x;
     m_GameObjectSize[1] = game_object.GetSize().y;
 
-    strcpy_s(m_GameObjectName, game_object.GetFileName().c_str());
+    strcpy_s(m_GameObjectName, game_object.GetName().c_str());
 }
 
 void GameObjectEditor::ApplyValuesToGameObject(IEditableGameObject& game_object)
