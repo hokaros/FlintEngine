@@ -20,11 +20,6 @@ const GameObject& InlineGameObject::GetResult() const
 	return *m_GameObject;
 }
 
-void InlineGameObject::Destroy()
-{
-	GameObject::Destroy(m_GameObject.get());
-}
-
 void InlineGameObject::SetName(const std::string& name)
 {
 	m_GameObject->SetName(name);
@@ -43,6 +38,19 @@ void InlineGameObject::SetPosition(const Vector& position)
 void InlineGameObject::AddChild(std::unique_ptr<IEditableGameObject> child)
 {
 	m_ChildrenEditables.push_back(std::move(child));
+}
+
+void InlineGameObject::DeleteChild(IEditableGameObject& child)
+{
+	for (auto it = m_ChildrenEditables.begin(); it != m_ChildrenEditables.end(); it++)
+	{
+		std::unique_ptr<IEditableGameObject>& c = *it;
+		if (c.get() == &child)
+		{
+			m_ChildrenEditables.erase(it);
+			return;
+		}
+	}
 }
 
 void InlineGameObject::AddComponent(std::unique_ptr<ObjectComponent> component)

@@ -50,8 +50,6 @@ public:
 	virtual GameObject& GetResult() = 0; // Please don't recalculate it on every GetResult() call.
 	virtual const GameObject& GetResult() const = 0;
 
-	virtual void Destroy() = 0;
-
 	virtual void SetName(const std::string& name) = 0;
 	virtual void SetSize(const Vector& size) = 0;
 	virtual void SetPosition(const Vector& position) = 0;

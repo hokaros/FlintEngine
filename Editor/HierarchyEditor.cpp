@@ -20,6 +20,8 @@ void HierarchyEditor::SetEditedObject(std::shared_ptr<EditorUniversalHandle> han
 
 void HierarchyEditor::Render()
 {
+	ProcessAsyncOperations();
+
 	if (ImGui::Begin("Hierarchy Editor"))
 	{
 		if (m_EditedObjectHandle == nullptr)
@@ -30,14 +32,14 @@ void HierarchyEditor::Render()
 		{
 			if (std::shared_ptr<EditorGameObjectHandle> root_game_object = m_EditedObjectHandle->GetGameObjectHandle(); root_game_object != nullptr)
 			{
-				RenderObjectHierarchy(root_game_object, /*is_root*/ true);
+				RenderObjectHierarchy(root_game_object, /*parent*/nullptr);
 			}
 			else
 			{
 				for (const std::unique_ptr<IEditableGameObject>& subroot_object : m_EditedObjectHandle->GetHierarchyEditable()->GetSubRootObjects())
 				{
 
-					RenderObjectHierarchy(std::make_shared<EditorIEditableGameObjectHandle>(subroot_object.get()), /*is_root*/false);
+					RenderObjectHierarchy(std::make_shared<EditorIEditableGameObjectHandle>(subroot_object.get()), m_EditedObjectHandle->GetHierarchyEditable());
 				}
 			}
 		}
@@ -45,7 +47,7 @@ void HierarchyEditor::Render()
 	ImGui::End();
 }
 
-void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, bool is_root)
+void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, IHierarchyEditable* parent)
 {
 	if (node_object_handle == nullptr)
 		return;
@@ -74,7 +76,7 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 
 	if (ImGui::BeginPopupContextItem("Tree node context menu"))
 	{
-		RenderObjectContextMenu(*node_object, is_root);
+		RenderObjectContextMenu(*node_object, parent);
 		ImGui::EndPopup();
 	}
 
@@ -83,14 +85,14 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 		for (const std::unique_ptr<IEditableGameObject>& child : node_object->GetChildren())
 		{
 			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(child.get());
-			RenderObjectHierarchy(child_handle, /*is_root*/ false);
+			RenderObjectHierarchy(child_handle, node_object);
 		}
 
 		ImGui::TreePop();
 	}
 }
 
-void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, bool is_root)
+void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, IHierarchyEditable* parent)
 {
 	if (ImGui::Button("Add child"))
 	{
@@ -114,12 +116,34 @@ void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, 
 		}
 	}
 
-	ImGui::BeginDisabled(is_root); // Child nodes only
+	ImGui::BeginDisabled(parent == nullptr); // Child nodes only
 	{
 		if (ImGui::Button("Delete"))
 		{
-			game_object.Destroy();
+			m_RequestedRemove.emplace(game_object, *parent);
 		}
 	}
 	ImGui::EndDisabled();
+}
+
+void HierarchyEditor::ProcessAsyncOperations()
+{
+	if (m_RequestedRemove.has_value())
+	{
+		RemoveObjectOperation& op = m_RequestedRemove.value();
+		op.Execute();
+
+		m_RequestedRemove.reset();
+	}
+}
+
+HierarchyEditor::RemoveObjectOperation::RemoveObjectOperation(IEditableGameObject& removed_object, IHierarchyEditable& parent)
+	: m_RemovedObject(removed_object)
+	, m_Parent(parent)
+{
+}
+
+void HierarchyEditor::RemoveObjectOperation::Execute()
+{
+	m_Parent.DeleteChild(m_RemovedObject);
 }

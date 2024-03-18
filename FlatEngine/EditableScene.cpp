@@ -55,3 +55,16 @@ const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetSubRo
 {
 	return m_RootObjects;
 }
+
+void EditableScene::DeleteChild(IEditableGameObject& child)
+{
+	for (auto it = m_RootObjects.begin(); it != m_RootObjects.end(); it++)
+	{
+		std::unique_ptr<IEditableGameObject>& c = *it;
+		if (c.get() == &child)
+		{
+			m_RootObjects.erase(it);
+			return;
+		}
+	}
+}

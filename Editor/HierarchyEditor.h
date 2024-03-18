@@ -18,11 +18,28 @@ public:
 	void Render();
 
 private:
-	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, bool is_root);
-	void RenderObjectContextMenu(IEditableGameObject& game_object, bool is_root);
+	class RemoveObjectOperation
+	{
+	public:
+		RemoveObjectOperation(IEditableGameObject& removed_object, IHierarchyEditable& parent);
+
+		void Execute();
+
+	private:
+		IEditableGameObject& m_RemovedObject;
+		IHierarchyEditable& m_Parent;
+	};
+
+private:
+	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, IHierarchyEditable* parent);
+	void RenderObjectContextMenu(IEditableGameObject& game_object, IHierarchyEditable* parent);
+
+	void ProcessAsyncOperations();
 
 private:
 	std::shared_ptr<EditorUniversalHandle> m_EditedObjectHandle;
+
+	std::optional<RemoveObjectOperation> m_RequestedRemove = std::nullopt;
 
 	SelectedGameObjectManager* m_SelectedGameObjectManager;
 	AssetExplorer* m_AssetExplorer;

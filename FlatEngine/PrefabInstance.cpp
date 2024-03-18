@@ -21,11 +21,6 @@ const GameObject& PrefabInstance::GetResult() const
 	return m_ResultGameObject->GetResult();
 }
 
-void PrefabInstance::Destroy()
-{
-	m_ResultGameObject->Destroy();
-}
-
 void PrefabInstance::SetName(const std::string& name)
 {
 	m_Name = name;
@@ -48,6 +43,11 @@ void PrefabInstance::AddChild(std::unique_ptr<IEditableGameObject> child)
 {
 	m_AdditionalChildren.push_back(&child->GetResult());
 	m_ResultGameObject->AddChild(std::move(child));
+}
+
+void PrefabInstance::DeleteChild(IEditableGameObject& child)
+{
+	m_ResultGameObject->DeleteChild(child);
 }
 
 void PrefabInstance::AddComponent(std::unique_ptr<ObjectComponent> component)

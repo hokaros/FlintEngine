@@ -11,13 +11,12 @@ public:
 	virtual GameObject& GetResult() override;
 	virtual const GameObject& GetResult() const override;
 
-	virtual void Destroy() override;
-
 	virtual void SetName(const std::string& name) override;
 	virtual void SetSize(const Vector& size) override;
 	virtual void SetPosition(const Vector& position) override;
 
 	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
+	virtual void DeleteChild(IEditableGameObject& child) override;
 
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
 	virtual void RemoveComponent(size_t index) override;
