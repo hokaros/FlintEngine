@@ -31,8 +31,8 @@ private:
 	};
 
 private:
-	void RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, IHierarchyEditable* parent, size_t index_in_parent);
-	void RenderObjectContextMenu(IEditableGameObject& game_object, IHierarchyEditable* parent);
+	void RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandle> node_object_handle, IHierarchyEditable* parent, size_t index_in_parent);
+	void RenderObjectContextMenu(std::shared_ptr<EditorUniversalHandle> game_object, IHierarchyEditable* parent);
 
 	void ProcessAsyncOperations();
 

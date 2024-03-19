@@ -26,7 +26,7 @@ void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
     std::shared_ptr<EditorUniversalHandle> handle = std::make_shared<EditorUniversalHandle>(prefab_shared);
 
     m_HierarchyEditor.SetEditedObject(handle);
-    m_SelectedGameObjectManager.SelectGameObject(handle);
+    m_SelectedGameObjectManager.SelectObject(handle);
     m_SceneEditor.SetRootObject(std::weak_ptr<EditorUniversalHandle>(handle));
 }
 

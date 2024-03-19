@@ -30,39 +30,24 @@ void HierarchyEditor::Render()
 		}
 		else
 		{
-			if (std::shared_ptr<EditorGameObjectHandle> root_game_object = m_EditedObjectHandle->GetGameObjectHandle(); root_game_object != nullptr)
-			{
-				RenderObjectHierarchy(root_game_object, /*parent*/nullptr, 0);
-			}
-			else
-			{
-				IHierarchyEditable* parent = m_EditedObjectHandle->GetHierarchyEditable();
-				size_t i = 0;
-				for (const std::unique_ptr<IEditableGameObject>& subroot_object : parent->GetSubRootObjects())
-				{
-
-					std::shared_ptr<EditorIEditableGameObjectHandle> handle = std::make_shared<EditorIEditableGameObjectHandle>(subroot_object.get());
-					RenderObjectHierarchy(handle, parent, i++);
-				}
-			}
+			RenderObjectHierarchy(m_EditedObjectHandle, nullptr, 0);
 		}
 	}
 	ImGui::End();
 }
 
-void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHandle> node_object_handle, IHierarchyEditable* parent, size_t index_in_parent)
+void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandle> node_object_handle, IHierarchyEditable* parent, size_t index_in_parent)
 {
 	if (node_object_handle == nullptr)
 		return;
 
-	IEditableGameObject* node_object = node_object_handle->GetGameObject();
-	if (node_object == nullptr)
+	IHierarchyEditable* hierarchy_node = node_object_handle->GetHierarchyEditable();
+	if (hierarchy_node == nullptr)
 		return;
 
 	constexpr ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-	GameObject& runtime_object = node_object->GetResult();
-	const bool is_selected = m_SelectedGameObjectManager->IsGameObjectSelected(runtime_object);
+	const bool is_selected = m_SelectedGameObjectManager->IsObjectSelected(*node_object_handle);
 	ImGuiTreeNodeFlags node_flags = base_flags;
 	if (is_selected)
 	{
@@ -72,15 +57,15 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	ImGui::PushID(index_in_parent);
 
-	const bool node_open = ImGui::TreeNodeEx(static_cast<IHierarchyEditable*>(node_object)->GetName(), node_flags);
+	const bool node_open = ImGui::TreeNodeEx(hierarchy_node->GetName(), node_flags);
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{
-		m_SelectedGameObjectManager->SelectGameObject(std::make_shared<EditorUniversalHandle>(node_object_handle));
+		m_SelectedGameObjectManager->SelectObject(node_object_handle);
 	}
 
 	if (ImGui::BeginPopupContextItem("Tree node context menu"))
 	{
-		RenderObjectContextMenu(*node_object, parent);
+		RenderObjectContextMenu(node_object_handle, parent);
 		ImGui::EndPopup();
 	}
 	ImGui::PopID();
@@ -88,49 +73,55 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorGameObjectHand
 	if (node_open)
 	{
 		size_t i = 0;
-		for (const std::unique_ptr<IEditableGameObject>& child : node_object->GetChildren())
+		for (const std::unique_ptr<IEditableGameObject>& child : hierarchy_node->GetSubRootObjects())
 		{
 			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(child.get());
-			RenderObjectHierarchy(child_handle, node_object, i++);
+			std::shared_ptr<EditorUniversalHandle> uni_han = std::make_shared<EditorUniversalHandle>(child_handle);
+			RenderObjectHierarchy(uni_han, hierarchy_node, i++);
 		}
 
 		ImGui::TreePop();
 	}
 }
 
-void HierarchyEditor::RenderObjectContextMenu(IEditableGameObject& game_object, IHierarchyEditable* parent)
+void HierarchyEditor::RenderObjectContextMenu(std::shared_ptr<EditorUniversalHandle> object, IHierarchyEditable* parent)
 {
-	if (ImGui::Button("Add child"))
-	{
-		std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>();
-		game_object.AddChild(std::move(editor_child));
-		ImGui::CloseCurrentPopup();
-	}
-
-	if (ImGui::Button("Add prefab child"))
-	{
-		m_PrefabPathPrompt.Open();
-	}
-	std::string prefab_path;
-	if (m_PrefabPathPrompt.Update(prefab_path))
-	{
-		std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
-		if (prefab_instance != nullptr)
+	if (std::shared_ptr<EditorGameObjectHandle> go_handle = object->GetGameObjectHandle(); go_handle != nullptr)
+	{ // TODO: extract
+		IEditableGameObject* game_object = go_handle->GetGameObject();
+		// TODO: enable this for IHierarchyEditables
+		if (ImGui::Button("Add child"))
 		{
-			game_object.AddChild(std::move(prefab_instance));
+			std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>();
+			game_object->AddChild(std::move(editor_child));
 			ImGui::CloseCurrentPopup();
 		}
-	}
 
-	ImGui::BeginDisabled(parent == nullptr); // Child nodes only
-	{
-		if (ImGui::Button("Delete"))
+		if (ImGui::Button("Add prefab child"))
 		{
-			m_RequestedRemove.emplace(game_object, *parent);
-			m_SelectedGameObjectManager->OnObjectDestroying(game_object.GetResult());
+			m_PrefabPathPrompt.Open();
 		}
+		std::string prefab_path;
+		if (m_PrefabPathPrompt.Update(prefab_path))
+		{
+			std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
+			if (prefab_instance != nullptr)
+			{
+				game_object->AddChild(std::move(prefab_instance));
+				ImGui::CloseCurrentPopup();
+			}
+		}
+
+		ImGui::BeginDisabled(parent == nullptr); // Child nodes only
+		{
+			if (ImGui::Button("Delete"))
+			{
+				m_RequestedRemove.emplace(*game_object, *parent);
+				m_SelectedGameObjectManager->OnObjectDestroying(*object);
+			}
+		}
+		ImGui::EndDisabled();
 	}
-	ImGui::EndDisabled();
 }
 
 void HierarchyEditor::ProcessAsyncOperations()

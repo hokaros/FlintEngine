@@ -1,50 +1,45 @@
 #include "SelectedGameObjectManager.h"
 
-void SelectedGameObjectManager::SelectGameObject(std::shared_ptr<EditorUniversalHandle> game_object)
+void SelectedGameObjectManager::SelectObject(std::shared_ptr<EditorUniversalHandle> game_object)
 {
-	FE_ASSERT(game_object == nullptr || game_object->GetGameObjectHandle() != nullptr, "No GameObjectHandle passed");
-
-	m_SelectedGameObject = game_object;
+	m_SelectedObject = game_object;
 
 	NotifyGameObjectSelected();
 }
 
-EditorGameObjectHandle* SelectedGameObjectManager::GetSelectedGameObject() const
+std::weak_ptr<EditorUniversalHandle> SelectedGameObjectManager::GetSelectedObject() const
 {
-	if (m_SelectedGameObject == nullptr)
-		return nullptr;
+	if (m_SelectedObject == nullptr)
+		return std::weak_ptr<EditorUniversalHandle>();
 
-	return m_SelectedGameObject->GetGameObjectHandle().get();
+	return std::weak_ptr<EditorUniversalHandle>(m_SelectedObject);
 }
 
-bool SelectedGameObjectManager::IsGameObjectSelected(const GameObject& game_object) const
+bool SelectedGameObjectManager::IsObjectSelected(const EditorUniversalHandle& game_object) const
 {
-	if (m_SelectedGameObject == nullptr || m_SelectedGameObject->GetGameObjectHandle()->GetGameObject() == nullptr)
+	if (m_SelectedObject == nullptr)
 		return false;
 
-	return &game_object == &m_SelectedGameObject->GetGameObjectHandle()->GetGameObject()->GetResult();
+	return game_object == *m_SelectedObject;
 }
 
-void SelectedGameObjectManager::SubscribeSelection(IGameObjectSelectionObserver& subscriber)
+void SelectedGameObjectManager::SubscribeSelection(ISelectionObserver& subscriber)
 {
 	m_SelectionSubscribers.push_back(&subscriber);
 }
 
-void SelectedGameObjectManager::OnObjectDestroying(GameObject& game_object) // TODO: IEditable
+void SelectedGameObjectManager::OnObjectDestroying(EditorUniversalHandle& game_object) // TODO: IEditable
 {
-	if (m_SelectedGameObject == nullptr || m_SelectedGameObject->GetGameObjectHandle()->GetGameObject() == nullptr)
-		return;
-
-	if (&m_SelectedGameObject->GetGameObjectHandle()->GetGameObject()->GetResult() == &game_object)
+	if (IsObjectSelected(game_object))
 	{
-		SelectGameObject(nullptr);
+		SelectObject(nullptr);
 	}
 }
 
 void SelectedGameObjectManager::NotifyGameObjectSelected() const
 {
-	for (IGameObjectSelectionObserver* subscriber : m_SelectionSubscribers)
+	for (ISelectionObserver* subscriber : m_SelectionSubscribers)
 	{
-		subscriber->OnGameObjectSelected(GetSelectedGameObject());
+		subscriber->OnObjectSelected(GetSelectedObject());
 	}
 }

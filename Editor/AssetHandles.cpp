@@ -2,6 +2,12 @@
 
 #include "PrefabSaver.h"
 
+bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const
+{
+    return GetGameObject() == other.GetGameObject();
+}
+
+
 EditorPrefabHandle::EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab, const std::string& prefab_path)
     : m_Prefab(std::move(prefab))
     , m_PrefabPath(prefab_path)
@@ -55,11 +61,22 @@ void EditorSceneHandle::SaveScene()
     FE_ASSERT(false, "Unimplemented");
 }
 
+bool EditorSceneHandle::operator==(const EditorSceneHandle& other) const
+{
+    return m_Scene.get() == other.m_Scene.get();
+}
+
 
 
 
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorGameObjectHandle> game_object)
     : m_EditableGameObject(std::move(game_object))
+{
+    m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+}
+
+EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorIEditableGameObjectHandle> game_object)
+    : m_EditableGameObject(std::static_pointer_cast<EditorGameObjectHandle>(game_object))
 {
     m_HierarchyEditable = m_EditableGameObject->GetGameObject();
 }
@@ -89,4 +106,20 @@ std::shared_ptr<EditorGameObjectHandle> EditorUniversalHandle::GetGameObjectHand
 std::shared_ptr<EditorSceneHandle> EditorUniversalHandle::GetSceneHandle() const
 {
     return m_SceneHandle;
+}
+
+bool EditorUniversalHandle::operator==(const EditorUniversalHandle& other) const
+{
+    return AreGameObjectHandlesSame(other)
+        && AreSceneHandlesSame(other);
+}
+
+bool EditorUniversalHandle::AreGameObjectHandlesSame(const EditorUniversalHandle& other) const
+{
+    return ArePointedObjectsEqual(m_EditableGameObject.get(), other.m_EditableGameObject.get());
+}
+
+bool EditorUniversalHandle::AreSceneHandlesSame(const EditorUniversalHandle& other) const
+{
+    return ArePointedObjectsEqual(m_SceneHandle.get(), other.m_SceneHandle.get());
 }

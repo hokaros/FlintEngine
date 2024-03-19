@@ -7,7 +7,7 @@
 
 class GameObjectEditor
 	: protected IComponentActionObserver
-	, protected IGameObjectSelectionObserver
+	, protected ISelectionObserver
 {
 public:
 	void Init(SelectedGameObjectManager& selected_game_object_manager);
@@ -15,8 +15,8 @@ public:
 	void Render();
 
 protected:
-	// IGameObjectSelectionObserver
-	virtual void OnGameObjectSelected(EditorGameObjectHandle* game_object) override;
+	// ISelectionObserver
+	virtual void OnObjectSelected(std::weak_ptr<EditorUniversalHandle> object) override;
 
 	// IComponentActionObserver
 	virtual void OnComponentDeleted(size_t index_in_game_object) override;
@@ -33,10 +33,12 @@ private:
 	void InitValuesFromGameObject(const GameObject& game_object);
 	void ApplyValuesToGameObject(IEditableGameObject& game_object);
 
+	EditorGameObjectHandle* GetGameObjectHandle();
+
 private:
 	static constexpr size_t s_NameMaxSize = 64;
 
-	EditorGameObjectHandle* m_GameObjectHandle = nullptr;
+	std::weak_ptr<EditorUniversalHandle> m_GameObjectHandle; // TODO: rename
 	std::vector<std::unique_ptr<ComponentEditor>> m_ComponentEditors;
 
 	std::vector<const char*> m_AddableComponentNames;

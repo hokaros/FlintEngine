@@ -4,32 +4,31 @@
 
 #include "AssetHandles.h"
 
-class IGameObjectSelectionObserver
+class ISelectionObserver
 {
 public:
-	virtual void OnGameObjectSelected(EditorGameObjectHandle* game_object) = 0;
+	virtual void OnObjectSelected(std::weak_ptr<EditorUniversalHandle> game_object) = 0;
 
-	virtual ~IGameObjectSelectionObserver() = default;
+	virtual ~ISelectionObserver() = default;
 };
 
 class SelectedGameObjectManager
-	: public IObjectManagerObserver
 {
 public:
-	void SelectGameObject(std::shared_ptr<EditorUniversalHandle> game_object);
-	EditorGameObjectHandle* GetSelectedGameObject() const;
-	bool IsGameObjectSelected(const GameObject& game_object) const;
+	void SelectObject(std::shared_ptr<EditorUniversalHandle> game_object);
+	std::weak_ptr<EditorUniversalHandle> GetSelectedObject() const;
+	bool IsObjectSelected(const EditorUniversalHandle& object) const;
 
-	void SubscribeSelection(IGameObjectSelectionObserver& subscriber);
+	void SubscribeSelection(ISelectionObserver& subscriber);
 
-	virtual void OnObjectDestroying(GameObject& game_object) override;
+	void OnObjectDestroying(EditorUniversalHandle& object);
 
 private:
 	void NotifyGameObjectSelected() const;
 
 private:
-	std::vector<IGameObjectSelectionObserver*> m_SelectionSubscribers;
+	std::vector<ISelectionObserver*> m_SelectionSubscribers;
 
-	std::shared_ptr<EditorUniversalHandle> m_SelectedGameObject;
+	std::shared_ptr<EditorUniversalHandle> m_SelectedObject;
 };
 
