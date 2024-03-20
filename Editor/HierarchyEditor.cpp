@@ -3,9 +3,6 @@
 HierarchyEditor::HierarchyEditor()
 	: m_PrefabPathPrompt("Prefab path", "Prefab path")
 {
-	m_PrefabPathPrompt.SetAcceptCallback("Add", [this](std::string path) {
-		AddPrefabChildToModalContext(path);
-	});
 }
 
 void HierarchyEditor::Init(SelectedObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer)
@@ -35,6 +32,8 @@ void HierarchyEditor::Render()
 		{
 			RenderObjectHierarchy(m_EditedObjectHandle, nullptr, 0);
 		}
+
+		m_PrefabPathPrompt.Update();
 	}
 	ImGui::End();
 }
@@ -102,10 +101,13 @@ void HierarchyEditor::RenderObjectContextMenu(std::shared_ptr<EditorUniversalHan
 
 		if (ImGui::Button("Add prefab child"))
 		{
+			m_PrefabPathPrompt.SetAcceptCallback("Add", [this, game_object](std::string prefab_path) {
+				AddPrefabChild(*game_object, prefab_path);
+			});
 			m_PrefabPathPrompt.Open();
-			m_ModalContext = game_object;
+
+			ImGui::CloseCurrentPopup();
 		}
-		m_PrefabPathPrompt.Update();
 
 		ImGui::BeginDisabled(parent == nullptr); // Child nodes only
 		{
@@ -130,14 +132,12 @@ void HierarchyEditor::ProcessAsyncOperations()
 	}
 }
 
-void HierarchyEditor::AddPrefabChildToModalContext(std::string prefab_path)
+void HierarchyEditor::AddPrefabChild(IEditableGameObject& parent, std::string prefab_path)
 {
-	FE_ASSERT(m_ModalContext != nullptr, "No modal context set");
-
 	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
 	if (prefab_instance != nullptr)
 	{
-		m_ModalContext->AddChild(std::move(prefab_instance));
+		parent.AddChild(std::move(prefab_instance));
 		ImGui::CloseCurrentPopup();
 	}
 }

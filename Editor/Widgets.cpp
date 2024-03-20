@@ -5,6 +5,22 @@ void ModalPrompt::Open()
 	m_ShouldOpenOnUpdate = true;
 }
 
+void ModalPrompt::Update()
+{
+	if (m_ShouldOpenOnUpdate)
+	{
+		ImGui::OpenPopup(GetModalId());
+		m_ShouldOpenOnUpdate = false;
+	}
+
+	if (ImGui::BeginPopupModal(GetModalId(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		FillModal();
+
+		ImGui::EndPopup();
+	}
+}
+
 const char* ModalPrompt::GetModalId() const
 {
 	return m_ModalId.c_str();
@@ -33,36 +49,25 @@ void ModalStringPrompt::SetAcceptCallback(const char* accept_btn_name, std::func
 	m_OnAccepted = on_accepted;
 }
 
-void ModalStringPrompt::Update()
-{
-	if (m_ShouldOpenOnUpdate)
-	{
-		ImGui::OpenPopup(GetModalId());
-		m_ShouldOpenOnUpdate = false;
-	}
-
-	if (ImGui::BeginPopupModal(GetModalId(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-	{
-		ImGui::InputText(m_Label.c_str(), m_Buffer, s_BufferSize);
-
-		if (ImGui::Button(m_AcceptBtnName.c_str()))
-		{
-			ImGui::CloseCurrentPopup();
-			m_OnAccepted(m_Buffer);
-		}
-
-		if (ImGui::Button("Cancel"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-}
-
 void ModalStringPrompt::SetLabel(const std::string& label)
 {
 	m_Label = label;
+}
+
+void ModalStringPrompt::FillModal()
+{
+	ImGui::InputText(m_Label.c_str(), m_Buffer, s_BufferSize);
+
+	if (ImGui::Button(m_AcceptBtnName.c_str()))
+	{
+		ImGui::CloseCurrentPopup();
+		m_OnAccepted(m_Buffer);
+	}
+
+	if (ImGui::Button("Cancel"))
+	{
+		ImGui::CloseCurrentPopup();
+	}
 }
 
 ModalChoicePrompt::ModalChoicePrompt(const char* modal_id)
@@ -80,32 +85,20 @@ void ModalChoicePrompt::AddChoice(const std::string& name, std::function<void()>
 	m_Choices.emplace_back(name, on_selected);
 }
 
-void ModalChoicePrompt::Update()
+void ModalChoicePrompt::FillModal()
 {
-	if (m_ShouldOpenOnUpdate)
+	for (const Choice& choice : m_Choices)
 	{
-		ImGui::OpenPopup(GetModalId());
-		m_ShouldOpenOnUpdate = false;
-	}
-
-	// TODO: after we simplify ModalStringPrompt, we can unify this
-	if (ImGui::BeginPopupModal(GetModalId(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-	{
-		for (const Choice& choice : m_Choices)
-		{
-			if (ImGui::Button(choice.m_Name.c_str(), ImVec2(200, 30)))
-			{
-				ImGui::CloseCurrentPopup();
-				choice.m_OnSelected();
-			}
-		}
-
-		if (ImGui::Button("Cancel"))
+		if (ImGui::Button(choice.m_Name.c_str(), ImVec2(200, 30)))
 		{
 			ImGui::CloseCurrentPopup();
+			choice.m_OnSelected();
 		}
+	}
 
-		ImGui::EndPopup();
+	if (ImGui::Button("Cancel"))
+	{
+		ImGui::CloseCurrentPopup();
 	}
 }
 

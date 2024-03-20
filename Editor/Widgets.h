@@ -8,11 +8,15 @@ class ModalPrompt
 {
 public:
 	void Open(); // TODO: open context
+	void Update();
+
 	const char* GetModalId() const;
 	void SetModalId(const std::string& new_id);
 
 protected:
 	ModalPrompt(const char* modal_id);
+
+	virtual void FillModal() = 0;
 
 	bool m_ShouldOpenOnUpdate = false;
 
@@ -28,9 +32,10 @@ public:
 
 	void SetAcceptCallback(const char* accept_btn_name, std::function<void(std::string)> on_accepted);
 
-	void Update();
-
 	void SetLabel(const std::string& label);
+
+protected:
+	virtual void FillModal() override;
 
 private:
 	static constexpr size_t s_BufferSize = 256;
@@ -54,7 +59,8 @@ public:
 	void AddChoice(const char* name, std::function<void()> on_selected);
 	void AddChoice(const std::string& name, std::function<void()> on_selected);
 
-	void Update();
+protected:
+	virtual void FillModal() override;
 
 private:
 	struct Choice
