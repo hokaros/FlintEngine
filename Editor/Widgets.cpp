@@ -27,7 +27,13 @@ ModalStringPrompt::ModalStringPrompt(const char* modal_id, const char* label)
 {
 }
 
-bool ModalStringPrompt::Update(std::string& response)
+void ModalStringPrompt::SetAcceptCallback(const char* accept_btn_name, std::function<void(std::string)> on_accepted)
+{
+	m_AcceptBtnName = accept_btn_name;
+	m_OnAccepted = on_accepted;
+}
+
+void ModalStringPrompt::Update()
 {
 	if (m_ShouldOpenOnUpdate)
 	{
@@ -35,18 +41,14 @@ bool ModalStringPrompt::Update(std::string& response)
 		m_ShouldOpenOnUpdate = false;
 	}
 
-	bool has_accepted = false;
-
 	if (ImGui::BeginPopupModal(GetModalId(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		ImGui::InputText(m_Label.c_str(), m_Buffer, s_BufferSize);
 
-		if (ImGui::Button("Add"))
+		if (ImGui::Button(m_AcceptBtnName.c_str()))
 		{
-			response = m_Buffer;
-			has_accepted = true;
-
 			ImGui::CloseCurrentPopup();
+			m_OnAccepted(m_Buffer);
 		}
 
 		if (ImGui::Button("Cancel"))
@@ -56,8 +58,6 @@ bool ModalStringPrompt::Update(std::string& response)
 
 		ImGui::EndPopup();
 	}
-
-	return has_accepted;
 }
 
 void ModalStringPrompt::SetLabel(const std::string& label)

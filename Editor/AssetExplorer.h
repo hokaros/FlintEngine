@@ -41,8 +41,7 @@ private:
 
 	void UpdateCurrentDirectoryContents();
 
-	void UpdateAddFilePrompt();
-
+	void AddPrefab(std::string name);
 	void OpenAddAssetPrompt();
 	void OpenAddScenePrompt();
 

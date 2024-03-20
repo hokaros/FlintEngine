@@ -36,6 +36,8 @@ private:
 
 	void ProcessAsyncOperations();
 
+	void AddPrefabChildToModalContext(std::string prefab_path);
+
 private:
 	std::shared_ptr<EditorUniversalHandle> m_EditedObjectHandle;
 
@@ -45,5 +47,6 @@ private:
 	AssetExplorer* m_AssetExplorer;
 
 	ModalStringPrompt m_PrefabPathPrompt;
+	IEditableGameObject* m_ModalContext; // TODO: send this to the Widget
 };
 

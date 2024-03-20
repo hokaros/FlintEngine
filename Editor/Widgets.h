@@ -7,7 +7,7 @@
 class ModalPrompt
 {
 public:
-	void Open();
+	void Open(); // TODO: open context
 	const char* GetModalId() const;
 	void SetModalId(const std::string& new_id);
 
@@ -26,7 +26,9 @@ class ModalStringPrompt
 public:
 	ModalStringPrompt(const char* modal_id, const char* label);
 
-	bool Update(std::string& response); // TODO: this can be callback-based
+	void SetAcceptCallback(const char* accept_btn_name, std::function<void(std::string)> on_accepted);
+
+	void Update();
 
 	void SetLabel(const std::string& label);
 
@@ -35,6 +37,9 @@ private:
 
 	char m_Buffer[s_BufferSize];
 	std::string m_Label;
+
+	std::string m_AcceptBtnName = "Accept";
+	std::function<void(std::string)> m_OnAccepted;
 };
 
 
