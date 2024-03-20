@@ -43,6 +43,9 @@ private:
 
 	void UpdateAddFilePrompt();
 
+	void OpenAddAssetPrompt();
+	void OpenAddScenePrompt();
+
 	std::string GetPathToCurrDir() const;
 	const files::DirectoryElement* FindElementInCurrentDirectory(const std::string& filename) const;
 
@@ -58,6 +61,7 @@ private:
 
 	DirectoryTreeExplorer m_TreeExplorer;
 	ModalStringPrompt m_NewAssetNamePrompt;
+	ModalChoicePrompt m_AssetTypePrompt;
 
 	IAssetListener* m_Listener;
 };

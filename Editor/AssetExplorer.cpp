@@ -10,10 +10,18 @@ AssetExplorer::AssetExplorer()
 	: m_CurrDirPath(s_RootDirectory)
 	, m_TreeExplorer(s_RootDirectory)
 	, m_NewAssetNamePrompt("Add asset", "Asset name")
+	, m_AssetTypePrompt("Select asset type")
 {
 	UpdateCurrentDirectoryContents();
 
 	m_TreeExplorer.SubscribeEvents(*this);
+
+	m_AssetTypePrompt.AddChoice("Prefab", [this]() {
+		OpenAddAssetPrompt();
+	});
+	m_AssetTypePrompt.AddChoice("Scene", [this]() {
+		OpenAddScenePrompt();
+	});
 }
 
 void AssetExplorer::RegisterAssetListener(IAssetListener* listener)
@@ -56,8 +64,10 @@ void AssetExplorer::RenderCurrentFolderContent()
 		ImGui::Text("Contents of %s:", m_CurrDirPath.c_str());
 		if (ImGui::Button("+"))
 		{
-			m_NewAssetNamePrompt.Open();
+			m_AssetTypePrompt.Open();
 		}
+
+		m_AssetTypePrompt.Update();
 		UpdateAddFilePrompt();
 
 		if (ImGui::BeginChild("Current folder contents"))
@@ -174,6 +184,16 @@ void AssetExplorer::UpdateAddFilePrompt()
 			OpenAssetFile(files::AssetFile::SpecificCast(*new_file));
 		}
 	}
+}
+
+void AssetExplorer::OpenAddAssetPrompt()
+{
+	m_NewAssetNamePrompt.Open();
+}
+
+void AssetExplorer::OpenAddScenePrompt()
+{
+	std::cout << "Create scene" << std::endl;
 }
 
 std::string AssetExplorer::GetPathToCurrDir() const
