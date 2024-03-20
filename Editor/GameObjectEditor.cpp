@@ -1,6 +1,6 @@
 #include "GameObjectEditor.h"
 
-void GameObjectEditor::Init(SelectedGameObjectManager& selected_game_object_manager)
+void GameObjectEditor::Init(SelectedObjectManager& selected_game_object_manager)
 {
     selected_game_object_manager.SubscribeSelection(*this);
 }

@@ -5,7 +5,7 @@ HierarchyEditor::HierarchyEditor()
 {
 }
 
-void HierarchyEditor::Init(SelectedGameObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer)
+void HierarchyEditor::Init(SelectedObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer)
 {
 	m_SelectedGameObjectManager = &selected_game_object_manager;
 	m_AssetExplorer = &asset_explorer;

@@ -3,14 +3,14 @@
 #include "../FlatEngine/IEditableGameObject.h"
 #include "ComponentEditor.h"
 #include "AssetHandles.h"
-#include "SelectedGameObjectManager.h"
+#include "SelectedObjectManager.h"
 
 class GameObjectEditor
 	: protected IComponentActionObserver
 	, protected ISelectionObserver
 {
 public:
-	void Init(SelectedGameObjectManager& selected_game_object_manager);
+	void Init(SelectedObjectManager& selected_game_object_manager);
 
 	void Render();
 

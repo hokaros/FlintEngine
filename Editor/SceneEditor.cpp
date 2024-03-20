@@ -18,7 +18,7 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object
 {
 	m_RootObject = root_object;
 
-	std::shared_ptr<EditorUniversalHandle> handle = root_object.lock();
+	std::shared_ptr<EditorUniversalHandle> handle = m_RootObject.lock();
 	std::shared_ptr<EditorSceneHandle> scene = handle->GetSceneHandle();
 	if (scene != nullptr)
 	{
@@ -45,7 +45,7 @@ void SceneEditor::Render()
 		{
 			viewportController.Update(m_SceneRenderer.GetViewport());
 		}
-		// WARNING: do not render anything between viewportController's update and displaying the scene
+		// WARNING: do not render any widget between viewportController's update and displaying the scene - viewportController's calculations may be wrong
 
 		m_CurrentScene->Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
 

@@ -12,7 +12,7 @@ public:
 	virtual ~ISelectionObserver() = default;
 };
 
-class SelectedGameObjectManager
+class SelectedObjectManager
 {
 public:
 	void SelectObject(std::shared_ptr<EditorUniversalHandle> game_object);

@@ -2,7 +2,7 @@
 #include "../FlatEngine/imgui/imgui.h"
 #include "../FlatEngine/PrefabInstance.h"
 #include "AssetHandles.h"
-#include "SelectedGameObjectManager.h"
+#include "SelectedObjectManager.h"
 #include "AssetExplorer.h"
 #include "Widgets.h"
 
@@ -11,7 +11,7 @@ class HierarchyEditor
 public:
 	HierarchyEditor();
 
-	void Init(SelectedGameObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer);
+	void Init(SelectedObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer);
 
 	void SetEditedObject(std::shared_ptr<EditorUniversalHandle> handle);
 
@@ -41,7 +41,7 @@ private:
 
 	std::optional<RemoveObjectOperation> m_RequestedRemove = std::nullopt;
 
-	SelectedGameObjectManager* m_SelectedGameObjectManager;
+	SelectedObjectManager* m_SelectedGameObjectManager;
 	AssetExplorer* m_AssetExplorer;
 
 	ModalStringPrompt m_PrefabPathPrompt;

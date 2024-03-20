@@ -5,7 +5,7 @@
 #include "AssetExplorer.h"
 #include "SceneEditor.h"
 #include "HierarchyEditor.h"
-#include "SelectedGameObjectManager.h"
+#include "SelectedObjectManager.h"
 
 class Editor
 	: private IAssetListener
@@ -27,7 +27,7 @@ private:
 	SceneEditor m_SceneEditor;
 	HierarchyEditor m_HierarchyEditor;
 
-	SelectedGameObjectManager m_SelectedGameObjectManager;
+	SelectedObjectManager m_SelectedGameObjectManager;
 
 	ImVec4& m_ClearColor;
 };
