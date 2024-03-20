@@ -57,7 +57,7 @@ private:
 	std::optional<files::Directory> m_RequestedDirectory = std::nullopt;
 
 	DirectoryTreeExplorer m_TreeExplorer;
-	ModalStringPrompt m_AddPrefabPrompt;
+	ModalStringPrompt m_NewAssetNamePrompt;
 
 	IAssetListener* m_Listener;
 };

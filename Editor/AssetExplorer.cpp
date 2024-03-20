@@ -9,7 +9,7 @@
 AssetExplorer::AssetExplorer()
 	: m_CurrDirPath(s_RootDirectory)
 	, m_TreeExplorer(s_RootDirectory)
-	, m_AddPrefabPrompt("Add prefab", "Prefab name")
+	, m_NewAssetNamePrompt("Add asset", "Asset name")
 {
 	UpdateCurrentDirectoryContents();
 
@@ -56,7 +56,7 @@ void AssetExplorer::RenderCurrentFolderContent()
 		ImGui::Text("Contents of %s:", m_CurrDirPath.c_str());
 		if (ImGui::Button("+"))
 		{
-			m_AddPrefabPrompt.Open();
+			m_NewAssetNamePrompt.Open();
 		}
 		UpdateAddFilePrompt();
 
@@ -154,7 +154,7 @@ void AssetExplorer::UpdateCurrentDirectoryContents()
 void AssetExplorer::UpdateAddFilePrompt()
 {
 	std::string filename;
-	if (m_AddPrefabPrompt.Update(filename) && !filename.empty())
+	if (m_NewAssetNamePrompt.Update(filename) && !filename.empty())
 	{
 		std::string filename_extended = filename + ".prefab";
 		// TODO: find if filename exists
