@@ -4,6 +4,11 @@
 #include "../FlatEngine/RectangleRenderer.h"
 #include "../FlatEngine/AssetManager.h"
 
+ImU32 Rgb8ToImU32(const Rgb8& rgb)
+{
+	return IM_COL32(rgb.r, rgb.g, rgb.b, 0xFF);
+}
+
 SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screenHeight)
 	: m_SceneRenderer(screenWidth, screenHeight)
 {
@@ -82,12 +87,17 @@ void SceneEditor::RenderOverlay()
 {
 	Vector viewport_pos = m_SceneRenderer.GetViewport().pos;
 
-	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 0xFF));
+	Rgb8 text_col = GetNegativeColor(m_CurrentScene->GetBackgroundColor());
+	ImGui::PushStyleColor(ImGuiCol_Text, Rgb8ToImU32(text_col));
 	ImGui::Text("(%0.2f, %0.2f)", viewport_pos.x, viewport_pos.y);
 	ImGui::PopStyleColor();
 }
 
 Rgb8 SceneEditor::GetNegativeColor(const Rgb8& color)
 {
-	return Rgb8();
+	return Rgb8(
+		0xFF - color.r,
+		0xFF - color.g,
+		0xFF - color.b
+	);
 }
