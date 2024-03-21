@@ -1,5 +1,7 @@
 #include "HierarchyEditor.h"
 
+#include "../FlatEngine/AssetManager.h"
+
 HierarchyEditor::HierarchyEditor()
 	: m_PrefabPathPrompt("Prefab path", "Prefab path")
 {
@@ -88,32 +90,34 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandl
 
 void HierarchyEditor::RenderObjectContextMenu(std::shared_ptr<EditorUniversalHandle> object, IHierarchyEditable* parent)
 {
-	if (std::shared_ptr<EditorGameObjectHandle> go_handle = object->GetGameObjectHandle(); go_handle != nullptr)
-	{ // TODO: extract
-		IEditableGameObject* game_object = go_handle->GetGameObject();
-		// TODO: enable this for IHierarchyEditables
+	if (IHierarchyEditable* edited_node = object->GetHierarchyEditable())
+	{
 		if (ImGui::Button("Add child"))
 		{
-			std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>();
-			game_object->AddChild(std::move(editor_child));
 			ImGui::CloseCurrentPopup();
+
+			std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>();
+			edited_node->AddChild(std::move(editor_child));
 		}
 
 		if (ImGui::Button("Add prefab child"))
 		{
-			m_PrefabPathPrompt.SetAcceptCallback("Add", [this, game_object](std::string prefab_path) {
-				AddPrefabChild(*game_object, prefab_path);
+			ImGui::CloseCurrentPopup();
+
+			m_PrefabPathPrompt.SetAcceptCallback("Add", [this, edited_node](std::string prefab_path) {
+				AddPrefabChild(*edited_node, prefab_path);
 			});
 			m_PrefabPathPrompt.Open();
-
-			ImGui::CloseCurrentPopup();
 		}
+	}
 
+	if (std::shared_ptr<EditorGameObjectHandle> game_object = object->GetGameObjectHandle())
+	{
 		ImGui::BeginDisabled(parent == nullptr); // Child nodes only
 		{
 			if (ImGui::Button("Delete"))
 			{
-				m_RequestedRemove.emplace(*game_object, *parent);
+				m_RequestedRemove.emplace(*game_object->GetGameObject(), *parent);
 				m_SelectedGameObjectManager->OnObjectDestroying(*object);
 			}
 		}
@@ -132,13 +136,17 @@ void HierarchyEditor::ProcessAsyncOperations()
 	}
 }
 
-void HierarchyEditor::AddPrefabChild(IEditableGameObject& parent, std::string prefab_path)
+void HierarchyEditor::AddPrefabChild(IHierarchyEditable& parent, std::string prefab_path)
 {
-	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
-	if (prefab_instance != nullptr)
+	if (AssetManager::GetInstance()->GetPrefab(prefab_path) != nullptr)
 	{
+		std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>(prefab_path);
 		parent.AddChild(std::move(prefab_instance));
-		ImGui::CloseCurrentPopup();
+	}
+	else
+	{
+		// TODO: visual error
+		FE_LOG("No such prefab");
 	}
 }
 

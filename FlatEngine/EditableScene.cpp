@@ -59,6 +59,11 @@ const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetSubRo
 	return m_RootObjects;
 }
 
+void EditableScene::AddChild(std::unique_ptr<IEditableGameObject> child)
+{
+	AddRootObject(std::move(child));
+}
+
 void EditableScene::DeleteChild(IEditableGameObject& child)
 {
 	for (auto it = m_RootObjects.begin(); it != m_RootObjects.end(); it++)

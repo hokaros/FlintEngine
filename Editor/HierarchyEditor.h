@@ -36,7 +36,7 @@ private:
 
 	void ProcessAsyncOperations();
 
-	void AddPrefabChild(IEditableGameObject& parent, std::string prefab_path);
+	void AddPrefabChild(IHierarchyEditable& parent, std::string prefab_path);
 
 private:
 	std::shared_ptr<EditorUniversalHandle> m_EditedObjectHandle;

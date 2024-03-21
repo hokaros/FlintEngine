@@ -54,7 +54,7 @@ void AssetManager::AddPrefab(const char* path)
 	std::unique_ptr<GameObject> prefab = InlineGameObject::ToRuntimeObject(GameObjectLoader::LoadPrefab(full_path.c_str()));
 	if (prefab == nullptr)
 	{
-		FE_ASSERT(false, "Cannot load prefab: %s", path);
+		FE_LOG("Cannot load prefab: %s", path);
 		return;
 	}
 
