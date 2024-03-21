@@ -7,7 +7,7 @@
 class ModalPrompt
 {
 public:
-	void Open(); // TODO: open context
+	void Open();
 	void Update();
 
 	const char* GetModalId() const;
@@ -16,6 +16,7 @@ public:
 protected:
 	ModalPrompt(const char* modal_id);
 
+	virtual void PreOpen() {}
 	virtual void FillModal() = 0;
 
 	bool m_ShouldOpenOnUpdate = false;
@@ -35,6 +36,7 @@ public:
 	void SetLabel(const std::string& label);
 
 protected:
+	virtual void PreOpen() override;
 	virtual void FillModal() override;
 
 private:

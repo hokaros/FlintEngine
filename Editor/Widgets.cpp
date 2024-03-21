@@ -9,6 +9,7 @@ void ModalPrompt::Update()
 {
 	if (m_ShouldOpenOnUpdate)
 	{
+		PreOpen();
 		ImGui::OpenPopup(GetModalId());
 		m_ShouldOpenOnUpdate = false;
 	}
@@ -52,6 +53,12 @@ void ModalStringPrompt::SetAcceptCallback(const char* accept_btn_name, std::func
 void ModalStringPrompt::SetLabel(const std::string& label)
 {
 	m_Label = label;
+}
+
+void ModalStringPrompt::PreOpen()
+{
+	// Clear
+	m_Buffer[0] = '\0';
 }
 
 void ModalStringPrompt::FillModal()
