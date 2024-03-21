@@ -3,10 +3,6 @@
 
 namespace files
 {
-    static constexpr const char* s_PrefabFileExtension = ".prefab";
-    static constexpr const char* s_BitmapFileExtension = ".bmp";
-    static constexpr const char* s_SceneFileExtension = ".scene";
-
     Directory::Directory(const std::filesystem::path& path)
         : DirectoryElement(path)
     {
@@ -62,6 +58,28 @@ namespace files
         else
         {
             return AssetType::Unknown;
+        }
+    }
+
+    const char* AssetFile::GetAssetExtension(AssetType asset_type)
+    {
+        switch (asset_type)
+        {
+        case files::AssetType::Prefab:
+            return s_PrefabFileExtension;
+
+        case files::AssetType::Bitmap:
+            return s_BitmapFileExtension;
+
+        case files::AssetType::Scene:
+            return s_SceneFileExtension;
+
+        case files::AssetType::Unknown:
+            return "";
+
+        default:
+            FE_ASSERT(false, "Unimplemented asset type extension");
+            return "";
         }
     }
 

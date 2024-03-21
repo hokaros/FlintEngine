@@ -41,8 +41,9 @@ private:
 
 	void UpdateCurrentDirectoryContents();
 
-	void AddPrefab(std::string name);
-	void OpenAddAssetPrompt();
+	void CreateAsset(const std::string& name, files::AssetType asset_type);
+	void OpenAddAssetPrompt(files::AssetType asset_type);
+	void OpenAddPrefabPrompt();
 	void OpenAddScenePrompt();
 
 	std::string GetPathToCurrDir() const;

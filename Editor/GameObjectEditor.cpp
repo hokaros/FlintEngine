@@ -67,7 +67,7 @@ void GameObjectEditor::RenderGameObjectEditor(IEditableGameObject& game_object)
 
     if (ImGui::Button("Save"))
     {
-        GetGameObjectHandle()->SaveInlineGameObject();
+        GetGameObjectHandle()->Save();
     }
 }
 

@@ -20,7 +20,7 @@ IEditableGameObject* EditorPrefabHandle::GetGameObject() const
     return m_Prefab.get();
 }
 
-void EditorPrefabHandle::SaveInlineGameObject()
+void EditorPrefabHandle::Save()
 {
     if (m_Prefab != nullptr)
     {
@@ -39,7 +39,7 @@ IEditableGameObject* EditorIEditableGameObjectHandle::GetGameObject() const
     return m_EditableObject;
 }
 
-void EditorIEditableGameObjectHandle::SaveInlineGameObject()
+void EditorIEditableGameObjectHandle::Save()
 {
 
 }
@@ -56,7 +56,7 @@ EditableScene* EditorSceneHandle::GetScene() const
     return m_Scene.get();
 }
 
-void EditorSceneHandle::SaveScene()
+void EditorSceneHandle::Save()
 {
     FE_ASSERT(false, "Unimplemented");
 }
@@ -73,24 +73,21 @@ EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorGameObjectHan
     : m_EditableGameObject(std::move(game_object))
 {
     m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+    m_Saveable = m_EditableGameObject.get();
 }
 
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorIEditableGameObjectHandle> game_object)
     : m_EditableGameObject(std::static_pointer_cast<EditorGameObjectHandle>(game_object))
 {
     m_HierarchyEditable = m_EditableGameObject->GetGameObject();
-}
-
-EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorPrefabHandle> prefab)
-    : m_EditableGameObject(std::dynamic_pointer_cast<EditorGameObjectHandle>(prefab))
-{
-    m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+    m_Saveable = m_EditableGameObject.get();
 }
 
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorSceneHandle> scene)
     : m_SceneHandle(std::move(scene))
 {
     m_HierarchyEditable = m_SceneHandle->GetScene();
+    m_Saveable = m_SceneHandle.get();
 }
 
 IHierarchyEditable* EditorUniversalHandle::GetHierarchyEditable() const
@@ -106,6 +103,11 @@ std::shared_ptr<EditorGameObjectHandle> EditorUniversalHandle::GetGameObjectHand
 std::shared_ptr<EditorSceneHandle> EditorUniversalHandle::GetSceneHandle() const
 {
     return m_SceneHandle;
+}
+
+void EditorUniversalHandle::Save()
+{
+    m_Saveable->Save();
 }
 
 bool EditorUniversalHandle::operator==(const EditorUniversalHandle& other) const

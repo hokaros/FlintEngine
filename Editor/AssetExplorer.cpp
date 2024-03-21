@@ -16,12 +16,8 @@ AssetExplorer::AssetExplorer()
 
 	m_TreeExplorer.SubscribeEvents(*this);
 
-	m_NewAssetNamePrompt.SetAcceptCallback("Add", [this](std::string name) {
-		AddPrefab(name);
-	});
-
 	m_AssetTypePrompt.AddChoice("Prefab", [this]() {
-		OpenAddAssetPrompt();
+		OpenAddPrefabPrompt();
 	});
 	m_AssetTypePrompt.AddChoice("Scene", [this]() {
 		OpenAddScenePrompt();
@@ -165,17 +161,18 @@ void AssetExplorer::UpdateCurrentDirectoryContents()
 	m_CurrSelectedFile = nullptr;
 }
 
-void AssetExplorer::AddPrefab(std::string name)
+void AssetExplorer::CreateAsset(const std::string& name, files::AssetType asset_type)
 {
 	if (name.empty())
 		return;
 
-	std::string filename = name + ".prefab";
+	std::string filename = name + files::AssetFile::GetAssetExtension(asset_type);
 	// TODO: find if filename exists
 
 	std::string full_path = m_CurrDirPath + "\\" + filename;
-	std::unique_ptr<EditorPrefabHandle> prefab_handle = AssetOpener::OpenPrefab(full_path);
-	prefab_handle->SaveInlineGameObject();
+	std::unique_ptr<EditorUniversalHandle> asset_handle = AssetOpener::OpenAsset(full_path, asset_type);
+	asset_handle->Save();
+
 	UpdateCurrentDirectoryContents();
 
 	const files::DirectoryElement* new_file = FindElementInCurrentDirectory(filename);
@@ -189,14 +186,24 @@ void AssetExplorer::AddPrefab(std::string name)
 	}
 }
 
-void AssetExplorer::OpenAddAssetPrompt()
+void AssetExplorer::OpenAddAssetPrompt(files::AssetType asset_type)
 {
+	m_NewAssetNamePrompt.SetAcceptCallback("Add", [this, asset_type](std::string name) {
+		CreateAsset(name, asset_type);
+		});
 	m_NewAssetNamePrompt.Open();
+}
+
+void AssetExplorer::OpenAddPrefabPrompt()
+{
+	m_NewAssetNamePrompt.SetLabel("Prefab name");
+	OpenAddAssetPrompt(files::AssetType::Prefab);
 }
 
 void AssetExplorer::OpenAddScenePrompt()
 {
-	std::cout << "Create scene" << std::endl;
+	m_NewAssetNamePrompt.SetLabel("Scene name");
+	OpenAddAssetPrompt(files::AssetType::Scene);
 }
 
 std::string AssetExplorer::GetPathToCurrDir() const

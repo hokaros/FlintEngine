@@ -59,6 +59,13 @@ namespace files
 
 		AssetType GetAssetType() const;
 
+		static const char* GetAssetExtension(AssetType asset_type);
+
+	public:
+		static constexpr const char* s_PrefabFileExtension = ".prefab";
+		static constexpr const char* s_BitmapFileExtension = ".bmp";
+		static constexpr const char* s_SceneFileExtension = ".scene";
+
 	private:
 		virtual Type GetType() const override;
 	};
