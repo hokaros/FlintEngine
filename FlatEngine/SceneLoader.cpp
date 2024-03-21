@@ -78,13 +78,13 @@ void SceneLoader::ParseSceneParamsLine(const std::string& line)
 	std::string key, value;
 	SplitLineToKeyAndValue(line, key, value);
 
-	if (key == "game_objects")
+	if (key == s_GameObjectsKey)
 	{
 		FE_DATA_CHECK(value.size() == 0, "Invalid value - GameObjects should be below");
 
 		SetParsingStateAfterIndent(SceneParsingState::GameObjectList);
 	}
-	else if(key == "background_color")
+	else if(key == s_BackgroundColorKey)
 	{
 		m_SceneDesc->background_color = value;
 	}

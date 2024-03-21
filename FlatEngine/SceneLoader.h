@@ -15,6 +15,9 @@ public:
 	static std::unique_ptr<EditableScene> LoadScene(const char* file_path);
 	static std::unique_ptr<SceneStringDesc> LoadSceneDesc(const char* file_path);
 
+	static constexpr const char* s_GameObjectsKey = "game_objects";
+	static constexpr const char* s_BackgroundColorKey = "background_color";
+
 protected:
 	virtual SceneParsingState GetOuterParsingState(SceneParsingState current_state) override;
 	virtual void ParseLineForCurrentState(const std::string& line) override;

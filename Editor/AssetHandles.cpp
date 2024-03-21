@@ -1,6 +1,7 @@
 #include "AssetHandles.h"
 
 #include "PrefabSaver.h"
+#include "SceneSaver.h"
 
 bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const
 {
@@ -58,7 +59,10 @@ EditableScene* EditorSceneHandle::GetScene() const
 
 void EditorSceneHandle::Save()
 {
-    FE_ASSERT(false, "Unimplemented");
+    if (m_Scene != nullptr)
+    {
+        SceneSaver::SaveScene(*m_Scene, m_ScenePath.c_str());
+    }
 }
 
 bool EditorSceneHandle::operator==(const EditorSceneHandle& other) const

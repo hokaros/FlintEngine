@@ -25,6 +25,11 @@ PrefabSaver::PrefabSaver(std::fstream& prefab_file, size_t start_indent)
 
 }
 
+PrefabSaver::PrefabSaver(const IndentPrinter& indent_printer)
+    : m_IndentPrinter(indent_printer)
+{
+}
+
 void PrefabSaver::SavePrefab(const InlineGameObject& prefab)
 {
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = GameObjectSerializer::SerializeGameObject(prefab);
@@ -60,7 +65,7 @@ void PrefabSaver::SaveGameObject(const GameObjectStringDescProxy& game_object)
 
 void PrefabSaver::SaveInlineGameObject(const GameObjectStringDesc& game_object)
 {
-    SaveKeyValuePairs(game_object.params);
+    m_IndentPrinter.SaveKeyValuePairs(game_object.params);
 
     SaveComponents(game_object.components);
 
@@ -69,9 +74,9 @@ void PrefabSaver::SaveInlineGameObject(const GameObjectStringDesc& game_object)
 
 void PrefabSaver::SavePrefabInstance(const PrefabInstanceStringDesc& prefab_instance)
 {
-    SaveKeyValuePair(PrefabInstanceSerializer::s_PrefabKey, prefab_instance.m_PrefabPath);
+    m_IndentPrinter.SaveKeyValuePair(PrefabInstanceSerializer::s_PrefabKey, prefab_instance.m_PrefabPath);
 
-    SaveKeyValuePairs(prefab_instance.m_OverridenParams);
+    m_IndentPrinter.SaveKeyValuePairs(prefab_instance.m_OverridenParams);
 
     // TODO: additional children
 
@@ -95,7 +100,7 @@ void PrefabSaver::SaveComponents(const std::vector<std::unique_ptr<ComponentStri
         m_IndentPrinter.EndLine();
 
         m_IndentPrinter.IncreaseIndent();
-        SaveKeyValuePairs(component->fields);
+        m_IndentPrinter.SaveKeyValuePairs(component->fields);
         m_IndentPrinter.DecreaseIndent();
     }
 
@@ -113,24 +118,4 @@ void PrefabSaver::SaveChildren(const std::vector<std::unique_ptr<GameObjectStrin
     }
 
     m_IndentPrinter.DecreaseIndent();
-}
-
-void PrefabSaver::SaveKeyValuePair(const std::string& key, const std::string& value)
-{
-    m_IndentPrinter.StartLine();
-    m_IndentPrinter.AddToLine(key);
-    m_IndentPrinter.AddToLine(": ");
-    m_IndentPrinter.AddToLine(value);
-    m_IndentPrinter.EndLine();
-}
-
-void PrefabSaver::SaveKeyValuePairs(const std::map<std::string, std::string>& dict)
-{
-    for (auto& pair : dict)
-    {
-        const std::string& key = pair.first;
-        const std::string& value = pair.second;
-
-        SaveKeyValuePair(key, value);
-    }
 }
