@@ -17,11 +17,7 @@ void GameObjectPropertyEditor::SetGameObject(std::weak_ptr<EditorUniversalHandle
 {
     m_GameObjectHandle = object;
 
-    std::shared_ptr<EditorUniversalHandle> shared_obj = object.lock();
-    if (shared_obj == nullptr)
-        return;
-
-    std::shared_ptr<EditorGameObjectHandle> go_handle = shared_obj->GetGameObjectHandle();
+    EditorGameObjectHandle* go_handle = GetGameObjectHandle();
     if (go_handle == nullptr)
         return;
 
