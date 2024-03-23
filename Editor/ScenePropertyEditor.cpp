@@ -5,9 +5,9 @@
 void ScenePropertyEditor::RenderEmbedded()
 {
     EditorSceneHandle* scene_handle = GetSceneHandle();
-    if (scene_handle != nullptr && scene_handle->GetScene() != nullptr)
+    if (scene_handle != nullptr)
     {
-        ImGui::Text("Scene selected!");
+        RenderSceneEditor(*scene_handle->GetScene());
     }
     else
     {
@@ -29,7 +29,26 @@ void ScenePropertyEditor::SetScene(std::weak_ptr<EditorUniversalHandle> handle)
         return;
 
     EditableScene& scene = *scene_handle->GetScene();
-    // TODO
+    InitValuesFromScene(scene);
+}
+
+void ScenePropertyEditor::RenderSceneEditor(EditableScene& scene)
+{
+    ImGui::Text("Scene properties");
+
+    if (ImGui::Button("Save"))
+    {
+        GetSceneHandle()->Save();
+    }
+}
+
+void ScenePropertyEditor::InitValuesFromScene(EditableScene& scene)
+{
+}
+
+void ScenePropertyEditor::ApplyValuesToScene(EditableScene& scene)
+{
+
 }
 
 EditorSceneHandle* ScenePropertyEditor::GetSceneHandle()
