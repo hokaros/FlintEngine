@@ -106,9 +106,9 @@ IHierarchyEditable* EditorUniversalHandle::GetHierarchyEditable() const
     return m_HierarchyEditable;
 }
 
-std::shared_ptr<EditorGameObjectHandle> EditorUniversalHandle::GetGameObjectHandle() const
+EditorGameObjectHandle* EditorUniversalHandle::GetGameObjectHandle() const
 {
-    return m_EditableGameObject;
+    return m_EditableGameObject.get();
 }
 
 std::shared_ptr<EditorSceneHandle> EditorUniversalHandle::GetSceneHandle() const

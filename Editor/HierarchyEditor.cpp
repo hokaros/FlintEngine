@@ -111,7 +111,7 @@ void HierarchyEditor::RenderObjectContextMenu(std::shared_ptr<EditorUniversalHan
 		}
 	}
 
-	if (std::shared_ptr<EditorGameObjectHandle> game_object = object->GetGameObjectHandle())
+	if (EditorGameObjectHandle* game_object = object->GetGameObjectHandle())
 	{
 		ImGui::BeginDisabled(parent == nullptr); // Child nodes only
 		{

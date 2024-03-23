@@ -158,8 +158,7 @@ const EditorGameObjectHandle* GameObjectPropertyEditor::GetGameObjectHandle() co
     if (shared_obj == nullptr)
         return nullptr;
 
-    std::shared_ptr<EditorGameObjectHandle> go_handle = shared_obj->GetGameObjectHandle();
-    return go_handle.get();
+    return shared_obj->GetGameObjectHandle();
 }
 
 void GameObjectPropertyEditor::OnComponentDeleted(size_t index_in_game_object)
