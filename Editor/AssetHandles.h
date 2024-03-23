@@ -54,7 +54,7 @@ class EditorSceneHandle
 public:
 	EditorSceneHandle(std::unique_ptr<EditableScene> scene, const std::string& scene_path);
 
-	EditableScene* GetScene() const; // TODO: make this guaranteed non-null
+	EditableScene& GetScene() const;
 	virtual void Save() override;
 
 	bool operator==(const EditorSceneHandle& other) const;

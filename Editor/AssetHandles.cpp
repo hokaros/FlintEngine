@@ -50,11 +50,12 @@ EditorSceneHandle::EditorSceneHandle(std::unique_ptr<EditableScene> scene, const
     : m_Scene(std::move(scene))
     , m_ScenePath(scene_path)
 {
+    FE_ASSERT(m_Scene != nullptr, "No scene passed to SceneHandle");
 }
 
-EditableScene* EditorSceneHandle::GetScene() const
+EditableScene& EditorSceneHandle::GetScene() const
 {
-    return m_Scene.get();
+    return *m_Scene;
 }
 
 void EditorSceneHandle::Save()
@@ -90,7 +91,7 @@ EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorIEditableGame
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorSceneHandle> scene)
     : m_SceneHandle(std::move(scene))
 {
-    m_HierarchyEditable = m_SceneHandle->GetScene();
+    m_HierarchyEditable = &m_SceneHandle->GetScene();
     m_Saveable = m_SceneHandle.get();
 }
 

@@ -7,7 +7,7 @@ void ScenePropertyEditor::RenderEmbedded()
     EditorSceneHandle* scene_handle = GetSceneHandle();
     if (scene_handle != nullptr)
     {
-        RenderSceneEditor(*scene_handle->GetScene());
+        RenderSceneEditor(scene_handle->GetScene());
     }
     else
     {
@@ -28,7 +28,7 @@ void ScenePropertyEditor::SetScene(std::weak_ptr<EditorUniversalHandle> handle)
     if (scene_handle == nullptr)
         return;
 
-    EditableScene& scene = *scene_handle->GetScene();
+    EditableScene& scene = scene_handle->GetScene();
     InitValuesFromScene(scene);
 }
 
