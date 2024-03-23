@@ -6,6 +6,7 @@
 		- movementSpeed: 300.000000
 	- BoxCollider:
 		- m_InsideOutCollision: 0
+		- m_IsStatic: 0
 		- m_Position: 0.000000, 0.000000
 		- m_Size: 20.000000, 20.000000
 	- PlayerEquipment
@@ -17,7 +18,7 @@
 - children:
 	- GameObject
 		- m_Name: Basic Firearm
-		- m_Pos: 20.000000, 0.000000
+		- m_Pos: 20.000000, 4.400000
 		- m_Size: 30.000000, 10.000000
 		- components:
 			- SpriteRenderer:
@@ -29,7 +30,7 @@
 		- children:
 	- GameObject
 		- m_Name: Super Firearm
-		- m_Pos: 20.000000, 0.000000
+		- m_Pos: 20.000000, 4.400000
 		- m_Size: 30.000000, 10.000000
 		- components:
 			- SpriteRenderer:
