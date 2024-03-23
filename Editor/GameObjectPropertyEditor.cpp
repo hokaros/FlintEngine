@@ -128,12 +128,23 @@ void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_o
 
 void GameObjectPropertyEditor::ApplyValuesToGameObject(IEditableGameObject& game_object)
 {
-    game_object.SetPosition(Vector(m_GameObjectPosition));
+    Vector target_position = Vector(m_GameObjectPosition);
+    if (game_object.GetResult().GetPosition() != target_position)
+    {
+        game_object.SetPosition(target_position);
+    }
 
-    game_object.SetSize(Vector(m_GameObjectSize));
+    Vector target_size = Vector(m_GameObjectSize);
+    if (game_object.GetResult().GetSize() != target_size)
+    {
+        game_object.SetSize(target_size);
+    }
 
-    std::string name_str = std::string(m_GameObjectName);
-    game_object.SetName(name_str);
+    std::string target_name = std::string(m_GameObjectName);
+    if (game_object.GetResult().GetName() != target_name)
+    {
+        game_object.SetName(target_name);
+    }
 }
 
 EditorGameObjectHandle* GameObjectPropertyEditor::GetGameObjectHandle()

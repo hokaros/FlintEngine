@@ -101,6 +101,11 @@ bool operator==(const Vector& left, const Vector& right)
 	return left.x == right.x && left.y == right.y;
 }
 
+bool operator!=(const Vector& left, const Vector& right)
+{
+	return !(left == right);
+}
+
 double Vector::GetAngle(const Vector& v1, const Vector& v2) {
 	return v1.GetAngle() - v2.GetAngle();
 }

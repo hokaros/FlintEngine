@@ -92,6 +92,7 @@ public:
     friend Vector operator/(const Vector& left, float dividor);
     friend std::ostream& operator<<(std::ostream& ostr, const Vector& v);
     friend bool operator==(const Vector& left, const Vector& right);
+    friend bool operator!=(const Vector& left, const Vector& right);
 
     // K¹t w radianach miêdzy dwoma wektorami
     static double GetAngle(const Vector& v1, const Vector& v2);
