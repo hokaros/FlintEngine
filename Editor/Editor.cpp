@@ -36,6 +36,7 @@ void Editor::OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene)
     std::shared_ptr<EditorUniversalHandle> handle = std::make_shared<EditorUniversalHandle>(scene_shared);
 
     m_HierarchyEditor.SetEditedObject(handle);
+    m_SelectedGameObjectManager.SelectObject(handle);
     m_SceneEditor.SetRootObject(std::weak_ptr<EditorUniversalHandle>(handle));
 }
 
