@@ -1,7 +1,7 @@
 #pragma once
 #include "../FlatEngine/imgui/imgui.h"
 #include "../FlatEngine/AssetManager.h"
-#include "GameObjectEditor.h"
+#include "PropertyEditor.h"
 #include "AssetExplorer.h"
 #include "SceneEditor.h"
 #include "HierarchyEditor.h"
@@ -21,7 +21,7 @@ private:
 	void RenderEditorConfigWindow();
 
 private:
-	GameObjectEditor m_GameObjectEditor;
+	PropertyEditor m_PropertyEditor;
 	AssetExplorer m_AssetExplorer;
 	AssetManager m_AssetManager;
 	SceneEditor m_SceneEditor;

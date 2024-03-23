@@ -1,13 +1,13 @@
-#include "GameObjectEditor.h"
+#include "PropertyEditor.h"
 
-void GameObjectEditor::Init(SelectedObjectManager& selected_game_object_manager)
+void PropertyEditor::Init(SelectedObjectManager& selected_game_object_manager)
 {
     selected_game_object_manager.SubscribeSelection(*this);
 }
 
-void GameObjectEditor::Render()
+void PropertyEditor::Render()
 {
-    ImGui::Begin("GameObject Editor");
+    ImGui::Begin("Property Editor");
 
     EditorGameObjectHandle* game_object_handle = GetGameObjectHandle();
     if (game_object_handle != nullptr && game_object_handle->GetGameObject() != nullptr)
@@ -22,7 +22,7 @@ void GameObjectEditor::Render()
     ImGui::End();
 }
 
-void GameObjectEditor::OnObjectSelected(std::weak_ptr<EditorUniversalHandle> object)
+void PropertyEditor::OnObjectSelected(std::weak_ptr<EditorUniversalHandle> object)
 {
     m_GameObjectHandle = object;
 
@@ -41,7 +41,7 @@ void GameObjectEditor::OnObjectSelected(std::weak_ptr<EditorUniversalHandle> obj
     LoadAddableComponents();
 }
 
-void GameObjectEditor::LoadAddableComponents()
+void PropertyEditor::LoadAddableComponents()
 {
     m_AddableComponentNames.clear();
     m_AddableComponents.clear();
@@ -53,7 +53,7 @@ void GameObjectEditor::LoadAddableComponents()
     }
 }
 
-void GameObjectEditor::RenderGameObjectEditor(IEditableGameObject& game_object)
+void PropertyEditor::RenderGameObjectEditor(IEditableGameObject& game_object)
 {
     ImGui::InputText("Name", m_GameObjectName, s_NameMaxSize);
 
@@ -71,7 +71,7 @@ void GameObjectEditor::RenderGameObjectEditor(IEditableGameObject& game_object)
     }
 }
 
-void GameObjectEditor::RenderComponentEditors()
+void PropertyEditor::RenderComponentEditors()
 {
     if (!m_AreComponentEditorsValid)
     {
@@ -87,7 +87,7 @@ void GameObjectEditor::RenderComponentEditors()
     ImGui::Separator();
 }
 
-void GameObjectEditor::RenderComponentAddSection()
+void PropertyEditor::RenderComponentAddSection()
 {
     static int s_ItemCurrent = 0;
     ImGui::Combo("New component", &s_ItemCurrent, m_AddableComponentNames.data(), m_AddableComponentNames.size());
@@ -98,7 +98,7 @@ void GameObjectEditor::RenderComponentAddSection()
     }
 }
 
-void GameObjectEditor::LoadComponents(IEditableGameObject& game_object)
+void PropertyEditor::LoadComponents(IEditableGameObject& game_object)
 {
     m_ComponentEditors.clear();
 
@@ -115,7 +115,7 @@ void GameObjectEditor::LoadComponents(IEditableGameObject& game_object)
     m_AreComponentEditorsValid = true;
 }
 
-void GameObjectEditor::AddComponent(const ComponentDefinition* component)
+void PropertyEditor::AddComponent(const ComponentDefinition* component)
 {
     IEditableGameObject& game_object = *GetGameObjectHandle()->GetGameObject();
     game_object.AddComponent(component->GetConstructor()());
@@ -123,7 +123,7 @@ void GameObjectEditor::AddComponent(const ComponentDefinition* component)
     m_AreComponentEditorsValid = false;
 }
 
-void GameObjectEditor::InitValuesFromGameObject(const GameObject& game_object)
+void PropertyEditor::InitValuesFromGameObject(const GameObject& game_object)
 {
     m_GameObjectPosition[0] = game_object.GetPosition().x;
     m_GameObjectPosition[1] = game_object.GetPosition().y;
@@ -134,7 +134,7 @@ void GameObjectEditor::InitValuesFromGameObject(const GameObject& game_object)
     strcpy_s(m_GameObjectName, game_object.GetName().c_str());
 }
 
-void GameObjectEditor::ApplyValuesToGameObject(IEditableGameObject& game_object)
+void PropertyEditor::ApplyValuesToGameObject(IEditableGameObject& game_object)
 {
     game_object.SetPosition(Vector(m_GameObjectPosition));
 
@@ -144,7 +144,7 @@ void GameObjectEditor::ApplyValuesToGameObject(IEditableGameObject& game_object)
     game_object.SetName(name_str);
 }
 
-EditorGameObjectHandle* GameObjectEditor::GetGameObjectHandle()
+EditorGameObjectHandle* PropertyEditor::GetGameObjectHandle()
 {
     std::shared_ptr<EditorUniversalHandle> shared_obj = m_GameObjectHandle.lock();
     if (shared_obj == nullptr)
@@ -154,7 +154,7 @@ EditorGameObjectHandle* GameObjectEditor::GetGameObjectHandle()
     return go_handle.get();
 }
 
-void GameObjectEditor::OnComponentDeleted(size_t index_in_game_object)
+void PropertyEditor::OnComponentDeleted(size_t index_in_game_object)
 {
     IEditableGameObject& game_object = *GetGameObjectHandle()->GetGameObject();
     game_object.RemoveComponent(index_in_game_object);

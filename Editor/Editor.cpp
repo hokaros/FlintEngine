@@ -4,7 +4,7 @@ Editor::Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int
     : m_ClearColor(clear_color)
     , m_SceneEditor(renderer, screenWidth, screenHeight)
 {
-    m_GameObjectEditor.Init(m_SelectedGameObjectManager);
+    m_PropertyEditor.Init(m_SelectedGameObjectManager);
     m_HierarchyEditor.Init(m_SelectedGameObjectManager, m_AssetExplorer);
 
     m_AssetExplorer.RegisterAssetListener(this);
@@ -14,7 +14,7 @@ void Editor::Render()
 {
     RenderEditorConfigWindow();
 
-    m_GameObjectEditor.Render();
+    m_PropertyEditor.Render();
     m_AssetExplorer.Render();
     m_SceneEditor.Render();
     m_HierarchyEditor.Render();

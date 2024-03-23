@@ -5,7 +5,7 @@
 #include "AssetHandles.h"
 #include "SelectedObjectManager.h"
 
-class GameObjectEditor
+class PropertyEditor
 	: protected IComponentActionObserver
 	, protected ISelectionObserver
 {

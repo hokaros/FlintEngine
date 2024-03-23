@@ -1,7 +1,6 @@
 #pragma once
 #include "../FlatEngine/GameObjectSerializer.h"
 #include "../FlatEngine/PrefabInstanceSerializer.h"
-#include "GameObjectEditor.h"
 #include "IndentPrinter.h"
 
 class PrefabSaver
