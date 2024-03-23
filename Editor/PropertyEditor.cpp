@@ -21,15 +21,14 @@ void PropertyEditor::Render()
         }
     }
 
-
     ImGui::End();
 }
 
 void PropertyEditor::OnObjectSelected(std::weak_ptr<EditorUniversalHandle> object)
 {
-    m_GameObjectHandle = object;
+    m_EditedObjectHandle = object;
     
-    ApplyObjectToEditors(m_GameObjectHandle);
+    ApplyObjectToEditors(m_EditedObjectHandle);
 
     m_CurrEditor = GetValidEditor();
 }
@@ -37,12 +36,16 @@ void PropertyEditor::OnObjectSelected(std::weak_ptr<EditorUniversalHandle> objec
 void PropertyEditor::ApplyObjectToEditors(std::weak_ptr<EditorUniversalHandle> object)
 {
     m_GameObjectEditor.SetGameObject(object);
+    m_SceneEditor.SetScene(object);
 }
 
 IPropertyEditor* PropertyEditor::GetValidEditor()
 {
     if (m_GameObjectEditor.HasValidObject())
         return &m_GameObjectEditor;
+
+    if (m_SceneEditor.HasValidObject())
+        return &m_SceneEditor;
 
     return nullptr;
 }

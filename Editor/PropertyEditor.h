@@ -1,9 +1,10 @@
 #pragma once
 #include "../FlatEngine/GameObject.h"
 #include "../FlatEngine/IEditableGameObject.h"
-#include "GameObjectPropertyEditor.h"
 #include "AssetHandles.h"
 #include "SelectedObjectManager.h"
+#include "GameObjectPropertyEditor.h"
+#include "ScenePropertyEditor.h"
 
 class PropertyEditor
 	: protected ISelectionObserver
@@ -23,10 +24,11 @@ private:
 	void ValidateCurrentEditor();
 
 private:
-	std::weak_ptr<EditorUniversalHandle> m_GameObjectHandle; // TODO: rename
+	std::weak_ptr<EditorUniversalHandle> m_EditedObjectHandle;
 	
 	// Actual implementations of the Property Editor
 	IPropertyEditor* m_CurrEditor;
 	GameObjectPropertyEditor m_GameObjectEditor;
+	ScenePropertyEditor m_SceneEditor;
 };
 

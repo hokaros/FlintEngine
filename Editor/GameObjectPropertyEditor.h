@@ -5,14 +5,14 @@
 
 
 class GameObjectPropertyEditor
-	: protected IComponentActionObserver
-	, public IPropertyEditor
+	: public IPropertyEditor
+	, protected IComponentActionObserver
 {
 public:
 	virtual void RenderEmbedded() override;
 	virtual bool HasValidObject() const override;
 
-	void SetGameObject(std::weak_ptr<EditorUniversalHandle> game_object); // TODO: let's see if we can pass EditorGameObjectHandle here
+	void SetGameObject(std::weak_ptr<EditorUniversalHandle> game_object);
 
 protected:
 	// IComponentActionObserver
