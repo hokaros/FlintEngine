@@ -48,7 +48,7 @@ public:
 
 private:
 	clock_t lastFrameTime = 0;
-	double deltaTime = 0.0f;
+	double deltaTime = 0.0;
 
 	bool paused = false;
 	clock_t pauseTime = 0;
@@ -56,5 +56,7 @@ private:
 	InvokeQueue invokeQueue;
 
 	static Timer* main;
+	static constexpr double s_DeltaTimeToIgnore = 1.0; // dt powy¿ej tego czasu zostaje zignorowany i uciêty do docelowego czasu ramki
+	static constexpr double s_TargetFrameTime = 1 / 60.0;
 };
 

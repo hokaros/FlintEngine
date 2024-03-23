@@ -30,6 +30,11 @@ void Timer::NextFrame() {
 
 	deltaTime = ((double)elapsedClocks) / CLOCKS_PER_SEC;
 
+	if (deltaTime > s_DeltaTimeToIgnore)
+	{
+		deltaTime = s_TargetFrameTime;
+	}
+
 	lastFrameTime = currentTime;
 
 	invokeQueue.UpdateTimes(deltaTime);
