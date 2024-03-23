@@ -21,21 +21,23 @@ SpriteRenderer::~SpriteRenderer()
 	}
 }
 
-void SpriteRenderer::Awake()
-{
-	if (m_BitmapPath.empty())
-	{
-		FE_WARN("No bitmap path set");
-		return;
-	}
-
-	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(m_BitmapPath);
-	m_Texture = SDL_CreateTextureFromSurface(Window::Main()->GetRenderer(), bitmap);
-}
-
 void SpriteRenderer::Render()
 {
+	if (m_Texture == nullptr)
+	{
+		m_Texture = CreateTextureFromBitmap(m_BitmapPath);
+	}
+
 	Rect dstRect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
 
 	SceneRenderer::Main()->RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
+}
+
+SDL_Texture* SpriteRenderer::CreateTextureFromBitmap(const std::string& bitmap_path)
+{
+	if (bitmap_path.empty())
+		return nullptr;
+
+	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(bitmap_path);
+	return SDL_CreateTextureFromSurface(SceneRenderer::Main()->GetRenderer(), bitmap);
 }

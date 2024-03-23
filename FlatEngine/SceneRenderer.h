@@ -24,6 +24,8 @@ public:
 	SceneRenderer(int windowWidth, int windowHeight); // TODO: don't require windowWidth and windowHeight here, just set the render target for the SceneRenderer before any rendering
 	bool Init(SDL_Renderer* renderer, RenderingKey);
 
+	SDL_Renderer* GetRenderer();
+
 	SDL_Texture* GetOutputTexture() const;
 
 	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle);

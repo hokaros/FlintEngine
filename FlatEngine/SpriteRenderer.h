@@ -12,8 +12,10 @@ public:
 	SpriteRenderer(const std::string& bitmap_path);
 	~SpriteRenderer();
 
-	void Awake() override;
 	void Render() override;
+
+protected:
+	static SDL_Texture* CreateTextureFromBitmap(const std::string& bitmap_path);
 
 protected:
 	std::string m_BitmapPath = "";

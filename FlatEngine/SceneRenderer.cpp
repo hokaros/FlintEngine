@@ -37,6 +37,11 @@ bool SceneRenderer::Init(SDL_Renderer* renderer, RenderingKey)
 	return true;
 }
 
+SDL_Renderer* SceneRenderer::GetRenderer()
+{
+	return m_Renderer;
+}
+
 SDL_Texture* SceneRenderer::GetOutputTexture() const
 {
 	return m_OutTexture;
