@@ -111,9 +111,9 @@ EditorGameObjectHandle* EditorUniversalHandle::GetGameObjectHandle() const
     return m_EditableGameObject.get();
 }
 
-std::shared_ptr<EditorSceneHandle> EditorUniversalHandle::GetSceneHandle() const
+EditorSceneHandle* EditorUniversalHandle::GetSceneHandle() const
 {
-    return m_SceneHandle;
+    return m_SceneHandle.get();
 }
 
 void EditorUniversalHandle::Save()

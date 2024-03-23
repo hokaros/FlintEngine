@@ -24,7 +24,7 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object
 	m_RootObject = root_object;
 
 	std::shared_ptr<EditorUniversalHandle> handle = m_RootObject.lock();
-	std::shared_ptr<EditorSceneHandle> scene = handle->GetSceneHandle();
+	EditorSceneHandle* scene = handle->GetSceneHandle();
 	if (scene != nullptr)
 	{
 		m_CurrentScene = &scene->GetScene();

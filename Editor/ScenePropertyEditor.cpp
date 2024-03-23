@@ -62,6 +62,5 @@ const EditorSceneHandle* ScenePropertyEditor::GetSceneHandle() const
     if (shared_obj == nullptr)
         return nullptr;
 
-    std::shared_ptr<EditorSceneHandle> go_handle = shared_obj->GetSceneHandle();
-    return go_handle.get();
+    return shared_obj->GetSceneHandle();
 }

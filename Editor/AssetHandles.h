@@ -76,8 +76,8 @@ public:
 	EditorUniversalHandle(std::shared_ptr<EditorSceneHandle> scene);
 
 	IHierarchyEditable* GetHierarchyEditable() const;
-	EditorGameObjectHandle* GetGameObjectHandle() const; // TODO: return IEditableGameObject
-	std::shared_ptr<EditorSceneHandle> GetSceneHandle() const;
+	EditorGameObjectHandle* GetGameObjectHandle() const;
+	EditorSceneHandle* GetSceneHandle() const;
 
 	virtual void Save() override;
 
