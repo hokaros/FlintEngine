@@ -5,7 +5,7 @@
 
 bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const
 {
-    return GetGameObject() == other.GetGameObject();
+    return &GetGameObject() == &other.GetGameObject();
 }
 
 
@@ -13,12 +13,12 @@ EditorPrefabHandle::EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab,
     : m_Prefab(std::move(prefab))
     , m_PrefabPath(prefab_path)
 {
-
+    FE_ASSERT(m_Prefab != nullptr, "No prefab passed to PrefabHandle");
 }
 
-IEditableGameObject* EditorPrefabHandle::GetGameObject() const
+IEditableGameObject& EditorPrefabHandle::GetGameObject() const
 {
-    return m_Prefab.get();
+    return *m_Prefab;
 }
 
 void EditorPrefabHandle::Save()
@@ -30,12 +30,12 @@ void EditorPrefabHandle::Save()
 }
 
 
-EditorIEditableGameObjectHandle::EditorIEditableGameObjectHandle(IEditableGameObject* game_object)
+EditorIEditableGameObjectHandle::EditorIEditableGameObjectHandle(IEditableGameObject& game_object)
     : m_EditableObject(game_object)
 {
 }
 
-IEditableGameObject* EditorIEditableGameObjectHandle::GetGameObject() const
+IEditableGameObject& EditorIEditableGameObjectHandle::GetGameObject() const
 {
     return m_EditableObject;
 }
@@ -77,20 +77,26 @@ bool EditorSceneHandle::operator==(const EditorSceneHandle& other) const
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorGameObjectHandle> game_object)
     : m_EditableGameObject(std::move(game_object))
 {
-    m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+    FE_ASSERT(m_EditableGameObject != nullptr, "Creating handle without GameObject");
+
+    m_HierarchyEditable = &m_EditableGameObject->GetGameObject();
     m_Saveable = m_EditableGameObject.get();
 }
 
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorIEditableGameObjectHandle> game_object)
     : m_EditableGameObject(std::static_pointer_cast<EditorGameObjectHandle>(game_object))
 {
-    m_HierarchyEditable = m_EditableGameObject->GetGameObject();
+    FE_ASSERT(m_EditableGameObject != nullptr, "Creating handle without GameObject");
+
+    m_HierarchyEditable = &m_EditableGameObject->GetGameObject();
     m_Saveable = m_EditableGameObject.get();
 }
 
 EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorSceneHandle> scene)
     : m_SceneHandle(std::move(scene))
 {
+    FE_ASSERT(m_SceneHandle != nullptr, "Creating handle without SceneHandle");
+
     m_HierarchyEditable = &m_SceneHandle->GetScene();
     m_Saveable = m_SceneHandle.get();
 }

@@ -15,7 +15,7 @@ class EditorGameObjectHandle
 	: public ISaveable
 {
 public:
-	virtual IEditableGameObject* GetGameObject() const = 0;
+	virtual IEditableGameObject& GetGameObject() const = 0;
 
 	bool operator==(const EditorGameObjectHandle& other) const;
 };
@@ -26,7 +26,7 @@ class EditorPrefabHandle
 public:
 	EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab, const std::string& prefab_path);
 
-	virtual IEditableGameObject* GetGameObject() const override;
+	virtual IEditableGameObject& GetGameObject() const override;
 	virtual void Save() override;
 
 private:
@@ -38,13 +38,13 @@ class EditorIEditableGameObjectHandle
 	: public EditorGameObjectHandle
 {
 public:
-	EditorIEditableGameObjectHandle(IEditableGameObject* game_object);
+	EditorIEditableGameObjectHandle(IEditableGameObject& game_object);
 
-	virtual IEditableGameObject* GetGameObject() const override;
+	virtual IEditableGameObject& GetGameObject() const override;
 	virtual void Save() override;
 
 private:
-	IEditableGameObject* m_EditableObject;
+	IEditableGameObject& m_EditableObject;
 };
 
 

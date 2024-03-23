@@ -3,9 +3,9 @@
 void GameObjectPropertyEditor::RenderEmbedded()
 {
     EditorGameObjectHandle* game_object_handle = GetGameObjectHandle();
-    if (game_object_handle != nullptr && game_object_handle->GetGameObject() != nullptr)
+    if (game_object_handle != nullptr)
     {
-        RenderGameObjectEditor(*game_object_handle->GetGameObject());
+        RenderGameObjectEditor(game_object_handle->GetGameObject());
     }
     else
     {
@@ -21,9 +21,9 @@ void GameObjectPropertyEditor::SetGameObject(std::weak_ptr<EditorUniversalHandle
     if (go_handle == nullptr)
         return;
 
-    GameObject& go = go_handle->GetGameObject()->GetResult();
+    GameObject& go = go_handle->GetGameObject().GetResult();
     InitValuesFromGameObject(go);
-    LoadComponents(*go_handle->GetGameObject());
+    LoadComponents(go_handle->GetGameObject());
 
     LoadAddableComponents();
 }
@@ -67,7 +67,7 @@ void GameObjectPropertyEditor::RenderComponentEditors()
 {
     if (!m_AreComponentEditorsValid)
     {
-        LoadComponents(*GetGameObjectHandle()->GetGameObject()); // TODO: let's pass GameObjectHandle as a parameter
+        LoadComponents(GetGameObjectHandle()->GetGameObject()); // TODO: let's pass GameObjectHandle as a parameter
     }
 
     for (std::unique_ptr<ComponentEditor>& comp_editor : m_ComponentEditors)
@@ -109,7 +109,7 @@ void GameObjectPropertyEditor::LoadComponents(IEditableGameObject& game_object)
 
 void GameObjectPropertyEditor::AddComponent(const ComponentDefinition* component)
 {
-    IEditableGameObject& game_object = *GetGameObjectHandle()->GetGameObject();
+    IEditableGameObject& game_object = GetGameObjectHandle()->GetGameObject();
     game_object.AddComponent(component->GetConstructor()());
 
     m_AreComponentEditorsValid = false;
@@ -164,7 +164,7 @@ const EditorGameObjectHandle* GameObjectPropertyEditor::GetGameObjectHandle() co
 
 void GameObjectPropertyEditor::OnComponentDeleted(size_t index_in_game_object)
 {
-    IEditableGameObject& game_object = *GetGameObjectHandle()->GetGameObject();
+    IEditableGameObject& game_object = GetGameObjectHandle()->GetGameObject();
     game_object.RemoveComponent(index_in_game_object);
 
     m_AreComponentEditorsValid = false;

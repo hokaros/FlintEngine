@@ -56,10 +56,9 @@ void SceneEditor::Render()
 
 		if (std::shared_ptr<EditorUniversalHandle> handle = m_RootObject.lock(); 
 			handle != nullptr 
-			&& handle->GetGameObjectHandle() != nullptr
-			&& handle->GetGameObjectHandle()->GetGameObject() != nullptr)
+			&& handle->GetGameObjectHandle() != nullptr)
 		{
-			IEditableGameObject::RenderUpdate(*handle->GetGameObjectHandle()->GetGameObject());
+			IEditableGameObject::RenderUpdate(handle->GetGameObjectHandle()->GetGameObject());
 		}
 
 		if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())
