@@ -7,7 +7,6 @@
 #include "DebugRenderer.h"
 #include "DebugConfig.h"
 #include "Scene.h"
-
 #include "InputController.h"
 
 
@@ -20,6 +19,8 @@ public:
 	bool Run();
 	bool RunOneLoop();
 	bool IsRunning();
+
+	void LoadScene(std::unique_ptr<Scene> scene);
 
 	void InvokeOnNextFrame(function<void()> fun);
 

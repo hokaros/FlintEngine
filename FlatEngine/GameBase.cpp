@@ -67,6 +67,11 @@ bool GameBase::IsRunning()
 	return isRunning;
 }
 
+void GameBase::LoadScene(std::unique_ptr<Scene> scene)
+{
+	m_CurrScene = std::move(scene);
+}
+
 void GameBase::InvokeOnNextFrame(function<void()> fun)
 {
 	std::lock_guard<std::mutex> lock(invokesMutex);
