@@ -11,8 +11,6 @@ bool GameBase::Run()
 {
 	m_CurrScene = CreateScene(); // TODO: inject
 
-	timer.NextFrame();
-
 	// Pêtla gry
 	SetRunning(true);
 	bool is_running = true;
