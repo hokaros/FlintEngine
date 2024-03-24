@@ -2,46 +2,39 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl2.h"
 
+#include "ftl.h"
+
 InputController* InputController::s_Main{ nullptr };
 
 InputController* InputController::Main() {
 	return s_Main;
 }
 
-InputController::InputController(SDL_Keycode* managedKeys, size_t keysCount)
-	: keysCount(keysCount),
-	managedKeys(new SDL_Keycode[keysCount]),
-	keyDownInfo(new bool[keysCount]),
-	pressedThisFrame(new bool[keysCount]) {
-
-	if (s_Main == nullptr) {
+InputController::InputController()
+{
+	if (s_Main == nullptr) 
+	{
 		s_Main = this;
-	}
-
-
-	std::memcpy(this->managedKeys, managedKeys, keysCount * sizeof(SDL_Keycode));
-	for (size_t i = 0; i < keysCount; i++) {
-		keyDownInfo[i] = false;
-		pressedThisFrame[i] = false;
 	}
 }
 
-InputController::~InputController() {
-	delete[] managedKeys;
-	delete[] keyDownInfo;
-
-	if (s_Main == this) {
+InputController::~InputController() 
+{
+	if (s_Main == this) 
+	{
 		s_Main = nullptr;
 	}
 }
 
-bool InputController::Update() {
+bool InputController::Update() 
+{
 	ClearFrameInfo();
 
 	SDL_Event event;
 	bool quit = false;
 
-	while (SDL_PollEvent(&event)) {
+	while (SDL_PollEvent(&event))
+	{
 		ImGui_ImplSDL2_ProcessEvent(&event);
 		if (event.type == SDL_QUIT)
 			quit = true;
@@ -49,57 +42,68 @@ bool InputController::Update() {
 		if (event.type != SDL_KEYDOWN && event.type != SDL_KEYUP)
 			continue; //not my business
 
-		for (size_t i = 0; i < keysCount; i++) {
-			if (event.key.keysym.sym == managedKeys[i]) {
-				if (event.type == SDL_KEYDOWN) {
-					keyDownInfo[i] = true;
-					pressedThisFrame[i] = true;
-				}
-				else if (event.type == SDL_KEYUP) {
-					keyDownInfo[i] = false;
-				}
-			}
+		SDL_Keycode keycode = event.key.keysym.sym;
+		if (event.type == SDL_KEYDOWN)
+		{
+			OnKeyDown(keycode);
+		}
+		else if (event.type == SDL_KEYUP)
+		{
+			OnKeyUp(keycode);
 		}
 	};
 
 	return !quit;
 }
 
-bool InputController::IsKeyDown(SDL_Keycode key) const {
-	int index = KeyIndex(key);
-	if (index < 0)
-		return false; // nie nale¿y do zarz¹dzanych klawiszy
-
-	return keyDownInfo[index];
-}
-
-bool InputController::PressedThisFrame(SDL_Keycode key) const {
-	int index = KeyIndex(key);
-	if (index < 0)
+bool InputController::IsKeyDown(SDL_Keycode key) const 
+{
+	auto it = m_KeyDownInfo.find(key);
+	if (it == m_KeyDownInfo.end())
 		return false;
 
-	return pressedThisFrame[index];
+	return it->second;
 }
 
-Vector InputController::GetMousePosition() const {
+bool InputController::PressedThisFrame(SDL_Keycode key) const 
+{
+	return ftl::vector_contains(m_PressedThisFrame, key);
+}
+
+Vector InputController::GetMousePosition() const 
+{
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
 	return Vector(x, y);
 }
 
-int InputController::KeyIndex(SDL_Keycode key) const {
-	for (size_t i = 0; i < keysCount; i++) {
-		if (managedKeys[i] == key) {
-			return i;
-		}
+void InputController::OnKeyDown(SDL_Keycode key)
+{
+	m_PressedThisFrame.push_back(key);
+	
+	// Update keydown status
+	auto it = m_KeyDownInfo.find(key);
+	if (it == m_KeyDownInfo.end())
+	{
+		m_KeyDownInfo.insert({ key, true });
 	}
-
-	return -1;
+	else
+	{
+		it->second = true;
+	}
 }
 
-void InputController::ClearFrameInfo() {
-	for (size_t i = 0; i < keysCount; i++) {
-		pressedThisFrame[i] = false;
-	}
+void InputController::OnKeyUp(SDL_Keycode key)
+{
+	auto it = m_KeyDownInfo.find(key);
+	if (it == m_KeyDownInfo.end())
+		return; // No entry
+
+	it->second = false;
+}
+
+void InputController::ClearFrameInfo()
+{
+	m_PressedThisFrame.clear();
 }

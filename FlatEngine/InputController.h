@@ -1,13 +1,16 @@
 #pragma once
 #include <iostream>
+#include <unordered_map>
+#include <vector>
 #include <SDL.h>
 #include "Vector.h"
 
 class InputController
 {
 public:
-	InputController( SDL_Keycode* managedKeys, size_t keysCount);
+	InputController();
 	~InputController();
+
 	// Aktualizuje statusy klawiszy. Zwraca false, jeœli zamkniêto okno
 	bool Update();
 	bool IsKeyDown(SDL_Keycode key) const;
@@ -16,16 +19,16 @@ public:
 	Vector GetMousePosition() const;
 
 	static InputController* Main();
+
 private:
-	size_t keysCount;
-	SDL_Keycode* managedKeys;
-	bool* keyDownInfo;
-	bool* pressedThisFrame;
+	void OnKeyDown(SDL_Keycode key);
+	void OnKeyUp(SDL_Keycode key);
+	void ClearFrameInfo();
+
+private:
+	std::vector<SDL_Keycode> m_PressedThisFrame;
+	std::unordered_map<SDL_Keycode, bool> m_KeyDownInfo;
 
 	static InputController* s_Main;
-
-private:
-	int KeyIndex(SDL_Keycode key) const;
-	void ClearFrameInfo();
 };
 
