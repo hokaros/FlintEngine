@@ -8,12 +8,12 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
-std::unique_ptr<Game> CreateGame(Window& window)
+std::unique_ptr<Game> CreateGame(Window& window, IInputController& input_controller)
 {
 	Vector player_start_pos = Vector(260, 160);
 
 	GameStartInfo gameInfo = GameStartInfo(player_start_pos);
-	return std::make_unique<Game>(&window, std::move(gameInfo));
+	return std::make_unique<Game>(&window, input_controller, std::move(gameInfo));
 }
 
 int main()
@@ -24,7 +24,7 @@ int main()
 
 	InputController input;
 
-	std::unique_ptr<Game> game = CreateGame(window);
+	std::unique_ptr<Game> game = CreateGame(window, input);
 
 	game->Run();
 

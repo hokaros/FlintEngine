@@ -1,7 +1,7 @@
 #include "Game.h"
 
-Game::Game(Window* window, GameStartInfo&& gameInfo)
-	: GameBase(window)
+Game::Game(Window* window, IInputController& input_controller, GameStartInfo&& gameInfo)
+	: GameBase(window, input_controller)
 	, startInfo(std::move(gameInfo)) 
 {
 }

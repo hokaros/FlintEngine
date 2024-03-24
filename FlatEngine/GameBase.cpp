@@ -1,10 +1,9 @@
 #include "GameBase.h"
 
-#include "InputController.h"
-
-GameBase::GameBase(Window* window)
+GameBase::GameBase(Window* window, IInputController& input_controller)
 	: m_Window(window)
 	, physicsSystem({})
+	, m_InputController(input_controller)
 {
 }
 
@@ -32,11 +31,10 @@ bool GameBase::RunOneLoop()
 	// Nowa klatka
 	timer.NextFrame();
 
-	InputController* input = InputController::Main();
-	if (input != nullptr && !input->Update())
+	if (!m_InputController.Update())
 		return false;
 
-	if (input != nullptr && input->PressedThisFrame(SDLK_ESCAPE))
+	if (m_InputController.PressedThisFrame(SDLK_ESCAPE))
 		return false;
 
 	// Wywo³anie zleconych akcji

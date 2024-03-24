@@ -26,9 +26,9 @@ public:
 	void Start() override;
 
 protected:
-	InputController* input = NULL;
-	PlayerEquipment* equipment = NULL;
-	ConstantMover* mover = NULL;
+	const IInputController* input = nullptr;
+	PlayerEquipment* equipment = nullptr;
+	ConstantMover* mover = nullptr;
 
 private:
 	void ProcessMovement();

@@ -28,7 +28,7 @@ class Game
 	: public GameBase
 {
 public:
-	Game(Window* window, GameStartInfo&& gameInfo);
+	Game(Window* window, IInputController& input_controller, GameStartInfo&& gameInfo);
 
 protected:
 	virtual std::unique_ptr<Scene> CreateScene() override;

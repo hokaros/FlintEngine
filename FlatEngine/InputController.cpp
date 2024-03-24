@@ -4,11 +4,7 @@
 
 #include "ftl.h"
 
-InputController* InputController::s_Main{ nullptr };
-
-InputController* InputController::Main() {
-	return s_Main;
-}
+IInputController* IInputController::s_Main{ nullptr };
 
 InputController::InputController()
 {
@@ -106,4 +102,9 @@ void InputController::OnKeyUp(SDL_Keycode key)
 void InputController::ClearFrameInfo()
 {
 	m_PressedThisFrame.clear();
+}
+
+const IInputController* IInputController::Main()
+{
+	return s_Main;
 }

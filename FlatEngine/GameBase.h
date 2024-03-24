@@ -8,11 +8,13 @@
 #include "DebugConfig.h"
 #include "Scene.h"
 
+#include "InputController.h"
+
 
 class GameBase
 {
 public:
-	GameBase(Window* window);
+	GameBase(Window* window, IInputController& input_controller);
 
 	// G³ówna pêtla gry. Zwraca fa³sz, jeœli w trakcie u¿ytkownik zamknie okno
 	bool Run();
@@ -25,6 +27,7 @@ protected:
 	virtual std::unique_ptr<Scene> CreateScene();
 
 protected:
+	IInputController& m_InputController;
 	Window* m_Window = nullptr;
 	Timer timer;
 	PhysicsSystem physicsSystem;

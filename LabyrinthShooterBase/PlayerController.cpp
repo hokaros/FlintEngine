@@ -7,7 +7,7 @@ DEFINE_COMPONENT(PlayerController);
 void PlayerController::Start() 
 {
 	// Za³adowanie cache'a
-	input = InputController::Main();
+	input = IInputController::Main();
 	equipment = m_GameObject->FindComponent<PlayerEquipment>();
 	mover = m_GameObject->FindComponent<ConstantMover>();
 }
