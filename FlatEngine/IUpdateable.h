@@ -1,10 +1,12 @@
 #pragma once
 
+class SceneRenderer;
+
 class IUpdateable {
 public:
 	// Wywo³ywane raz na klatkê
 	virtual void Update() {}
-	virtual void RenderUpdate() {}
+	virtual void RenderUpdate(SceneRenderer& renderer) {}
 
 	// Wywo³ywane przed rozpoczêciem gry
 	virtual void Awake() {}

@@ -12,10 +12,10 @@ RectangleRenderer::RectangleRenderer(const Rgb8& color)
 
 }
 
-void RectangleRenderer::Render() 
+void RectangleRenderer::Render(SceneRenderer& renderer)
 {
 	Rect rect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
-	SceneRenderer::Main()->RenderRect(rect, m_Color);
+	renderer.RenderRect(rect, m_Color);
 }
 
 void RectangleRenderer::SetColor(Rgb8 color)

@@ -146,19 +146,19 @@ void GameObject::Update()
 	}
 }
 
-void GameObject::RenderUpdate() 
+void GameObject::RenderUpdate(SceneRenderer& renderer)
 {
 	if (!isEnabled)
 		return;
 
 	for (std::unique_ptr<ObjectComponent>& component : components)
 	{
-		component->RenderUpdate();
+		component->RenderUpdate(renderer);
 	}
 
 	for (std::unique_ptr<GameObject>& child : children)
 	{
-		child->RenderUpdate();
+		child->RenderUpdate(renderer);
 	}
 }
 

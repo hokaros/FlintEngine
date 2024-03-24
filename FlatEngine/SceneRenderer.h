@@ -19,8 +19,6 @@ private:
 class SceneRenderer
 {
 public:
-	static SceneRenderer* Main();
-
 	SceneRenderer(int windowWidth, int windowHeight); // TODO: don't require windowWidth and windowHeight here, just set the render target for the SceneRenderer before any rendering
 	bool Init(SDL_Renderer* renderer, RenderingKey);
 
@@ -66,7 +64,5 @@ private:
 
 	Vector m_RTSize;
 	Rect m_CurrentViewport;
-
-	static SceneRenderer* s_Instance;
 };
 

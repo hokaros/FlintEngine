@@ -8,7 +8,7 @@ class Scene
 {
 public:
 	virtual void Update();
-	virtual void Render();
+	virtual void Render(SceneRenderer& renderer);
 	void ResetScene();
 	void PostFrame();
 	
@@ -21,7 +21,7 @@ public:
 	const ObjectManager& GetObjectManager() const;
 
 private:
-	void RenderBackground();
+	void RenderBackground(SceneRenderer& renderer);
 
 	virtual bool ShouldRender(GameObject* gameObject);
 

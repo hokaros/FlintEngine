@@ -52,13 +52,13 @@ void SceneEditor::Render()
 		}
 		// WARNING: do not render any widget between viewportController's update and displaying the scene - viewportController's calculations may be wrong
 
-		m_CurrentScene->Render(); // TODO: this is highly obscure that the rendered texture is retrieved from the SceneRenderer (maybe we should pass the renderer to GameObject::RenderUpdate())
+		m_CurrentScene->Render(m_SceneRenderer);
 
 		if (std::shared_ptr<EditorUniversalHandle> handle = m_RootObject.lock(); 
 			handle != nullptr 
 			&& handle->GetGameObjectHandle() != nullptr)
 		{
-			IEditableGameObject::RenderUpdate(handle->GetGameObjectHandle()->GetGameObject());
+			IEditableGameObject::RenderUpdate(handle->GetGameObjectHandle()->GetGameObject(), m_SceneRenderer);
 		}
 
 		if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())

@@ -20,15 +20,15 @@ void LabyrinthScene::Update()
 	Scene::Update();
 }
 
-void LabyrinthScene::Render()
+void LabyrinthScene::Render(SceneRenderer& renderer)
 {
-	Scene::Render();
+	Scene::Render(renderer);
 
 	// Renderowanie nak³adek UI
-	m_HealthStats->Render();
+	m_HealthStats->Render(renderer);
 
 	VectorInt player_label_pos = m_Player->GetPosition() + Vector(-20, -20);
-	SceneRenderer::Main()->DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, "Player", 10);
+	renderer.DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, "Player", 10);
 }
 
 void LabyrinthScene::LoadFromFile(const char* file_path)

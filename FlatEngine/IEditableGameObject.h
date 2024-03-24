@@ -68,7 +68,7 @@ public:
 	virtual ~IEditableGameObject() = default;
 
 	static void CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest);
-	static void RenderUpdate(IEditableGameObject& editable);
+	static void RenderUpdate(IEditableGameObject& editable, SceneRenderer& renderer);
 
 private:
 	// IHierarchyEditable

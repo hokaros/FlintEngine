@@ -6,7 +6,7 @@
 class ObjectRenderer : public ObjectComponent
 {
 public:
-	void RenderUpdate() override;
-	virtual void Render() = 0;
+	void RenderUpdate(SceneRenderer& renderer) override;
+	virtual void Render(SceneRenderer& renderer) = 0;
 };
 

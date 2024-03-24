@@ -11,7 +11,7 @@ class TextBox
 public:
 	TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, int fontSize);
 
-	void Draw();
+	void Draw(SceneRenderer& renderer);
 	void Update();
 	// Maksymalna liczba znaków, które mog¹ siê zmieœciæ
 	int MaxCharacters() const;

@@ -7,7 +7,7 @@ class EditableScene
 	: public IHierarchyEditable
 {
 public:
-	void Render();
+	void Render(SceneRenderer& renderer);
 	
 	std::unique_ptr<Scene> CreateRuntimeObject() const;
 

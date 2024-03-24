@@ -1,12 +1,12 @@
 #include "EditableScene.h"
 
-void EditableScene::Render()
+void EditableScene::Render(SceneRenderer& renderer)
 {
-	m_ResultScene.Render();
+	m_ResultScene.Render(renderer);
 
 	for (std::unique_ptr<IEditableGameObject>& root_object : m_RootObjects)
 	{
-		IEditableGameObject::RenderUpdate(*root_object);
+		IEditableGameObject::RenderUpdate(*root_object, renderer);
 	}
 }
 

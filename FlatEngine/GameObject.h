@@ -18,6 +18,8 @@ public:
 	virtual ~IGameObjectContainer() = default;
 };
 
+class SceneRenderer;
+
 class GameObject
 {
 public:
@@ -56,7 +58,7 @@ public:
 
 	// Raz na klatkê
 	void Update();
-	void RenderUpdate();
+	void RenderUpdate(SceneRenderer& renderer);
 	// Na pocz¹tku gry
 	void Start();
 	// Przed Start()

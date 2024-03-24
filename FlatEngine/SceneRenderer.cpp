@@ -1,14 +1,7 @@
 #include "SceneRenderer.h"
 #include "../FlatEngine/utility.h"
 
-SceneRenderer* SceneRenderer::s_Instance = nullptr;
-
 constexpr Vector s_RenderStart = Vector(0, 0);
-
-SceneRenderer* SceneRenderer::Main()
-{
-	return s_Instance;
-}
 
 SceneRenderer::SceneRenderer(int windowWidth, int windowHeight)
 	: m_CurrentViewport(s_RenderStart,
@@ -29,11 +22,6 @@ bool SceneRenderer::Init(SDL_Renderer* renderer, RenderingKey)
 	if (!LoadCharsets())
 		return false;
 
-	if (s_Instance != nullptr)
-	{
-		FE_WARN("Overwriting SceneRenderer singleton");
-	}
-	s_Instance = this;
 	return true;
 }
 

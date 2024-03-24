@@ -4,28 +4,29 @@ void Scene::Update()
 {
 	m_ObjectManager.ActivateNewObjects();
 
-	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) {
+	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
+	{
 		go->Update();
 	}
 }
 
-void Scene::Render()
+void Scene::Render(SceneRenderer& renderer)
 {
-	RenderBackground();
+	RenderBackground(renderer);
 
 	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
 		if (go->renderUnseen) 
 		{
-			go->RenderUpdate();
+			go->RenderUpdate(renderer);
 			continue;
 		}
 
 		// TODO: we can refactor vision a lot
-		bool canSee = ShouldRender(go);
+		const bool canSee = ShouldRender(go);
 		if (canSee)
 		{
-			go->RenderUpdate();
+			go->RenderUpdate(renderer);
 		}
 	}
 }
@@ -56,10 +57,9 @@ const Rgb8& Scene::GetBackgroundColor() const
 	return m_BackgroundColor;
 }
 
-void Scene::RenderBackground()
+void Scene::RenderBackground(SceneRenderer& renderer)
 {
-	SceneRenderer* renderer = SceneRenderer::Main();
-	renderer->RenderRect(renderer->GetRenderedRect(), m_BackgroundColor);
+	renderer.RenderRect(renderer.GetRenderedRect(), m_BackgroundColor);
 }
 
 bool Scene::ShouldRender(GameObject* gameObject)

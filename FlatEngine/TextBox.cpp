@@ -9,14 +9,12 @@ TextBox::TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, in
 
 }
 
-void TextBox::Draw() 
+void TextBox::Draw(SceneRenderer& renderer)
 {
-	SceneRenderer* renderer = SceneRenderer::Main();
-
 	// Ramka
 	Rect rect = SDLRectToRect(m_Rect);
-	renderer->RenderRect(rect, m_Fill);
-	renderer->RenderWireRect(rect, m_Outline);
+	renderer.RenderRect(rect, m_Fill);
+	renderer.RenderWireRect(rect, m_Outline);
 
 	// Wyœwietlenie zebranego tekstu
 	char buffer[32];
@@ -27,7 +25,7 @@ void TextBox::Draw()
 	}
 	buffer[i] = '\0';
 
-	renderer->DrawStringScreenSpace(
+	renderer.DrawStringScreenSpace(
 		m_Rect.x + TEXTBOX_PADDING,
 		m_Rect.y + m_Rect.h / 2 - m_FontSize / 2,
 		buffer,

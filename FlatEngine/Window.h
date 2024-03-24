@@ -18,6 +18,7 @@ public:
 	void Present();
 
 	SDL_Renderer* GetRenderer() const;
+	SceneRenderer& GetSceneRenderer();
 
 	int GetWidth() const;
 	int GetHeight() const;

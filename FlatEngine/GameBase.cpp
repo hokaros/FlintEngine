@@ -1,7 +1,8 @@
 #include "GameBase.h"
 
-GameBase::GameBase(Window* window, IInputController& input_controller)
+GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputController& input_controller)
 	: m_Window(window)
+	, m_SceneRenderer(scene_renderer)
 	, physicsSystem({})
 	, m_InputController(input_controller)
 {
@@ -44,10 +45,10 @@ bool GameBase::RunOneLoop()
 	physicsSystem.Update();
 
 	// Renderowanie obiektów
-	if (m_ShouldRender)
+	if (m_SceneRenderer != nullptr)
 	{
 		m_DebugConfigWindow.Render();
-		m_CurrScene->Render();
+		m_CurrScene->Render(*m_SceneRenderer);
 		DebugRender();
 
 		if (m_Window != nullptr)

@@ -16,7 +16,7 @@ public:
 	LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager);
 
 	virtual void Update() override;
-	virtual void Render() override;
+	virtual void Render(SceneRenderer& renderer) override;
 
 private:
 	void LoadFromFile(const char* file_path);

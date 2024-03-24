@@ -2,6 +2,7 @@
 #include "Draw.h"
 #include "GameObject.h"
 #include "AssetManager.h"
+#include "SceneRenderer.h"
 
 DEFINE_COMPONENT(SpriteRenderer);
 
@@ -21,23 +22,23 @@ SpriteRenderer::~SpriteRenderer()
 	}
 }
 
-void SpriteRenderer::Render()
+void SpriteRenderer::Render(SceneRenderer& renderer)
 {
 	if (m_Texture == nullptr)
 	{
-		m_Texture = CreateTextureFromBitmap(m_BitmapPath);
+		m_Texture = CreateTextureFromBitmap(m_BitmapPath, renderer);
 	}
 
 	Rect dstRect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
 
-	SceneRenderer::Main()->RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
+	renderer.RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
 }
 
-SDL_Texture* SpriteRenderer::CreateTextureFromBitmap(const std::string& bitmap_path)
+SDL_Texture* SpriteRenderer::CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer)
 {
 	if (bitmap_path.empty())
 		return nullptr;
 
 	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(bitmap_path);
-	return SDL_CreateTextureFromSurface(SceneRenderer::Main()->GetRenderer(), bitmap);
+	return SDL_CreateTextureFromSurface(renderer.GetRenderer(), bitmap);
 }

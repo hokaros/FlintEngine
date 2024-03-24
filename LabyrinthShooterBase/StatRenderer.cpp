@@ -14,14 +14,14 @@ BMPStats::BMPStats(SDL_Surface* bitmap, const VectorInt& elementSize, const Vect
 
 }
 
-void BMPStats::Render() 
+void BMPStats::Render(SceneRenderer& renderer)
 {
 	// Wyœwietl tyle elementów, ile wynosi stat
 	Rect dest = Rect(m_StartPos, m_ElementSize);
 
 	for (int i = 0; i < stat; i++) 
 	{
-		SceneRenderer::Main()->RenderTexture(m_Bitmap, dest, /* angle = */0.0f);
+		renderer.RenderTexture(m_Bitmap, dest, /* angle = */0.0f);
 
 		dest.pos.x += m_ElementSize.x;
 	}

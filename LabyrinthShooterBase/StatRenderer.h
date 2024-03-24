@@ -1,12 +1,13 @@
 #pragma once
 #include "../FlatEngine/Window.h"
 #include "../FlatEngine/Vector.h"
+#include "../FlatEngine/SceneRenderer.h"
 
 // Element wyœwietlaj¹cy pewn¹ statystykê (zdrowie / liczbê graczy itp.)
 class StatRenderer
 {
 public:
-	virtual void Render() = 0;
+	virtual void Render(SceneRenderer& renderer) = 0;
 
 	void UpdateStat(int newStat);
 
@@ -20,7 +21,7 @@ class BMPStats : public StatRenderer
 public:
 	BMPStats(SDL_Surface* bitmap, const VectorInt& elementSize, const VectorInt& startPosition);
 
-	void Render() override;
+	void Render(SceneRenderer& renderer) override;
 
 private:
 	SDL_Texture* m_Bitmap;
