@@ -3,56 +3,64 @@
 #include "InputController.h"
 
 GameBase::GameBase(Window* window)
-	: window(window)
+	: m_Window(window)
 	, physicsSystem({})
 {
 }
 
 bool GameBase::Run()
 {
-	std::unique_ptr<Scene> scene = CreateScene();
-
-	InputController* input = InputController::Main();
-
-	int quit = 0;
+	m_CurrScene = CreateScene(); // TODO: inject
 
 	timer.NextFrame();
 
-	SetRunning(true);
 	// Pêtla gry
-	while (!quit) 
+	SetRunning(true);
+	bool is_running = true;
+	while (is_running) 
 	{
-		// Nowa klatka
-		timer.NextFrame();
-
-		if (input != nullptr && !input->Update())
-			return false;
-
-		if (input != nullptr && input->PressedThisFrame(SDLK_ESCAPE))
-			quit = 1;
-
-		// Wywo³anie zleconych akcji
-		InvokePostponed();
-
-		// Zaktualizowanie stanu gry
-		scene->Update();
-
-		physicsSystem.Update();
-
-		// Renderowanie obiektów
-		if (window != nullptr) 
-		{
-			m_DebugConfigWindow.Render();
-			scene->Render();
-			DebugRender();
-
-			window->Present();
-		}
-
-		scene->PostFrame();
+		is_running = RunOneLoop();
 	}
 
 	SetRunning(false);
+
+	return true;
+}
+
+bool GameBase::RunOneLoop()
+{
+	// Nowa klatka
+	timer.NextFrame();
+
+	InputController* input = InputController::Main();
+	if (input != nullptr && !input->Update())
+		return false;
+
+	if (input != nullptr && input->PressedThisFrame(SDLK_ESCAPE))
+		return false;
+
+	// Wywo³anie zleconych akcji
+	InvokePostponed();
+
+	// Zaktualizowanie stanu gry
+	m_CurrScene->Update();
+
+	physicsSystem.Update();
+
+	// Renderowanie obiektów
+	if (m_ShouldRender)
+	{
+		m_DebugConfigWindow.Render();
+		m_CurrScene->Render();
+		DebugRender();
+
+		if (m_Window != nullptr)
+		{
+			m_Window->Present();
+		}
+	}
+
+	m_CurrScene->PostFrame();
 
 	return true;
 }

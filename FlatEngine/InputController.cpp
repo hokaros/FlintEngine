@@ -2,10 +2,10 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl2.h"
 
-InputController* InputController::main{ NULL };
+InputController* InputController::s_Main{ nullptr };
 
 InputController* InputController::Main() {
-	return main;
+	return s_Main;
 }
 
 InputController::InputController(SDL_Keycode* managedKeys, size_t keysCount)
@@ -14,8 +14,8 @@ InputController::InputController(SDL_Keycode* managedKeys, size_t keysCount)
 	keyDownInfo(new bool[keysCount]),
 	pressedThisFrame(new bool[keysCount]) {
 
-	if (main == NULL) {
-		main = this;
+	if (s_Main == nullptr) {
+		s_Main = this;
 	}
 
 
@@ -30,8 +30,8 @@ InputController::~InputController() {
 	delete[] managedKeys;
 	delete[] keyDownInfo;
 
-	if (main == this) {
-		main = NULL;
+	if (s_Main == this) {
+		s_Main = nullptr;
 	}
 }
 

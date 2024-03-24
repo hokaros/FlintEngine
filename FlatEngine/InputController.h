@@ -22,7 +22,7 @@ private:
 	bool* keyDownInfo;
 	bool* pressedThisFrame;
 
-	static InputController* main;
+	static InputController* s_Main;
 
 private:
 	int KeyIndex(SDL_Keycode key) const;
