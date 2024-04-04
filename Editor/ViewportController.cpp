@@ -6,10 +6,14 @@ Vector ImVecToVec(ImVec2 imVec)
 }
 
 
-void ViewportController::Update(Rect& viewport)
+void ViewportController::UpdateFromMouse(Rect& viewport)
+{
+    ProcessZooming(viewport);
+}
+
+void ViewportController::UpdateFromKeyboard(Rect& viewport)
 {
     ProcessTranslation(viewport);
-    ProcessZooming(viewport);
 }
 
 void ViewportController::ProcessTranslation(Rect& viewport)

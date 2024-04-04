@@ -46,9 +46,13 @@ void SceneEditor::Render()
 
 	if (ImGui::Begin("Scene Editor"))
 	{
+		if (ImGui::IsWindowHovered())
+		{
+			viewportController.UpdateFromMouse(m_SceneRenderer.GetViewport());
+		}
 		if (ImGui::IsWindowFocused())
 		{
-			viewportController.Update(m_SceneRenderer.GetViewport());
+			viewportController.UpdateFromKeyboard(m_SceneRenderer.GetViewport());
 		}
 		// WARNING: do not render any widget between viewportController's update and displaying the scene - viewportController's calculations may be wrong
 

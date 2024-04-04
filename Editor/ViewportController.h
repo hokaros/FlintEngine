@@ -5,7 +5,8 @@
 class ViewportController
 {
 public:
-	void Update(Rect& viewport);
+	void UpdateFromMouse(Rect& viewport);
+	void UpdateFromKeyboard(Rect& viewport);
 
 private:
 	void ProcessTranslation(Rect& viewport);
