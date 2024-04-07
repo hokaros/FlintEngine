@@ -39,18 +39,12 @@ void ObjectManager::NotifyObjectDestroying(GameObject* object)
 
 ObjectManager::ObjectManager() 
 {
-	if (s_Main == nullptr) 
-	{
-		s_Main = this;
-	}
+	s_Main = this;
 }
 
 ObjectManager::~ObjectManager() 
 {
-	if (s_Main == this) 
-	{
-		s_Main = nullptr;
-	}
+	s_Main = nullptr;
 }
 
 void ObjectManager::AddNewObject(std::unique_ptr<GameObject> gameObject)
