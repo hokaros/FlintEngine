@@ -13,6 +13,14 @@ PhysicsSystem::PhysicsSystem(SystemCreationKey)
 	s_Instance = this;
 }
 
+PhysicsSystem::~PhysicsSystem()
+{
+	if (s_Instance == this)
+	{
+		s_Instance = nullptr;
+	}
+}
+
 void PhysicsSystem::Update()
 {
 	ApplyUnregisterColliders();

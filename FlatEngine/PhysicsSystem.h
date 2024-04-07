@@ -10,6 +10,7 @@ class PhysicsSystem
 {
 public:
 	PhysicsSystem(SystemCreationKey);
+	~PhysicsSystem();
 
 	void RegisterCollider(BoxCollider* collider); // TODO: change to ICollider
 	void UnregisterCollider(BoxCollider* collider);
