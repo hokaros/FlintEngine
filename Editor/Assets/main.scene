@@ -2,5 +2,6 @@
 - game_objects: 
 	- PrefabInstance
 		- Prefab: player.prefab
+		- pos: 260.000000, 160.000000
 	- PrefabInstance
 		- Prefab: lab.prefab
