@@ -18,6 +18,7 @@ void Editor::Render()
     m_AssetExplorer.Render();
     m_SceneEditor.Render();
     m_HierarchyEditor.Render();
+    m_GameRunner.Render();
 }
 
 void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
@@ -28,6 +29,7 @@ void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
     m_HierarchyEditor.SetEditedObject(handle);
     m_SelectedGameObjectManager.SelectObject(handle);
     m_SceneEditor.SetRootObject(std::weak_ptr<EditorUniversalHandle>(handle));
+    m_GameRunner.SetSelectedScene(handle);
 }
 
 void Editor::OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene)
@@ -38,6 +40,7 @@ void Editor::OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene)
     m_HierarchyEditor.SetEditedObject(handle);
     m_SelectedGameObjectManager.SelectObject(handle);
     m_SceneEditor.SetRootObject(std::weak_ptr<EditorUniversalHandle>(handle));
+    m_GameRunner.SetSelectedScene(handle);
 }
 
 void Editor::RenderEditorConfigWindow()

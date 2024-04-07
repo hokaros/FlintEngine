@@ -6,6 +6,7 @@
 #include "SceneEditor.h"
 #include "HierarchyEditor.h"
 #include "SelectedObjectManager.h"
+#include "EditorGameRunner.h"
 
 class Editor
 	: private IAssetListener
@@ -26,6 +27,7 @@ private:
 	AssetManager m_AssetManager;
 	SceneEditor m_SceneEditor;
 	HierarchyEditor m_HierarchyEditor;
+	EditorGameRunner m_GameRunner;
 
 	SelectedObjectManager m_SelectedGameObjectManager;
 
