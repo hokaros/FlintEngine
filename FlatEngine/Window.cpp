@@ -66,8 +66,6 @@ bool Window::Init()
 
 	SDL_SetWindowTitle(m_Window, "Labyrinth Shooter");
 
-	m_DebugRenderer = std::make_unique<DebugRenderer>(m_SceneRenderer);
-
 	InitImGui();
 
 	return m_SceneRenderer.Init(m_Renderer, {});

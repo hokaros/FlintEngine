@@ -40,8 +40,6 @@ private:
 
 	SceneRenderer m_SceneRenderer;
 
-	std::unique_ptr<DebugRenderer> m_DebugRenderer = nullptr;
-
 	static Window* s_MainWindow;
 };
 

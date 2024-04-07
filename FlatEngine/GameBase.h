@@ -30,7 +30,9 @@ protected:
 protected:
 	IInputController& m_InputController;
 	Window* m_Window = nullptr;
-	SceneRenderer* m_SceneRenderer;
+	SceneRenderer* m_SceneRenderer = nullptr;
+	std::unique_ptr<DebugRenderer> m_DebugRenderer = nullptr;
+
 	Timer timer;
 	PhysicsSystem physicsSystem;
 	debug::DebugConfigWindow m_DebugConfigWindow;

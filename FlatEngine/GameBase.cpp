@@ -6,6 +6,10 @@ GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputControll
 	, physicsSystem({})
 	, m_InputController(input_controller)
 {
+	if (m_SceneRenderer != nullptr)
+	{
+		m_DebugRenderer = std::make_unique<DebugRenderer>(*m_SceneRenderer);
+	}
 }
 
 bool GameBase::Run()
