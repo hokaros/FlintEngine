@@ -15,10 +15,8 @@ PhysicsSystem::PhysicsSystem(SystemCreationKey)
 
 PhysicsSystem::~PhysicsSystem()
 {
-	if (s_Instance == this)
-	{
-		s_Instance = nullptr;
-	}
+	FE_ASSERT(s_Instance == this, "There are 2 instances of the PhysicsSystem");
+	s_Instance = nullptr;
 }
 
 void PhysicsSystem::Update()
