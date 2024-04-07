@@ -37,7 +37,7 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object
 
 void SceneEditor::Render()
 {
-	FE_ASSERT(m_CurrentScene != nullptr, "Scene should be present. Consider using the default one");
+	FE_ASSERT(m_CurrentScene != nullptr, "Scene should be present. Consider using the default - m_PrefabScene");
 
 	if (m_RootObject.expired())
 	{

@@ -59,7 +59,7 @@ const Rgb8& Scene::GetBackgroundColor() const
 
 void Scene::RenderBackground(SceneRenderer& renderer)
 {
-	renderer.RenderRect(renderer.GetRenderedRect(), m_BackgroundColor);
+	renderer.Clear(m_BackgroundColor);
 }
 
 bool Scene::ShouldRender(GameObject* gameObject)

@@ -102,6 +102,11 @@ void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color)
 	SDL_SetRenderTarget(m_Renderer, originalRT);
 }
 
+void SceneRenderer::Clear(const Rgb8& clear_color)
+{
+	RenderRect(GetRenderedRect(), clear_color);
+}
+
 void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fontSize)
 {
 	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);

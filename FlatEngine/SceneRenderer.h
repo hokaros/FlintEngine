@@ -6,6 +6,7 @@
 
 class Window;
 class SceneEditor;
+class EditorGameRunner;
 
 class RenderingKey
 {
@@ -14,6 +15,7 @@ private:
 	
 	friend class Window;
 	friend class SceneEditor;
+	friend class EditorGameRunner;
 };
 
 class SceneRenderer
@@ -30,6 +32,8 @@ public:
 	void RenderRect(const Rect& rect, const Rgb8& color);
 	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color);
 	void RenderWireRect(const Rect& rect, const Rgb8& color);
+
+	void Clear(const Rgb8& clear_color);
 
 	void SetViewport(const Rect& viewport);
 	const Rect& GetRenderedRect() const;
