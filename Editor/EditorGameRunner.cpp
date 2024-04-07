@@ -55,6 +55,16 @@ void EditorGameRunner::StopGame()
 	m_RunningGame = nullptr;
 }
 
+bool EditorGameRunner::IsGameRunning() const
+{
+	return m_RunningGame != nullptr;
+}
+
+InputController& EditorGameRunner::GetInputController()
+{
+	return m_InputController;
+}
+
 void EditorGameRunner::RenderControlPanel()
 {
 	const bool has_runnable_scene = GetSelectedScene() != nullptr;

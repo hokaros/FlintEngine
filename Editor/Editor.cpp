@@ -22,6 +22,11 @@ void Editor::Render()
     m_GameRunner.Render();
 }
 
+EditorGameRunner& Editor::GetGameRunner()
+{
+    return m_GameRunner;
+}
+
 void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
 {
     std::shared_ptr<EditorPrefabHandle> prefab_shared = std::shared_ptr<EditorPrefabHandle>(std::move(prefab));

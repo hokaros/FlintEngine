@@ -15,6 +15,8 @@ public:
 	Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int screenHeight);
 	void Render();
 
+	EditorGameRunner& GetGameRunner();
+
 private:
 	virtual void OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab) override;
 	virtual void OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene) override;

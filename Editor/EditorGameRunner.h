@@ -16,6 +16,9 @@ public:
 
 	void StartGame();
 	void StopGame();
+	bool IsGameRunning() const;
+
+	InputController& GetInputController();
 
 private:
 	void RenderControlPanel();

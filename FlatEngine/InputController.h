@@ -29,7 +29,7 @@ public:
 	InputController();
 	~InputController();
 
-	virtual bool Update() override;
+	virtual bool Update() override; // Returns false if window closed
 
 	virtual bool IsKeyDown(SDL_Keycode key) const override;
 	virtual bool PressedThisFrame(SDL_Keycode key) const override;
