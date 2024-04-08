@@ -13,6 +13,8 @@ Editor::Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int
 
 void Editor::Render()
 {
+    BeginEditorSpace();
+
     RenderEditorConfigWindow();
 
     m_PropertyEditor.Render();
@@ -20,6 +22,8 @@ void Editor::Render()
     m_SceneEditor.Render();
     m_HierarchyEditor.Render();
     m_GameRunner.Render();
+
+    EndEditorSpace();
 }
 
 EditorGameRunner& Editor::GetGameRunner()
@@ -47,6 +51,42 @@ void Editor::OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene)
     m_SelectedGameObjectManager.SelectObject(handle);
     m_SceneEditor.SetRootObject(std::weak_ptr<EditorUniversalHandle>(handle));
     m_GameRunner.SetSelectedScene(handle);
+}
+
+void Editor::BeginEditorSpace()
+{
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+    // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+    // because it would be confusing to have two docking targets within each others.
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowViewport(viewport->ID);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("Editor space", nullptr, window_flags);
+    ImGui::PopStyleVar();
+
+    ImGui::PopStyleVar(2);
+
+    // Submit the DockSpace
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+        ImGuiID dockspace_id = ImGui::GetID("Main dockspace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    }
+}
+
+void Editor::EndEditorSpace()
+{
+    ImGui::End();
 }
 
 void Editor::RenderEditorConfigWindow()

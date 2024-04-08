@@ -21,6 +21,8 @@ private:
 	virtual void OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab) override;
 	virtual void OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene) override;
 
+	void BeginEditorSpace();
+	void EndEditorSpace();
 	void RenderEditorConfigWindow();
 
 private:
