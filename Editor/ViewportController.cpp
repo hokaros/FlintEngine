@@ -16,6 +16,16 @@ void ViewportController::UpdateFromKeyboard(Rect& viewport)
     ProcessTranslation(viewport);
 }
 
+Vector ViewportController::ScreenToViewportSpace(const Vector& screen_pos, const Rect& viewport)
+{
+    Vector output_space = screen_pos - ImVecToVec(ImGui::GetCursorScreenPos());
+
+    Vector outputSize = ImVecToVec(ImGui::GetContentRegionAvail());
+    Vector viewportSizeToOutputSize = Vector::Divide(viewport.size, outputSize);
+
+    return Vector::Scale(viewportSizeToOutputSize, output_space);
+}
+
 void ViewportController::ProcessTranslation(Rect& viewport)
 {
     constexpr float normalSpeed = 0.01f;
@@ -35,12 +45,7 @@ void ViewportController::ProcessZooming(Rect& viewport)
     const float multip = GetZoomMultiplier();
 
     Vector mousePosScreenSpace = ImVecToVec(ImGui::GetIO().MousePos);
-    Vector mousePosOutputSpace = mousePosScreenSpace - ImVecToVec(ImGui::GetCursorScreenPos());
-
-    Vector outputSize = ImVecToVec(ImGui::GetContentRegionAvail());
-    Vector viewportSizeToOutputSize = Vector::Divide( viewport.size, outputSize );
-
-    Vector toMouseViewport = Vector::Scale(viewportSizeToOutputSize, mousePosOutputSpace);
+    Vector toMouseViewport = ScreenToViewportSpace(mousePosScreenSpace, viewport);
     viewport.pos = viewport.pos - (toMouseViewport * multip - toMouseViewport);
 
     viewport.size *= multip;
