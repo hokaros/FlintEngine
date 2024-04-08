@@ -6,6 +6,18 @@
 #include "../FlatEngine/GameBase.h"
 #include "AssetHandles.h"
 
+class EditorInputController
+	: public InputController
+{
+public:
+	virtual Vector GetMousePosition() const override;
+
+	void UpdateMousePosition(const Rect& viewport);
+
+private:
+	Vector m_MousePos;
+};
+
 class EditorGameRunner
 {
 public:
@@ -29,7 +41,7 @@ private:
 
 private:
 	SceneRenderer m_SceneRenderer;
-	InputController m_InputController;
+	EditorInputController m_InputController;
 
 	std::shared_ptr<EditorUniversalHandle> m_SelectedSceneHandle = nullptr;
 

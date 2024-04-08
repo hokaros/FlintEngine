@@ -2,6 +2,8 @@
 #include "../FlatEngine/imgui/imgui.h"
 #include "../FlatEngine/Vector.h"
 
+Vector ImVecToVec(ImVec2 imVec); // TODO: move to helpers
+
 class ViewportController
 {
 public:

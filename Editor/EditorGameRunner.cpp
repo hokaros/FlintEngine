@@ -1,4 +1,5 @@
 #include "EditorGameRunner.h"
+#include "ViewportController.h"
 
 EditorGameRunner::EditorGameRunner(SDL_Renderer& renderer, float screenWidth, float screenHeight)
 	: m_SceneRenderer(screenWidth, screenHeight)
@@ -27,6 +28,8 @@ void EditorGameRunner::Render()
 	if (ImGui::Begin("Game"))
 	{
 		RenderControlPanel();
+
+		m_InputController.UpdateMousePosition(m_SceneRenderer.GetViewport());
 		RenderGameFrame();
 	}
 	ImGui::End();
@@ -115,4 +118,16 @@ EditorSceneHandle* EditorGameRunner::GetSelectedScene()
 		return nullptr;
 
 	return m_SelectedSceneHandle->GetSceneHandle();
+}
+
+Vector EditorInputController::GetMousePosition() const
+{
+	return m_MousePos;
+}
+
+void EditorInputController::UpdateMousePosition(const Rect& viewport)
+{
+	const Vector mouse_pos_screen_space = ImVecToVec(ImGui::GetIO().MousePos);
+
+	m_MousePos = ViewportController::ScreenToViewportSpace(mouse_pos_screen_space, viewport);
 }
