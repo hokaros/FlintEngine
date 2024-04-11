@@ -16,6 +16,8 @@ public:
 	virtual GameObject* GetPrefab(const std::string& path);
 	SDL_Surface* GetSurfaceAsset(const std::string& path);
 
+	void InvalidatePrefab(const std::string& path); // Invalidates cached prefab and forces reload on next query
+
 public:
 	static constexpr const char* s_RootFolder = "Assets";
 

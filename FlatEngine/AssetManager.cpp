@@ -107,3 +107,12 @@ SDL_Surface* AssetManager::GetSurfaceAsset(const std::string& path)
 
 	return it->second;
 }
+
+void AssetManager::InvalidatePrefab(const std::string& path)
+{
+	auto it = m_PathToPrefabDict.find(path);
+	if (it == m_PathToPrefabDict.end())
+		return;
+
+	m_PathToPrefabDict.erase(it);
+}

@@ -2,6 +2,7 @@
 
 #include "PrefabSaver.h"
 #include "SceneSaver.h"
+#include "../FlatEngine/AssetManager.h"
 
 bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const
 {
@@ -26,6 +27,11 @@ void EditorPrefabHandle::Save()
     if (m_Prefab != nullptr)
     {
         PrefabSaver::SavePrefab(*m_Prefab, m_PrefabPath.c_str());
+
+        // TODO: EditorPrefabHandle should have only the prefab path relative to root
+        constexpr const char* root_dir = "Assets\\";
+        std::string prefab_id = m_PrefabPath.substr(strlen(root_dir));
+        AssetManager::GetInstance()->InvalidatePrefab(prefab_id);
     }
 }
 
