@@ -1,6 +1,6 @@
 #pragma once
-#include <GameObjectSerializer.h>
-#include <PrefabInstanceSerializer.h>
+#include <Serialization/GameObjectSerializer.h>
+#include <Serialization/PrefabInstanceSerializer.h>
 #include "IndentPrinter.h"
 
 class PrefabSaver

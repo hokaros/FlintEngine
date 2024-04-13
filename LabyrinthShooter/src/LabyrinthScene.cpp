@@ -3,7 +3,7 @@
 #include <Firearm.h>
 #include <Health.h>
 
-#include <SceneLoader.h>
+#include <Serialization/SceneLoader.h>
 
 static constexpr const char* s_HeartBitmapPath = "heart.bmp";
 

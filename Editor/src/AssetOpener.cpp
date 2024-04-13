@@ -1,6 +1,6 @@
 #include "AssetOpener.h"
-#include <GameObjectLoader.h>
-#include <SceneLoader.h>
+#include <Serialization/GameObjectLoader.h>
+#include <Serialization/SceneLoader.h>
 #include "AssetMiner.h"
 
 

@@ -1,7 +1,7 @@
 #include "AssetManager.h"
 
 #include "utility.h"
-#include "GameObjectLoader.h"
+#include <Serialization/GameObjectLoader.h>
 
 AssetManager* AssetManager::s_Instance = nullptr;
 

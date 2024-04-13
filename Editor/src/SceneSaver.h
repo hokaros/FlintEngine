@@ -1,5 +1,5 @@
 #pragma once
-#include <SceneSerializer.h>
+#include <Serialization/SceneSerializer.h>
 #include "IndentPrinter.h"
 
 class SceneSaver

@@ -1,7 +1,7 @@
 #include "AssetExplorer.h"
 
 #include <utility.h>
-#include <GameObjectLoader.h>
+#include <Serialization/GameObjectLoader.h>
 #include <AssetManager.h>
 #include "PrefabSaver.h"
 #include "AssetOpener.h"

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include <GameObjectSerializer.h>
+#include <Serialization/GameObjectSerializer.h>
 
 TEST(GameObjectSerializer, DeserializesSizePositionAndName)
 {

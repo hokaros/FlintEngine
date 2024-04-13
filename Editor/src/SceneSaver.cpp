@@ -1,6 +1,6 @@
 #include "SceneSaver.h"
 
-#include <SceneLoader.h>
+#include <Serialization/SceneLoader.h>
 #include "PrefabSaver.h"
 
 void SceneSaver::SaveScene(const EditableScene& scene, const char* file_path)
