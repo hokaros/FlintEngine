@@ -1,7 +1,7 @@
 #include "PowerBullet.h"
 
 #include <ObjectManager.h>
-#include <GameObject.h>
+#include <Core/GameObject.h>
 #include "Destroyable.h"
 
 DEFINE_COMPONENT_DERIVED(PowerBullet, Bullet);

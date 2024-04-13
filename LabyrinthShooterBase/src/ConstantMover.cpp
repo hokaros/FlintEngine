@@ -1,5 +1,5 @@
 #include "ConstantMover.h"
-#include <GameObject.h>
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(ConstantMover);
 DEFINE_FIELD(ConstantMover, movementSpeed);

@@ -1,6 +1,6 @@
 #include "BoxCollider.h"
 #include "PhysicsSystem.h"
-#include "GameObject.h"
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(BoxCollider);
 

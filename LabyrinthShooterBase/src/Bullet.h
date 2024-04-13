@@ -1,7 +1,7 @@
 #pragma once
 #include <BoxCollider.h>
 #include <ComponentDefinition.h>
-#include <GameObject.h>
+#include <Core/GameObject.h>
 #include "Health.h"
 
 // Obiekt biegn¹cy przed siebie do momentu kolizji

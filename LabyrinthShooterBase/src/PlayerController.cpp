@@ -1,6 +1,6 @@
 #include "PlayerController.h"
 #include "Health.h"
-#include <GameObject.h>
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(PlayerController);
 

@@ -3,7 +3,7 @@
 #include "utility.h"
 #include "DebugRenderer.h"
 #include "DebugConfig.h"
-#include "GameObject.h"
+#include <Core/GameObject.h>
 
 PhysicsSystem* PhysicsSystem::s_Instance = nullptr;
 

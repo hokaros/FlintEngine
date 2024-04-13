@@ -1,5 +1,5 @@
 #pragma once
-#include <GameObject.h>
+#include <Core/GameObject.h>
 #include <IEditableGameObject.h>
 #include "AssetHandles.h"
 #include "SelectedObjectManager.h"

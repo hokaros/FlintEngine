@@ -1,5 +1,5 @@
 #include "Destroyable.h"
-#include <GameObject.h>
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(Destroyable);
 

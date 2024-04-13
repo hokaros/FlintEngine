@@ -1,5 +1,5 @@
 #include "PlayerEquipment.h"
-#include <GameObject.h>
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(PlayerEquipment);
 

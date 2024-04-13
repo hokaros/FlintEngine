@@ -1,7 +1,7 @@
 #include "RectangleRenderer.h"
 #include "Window.h"
 #include "SceneRenderer.h"
-#include "GameObject.h"
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(RectangleRenderer);
 DEFINE_FIELD(RectangleRenderer, m_Color);

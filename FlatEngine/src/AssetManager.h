@@ -3,7 +3,7 @@
 #include <map>
 
 #include "Draw.h"
-#include "GameObject.h"
+#include <Core/GameObject.h>
 
 class AssetManager
 {

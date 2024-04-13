@@ -1,5 +1,5 @@
 #include "Bullet.h"
-#include <GameObject.h>
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(Bullet);
 

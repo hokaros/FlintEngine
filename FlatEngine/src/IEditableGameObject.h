@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include <Core/GameObject.h>
 #include "ComponentFieldDefinition.h"
 #include "IHierarchyEditable.h"
 

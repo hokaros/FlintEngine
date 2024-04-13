@@ -1,6 +1,6 @@
 #include "SpriteRenderer.h"
 #include "Draw.h"
-#include "GameObject.h"
+#include <Core/GameObject.h>
 #include "AssetManager.h"
 #include "SceneRenderer.h"
 

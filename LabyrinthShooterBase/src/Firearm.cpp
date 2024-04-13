@@ -1,6 +1,6 @@
 #include "Firearm.h"
 #include <ObjectManager.h>
-#include <GameObject.h>
+#include <Core/GameObject.h>
 
 DEFINE_COMPONENT(Firearm);
 DEFINE_FIELD(Firearm, m_BulletPrefab);
