@@ -12,6 +12,7 @@ AssetExplorer::AssetExplorer()
 	, m_NewAssetNamePrompt("Add asset", "Asset name")
 	, m_AssetTypePrompt("Select asset type")
 {
+	files::AssetMiner::CreateDirectory(s_RootDirectory);
 	UpdateCurrentDirectoryContents();
 
 	m_TreeExplorer.SubscribeEvents(*this);

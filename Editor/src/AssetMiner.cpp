@@ -105,6 +105,17 @@ namespace files
 
 
 
+    std::unique_ptr<Directory> AssetMiner::CreateDirectory(const std::filesystem::path& path)
+    {
+        namespace fs = std::filesystem;
+
+        const bool success = fs::create_directory(path);
+        if (!success)
+            return nullptr;
+
+        return std::make_unique<Directory>(path);
+    }
+
     void AssetMiner::GetDirectoryContents(const Directory& dir, std::vector<std::unique_ptr<DirectoryElement>>& out_contents)
     {
         namespace fs = std::filesystem;
