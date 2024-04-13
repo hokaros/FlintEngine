@@ -1,0 +1,31 @@
+#pragma once
+#include <Window.h>
+#include <Vector.h>
+#include <SceneRenderer.h>
+
+// Element wyœwietlaj¹cy pewn¹ statystykê (zdrowie / liczbê graczy itp.)
+class StatRenderer
+{
+public:
+	virtual void Render(SceneRenderer& renderer) = 0;
+
+	void UpdateStat(int newStat);
+
+protected:
+	int stat = 0;
+};
+
+// Element reprezentuj¹cy statystykê, mno¿¹c elementy graficzne (wyœwietlanie serc itp.)
+class BMPStats : public StatRenderer 
+{
+public:
+	BMPStats(SDL_Surface* bitmap, const VectorInt& elementSize, const VectorInt& startPosition);
+
+	void Render(SceneRenderer& renderer) override;
+
+private:
+	SDL_Texture* m_Bitmap;
+	VectorInt m_ElementSize;
+	VectorInt m_StartPos;
+};
+

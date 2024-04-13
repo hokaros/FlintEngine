@@ -1,6 +1,0 @@
-- background_color: 0x00, 0x00, 0x00
-- game_objects:
-	- PrefabInstance:
-		- Prefab: player.prefab
-	- PrefabInstance:
-		- Prefab: lab.prefab
