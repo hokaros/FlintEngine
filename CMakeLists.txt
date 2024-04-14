@@ -16,10 +16,10 @@ FetchContent_MakeAvailable(googletest)
 
 project(FlatEngine)
 
-file(GLOB_RECURSE FLAT_ENGINE_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/FlatEngine/src/*.cpp")
+file(GLOB_RECURSE FLAT_ENGINE_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngine/*.cpp")
 
 add_library(FlatEngine "${FLAT_ENGINE_SOURCES}")
-target_include_directories(FlatEngine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/FlatEngine/src")
+target_include_directories(FlatEngine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngine")
 
 target_link_libraries(FlatEngine PUBLIC SDL2::SDL2main)
 target_link_libraries(FlatEngine PUBLIC SDL2::SDL2)
@@ -29,10 +29,10 @@ project(FlatEngineTests)
 
 enable_testing()
 
-file(GLOB_RECURSE FLAT_ENGINE_TESTS_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/FlatEngineTests/src/*.cpp")
+file(GLOB_RECURSE FLAT_ENGINE_TESTS_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngineTests/*.cpp")
 
 add_executable(FlatEngineTests "${FLAT_ENGINE_TESTS_SOURCES}")
-target_include_directories(FlatEngineTests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/FlatEngineTests/src")
+target_include_directories(FlatEngineTests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngineTests")
 
 target_link_libraries(FlatEngineTests PUBLIC FlatEngine)
 target_link_libraries(FlatEngineTests PUBLIC GTest::gtest_main)
@@ -43,10 +43,10 @@ gtest_discover_tests(FlatEngineTests)
 
 project(LabyrinthShooterBase)
 
-file(GLOB_RECURSE LAB_SHOOTER_BASE_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/LabyrinthShooterBase/src/*.cpp")
+file(GLOB_RECURSE LAB_SHOOTER_BASE_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/LabyrinthShooterBase/*.cpp")
 
 add_library(LabyrinthShooterBase "${LAB_SHOOTER_BASE_SOURCES}")
-target_include_directories(LabyrinthShooterBase PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/LabyrinthShooterBase/src")
+target_include_directories(LabyrinthShooterBase PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/LabyrinthShooterBase")
 
 target_link_libraries(LabyrinthShooterBase PUBLIC FlatEngine)
 set_target_properties(LabyrinthShooterBase PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlatEngine")
@@ -54,10 +54,10 @@ set_target_properties(LabyrinthShooterBase PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:
 
 project(Editor)
 
-file(GLOB_RECURSE EDITOR_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Editor/src/*.cpp")
+file(GLOB_RECURSE EDITOR_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/Editor/*.cpp")
 
 add_executable(Editor "${EDITOR_SOURCES}")
-target_include_directories(Editor PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Editor/src")
+target_include_directories(Editor PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/Editor")
 
 target_link_libraries(Editor PRIVATE FlatEngine)
 target_link_libraries(Editor PRIVATE LabyrinthShooterBase)
@@ -66,10 +66,10 @@ set_target_properties(Editor PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlatEngine /WH
 
 project(LabyrinthShooter)
 
-file(GLOB_RECURSE LAB_SHOOTER_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/LabyrinthShooter/src/*.cpp")
+file(GLOB_RECURSE LAB_SHOOTER_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/LabyrinthShooter/*.cpp")
 
 add_executable(LabyrinthShooter "${LAB_SHOOTER_SOURCES}")
-target_include_directories(LabyrinthShooter PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/LabyrinthShooter/src")
+target_include_directories(LabyrinthShooter PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/LabyrinthShooter")
 
 target_link_libraries(LabyrinthShooter PRIVATE LabyrinthShooterBase)
 set_target_properties(LabyrinthShooter PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlatEngine /WHOLEARCHIVE:LabyrinthShooterBase")
