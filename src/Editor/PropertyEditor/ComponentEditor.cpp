@@ -1,6 +1,6 @@
 #include "ComponentEditor.h"
 
-ComponentEditor::ComponentEditor(IEditableGameObject& game_object, ObjectComponent& component, size_t index_in_game_object)
+ComponentEditor::ComponentEditor(EditorGameObjectHandle& game_object, ObjectComponent& component, size_t index_in_game_object)
 	: m_GameObject(game_object)
 	, m_Component(component)
 	, m_ComponentDefinition(

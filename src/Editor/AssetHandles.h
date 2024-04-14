@@ -19,6 +19,16 @@ class EditorGameObjectHandle
 {
 public:
 	virtual IEditableGameObject& GetGameObject() const = 0;
+	const GameObject& GetResult() const;
+
+	// Modifying the underlying object
+	void SetPosition(const Vector& pos);
+	void SetSize(const Vector& size);
+	void SetName(const std::string& name);
+
+	void AddComponent(std::unique_ptr<ObjectComponent> component);
+	void ModifyComponentField(std::unique_ptr<ComponentFieldChange> modification);
+	void RemoveComponent(size_t component_index);
 
 	bool operator==(const EditorGameObjectHandle& other) const;
 };

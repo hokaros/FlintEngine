@@ -2,11 +2,12 @@
 #include <ComponentFieldDefinition.h>
 #include <imgui/imgui.h>
 #include <IEditableGameObject.h>
+#include <AssetHandles.h>
 
 class FieldEditor
 {
 public:
-	FieldEditor(IEditableGameObject& game_object, ObjectComponent& component, const ComponentFieldDefinition& field);
+	FieldEditor(EditorGameObjectHandle& game_object, ObjectComponent& component, const ComponentFieldDefinition& field);
 
 	virtual void Render() = 0;
 
@@ -19,14 +20,14 @@ protected:
 	void ApplyToGameObject(const ValueT& value);
 
 protected:
-	IEditableGameObject& m_GameObject;
+	EditorGameObjectHandle& m_GameObject;
 	ObjectComponent& m_Component;
 	const ComponentFieldDefinition& m_Field;
 	std::string m_FieldLabel;
 };
 
 #define FIELD_EDITOR_DELEGATING_CONSTRUCTOR(derived_clazz)																\
-derived_clazz(IEditableGameObject& game_object, ObjectComponent& component, const ComponentFieldDefinition& field)		\
+derived_clazz(EditorGameObjectHandle& game_object, ObjectComponent& component, const ComponentFieldDefinition& field)		\
 	: FieldEditor(game_object, component, field)																		\
 {}
 

@@ -1,6 +1,6 @@
 #include "FieldEditor.h"
 
-FieldEditor::FieldEditor(IEditableGameObject& game_object, ObjectComponent& component, const ComponentFieldDefinition& field)
+FieldEditor::FieldEditor(EditorGameObjectHandle& game_object, ObjectComponent& component, const ComponentFieldDefinition& field)
 	: m_GameObject(game_object)
 	, m_Component(component)
 	, m_Field(field)

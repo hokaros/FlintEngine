@@ -1,12 +1,13 @@
 #pragma once
 #include <ComponentDefinition.h>
 #include <imgui/imgui.h>
+#include <AssetHandles.h>
 #include "FieldEditor.h"
 
 class IComponentActionObserver
 {
 public:
-    virtual void OnComponentDeleted(size_t index_in_game_object) = 0;
+    virtual void OnComponentDeleted(size_t index_in_game_object) = 0; // This doesn't mean that the component has been deleted but only that the "Delete" button has been clicked
 
     virtual ~IComponentActionObserver() = default;
 };
@@ -14,7 +15,7 @@ public:
 class ComponentEditor
 {
 public:
-    ComponentEditor(IEditableGameObject& game_object, ObjectComponent& component, size_t index_in_game_object);
+    ComponentEditor(EditorGameObjectHandle& game_object, ObjectComponent& component, size_t index_in_game_object);
     void Render();
 
     void RegisterActionObserver(IComponentActionObserver* observer);
@@ -26,7 +27,7 @@ private:
     float CalculateHeight() const;
 
 private:
-    IEditableGameObject& m_GameObject;
+    EditorGameObjectHandle& m_GameObject;
     ObjectComponent& m_Component;
     ComponentDefinition& m_ComponentDefinition;
     size_t m_IndexInGameObject;

@@ -5,7 +5,7 @@ void GameObjectPropertyEditor::RenderEmbedded()
     EditorGameObjectHandle* game_object_handle = GetGameObjectHandle();
     if (game_object_handle != nullptr)
     {
-        RenderGameObjectEditor(game_object_handle->GetGameObject());
+        RenderGameObjectEditor(*game_object_handle);
     }
     else
     {
@@ -21,9 +21,9 @@ void GameObjectPropertyEditor::SetGameObject(std::weak_ptr<EditorUniversalHandle
     if (go_handle == nullptr)
         return;
 
-    GameObject& go = go_handle->GetGameObject().GetResult();
+    const GameObject& go = go_handle->GetResult();
     InitValuesFromGameObject(go);
-    LoadComponents(go_handle->GetGameObject());
+    LoadComponents(*go_handle);
 
     LoadAddableComponents();
 }
@@ -45,7 +45,7 @@ void GameObjectPropertyEditor::LoadAddableComponents()
     }
 }
 
-void GameObjectPropertyEditor::RenderGameObjectEditor(IEditableGameObject& game_object)
+void GameObjectPropertyEditor::RenderGameObjectEditor(EditorGameObjectHandle& game_object)
 {
     ImGui::InputText("Name", m_GameObjectName, s_NameMaxSize);
 
@@ -62,7 +62,7 @@ void GameObjectPropertyEditor::RenderComponentEditors()
 {
     if (!m_AreComponentEditorsValid)
     {
-        LoadComponents(GetGameObjectHandle()->GetGameObject()); // TODO: let's pass GameObjectHandle as a parameter
+        LoadComponents(*GetGameObjectHandle());
     }
 
     for (std::unique_ptr<ComponentEditor>& comp_editor : m_ComponentEditors)
@@ -85,12 +85,12 @@ void GameObjectPropertyEditor::RenderComponentAddSection()
     }
 }
 
-void GameObjectPropertyEditor::LoadComponents(IEditableGameObject& game_object)
+void GameObjectPropertyEditor::LoadComponents(EditorGameObjectHandle& game_object)
 {
     m_ComponentEditors.clear();
 
     size_t component_idx = 0;
-    for (std::unique_ptr<ObjectComponent>& component : game_object.GetResult().GetAllComponents())
+    for (const std::unique_ptr<ObjectComponent>& component : game_object.GetResult().GetAllComponents())
     {
         std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(game_object, *component, component_idx);
         comp_editor->RegisterActionObserver(this);
@@ -104,8 +104,7 @@ void GameObjectPropertyEditor::LoadComponents(IEditableGameObject& game_object)
 
 void GameObjectPropertyEditor::AddComponent(const ComponentDefinition* component)
 {
-    IEditableGameObject& game_object = GetGameObjectHandle()->GetGameObject();
-    game_object.AddComponent(component->GetConstructor()());
+    GetGameObjectHandle()->AddComponent(component->GetConstructor()());
 
     m_AreComponentEditorsValid = false;
 }
@@ -121,34 +120,24 @@ void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_o
     strcpy_s(m_GameObjectName, game_object.GetName().c_str());
 }
 
-void GameObjectPropertyEditor::ApplyValuesToGameObject(IEditableGameObject& game_object)
+void GameObjectPropertyEditor::ApplyValuesToGameObject(EditorGameObjectHandle& game_object)
 {
-    bool any_change = false;
-
     Vector target_position = Vector(m_GameObjectPosition);
     if (game_object.GetResult().GetPosition() != target_position)
     {
         game_object.SetPosition(target_position);
-        any_change = true;
     }
 
     Vector target_size = Vector(m_GameObjectSize);
     if (game_object.GetResult().GetSize() != target_size)
     {
         game_object.SetSize(target_size);
-        any_change = true;
     }
 
     std::string target_name = std::string(m_GameObjectName);
     if (game_object.GetResult().GetName() != target_name)
     {
         game_object.SetName(target_name);
-        any_change = true;
-    }
-
-    if (any_change)
-    {
-        GetGameObjectHandle()->OnUnsavedChange();
     }
 }
 
@@ -168,8 +157,7 @@ const EditorGameObjectHandle* GameObjectPropertyEditor::GetGameObjectHandle() co
 
 void GameObjectPropertyEditor::OnComponentDeleted(size_t index_in_game_object)
 {
-    IEditableGameObject& game_object = GetGameObjectHandle()->GetGameObject();
-    game_object.RemoveComponent(index_in_game_object);
+    GetGameObjectHandle()->RemoveComponent(index_in_game_object);
 
     m_AreComponentEditorsValid = false;
 }

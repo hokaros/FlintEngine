@@ -4,6 +4,47 @@
 #include <Serialization/SceneSaver.h>
 #include <AssetManager.h>
 
+const GameObject& EditorGameObjectHandle::GetResult() const
+{
+    return GetGameObject().GetResult();
+}
+
+void EditorGameObjectHandle::SetPosition(const Vector& pos)
+{
+    GetGameObject().SetPosition(pos);
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::SetSize(const Vector& size)
+{
+    GetGameObject().SetSize(size);
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::SetName(const std::string& name)
+{
+    GetGameObject().SetName(name);
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::AddComponent(std::unique_ptr<ObjectComponent> component)
+{
+    GetGameObject().AddComponent(std::move(component));
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::ModifyComponentField(std::unique_ptr<ComponentFieldChange> modification)
+{
+    GetGameObject().ModifyComponentField(std::move(modification));
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::RemoveComponent(size_t component_index)
+{
+    GetGameObject().RemoveComponent(component_index);
+    OnUnsavedChange();
+}
+
 bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const
 {
     return &GetGameObject() == &other.GetGameObject();

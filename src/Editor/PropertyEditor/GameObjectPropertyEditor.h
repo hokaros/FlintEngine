@@ -21,14 +21,14 @@ protected:
 private:
 	void LoadAddableComponents();
 
-	void RenderGameObjectEditor(IEditableGameObject& game_object);
+	void RenderGameObjectEditor(EditorGameObjectHandle& game_object);
 	void RenderComponentEditors();
 	void RenderComponentAddSection();
-	void LoadComponents(IEditableGameObject& game_object);
+	void LoadComponents(EditorGameObjectHandle& game_object);
 	void AddComponent(const ComponentDefinition* component);
 
 	void InitValuesFromGameObject(const GameObject& game_object);
-	void ApplyValuesToGameObject(IEditableGameObject& game_object);
+	void ApplyValuesToGameObject(EditorGameObjectHandle& game_object);
 
 	EditorGameObjectHandle* GetGameObjectHandle();
 	const EditorGameObjectHandle* GetGameObjectHandle() const;
