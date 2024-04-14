@@ -18,6 +18,7 @@ void PropertyEditor::Render()
         else
         {
             m_CurrEditor->RenderEmbedded();
+            RenderSharedSection();
         }
     }
 
@@ -58,5 +59,23 @@ void PropertyEditor::ValidateCurrentEditor()
     if (m_CurrEditor->HasValidObject() == false)
     {
         m_CurrEditor = nullptr;
+    }
+}
+
+void PropertyEditor::RenderSharedSection()
+{
+    if (m_CurrEditor == nullptr)
+        return;
+
+    std::shared_ptr<EditorUniversalHandle> edited_object = m_EditedObjectHandle.lock();
+    if (ImGui::Button("Save"))
+    {
+        edited_object->Save();
+    }
+
+    if (edited_object->HasUnsavedChanges())
+    {
+        ImGui::SameLine();
+        ImGui::Text("*");
     }
 }

@@ -35,11 +35,6 @@ void ScenePropertyEditor::SetScene(std::weak_ptr<EditorUniversalHandle> handle)
 void ScenePropertyEditor::RenderSceneEditor(EditableScene& scene)
 {
     ImGui::Text("Scene properties");
-
-    if (ImGui::Button("Save"))
-    {
-        GetSceneHandle()->Save();
-    }
 }
 
 void ScenePropertyEditor::InitValuesFromScene(EditableScene& scene)

@@ -33,6 +33,18 @@ void EditorPrefabHandle::Save()
         std::string prefab_id = m_PrefabPath.substr(strlen(root_dir));
         AssetManager::GetInstance()->InvalidatePrefab(prefab_id);
     }
+
+    m_HasUnsavedChanges = false;
+}
+
+bool EditorPrefabHandle::HasUnsavedChanges() const
+{
+    return m_HasUnsavedChanges;
+}
+
+void EditorPrefabHandle::OnUnsavedChange()
+{
+    m_HasUnsavedChanges = true;
 }
 
 
@@ -50,6 +62,16 @@ IEditableGameObject& EditorIEditableGameObjectHandle::GetGameObject() const
 void EditorIEditableGameObjectHandle::Save()
 {
     m_RootAsset.Save();
+}
+
+bool EditorIEditableGameObjectHandle::HasUnsavedChanges() const
+{
+    return m_RootAsset.HasUnsavedChanges();
+}
+
+void EditorIEditableGameObjectHandle::OnUnsavedChange()
+{
+    m_RootAsset.OnUnsavedChange();
 }
 
 
@@ -71,6 +93,18 @@ void EditorSceneHandle::Save()
     {
         SceneSaver::SaveScene(*m_Scene, m_ScenePath.c_str());
     }
+
+    m_HasUnsavedChanges = false;
+}
+
+bool EditorSceneHandle::HasUnsavedChanges() const
+{
+    return m_HasUnsavedChanges;
+}
+
+void EditorSceneHandle::OnUnsavedChange()
+{
+    m_HasUnsavedChanges = true;
 }
 
 bool EditorSceneHandle::operator==(const EditorSceneHandle& other) const
@@ -126,6 +160,16 @@ EditorSceneHandle* EditorUniversalHandle::GetSceneHandle() const
 void EditorUniversalHandle::Save()
 {
     m_Saveable->Save();
+}
+
+bool EditorUniversalHandle::HasUnsavedChanges() const
+{
+    return m_Saveable->HasUnsavedChanges();
+}
+
+void EditorUniversalHandle::OnUnsavedChange()
+{
+    return m_Saveable->OnUnsavedChange();
 }
 
 bool EditorUniversalHandle::operator==(const EditorUniversalHandle& other) const

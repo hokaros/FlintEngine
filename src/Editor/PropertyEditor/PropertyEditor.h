@@ -23,6 +23,8 @@ private:
 	IPropertyEditor* GetValidEditor();
 	void ValidateCurrentEditor();
 
+	void RenderSharedSection();
+
 private:
 	std::weak_ptr<EditorUniversalHandle> m_EditedObjectHandle;
 	

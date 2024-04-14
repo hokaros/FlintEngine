@@ -8,6 +8,9 @@ class ISaveable
 public:
 	virtual void Save() = 0;
 
+	virtual bool HasUnsavedChanges() const = 0;
+	virtual void OnUnsavedChange() = 0;
+
 	virtual ~ISaveable() = default;
 };
 
@@ -27,11 +30,17 @@ public:
 	EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab, const std::string& prefab_path);
 
 	virtual IEditableGameObject& GetGameObject() const override;
+
+	// ISaveable
 	virtual void Save() override;
+	virtual bool HasUnsavedChanges() const override;
+	virtual void OnUnsavedChange() override;
 
 private:
 	std::unique_ptr<InlineGameObject> m_Prefab;
 	std::string m_PrefabPath;
+
+	bool m_HasUnsavedChanges = false;
 };
 
 class EditorIEditableGameObjectHandle
@@ -41,7 +50,11 @@ public:
 	EditorIEditableGameObjectHandle(IEditableGameObject& game_object, ISaveable& root_asset);
 
 	virtual IEditableGameObject& GetGameObject() const override;
+
+	// ISaveable
 	virtual void Save() override;
+	virtual bool HasUnsavedChanges() const override;
+	virtual void OnUnsavedChange() override;
 
 private:
 	IEditableGameObject& m_EditableObject;
@@ -56,7 +69,11 @@ public:
 	EditorSceneHandle(std::unique_ptr<EditableScene> scene, const std::string& scene_path);
 
 	EditableScene& GetScene() const;
+
+	// ISaveable
 	virtual void Save() override;
+	virtual bool HasUnsavedChanges() const override;
+	virtual void OnUnsavedChange() override;
 
 	bool operator==(const EditorSceneHandle& other) const;
 
@@ -64,6 +81,7 @@ private:
 	std::unique_ptr<EditableScene> m_Scene;
 	std::string m_ScenePath;
 
+	bool m_HasUnsavedChanges = false;
 };
 
 
@@ -80,7 +98,10 @@ public:
 	EditorGameObjectHandle* GetGameObjectHandle() const;
 	EditorSceneHandle* GetSceneHandle() const;
 
+	// ISaveable
 	virtual void Save() override;
+	virtual bool HasUnsavedChanges() const override;
+	virtual void OnUnsavedChange() override;
 
 	bool operator==(const EditorUniversalHandle& other) const;
 

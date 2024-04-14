@@ -56,11 +56,6 @@ void GameObjectPropertyEditor::RenderGameObjectEditor(IEditableGameObject& game_
     RenderComponentAddSection();
 
     ApplyValuesToGameObject(game_object);
-
-    if (ImGui::Button("Save"))
-    {
-        GetGameObjectHandle()->Save();
-    }
 }
 
 void GameObjectPropertyEditor::RenderComponentEditors()
@@ -128,22 +123,32 @@ void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_o
 
 void GameObjectPropertyEditor::ApplyValuesToGameObject(IEditableGameObject& game_object)
 {
+    bool any_change = false;
+
     Vector target_position = Vector(m_GameObjectPosition);
     if (game_object.GetResult().GetPosition() != target_position)
     {
         game_object.SetPosition(target_position);
+        any_change = true;
     }
 
     Vector target_size = Vector(m_GameObjectSize);
     if (game_object.GetResult().GetSize() != target_size)
     {
         game_object.SetSize(target_size);
+        any_change = true;
     }
 
     std::string target_name = std::string(m_GameObjectName);
     if (game_object.GetResult().GetName() != target_name)
     {
         game_object.SetName(target_name);
+        any_change = true;
+    }
+
+    if (any_change)
+    {
+        GetGameObjectHandle()->OnUnsavedChange();
     }
 }
 
