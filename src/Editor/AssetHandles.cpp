@@ -36,8 +36,9 @@ void EditorPrefabHandle::Save()
 }
 
 
-EditorIEditableGameObjectHandle::EditorIEditableGameObjectHandle(IEditableGameObject& game_object)
+EditorIEditableGameObjectHandle::EditorIEditableGameObjectHandle(IEditableGameObject& game_object, ISaveable& root_asset)
     : m_EditableObject(game_object)
+    , m_RootAsset(root_asset)
 {
 }
 
@@ -48,7 +49,7 @@ IEditableGameObject& EditorIEditableGameObjectHandle::GetGameObject() const
 
 void EditorIEditableGameObjectHandle::Save()
 {
-
+    m_RootAsset.Save();
 }
 
 

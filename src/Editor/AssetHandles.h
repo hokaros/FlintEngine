@@ -38,13 +38,14 @@ class EditorIEditableGameObjectHandle
 	: public EditorGameObjectHandle
 {
 public:
-	EditorIEditableGameObjectHandle(IEditableGameObject& game_object);
+	EditorIEditableGameObjectHandle(IEditableGameObject& game_object, ISaveable& root_asset);
 
 	virtual IEditableGameObject& GetGameObject() const override;
 	virtual void Save() override;
 
 private:
 	IEditableGameObject& m_EditableObject;
+	ISaveable& m_RootAsset;
 };
 
 
