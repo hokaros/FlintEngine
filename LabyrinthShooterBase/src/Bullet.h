@@ -1,5 +1,5 @@
 #pragma once
-#include <BoxCollider.h>
+#include <Components/BoxCollider.h>
 #include <ComponentDefinition.h>
 #include <Core/GameObject.h>
 #include "Health.h"

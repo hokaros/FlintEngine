@@ -1,8 +1,8 @@
 #pragma once
 #include <list>
 
-#include <RectangleRenderer.h>
-#include <SpriteRenderer.h>
+#include <Components/RectangleRenderer.h>
+#include <Components/SpriteRenderer.h>
 #include <PlayerController.h>
 #include <PowerBullet.h>
 #include <PlayerEquipment.h>

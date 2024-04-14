@@ -1,5 +1,5 @@
 #include "LabyrinthSolidifier.h"
-#include <BoxCollider.h>
+#include <Components/BoxCollider.h>
 
 DEFINE_COMPONENT(LabyrinthSolidifier);
 DEFINE_FIELD(LabyrinthSolidifier, position);

@@ -1,5 +1,5 @@
 #include "PhysicsSystem.h"
-#include "BoxCollider.h"
+#include <Components/BoxCollider.h>
 #include "utility.h"
 #include "DebugRenderer.h"
 #include "DebugConfig.h"

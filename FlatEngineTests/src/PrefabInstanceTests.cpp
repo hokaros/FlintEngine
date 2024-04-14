@@ -1,7 +1,7 @@
 #include "pch.h"
 #include <PrefabInstance.h>
-#include <RectangleRenderer.h>
-#include <BoxCollider.h>
+#include <Components/RectangleRenderer.h>
+#include <Components/BoxCollider.h>
 #include "FakeAssetManager.h"
 
 #ifdef SUITE_NAME

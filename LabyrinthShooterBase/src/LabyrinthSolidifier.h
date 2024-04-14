@@ -1,6 +1,6 @@
 #pragma once
 #include <Core/GameObject.h>
-#include <RectangleRenderer.h>
+#include <Components/RectangleRenderer.h>
 #include <Window.h>
 #include <ColliderMemory.h>
 #include <Regenerable.h>

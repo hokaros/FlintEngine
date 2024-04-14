@@ -1,7 +1,6 @@
 #include "SceneEditor.h"
 
 #include <utility.h>
-#include <RectangleRenderer.h>
 #include <AssetManager.h>
 
 ImU32 Rgb8ToImU32(const Rgb8& rgb)
