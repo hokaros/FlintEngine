@@ -2,7 +2,7 @@
 #include <imgui/imgui.h>
 #include <AssetManager.h>
 #include <PropertyEditor/PropertyEditor.h>
-#include "AssetExplorer.h"
+#include <AssetExplorer/AssetExplorer.h>
 #include "SceneEditor.h"
 #include "HierarchyEditor.h"
 #include "SelectedObjectManager.h"

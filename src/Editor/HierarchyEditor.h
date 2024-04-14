@@ -3,7 +3,6 @@
 #include <PrefabInstance.h>
 #include "AssetHandles.h"
 #include "SelectedObjectManager.h"
-#include "AssetExplorer.h"
 #include "Widgets.h"
 
 class HierarchyEditor
@@ -11,7 +10,7 @@ class HierarchyEditor
 public:
 	HierarchyEditor();
 
-	void Init(SelectedObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer);
+	void Init(SelectedObjectManager& selected_game_object_manager);
 
 	void SetEditedObject(std::shared_ptr<EditorUniversalHandle> handle);
 
@@ -44,7 +43,6 @@ private:
 	std::optional<RemoveObjectOperation> m_RequestedRemove = std::nullopt;
 
 	SelectedObjectManager* m_SelectedGameObjectManager;
-	AssetExplorer* m_AssetExplorer;
 
 	ModalStringPrompt m_PrefabPathPrompt;
 };

@@ -6,7 +6,7 @@ Editor::Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int
     , m_GameRunner(renderer, screenWidth, screenHeight)
 {
     m_PropertyEditor.Init(m_SelectedGameObjectManager);
-    m_HierarchyEditor.Init(m_SelectedGameObjectManager, m_AssetExplorer);
+    m_HierarchyEditor.Init(m_SelectedGameObjectManager);
 
     m_AssetExplorer.RegisterAssetListener(this);
 }

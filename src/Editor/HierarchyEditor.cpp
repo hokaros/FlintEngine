@@ -7,10 +7,9 @@ HierarchyEditor::HierarchyEditor()
 {
 }
 
-void HierarchyEditor::Init(SelectedObjectManager& selected_game_object_manager, AssetExplorer& asset_explorer)
+void HierarchyEditor::Init(SelectedObjectManager& selected_game_object_manager)
 {
 	m_SelectedGameObjectManager = &selected_game_object_manager;
-	m_AssetExplorer = &asset_explorer;
 }
 
 void HierarchyEditor::SetEditedObject(std::shared_ptr<EditorUniversalHandle> handle)
