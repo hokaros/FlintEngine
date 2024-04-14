@@ -1,7 +1,7 @@
 #include "AssetHandles.h"
 
-#include "PrefabSaver.h"
-#include "SceneSaver.h"
+#include <Serialization/PrefabSaver.h>
+#include <Serialization/SceneSaver.h>
 #include <AssetManager.h>
 
 bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const
