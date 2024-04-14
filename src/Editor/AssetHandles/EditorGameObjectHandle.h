@@ -5,6 +5,7 @@
 
 class EditorGameObjectHandle
 	: public ISaveable
+	, public IHierarchyEditable
 {
 public:
 	virtual IEditableGameObject& GetGameObject() const = 0;
@@ -18,6 +19,12 @@ public:
 	void AddComponent(std::unique_ptr<ObjectComponent> component);
 	void ModifyComponentField(std::unique_ptr<ComponentFieldChange> modification);
 	void RemoveComponent(size_t component_index);
+
+	// IHierarchyEditable
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects() const override;
+	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
+	virtual void DeleteChild(IEditableGameObject& child) override;
+	virtual const char* GetName() const override;
 
 	bool operator==(const EditorGameObjectHandle& other) const;
 };

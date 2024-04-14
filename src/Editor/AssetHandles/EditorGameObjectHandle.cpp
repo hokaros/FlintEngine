@@ -45,6 +45,28 @@ void EditorGameObjectHandle::RemoveComponent(size_t component_index)
     OnUnsavedChange();
 }
 
+const std::vector<std::unique_ptr<IEditableGameObject>>& EditorGameObjectHandle::GetSubRootObjects() const
+{
+    return GetGameObject().GetChildren();
+}
+
+void EditorGameObjectHandle::AddChild(std::unique_ptr<IEditableGameObject> child)
+{
+    GetGameObject().AddChild(std::move(child));
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::DeleteChild(IEditableGameObject& child)
+{
+    GetGameObject().DeleteChild(child);
+    OnUnsavedChange();
+}
+
+const char* EditorGameObjectHandle::GetName() const
+{
+    return GetGameObject().GetResult().GetName().c_str();
+}
+
 bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const
 {
     return &GetGameObject() == &other.GetGameObject();
