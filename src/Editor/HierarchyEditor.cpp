@@ -31,7 +31,7 @@ void HierarchyEditor::Render()
 		}
 		else
 		{
-			RenderObjectHierarchy(m_EditedObjectHandle, nullptr, 0);
+			RenderObjectHierarchy(m_EditedObjectHandle, /*parent*/nullptr, /*index_in_parent*/0, /*is_root*/true);
 		}
 
 		m_PrefabPathPrompt.Update();
@@ -39,7 +39,7 @@ void HierarchyEditor::Render()
 	ImGui::End();
 }
 
-void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandle> node_object_handle, IHierarchyEditable* parent, size_t index_in_parent)
+void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandle> node_object_handle, IHierarchyEditable* parent, size_t index_in_parent, bool is_root)
 {
 	if (node_object_handle == nullptr)
 		return;
@@ -64,6 +64,11 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandl
 	if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
 	{
 		m_SelectedGameObjectManager->SelectObject(node_object_handle);
+	}
+	if (is_root && node_object_handle->HasUnsavedChanges())
+	{
+		ImGui::SameLine();
+		ImGui::Text("*");
 	}
 
 	if (ImGui::BeginPopupContextItem("Tree node context menu"))
