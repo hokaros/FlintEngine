@@ -45,9 +45,9 @@ void PrefabInstance::AddChild(std::unique_ptr<IEditableGameObject> child)
 	m_ResultGameObject->AddChild(std::move(child));
 }
 
-void PrefabInstance::DeleteChild(IEditableGameObject& child)
+void PrefabInstance::RemoveChild(IEditableGameObject& child)
 {
-	m_ResultGameObject->DeleteChild(child);
+	m_ResultGameObject->RemoveChild(child);
 }
 
 void PrefabInstance::AddComponent(std::unique_ptr<ObjectComponent> component)

@@ -1,7 +1,7 @@
 #pragma once
 #include <EditableScene.h>
-#include <IHierarchyEditable.h>
-#include <AssetHandles/AssetInterfaces.h>
+#include <AssetHandles/IHierarchyEditable.h>
+#include <AssetHandles/ISaveable.h>
 
 class EditorSceneHandle
 	: public ISaveable

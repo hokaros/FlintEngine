@@ -10,5 +10,3 @@ public:
 
 	virtual ~ISaveable() = default;
 };
-
-// TODO: move IHierarchyEditable from the engine

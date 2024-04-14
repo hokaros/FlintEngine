@@ -21,13 +21,3 @@ void IEditableGameObject::RenderUpdate(IEditableGameObject& editable, SceneRende
 		RenderUpdate(*editable_child, renderer);
 	}
 }
-
-const std::vector<std::unique_ptr<IEditableGameObject>>& IEditableGameObject::GetSubRootObjects() const
-{
-	return GetChildren();
-}
-
-const char* IEditableGameObject::GetName() const
-{
-	return GetResult().GetName().c_str();
-}

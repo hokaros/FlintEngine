@@ -16,7 +16,7 @@ public:
 	virtual void SetPosition(const Vector& position) override;
 
 	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
-	virtual void DeleteChild(IEditableGameObject& child) override;
+	virtual void RemoveChild(IEditableGameObject& child) override;
 
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
 	virtual void RemoveComponent(size_t index) override;

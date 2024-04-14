@@ -6,7 +6,7 @@ EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorGameObjectHan
 {
     FE_ASSERT(m_EditableGameObject != nullptr, "Creating handle without GameObject");
 
-    m_HierarchyEditable = &m_EditableGameObject->GetGameObject();
+    m_HierarchyEditable = m_EditableGameObject.get();
     m_Saveable = m_EditableGameObject.get();
 }
 
@@ -15,7 +15,7 @@ EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorIEditableGame
 {
     FE_ASSERT(m_EditableGameObject != nullptr, "Creating handle without GameObject");
 
-    m_HierarchyEditable = &m_EditableGameObject->GetGameObject();
+    m_HierarchyEditable = m_EditableGameObject.get();
     m_Saveable = m_EditableGameObject.get();
 }
 

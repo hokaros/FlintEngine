@@ -1,7 +1,7 @@
 #pragma once
 #include <InlineGameObject.h>
-#include <IHierarchyEditable.h>
-#include "AssetInterfaces.h"
+#include <AssetHandles/IHierarchyEditable.h>
+#include <AssetHandles/ISaveable.h>
 
 class EditorGameObjectHandle
 	: public ISaveable

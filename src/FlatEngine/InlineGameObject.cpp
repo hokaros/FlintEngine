@@ -40,7 +40,7 @@ void InlineGameObject::AddChild(std::unique_ptr<IEditableGameObject> child)
 	m_ChildrenEditables.push_back(std::move(child));
 }
 
-void InlineGameObject::DeleteChild(IEditableGameObject& child)
+void InlineGameObject::RemoveChild(IEditableGameObject& child)
 {
 	for (auto it = m_ChildrenEditables.begin(); it != m_ChildrenEditables.end(); it++)
 	{

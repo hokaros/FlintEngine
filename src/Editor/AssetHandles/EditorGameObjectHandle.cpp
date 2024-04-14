@@ -58,7 +58,7 @@ void EditorGameObjectHandle::AddChild(std::unique_ptr<IEditableGameObject> child
 
 void EditorGameObjectHandle::DeleteChild(IEditableGameObject& child)
 {
-    GetGameObject().DeleteChild(child);
+    GetGameObject().RemoveChild(child);
     OnUnsavedChange();
 }
 
