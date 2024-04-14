@@ -15,6 +15,7 @@ class ObjectManager
 {
 public:
 	ObjectManager();
+	~ObjectManager();
 
 	// Dodaje obiekt do zarz¹dzanych
 	virtual void AddGameObject(std::unique_ptr<GameObject> object) override;
@@ -36,6 +37,8 @@ public:
 
 	// Usuwa natychmiast wszystkie obiekty
 	void Clear();
+
+	void SetAsMain();
 
 	static ObjectManager* Main();
 private:

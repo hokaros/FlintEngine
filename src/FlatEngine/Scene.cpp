@@ -1,5 +1,10 @@
 #include "Scene.h"
 
+void Scene::OnLoaded()
+{
+	m_ObjectManager.SetAsMain();
+}
+
 void Scene::Update()
 {
 	m_ObjectManager.ActivateNewObjects();

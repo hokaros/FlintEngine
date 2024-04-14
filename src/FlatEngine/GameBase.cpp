@@ -75,6 +75,11 @@ bool GameBase::IsRunning()
 void GameBase::LoadScene(std::unique_ptr<Scene> scene)
 {
 	m_CurrScene = std::move(scene);
+
+	if (m_CurrScene != nullptr)
+	{
+		m_CurrScene->OnLoaded();
+	}
 }
 
 void GameBase::InvokeOnNextFrame(function<void()> fun)

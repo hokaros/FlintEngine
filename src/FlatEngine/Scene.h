@@ -7,6 +7,7 @@ class Scene
 	: public IGameObjectContainer
 {
 public:
+	virtual void OnLoaded();
 	virtual void Update();
 	virtual void Render(SceneRenderer& renderer);
 	void ResetScene();

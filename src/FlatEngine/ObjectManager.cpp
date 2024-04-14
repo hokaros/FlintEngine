@@ -7,6 +7,11 @@ ObjectManager* ObjectManager::Main()
 	return s_Main;
 }
 
+void ObjectManager::SetAsMain()
+{
+	s_Main = this;
+}
+
 void ObjectManager::DestroyObjectImpl(GameObject* gameObject, bool detach)
 {
 	for (GameObject* destroyedObj : m_DestroyedObjects) {
@@ -39,7 +44,18 @@ void ObjectManager::NotifyObjectDestroying(GameObject* object)
 
 ObjectManager::ObjectManager() 
 {
-	s_Main = this;
+	if (s_Main == nullptr)
+	{
+		s_Main = this;
+	}
+}
+
+ObjectManager::~ObjectManager()
+{
+	if (s_Main == this)
+	{
+		s_Main = nullptr;
+	}
 }
 
 void ObjectManager::AddNewObject(std::unique_ptr<GameObject> gameObject)
