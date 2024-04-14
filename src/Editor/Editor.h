@@ -1,7 +1,7 @@
 #pragma once
 #include <imgui/imgui.h>
 #include <AssetManager.h>
-#include "PropertyEditor.h"
+#include <PropertyEditor/PropertyEditor.h>
 #include "AssetExplorer.h"
 #include "SceneEditor.h"
 #include "HierarchyEditor.h"
