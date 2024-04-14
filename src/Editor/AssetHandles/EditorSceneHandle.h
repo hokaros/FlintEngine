@@ -1,9 +1,11 @@
 #pragma once
 #include <EditableScene.h>
+#include <IHierarchyEditable.h>
 #include <AssetHandles/AssetInterfaces.h>
 
 class EditorSceneHandle
 	: public ISaveable
+	, public IHierarchyEditable
 {
 public:
 	EditorSceneHandle(std::unique_ptr<EditableScene> scene, const std::string& scene_path);
@@ -14,6 +16,12 @@ public:
 	virtual void Save() override;
 	virtual bool HasUnsavedChanges() const override;
 	virtual void OnUnsavedChange() override;
+
+	// IHierarchyEditable
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects() const override;
+	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
+	virtual void DeleteChild(IEditableGameObject& child) override;
+	virtual const char* GetName() const override;
 
 	bool operator==(const EditorSceneHandle& other) const;
 

@@ -24,7 +24,7 @@ EditorUniversalHandle::EditorUniversalHandle(std::shared_ptr<EditorSceneHandle> 
 {
     FE_ASSERT(m_SceneHandle != nullptr, "Creating handle without SceneHandle");
 
-    m_HierarchyEditable = &m_SceneHandle->GetScene();
+    m_HierarchyEditable = m_SceneHandle.get();
     m_Saveable = m_SceneHandle.get();
 }
 

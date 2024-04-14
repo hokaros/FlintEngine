@@ -26,6 +26,19 @@ void EditableScene::AddRootObject(std::unique_ptr<IEditableGameObject> game_obje
 	m_RootObjects.push_back(std::move(game_object));
 }
 
+void EditableScene::RemoveRootObject(IEditableGameObject& game_object)
+{
+	for (auto it = m_RootObjects.begin(); it != m_RootObjects.end(); it++)
+	{
+		std::unique_ptr<IEditableGameObject>& c = *it;
+		if (c.get() == &game_object)
+		{
+			m_RootObjects.erase(it);
+			return;
+		}
+	}
+}
+
 const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetRootObjects() const
 {
 	return m_RootObjects;
@@ -54,30 +67,7 @@ void EditableScene::CopyObjectsToScene(Scene& scene) const
 	}
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& EditableScene::GetSubRootObjects() const
-{
-	return m_RootObjects;
-}
-
-void EditableScene::AddChild(std::unique_ptr<IEditableGameObject> child)
-{
-	AddRootObject(std::move(child));
-}
-
-void EditableScene::DeleteChild(IEditableGameObject& child)
-{
-	for (auto it = m_RootObjects.begin(); it != m_RootObjects.end(); it++)
-	{
-		std::unique_ptr<IEditableGameObject>& c = *it;
-		if (c.get() == &child)
-		{
-			m_RootObjects.erase(it);
-			return;
-		}
-	}
-}
-
 const char* EditableScene::GetName() const
 {
-	return "Scene";
+	return "Scene"; // TODO
 }
