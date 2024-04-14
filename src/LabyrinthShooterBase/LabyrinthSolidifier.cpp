@@ -121,7 +121,10 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
 }
 
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color) {
-	GameObject* wall = GameObject::Instantiate(*wallPrefab.Get());
+	const GameObject* wallPrefabLoaded = wallPrefab.Get();
+	FE_ASSERT(wallPrefabLoaded != nullptr, "Couldn't load wall prefab");
+
+	GameObject* wall = GameObject::Instantiate(*wallPrefabLoaded);
 
 	wall->SetSize(size);
 	wall->FindComponent<BoxCollider>()->SetSize(size);
