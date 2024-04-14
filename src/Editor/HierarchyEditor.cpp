@@ -65,11 +65,6 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandl
 	{
 		m_SelectedGameObjectManager->SelectObject(node_object_handle);
 	}
-	if (is_root && node_object_handle->HasUnsavedChanges())
-	{
-		ImGui::SameLine();
-		ImGui::Text("*");
-	}
 
 	if (ImGui::BeginPopupContextItem("Tree node context menu"))
 	{
@@ -77,6 +72,12 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandl
 		ImGui::EndPopup();
 	}
 	ImGui::PopID();
+
+	if (is_root && node_object_handle->HasUnsavedChanges())
+	{
+		ImGui::SameLine();
+		ImGui::Text("*");
+	}
 
 	if (node_open)
 	{
