@@ -78,5 +78,8 @@ namespace files
 
 		static void GetDirectoryContents(const Directory& dir, std::vector<std::unique_ptr<DirectoryElement>>& out_contents);
 		static void GetDirectoriesInside(const Directory& src_dir, std::vector<Directory>& out_directories);
+
+	private:
+		static bool ShouldDirectoryEntryBeIgnored(const std::filesystem::directory_entry& entry);
 	};
 }

@@ -122,6 +122,9 @@ namespace files
 
         for (auto& entry : fs::directory_iterator(dir.GetPath()))
         {
+            if (ShouldDirectoryEntryBeIgnored(entry))
+                continue;
+
             std::unique_ptr<DirectoryElement> elem = nullptr;
             if (entry.is_directory())
             {
@@ -147,5 +150,13 @@ namespace files
 
             out_directories.emplace_back(entry.path().string());
         }
+    }
+
+    bool AssetMiner::ShouldDirectoryEntryBeIgnored(const std::filesystem::directory_entry& entry)
+    {
+        if (entry.path().extension() == ".bak")
+            return true;
+
+        return false;
     }
 }
