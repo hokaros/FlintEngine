@@ -1,6 +1,7 @@
 #pragma once
 #include <imgui/imgui.h>
-#include "AssetHandles.h"
+#include <AssetHandles/EditorSceneHandle.h>
+#include <AssetHandles/EditorGameObjectHandle.h>
 #include "AssetMiner.h"
 #include "DirectoryTreeExplorer.h"
 #include "Widgets.h"

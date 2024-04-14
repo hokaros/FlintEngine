@@ -1,7 +1,6 @@
 #pragma once
 #include <Core/GameObject.h>
-#include <IEditableGameObject.h>
-#include "AssetHandles.h"
+#include <AssetHandles/EditorUniversalHandle.h>
 #include "SelectedObjectManager.h"
 #include "GameObjectPropertyEditor.h"
 #include "ScenePropertyEditor.h"

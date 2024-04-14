@@ -1,6 +1,6 @@
 #pragma once
 #include "ComponentEditor.h"
-#include "AssetHandles.h"
+#include <AssetHandles/EditorUniversalHandle.h>
 #include "IPropertyEditor.h"
 
 

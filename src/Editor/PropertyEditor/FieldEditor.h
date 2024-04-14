@@ -2,7 +2,7 @@
 #include <ComponentFieldDefinition.h>
 #include <imgui/imgui.h>
 #include <IEditableGameObject.h>
-#include <AssetHandles.h>
+#include <AssetHandles/EditorGameObjectHandle.h>
 
 class FieldEditor
 {

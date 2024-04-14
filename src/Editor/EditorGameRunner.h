@@ -4,7 +4,7 @@
 #include <Scene.h>
 #include <InputController.h>
 #include <GameBase.h>
-#include "AssetHandles.h"
+#include <AssetHandles/EditorUniversalHandle.h>
 
 class EditorInputController
 	: public InputController

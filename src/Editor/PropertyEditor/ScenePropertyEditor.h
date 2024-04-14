@@ -1,6 +1,6 @@
 #pragma once
 #include "IPropertyEditor.h"
-#include "AssetHandles.h"
+#include <AssetHandles/EditorUniversalHandle.h>
 
 class ScenePropertyEditor 
     : public IPropertyEditor

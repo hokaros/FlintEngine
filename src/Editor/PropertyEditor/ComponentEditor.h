@@ -1,7 +1,7 @@
 #pragma once
 #include <ComponentDefinition.h>
 #include <imgui/imgui.h>
-#include <AssetHandles.h>
+#include <AssetHandles/EditorGameObjectHandle.h>
 #include "FieldEditor.h"
 
 class IComponentActionObserver

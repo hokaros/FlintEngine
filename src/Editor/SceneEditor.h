@@ -2,7 +2,7 @@
 #include <SceneRenderer.h>
 #include <imgui/imgui.h>
 #include <Scene.h>
-#include "AssetHandles.h"
+#include <AssetHandles/EditorUniversalHandle.h>
 #include "ViewportController.h"
 
 class SceneEditor

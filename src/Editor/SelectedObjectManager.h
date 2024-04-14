@@ -2,7 +2,7 @@
 #include <ObjectManager.h>
 #include <Scene.h>
 
-#include "AssetHandles.h"
+#include <AssetHandles/EditorUniversalHandle.h>
 
 class ISelectionObserver
 {

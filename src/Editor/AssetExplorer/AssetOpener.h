@@ -1,5 +1,5 @@
 #pragma once
-#include "AssetHandles.h"
+#include <AssetHandles/EditorUniversalHandle.h>
 #include "AssetMiner.h"
 
 class AssetOpener
