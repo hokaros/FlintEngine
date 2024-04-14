@@ -5,8 +5,9 @@ Editor::Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int
     , m_SceneEditor(renderer, screenWidth, screenHeight)
     , m_GameRunner(renderer, screenWidth, screenHeight)
 {
-    m_PropertyEditor.Init(m_SelectedGameObjectManager);
-    m_HierarchyEditor.Init(m_SelectedGameObjectManager);
+    m_PropertyEditor.Init(m_SelectedObjectManager);
+    m_HierarchyEditor.Init(m_SelectedObjectManager);
+    m_SceneEditor.Init(m_SelectedObjectManager);
 
     m_AssetExplorer.RegisterAssetListener(this);
 }
@@ -37,7 +38,7 @@ void Editor::OnPrefabOpened(std::unique_ptr<EditorPrefabHandle> prefab)
     std::shared_ptr<EditorUniversalHandle> handle = std::make_shared<EditorUniversalHandle>(prefab_shared);
 
     m_HierarchyEditor.SetEditedObject(handle);
-    m_SelectedGameObjectManager.SelectObject(handle);
+    m_SelectedObjectManager.SelectObject(handle);
     m_SceneEditor.SetRootObject(std::weak_ptr<EditorUniversalHandle>(handle));
     m_GameRunner.SetSelectedScene(handle);
 }
@@ -48,7 +49,7 @@ void Editor::OnSceneOpened(std::unique_ptr<EditorSceneHandle> scene)
     std::shared_ptr<EditorUniversalHandle> handle = std::make_shared<EditorUniversalHandle>(scene_shared);
 
     m_HierarchyEditor.SetEditedObject(handle);
-    m_SelectedGameObjectManager.SelectObject(handle);
+    m_SelectedObjectManager.SelectObject(handle);
     m_SceneEditor.SetRootObject(std::weak_ptr<EditorUniversalHandle>(handle));
     m_GameRunner.SetSelectedScene(handle);
 }

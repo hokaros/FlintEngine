@@ -18,6 +18,11 @@ SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screen
 	m_PrefabScene.SetBackgroundColor(Rgb8(200, 200, 200));
 }
 
+void SceneEditor::Init(SelectedObjectManager& selected_object_manager)
+{
+	m_SelectedObjectManager = &selected_object_manager;
+}
+
 void SceneEditor::SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object)
 {
 	m_RootObject = root_object;
@@ -52,6 +57,7 @@ void SceneEditor::Render()
 		if (ImGui::IsWindowFocused())
 		{
 			viewportController.UpdateFromKeyboard(m_SceneRenderer.GetViewport());
+			ProcessShortcuts();
 		}
 		// WARNING: do not render any widget between viewportController's update and displaying the scene - viewportController's calculations may be wrong
 
@@ -93,6 +99,39 @@ void SceneEditor::RenderOverlay()
 	ImGui::PushStyleColor(ImGuiCol_Text, Rgb8ToImU32(text_col));
 	ImGui::Text("(%0.2f, %0.2f)", viewport_pos.x, viewport_pos.y);
 	ImGui::PopStyleColor();
+}
+
+void SceneEditor::ProcessShortcuts()
+{
+	if (ImGui::IsKeyDown(ImGuiKey_F))
+	{
+		MoveViewportToSelectedGameObject();
+	}
+}
+
+void SceneEditor::MoveViewportToSelectedGameObject()
+{
+	FE_ASSERT(m_SelectedObjectManager != nullptr, "No selected object manager");
+
+	std::shared_ptr<EditorUniversalHandle> selected_object = m_SelectedObjectManager->GetSelectedObject().lock();
+	if (selected_object == nullptr)
+		return;
+
+	EditorGameObjectHandle* go_handle = selected_object->GetGameObjectHandle();
+	if (go_handle == nullptr)
+		return;
+
+	MoveViewportToGameObject(go_handle->GetResult());
+}
+
+void SceneEditor::MoveViewportToGameObject(const GameObject& object)
+{
+	const Vector& new_position = object.GetPosition();
+	const Vector& new_size = object.GetSize();
+
+	Rect new_viewport = Rect(new_position, new_size);
+
+	m_SceneRenderer.SetViewport(new_viewport);
 }
 
 Rgb8 SceneEditor::GetNegativeColor(const Rgb8& color)

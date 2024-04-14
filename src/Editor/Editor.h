@@ -33,7 +33,7 @@ private:
 	HierarchyEditor m_HierarchyEditor;
 	EditorGameRunner m_GameRunner;
 
-	SelectedObjectManager m_SelectedGameObjectManager;
+	SelectedObjectManager m_SelectedObjectManager;
 
 	ImVec4& m_ClearColor;
 };
