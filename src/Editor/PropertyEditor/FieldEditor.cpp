@@ -35,7 +35,8 @@ void FieldEditorDefault::Render()
 		else
 		{
 			FE_WARN("Cannot use IEditableGameObject due to unspecialized FieldEditor");
-			m_Field.SetFieldValue(&m_Component, field_value);
+			m_Field.SetFieldValue(&m_Component, field_value); // TODO: encapsulate it in the handle
+			m_GameObject.OnUnsavedChange();
 		}
 	}
 }
