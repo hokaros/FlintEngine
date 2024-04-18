@@ -14,31 +14,31 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-project(FlatEngine)
+project(FlintEngine)
 
-file(GLOB_RECURSE FLAT_ENGINE_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngine/*.cpp)
+file(GLOB_RECURSE FLINT_ENGINE_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/FlintEngine/*.cpp)
 
-add_library(FlatEngine ${FLAT_ENGINE_SOURCES})
-target_include_directories(FlatEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngine)
+add_library(FlintEngine ${FLINT_ENGINE_SOURCES})
+target_include_directories(FlintEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/FlintEngine)
 
-target_link_libraries(FlatEngine PUBLIC SDL2::SDL2main)
-target_link_libraries(FlatEngine PUBLIC SDL2::SDL2)
+target_link_libraries(FlintEngine PUBLIC SDL2::SDL2main)
+target_link_libraries(FlintEngine PUBLIC SDL2::SDL2)
 
 
-project(FlatEngineTests)
+project(FlintEngineTests)
 
 enable_testing()
 
-file(GLOB_RECURSE FLAT_ENGINE_TESTS_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngineTests/*.cpp)
+file(GLOB_RECURSE FLINT_ENGINE_TESTS_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/FlintEngineTests/*.cpp)
 
-add_executable(FlatEngineTests ${FLAT_ENGINE_TESTS_SOURCES})
-target_include_directories(FlatEngineTests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/FlatEngineTests)
+add_executable(FlintEngineTests ${FLINT_ENGINE_TESTS_SOURCES})
+target_include_directories(FlintEngineTests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/FlintEngineTests)
 
-target_link_libraries(FlatEngineTests PUBLIC FlatEngine)
-target_link_libraries(FlatEngineTests PUBLIC GTest::gtest_main)
+target_link_libraries(FlintEngineTests PUBLIC FlintEngine)
+target_link_libraries(FlintEngineTests PUBLIC GTest::gtest_main)
 
 include(GoogleTest)
-gtest_discover_tests(FlatEngineTests)
+gtest_discover_tests(FlintEngineTests)
 
 
 project(LabyrinthShooterBase)
@@ -48,8 +48,8 @@ file(GLOB_RECURSE LAB_SHOOTER_BASE_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOU
 add_library(LabyrinthShooterBase ${LAB_SHOOTER_BASE_SOURCES})
 target_include_directories(LabyrinthShooterBase PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/LabyrinthShooterBase)
 
-target_link_libraries(LabyrinthShooterBase PUBLIC FlatEngine)
-set_target_properties(LabyrinthShooterBase PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlatEngine")
+target_link_libraries(LabyrinthShooterBase PUBLIC FlintEngine)
+set_target_properties(LabyrinthShooterBase PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlintEngine")
 
 
 project(Editor)
@@ -59,9 +59,9 @@ file(GLOB_RECURSE EDITOR_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/s
 add_executable(Editor ${EDITOR_SOURCES})
 target_include_directories(Editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/Editor)
 
-target_link_libraries(Editor PRIVATE FlatEngine)
+target_link_libraries(Editor PRIVATE FlintEngine)
 target_link_libraries(Editor PRIVATE LabyrinthShooterBase)
-set_target_properties(Editor PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlatEngine /WHOLEARCHIVE:LabyrinthShooterBase")
+set_target_properties(Editor PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlintEngine /WHOLEARCHIVE:LabyrinthShooterBase")
 
 
 project(LabyrinthShooter)
@@ -72,4 +72,4 @@ add_executable(LabyrinthShooter ${LAB_SHOOTER_SOURCES})
 target_include_directories(LabyrinthShooter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/LabyrinthShooter)
 
 target_link_libraries(LabyrinthShooter PRIVATE LabyrinthShooterBase)
-set_target_properties(LabyrinthShooter PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlatEngine /WHOLEARCHIVE:LabyrinthShooterBase")
+set_target_properties(LabyrinthShooter PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:FlintEngine /WHOLEARCHIVE:LabyrinthShooterBase")
