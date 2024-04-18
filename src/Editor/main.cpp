@@ -19,6 +19,16 @@
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
+void validateImGuiConfig(ImGuiIO& io)
+{
+    constexpr const char* DEFAULT_IMGUI_CONFIG_PATH = "../../../imgui_default.ini";
+
+    if (std::filesystem::exists(io.IniFilename) == false)
+    {
+        std::filesystem::copy_file(DEFAULT_IMGUI_CONFIG_PATH, io.IniFilename);
+    }
+}
+
 // Main code
 int main(int, char**)
 {
@@ -57,6 +67,8 @@ int main(int, char**)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigWindowsMoveFromTitleBarOnly = true;
+
+    validateImGuiConfig(io);
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
