@@ -1,6 +1,6 @@
-# FlatEngine
+# FlintEngine
 
-FlatEngine is a simple 2D game engine. It uses:
+FlintEngine is a simple 2D game engine. It uses:
 * SDL2 for rendering
 * [Dear ImGui](https://github.com/ocornut/imgui) as a GUI library for the editor and dev menus in game
 
