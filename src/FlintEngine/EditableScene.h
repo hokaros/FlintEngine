@@ -13,8 +13,6 @@ public:
 	void RemoveRootObject(IEditableGameObject& game_object);
 	const std::vector<std::unique_ptr<IEditableGameObject>>& GetRootObjects() const;
 
-	const char* GetName() const;
-
 	void SetBackgroundColor(const Rgb8& color);
 	const Rgb8& GetBackgroundColor() const;
 

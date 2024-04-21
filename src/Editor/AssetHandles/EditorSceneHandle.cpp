@@ -55,7 +55,7 @@ void EditorSceneHandle::DeleteChild(IEditableGameObject& child)
 
 const char* EditorSceneHandle::GetName() const
 {
-    return m_Scene->GetName();
+    return m_ScenePath.c_str();
 }
 
 bool EditorSceneHandle::operator==(const EditorSceneHandle& other) const

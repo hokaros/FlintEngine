@@ -66,8 +66,3 @@ void EditableScene::CopyObjectsToScene(Scene& scene) const
 		scene.AddGameObject(std::move(runtime_object));
 	}
 }
-
-const char* EditableScene::GetName() const
-{
-	return "Scene"; // TODO
-}
