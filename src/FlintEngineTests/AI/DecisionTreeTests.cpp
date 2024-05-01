@@ -39,8 +39,8 @@ TEST(SUITE_NAME, DecidesRootResult)
 	// Arrange
 	const int secret_result = 7;
 
-	dt::DecisionTreeResult<int> result(secret_result);
-	dt::DecisionTree<int> tree(result);
+	std::unique_ptr<dt::DecisionTreeResult<int>> result = std::make_unique<dt::DecisionTreeResult<int>>(secret_result);
+	dt::DecisionTree<int> tree(std::move(result));
 
 	// Act
 	const int decision = tree.Decide();
@@ -55,12 +55,10 @@ TEST(SUITE_NAME, BranchesTrueCondition)
 	const int expected_result = 7;
 	const int unexpected_result = 6;
 
-	dt::DecisionTreeResult<int> expected_node(expected_result);
-	dt::DecisionTreeResult<int> unexpected_node(unexpected_result);
-	TrueCondition truth;
-	dt::DecisionTreeSplit<int> true_condition(truth, expected_node, unexpected_node);
-
-	dt::DecisionTree<int> tree(true_condition);
+	std::unique_ptr<dt::DecisionTreeResult<int>> expected_node = std::make_unique<dt::DecisionTreeResult<int>>(expected_result);
+	std::unique_ptr<dt::DecisionTreeResult<int>> unexpected_node = std::make_unique<dt::DecisionTreeResult<int>>(unexpected_result);
+	std::unique_ptr<dt::DecisionTreeSplit<int>> true_condition = std::make_unique<dt::DecisionTreeSplit<int>>(std::make_unique<TrueCondition>(), std::move(expected_node), std::move(unexpected_node));
+	dt::DecisionTree<int> tree(std::move(true_condition));
 
 	// Act
 	const int decision = tree.Decide();
@@ -75,11 +73,10 @@ TEST(SUITE_NAME, BranchesFalseCondition)
 	const int expected_result = 7;
 	const int unexpected_result = 6;
 
-	dt::DecisionTreeResult<int> expected_node(expected_result);
-	dt::DecisionTreeResult<int> unexpected_node(unexpected_result);
-	FalseCondition falsth;
-	dt::DecisionTreeSplit<int> false_condition(falsth, unexpected_node, expected_node);
-	dt::DecisionTree<int> tree(false_condition);
+	std::unique_ptr<dt::DecisionTreeResult<int>> expected_node = std::make_unique<dt::DecisionTreeResult<int>>(expected_result);
+	std::unique_ptr<dt::DecisionTreeResult<int>> unexpected_node = std::make_unique<dt::DecisionTreeResult<int>>(unexpected_result);
+	std::unique_ptr<dt::DecisionTreeSplit<int>> true_condition = std::make_unique<dt::DecisionTreeSplit<int>>(std::make_unique<FalseCondition>(), std::move(unexpected_node), std::move(expected_node));
+	dt::DecisionTree<int> tree(std::move(true_condition));
 
 	// Act
 	const int decision = tree.Decide();
