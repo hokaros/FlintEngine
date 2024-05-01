@@ -10,26 +10,26 @@ namespace dt
 	class DecisionTree
 	{
 	public:
-		DecisionTree<ResultT>(std::unique_ptr<IDecisionTreeNode<ResultT>> rootNode);
+		DecisionTree<ResultT>(IDecisionTreeNode<ResultT>& rootNode);
 
 		const ResultT& Decide() const;
 
 	private:
-		std::unique_ptr<IDecisionTreeNode<ResultT>> m_RootNode;
+		IDecisionTreeNode<ResultT>& m_RootNode;
 	};
 
 
 
 	template<typename ResultT>
-	inline DecisionTree<ResultT>::DecisionTree(std::unique_ptr<IDecisionTreeNode<ResultT>> rootNode)
-		: m_RootNode(std::move(rootNode))
+	inline DecisionTree<ResultT>::DecisionTree(IDecisionTreeNode<ResultT>& rootNode)
+		: m_RootNode(rootNode)
 	{
-		FE_ASSERT(m_RootNode != nullptr, "Didn't pass root node to DecisionTree");
+
 	}
 
 	template<typename ResultT>
 	inline const ResultT& DecisionTree<ResultT>::Decide() const
 	{
-		return m_RootNode->Decide();
+		return m_RootNode.Decide();
 	}
 }
