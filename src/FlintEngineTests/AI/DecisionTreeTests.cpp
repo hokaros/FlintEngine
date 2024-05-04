@@ -3,6 +3,7 @@
 #include <AI/DecisionTree/DecisionTree.h>
 #include <AI/DecisionTree/DecisionTreeResult.h>
 #include <AI/DecisionTree/DecisionTreeSplit.h>
+#include <AI/DecisionTree/DecisionTreeBuilder.h>
 
 #ifdef SUITE_NAME
 #error Cannot redefine suite name
@@ -55,13 +56,17 @@ TEST(SUITE_NAME, BranchesTrueCondition)
 	const int expected_result = 7;
 	const int unexpected_result = 6;
 
-	std::unique_ptr<dt::DecisionTreeResult<int>> expected_node = std::make_unique<dt::DecisionTreeResult<int>>(expected_result);
-	std::unique_ptr<dt::DecisionTreeResult<int>> unexpected_node = std::make_unique<dt::DecisionTreeResult<int>>(unexpected_result);
-	std::unique_ptr<dt::DecisionTreeSplit<int>> true_condition = std::make_unique<dt::DecisionTreeSplit<int>>(std::make_unique<TrueCondition>(), std::move(expected_node), std::move(unexpected_node));
-	dt::DecisionTree<int> tree(std::move(true_condition));
+	dt::TreeBuilder<int> builder;
+	std::unique_ptr<dt::DecisionTree<int>> tree = builder.RootNode(
+		builder.Split()
+		->Condition(std::make_unique<TrueCondition>())
+		.True(builder.Result(expected_result))
+		.False(builder.Result(unexpected_result))
+		.Finalize()
+	).Finalize();
 
 	// Act
-	const int decision = tree.Decide();
+	const int decision = tree->Decide();
 
 	// Assert
 	ASSERT_EQ(expected_result, decision);
@@ -73,13 +78,17 @@ TEST(SUITE_NAME, BranchesFalseCondition)
 	const int expected_result = 7;
 	const int unexpected_result = 6;
 
-	std::unique_ptr<dt::DecisionTreeResult<int>> expected_node = std::make_unique<dt::DecisionTreeResult<int>>(expected_result);
-	std::unique_ptr<dt::DecisionTreeResult<int>> unexpected_node = std::make_unique<dt::DecisionTreeResult<int>>(unexpected_result);
-	std::unique_ptr<dt::DecisionTreeSplit<int>> true_condition = std::make_unique<dt::DecisionTreeSplit<int>>(std::make_unique<FalseCondition>(), std::move(unexpected_node), std::move(expected_node));
-	dt::DecisionTree<int> tree(std::move(true_condition));
+	dt::TreeBuilder<int> builder;
+	std::unique_ptr<dt::DecisionTree<int>> tree = builder.RootNode(
+		builder.Split()
+		->Condition(std::make_unique<FalseCondition>())
+		.True(builder.Result(unexpected_result))
+		.False(builder.Result(expected_result))
+		.Finalize()
+	).Finalize();
 
 	// Act
-	const int decision = tree.Decide();
+	const int decision = tree->Decide();
 
 	// Assert
 	ASSERT_EQ(expected_result, decision);
