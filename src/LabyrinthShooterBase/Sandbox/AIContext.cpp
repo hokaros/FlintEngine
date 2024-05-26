@@ -11,6 +11,16 @@ AIPerception& AIContext::GetPerception()
 	return m_Perception;
 }
 
+BTNodeMediator& AIContext::GetBTNodeMediator()
+{
+	return m_BTNodeMediator;
+}
+
+const BTNodeMediator& AIContext::GetBTNodeMediator() const
+{
+	return m_BTNodeMediator;
+}
+
 ConstantMover& AIContext::GetMover()
 {
 	return m_Mover;

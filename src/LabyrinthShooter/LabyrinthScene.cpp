@@ -28,7 +28,7 @@ void LabyrinthScene::Render(SceneRenderer& renderer)
 	m_HealthStats->Render(renderer);
 
 	VectorInt player_label_pos = m_Player->GetPosition() + Vector(-20, -20);
-	renderer.DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, "Player", 10);
+	renderer.DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, PLAYER_GO_NAME, 10);
 }
 
 void LabyrinthScene::LoadFromFile(const char* file_path)
@@ -97,5 +97,5 @@ GameObject* LabyrinthScene::FindLabyrinth()
 
 GameObject* LabyrinthScene::FindPlayer()
 {
-	return FindGameObjectByName("Player");
+	return FindGameObjectByName(PLAYER_GO_NAME);
 }

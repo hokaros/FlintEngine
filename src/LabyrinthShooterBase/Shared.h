@@ -5,3 +5,5 @@
 #define LAB_Y 5
 #define WALL_THICKNESS 10
 #define WALL_LENGTH 100
+
+#define PLAYER_GO_NAME "Player"
