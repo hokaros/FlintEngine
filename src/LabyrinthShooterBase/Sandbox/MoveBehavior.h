@@ -11,7 +11,8 @@ namespace bt
 	public:
 		MoveBehavior(AIContext& context);
 
-		virtual ENodeResult Run() override;
+	protected:
+		virtual ENodeStatus Update() override;
 
 	private:
 		AIContext& m_Context;

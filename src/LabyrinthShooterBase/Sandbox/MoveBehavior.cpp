@@ -7,9 +7,9 @@ namespace bt
 	{
 	}
 
-	ENodeResult MoveBehavior::Run()
+	ENodeStatus MoveBehavior::Update()
 	{
 		m_Context.GetMover().SetDirection(Vector(Direction::EAST));
-		return ENodeResult::Success;
+		return ENodeStatus::Success;
 	}
 }
