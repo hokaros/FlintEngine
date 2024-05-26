@@ -19,6 +19,15 @@ public:
 };
 
 class SceneRenderer;
+class Scene;
+
+class SceneKey
+{
+private:
+	SceneKey() = default;
+
+	friend Scene;
+};
 
 class GameObject
 {
@@ -94,6 +103,9 @@ public:
 	const std::vector<std::unique_ptr<GameObject>>& GetChildren() const;
 	GameObject* GetParent() const;
 
+	Scene* GetScene() const;
+	void SetScene(Scene* scene, SceneKey);
+
 	~GameObject() = default;
 
 protected:
@@ -109,6 +121,8 @@ private:
 
 	GameObject* parent = nullptr;
 	std::vector<std::unique_ptr<GameObject>> children;
+
+	Scene* scene = nullptr;
 };
 
 

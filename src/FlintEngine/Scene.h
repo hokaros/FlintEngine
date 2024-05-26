@@ -15,10 +15,11 @@ public:
 	
 	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
 
+	void MoveObjectsFrom(Scene&& other_scene);
+
 	void SetBackgroundColor(const Rgb8& color);
 	const Rgb8& GetBackgroundColor() const;
 
-	ObjectManager& GetObjectManager();
 	const ObjectManager& GetObjectManager() const;
 
 private:

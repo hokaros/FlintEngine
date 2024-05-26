@@ -49,7 +49,17 @@ void Scene::PostFrame()
 
 void Scene::AddGameObject(std::unique_ptr<GameObject> game_object)
 {
+	game_object->SetScene(this, {});
+
 	m_ObjectManager.AddNewObject(std::move(game_object));
+}
+
+void Scene::MoveObjectsFrom(Scene&& other_scene)
+{
+	for (std::unique_ptr<GameObject>& go : other_scene.m_ObjectManager.GetOwnedObjects())
+	{
+		AddGameObject(std::move(go));
+	}
 }
 
 void Scene::SetBackgroundColor(const Rgb8& color)
@@ -70,11 +80,6 @@ void Scene::RenderBackground(SceneRenderer& renderer)
 bool Scene::ShouldRender(GameObject* gameObject)
 {
 	return true;
-}
-
-ObjectManager& Scene::GetObjectManager()
-{
-	return m_ObjectManager;
 }
 
 const ObjectManager& Scene::GetObjectManager() const

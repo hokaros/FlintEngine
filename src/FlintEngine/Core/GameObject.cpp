@@ -378,6 +378,16 @@ GameObject* GameObject::GetParent() const
 	return parent;
 }
 
+Scene* GameObject::GetScene() const
+{
+	return scene;
+}
+
+void GameObject::SetScene(Scene* scene, SceneKey)
+{
+	this->scene = scene;
+}
+
 std::vector<VectorInt>* GameObject::GetPixels() const 
 {
 	std::vector<VectorInt>* pixels = new std::vector<VectorInt>();

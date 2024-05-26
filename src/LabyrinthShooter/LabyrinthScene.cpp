@@ -34,10 +34,7 @@ void LabyrinthScene::Render(SceneRenderer& renderer)
 void LabyrinthScene::LoadFromFile(const char* file_path)
 {
 	std::unique_ptr<Scene> scene = SceneLoader::LoadScene(file_path)->CreateRuntimeObject();
-	for (std::unique_ptr<GameObject>& go : scene->GetObjectManager().GetOwnedObjects())
-	{
-		GetObjectManager().AddNewObject(std::move(go));
-	}
+	MoveObjectsFrom(std::move(*scene));
 	
 	m_BackgroundColor = scene->GetBackgroundColor();
 }
