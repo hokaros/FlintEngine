@@ -2,6 +2,8 @@
 #include <AI/BehaviorTree/Selector.h>
 #include <AI/BehaviorTree/Sequence.h>
 
+#include "BehaviorTreeTestHelpers.h"
+
 using bt::ENodeResult;
 
 #ifdef SUITE_NAME
@@ -31,6 +33,56 @@ class InProgressor
 {
 public:
 	virtual ENodeResult Run() override { return ENodeResult::InProgress; }
+};
+
+
+class CountingNode
+	: public bt::Node
+{
+private:
+	int m_Counter = 0;
+
+public:
+	virtual ENodeResult Run() override
+	{
+		m_Counter++;
+		return ENodeResult::Success;
+	}
+
+	int GetCounter() const { return m_Counter; }
+};
+
+class CountingFailer
+	: public CountingNode
+{
+public:
+	virtual ENodeResult Run() override
+	{
+		CountingNode::Run();
+		return ENodeResult::Failure;
+	}
+};
+
+class CountingSuccessor
+	: public CountingNode
+{
+public:
+	virtual ENodeResult Run() override 
+	{
+		CountingNode::Run();
+		return ENodeResult::Success;
+	}
+};
+
+class CountingInProgressor
+	: public CountingNode
+{
+public:
+	virtual ENodeResult Run() override
+	{
+		CountingNode::Run();
+		return ENodeResult::InProgress;
+	}
 };
 
 
@@ -177,4 +229,89 @@ TEST(SUITE_NAME, SequenceWithInProgressInMiddleReturnsInProgress)
 
 	// Assert
 	ASSERT_EQ(ENodeResult::InProgress, result);
+}
+
+TEST(SUITE_NAME, SequenceWithAllSuccessesRunsEveryNode)
+{
+	// Arrange
+	bt::Sequence sequence;
+
+	CountingSuccessor& first_child = BehaviorTreeTestHelpers::AddChildTo<CountingSuccessor>(sequence);
+	CountingSuccessor& second_child = BehaviorTreeTestHelpers::AddChildTo<CountingSuccessor>(sequence);
+	CountingSuccessor& third_child = BehaviorTreeTestHelpers::AddChildTo<CountingSuccessor>(sequence);
+
+	// Pre-act assert
+	ASSERT_EQ(0, first_child.GetCounter());
+	ASSERT_EQ(0, second_child.GetCounter());
+	ASSERT_EQ(0, third_child.GetCounter());
+
+	// Act
+	sequence.Run();
+
+	// Assert
+	ASSERT_EQ(1, first_child.GetCounter());
+	ASSERT_EQ(1, second_child.GetCounter());
+	ASSERT_EQ(1, third_child.GetCounter());
+}
+
+TEST(SUITE_NAME, SequenceWithInProgressInMiddleSkipsPreviousNodesOn2ndRun)
+{
+	// Arrange
+	bt::Sequence sequence;
+
+	CountingSuccessor& first_child = BehaviorTreeTestHelpers::AddChildTo<CountingSuccessor>(sequence);
+	CountingInProgressor& in_progress_child = BehaviorTreeTestHelpers::AddChildTo<CountingInProgressor>(sequence);
+	CountingSuccessor& third_child = BehaviorTreeTestHelpers::AddChildTo<CountingSuccessor>(sequence);
+
+	// Pre-act assert
+	ASSERT_EQ(0, first_child.GetCounter());
+	ASSERT_EQ(0, in_progress_child.GetCounter());
+	ASSERT_EQ(0, third_child.GetCounter());
+
+	// Act 1
+	sequence.Run();
+
+	// Assert 1
+	ASSERT_EQ(1, first_child.GetCounter());
+	ASSERT_EQ(1, in_progress_child.GetCounter());
+	ASSERT_EQ(0, third_child.GetCounter());
+
+	// Act 2
+	sequence.Run();
+
+	// Assert 2
+	ASSERT_EQ(1, first_child.GetCounter());
+	ASSERT_EQ(2, in_progress_child.GetCounter());
+	ASSERT_EQ(0, third_child.GetCounter());
+}
+
+TEST(SUITE_NAME, SelectorWithInProgressInMiddleSkipsPreviousNodesOn2ndRun)
+{
+	// Arrange
+	bt::Selector selector;
+
+	CountingFailer& first_child = BehaviorTreeTestHelpers::AddChildTo<CountingFailer>(selector);
+	CountingInProgressor& in_progress_child = BehaviorTreeTestHelpers::AddChildTo<CountingInProgressor>(selector);
+	CountingFailer& third_child = BehaviorTreeTestHelpers::AddChildTo<CountingFailer>(selector);
+
+	// Pre-act assert
+	ASSERT_EQ(0, first_child.GetCounter());
+	ASSERT_EQ(0, in_progress_child.GetCounter());
+	ASSERT_EQ(0, third_child.GetCounter());
+
+	// Act 1
+	selector.Run();
+
+	// Assert 1
+	ASSERT_EQ(1, first_child.GetCounter());
+	ASSERT_EQ(1, in_progress_child.GetCounter());
+	ASSERT_EQ(0, third_child.GetCounter());
+
+	// Act 2
+	selector.Run();
+
+	// Assert 2
+	ASSERT_EQ(1, first_child.GetCounter());
+	ASSERT_EQ(2, in_progress_child.GetCounter());
+	ASSERT_EQ(0, third_child.GetCounter());
 }
