@@ -92,26 +92,10 @@ bool LabyrinthScene::ShouldRender(GameObject* go)
 
 GameObject* LabyrinthScene::FindLabyrinth()
 {
-	for (std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
-	{
-		if (go->GetName() == "Labyrinth")
-		{
-			return go.get();
-		}
-	}
-
-	return nullptr;
+	return FindGameObjectByName("Labyrinth");
 }
 
 GameObject* LabyrinthScene::FindPlayer()
 {
-	for (std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
-	{
-		if (go->GetName() == "Player")
-		{
-			return go.get();
-		}
-	}
-
-	return nullptr;
+	return FindGameObjectByName("Player");
 }

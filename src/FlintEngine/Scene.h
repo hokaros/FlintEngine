@@ -12,6 +12,8 @@ public:
 	virtual void Render(SceneRenderer& renderer);
 	void ResetScene();
 	void PostFrame();
+
+	GameObject* FindGameObjectByName(const std::string& name) const;
 	
 	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
 

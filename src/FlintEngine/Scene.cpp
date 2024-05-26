@@ -47,6 +47,19 @@ void Scene::PostFrame()
 	m_ObjectManager.DisposeDestroyed();
 }
 
+GameObject* Scene::FindGameObjectByName(const std::string& name) const
+{
+	for (const std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
+	{
+		if (go->GetName() == name)
+		{
+			return go.get();
+		}
+	}
+
+	return nullptr;
+}
+
 void Scene::AddGameObject(std::unique_ptr<GameObject> game_object)
 {
 	game_object->SetScene(this, {});
