@@ -2,8 +2,9 @@
 
 namespace bt
 {
-	enum class ENodeResult
+	enum class ENodeStatus
 	{
+		Invalid,
 		Failure,
 		Success,
 		InProgress

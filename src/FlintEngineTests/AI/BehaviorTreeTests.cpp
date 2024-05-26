@@ -4,7 +4,7 @@
 
 #include "BehaviorTreeTestHelpers.h"
 
-using bt::ENodeResult;
+using bt::ENodeStatus;
 
 #ifdef SUITE_NAME
 #error Cannot redefine suite name
@@ -17,22 +17,22 @@ using bt::ENodeResult;
 class Failer
 	: public bt::Node
 {
-public:
-	virtual ENodeResult Run() override { return ENodeResult::Failure; }
+protected:
+	virtual ENodeStatus Update() override { return ENodeStatus::Failure; }
 };
 
 class Successor
 	: public bt::Node
 {
-public:
-	virtual ENodeResult Run() override { return ENodeResult::Success; }
+protected:
+	virtual ENodeStatus Update() override { return ENodeStatus::Success; }
 };
 
 class InProgressor
 	: public bt::Node
 {
-public:
-	virtual ENodeResult Run() override { return ENodeResult::InProgress; }
+protected:
+	virtual ENodeStatus Update() override { return ENodeStatus::InProgress; }
 };
 
 
@@ -42,46 +42,47 @@ class CountingNode
 private:
 	int m_Counter = 0;
 
-public:
-	virtual ENodeResult Run() override
+protected:
+	virtual ENodeStatus Update() override
 	{
 		m_Counter++;
-		return ENodeResult::Success;
+		return ENodeStatus::Success;
 	}
 
+public:
 	int GetCounter() const { return m_Counter; }
 };
 
 class CountingFailer
 	: public CountingNode
 {
-public:
-	virtual ENodeResult Run() override
+protected:
+	virtual ENodeStatus Update() override
 	{
-		CountingNode::Run();
-		return ENodeResult::Failure;
+		CountingNode::Update();
+		return ENodeStatus::Failure;
 	}
 };
 
 class CountingSuccessor
 	: public CountingNode
 {
-public:
-	virtual ENodeResult Run() override 
+protected:
+	virtual ENodeStatus Update() override
 	{
-		CountingNode::Run();
-		return ENodeResult::Success;
+		CountingNode::Update();
+		return ENodeStatus::Success;
 	}
 };
 
 class CountingInProgressor
 	: public CountingNode
 {
-public:
-	virtual ENodeResult Run() override
+protected:
+	virtual ENodeStatus Update() override
 	{
-		CountingNode::Run();
-		return ENodeResult::InProgress;
+		CountingNode::Update();
+		return ENodeStatus::InProgress;
 	}
 };
 
@@ -93,10 +94,10 @@ TEST(SUITE_NAME, EmptySelectorReturnsFailure)
 	bt::Selector selector;
 
 	// Act
-	ENodeResult result = selector.Run();
+	ENodeStatus result = selector.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Failure, result);
+	ASSERT_EQ(ENodeStatus::Failure, result);
 }
 
 TEST(SUITE_NAME, EmptySequenceReturnsSuccess)
@@ -105,10 +106,10 @@ TEST(SUITE_NAME, EmptySequenceReturnsSuccess)
 	bt::Sequence sequence;
 
 	// Act
-	ENodeResult result = sequence.Run();
+	ENodeStatus result = sequence.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Success, result);
+	ASSERT_EQ(ENodeStatus::Success, result);
 }
 
 TEST(SUITE_NAME, SelectorWithSuccessOnEndReturnsSuccess)
@@ -120,10 +121,10 @@ TEST(SUITE_NAME, SelectorWithSuccessOnEndReturnsSuccess)
 	selector.AddChild(std::make_unique<Successor>());
 
 	// Act
-	ENodeResult result = selector.Run();
+	ENodeStatus result = selector.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Success, result);
+	ASSERT_EQ(ENodeStatus::Success, result);
 }
 
 TEST(SUITE_NAME, SelectorWithSuccessInMiddleReturnsSuccess)
@@ -135,10 +136,10 @@ TEST(SUITE_NAME, SelectorWithSuccessInMiddleReturnsSuccess)
 	selector.AddChild(std::make_unique<Failer>());
 
 	// Act
-	ENodeResult result = selector.Run();
+	ENodeStatus result = selector.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Success, result);
+	ASSERT_EQ(ENodeStatus::Success, result);
 }
 
 TEST(SUITE_NAME, SequenceWithFailureOnEndReturnsFailure)
@@ -150,10 +151,10 @@ TEST(SUITE_NAME, SequenceWithFailureOnEndReturnsFailure)
 	sequence.AddChild(std::make_unique<Failer>());
 
 	// Act
-	ENodeResult result = sequence.Run();
+	ENodeStatus result = sequence.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Failure, result);
+	ASSERT_EQ(ENodeStatus::Failure, result);
 }
 
 TEST(SUITE_NAME, SequenceWithFailureInMiddleReturnsFailure)
@@ -165,10 +166,10 @@ TEST(SUITE_NAME, SequenceWithFailureInMiddleReturnsFailure)
 	sequence.AddChild(std::make_unique<Successor>());
 
 	// Act
-	ENodeResult result = sequence.Run();
+	ENodeStatus result = sequence.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Failure, result);
+	ASSERT_EQ(ENodeStatus::Failure, result);
 }
 
 TEST(SUITE_NAME, SelectorWithAllFailuresReturnsFailure)
@@ -180,10 +181,10 @@ TEST(SUITE_NAME, SelectorWithAllFailuresReturnsFailure)
 	selector.AddChild(std::make_unique<Failer>());
 
 	// Act
-	ENodeResult result = selector.Run();
+	ENodeStatus result = selector.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Failure, result);
+	ASSERT_EQ(ENodeStatus::Failure, result);
 }
 
 TEST(SUITE_NAME, SequenceWithAllSuccessesReturnsSuccess)
@@ -195,10 +196,10 @@ TEST(SUITE_NAME, SequenceWithAllSuccessesReturnsSuccess)
 	sequence.AddChild(std::make_unique<Successor>());
 
 	// Act
-	ENodeResult result = sequence.Run();
+	ENodeStatus result = sequence.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::Success, result);
+	ASSERT_EQ(ENodeStatus::Success, result);
 }
 
 TEST(SUITE_NAME, SelectorWithInProgressInMiddleReturnsInProgress)
@@ -210,10 +211,10 @@ TEST(SUITE_NAME, SelectorWithInProgressInMiddleReturnsInProgress)
 	selector.AddChild(std::make_unique<Successor>()); // This will be reached after the InProgressor
 
 	// Act
-	ENodeResult result = selector.Run();
+	ENodeStatus result = selector.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::InProgress, result);
+	ASSERT_EQ(ENodeStatus::InProgress, result);
 }
 
 TEST(SUITE_NAME, SequenceWithInProgressInMiddleReturnsInProgress)
@@ -225,10 +226,10 @@ TEST(SUITE_NAME, SequenceWithInProgressInMiddleReturnsInProgress)
 	sequence.AddChild(std::make_unique<Failer>()); // This will be reached after the InProgressor
 
 	// Act
-	ENodeResult result = sequence.Run();
+	ENodeStatus result = sequence.Run();
 
 	// Assert
-	ASSERT_EQ(ENodeResult::InProgress, result);
+	ASSERT_EQ(ENodeStatus::InProgress, result);
 }
 
 TEST(SUITE_NAME, SequenceWithAllSuccessesRunsEveryNode)

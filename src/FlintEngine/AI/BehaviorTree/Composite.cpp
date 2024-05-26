@@ -7,7 +7,12 @@ namespace bt
 		m_Children.push_back(std::move(node));
 	}
 
-	const std::vector<std::unique_ptr<Node>>& Composite::GetChildren() const
+	const Composite::ChildrenT& Composite::GetChildren() const
+	{
+		return m_Children;
+	}
+
+	Composite::ChildrenT& Composite::GetChildren()
 	{
 		return m_Children;
 	}

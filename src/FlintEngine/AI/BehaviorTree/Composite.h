@@ -11,10 +11,15 @@ namespace bt
 		: public Node
 	{
 	public:
+		using ChildrenT = std::vector<std::unique_ptr<Node>>;
+
 		void AddChild(std::unique_ptr<Node> node);
-		const std::vector<std::unique_ptr<Node>>& GetChildren() const;
+		const ChildrenT& GetChildren() const;
+		
+	protected:
+		ChildrenT& GetChildren();
 
 	private:
-		std::vector<std::unique_ptr<Node>> m_Children;
+		ChildrenT m_Children;
 	};
 }

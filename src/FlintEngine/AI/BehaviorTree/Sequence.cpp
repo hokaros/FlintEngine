@@ -2,16 +2,24 @@
 
 namespace bt
 {
-	ENodeResult Sequence::Run()
+	void Sequence::Init()
 	{
-		for (const std::unique_ptr<Node>& child : GetChildren())
+		m_CurrentChild = GetChildren().begin();
+	}
+
+	ENodeStatus Sequence::Update()
+	{
+		while (true)
 		{
-			ENodeResult result = child->Run();
+			if (m_CurrentChild == GetChildren().end())
+				return ENodeStatus::Success; // Everything was a success (great success)
 
-			if (result != ENodeResult::Success)
-				return result;
+			ENodeStatus status = m_CurrentChild->get()->Run();
+
+			if (status != ENodeStatus::Success)
+				return status; // We run all nodes in 1 update only if they are all successes
+
+			m_CurrentChild++;
 		}
-
-		return ENodeResult::Success; // Everything was a success (great success)
 	}
 }

@@ -6,6 +6,15 @@ namespace bt
 	class Node
 	{
 	public:
-		virtual ENodeResult Run() = 0;
+		ENodeStatus Run();
+
+	protected:
+		virtual void Init() {}
+		virtual ENodeStatus Update() = 0;
+		virtual void Deinit() {}
+
+	private:
+		// TODO: probably not all nodes need to call Init or Deinit so we don't need to track status for them
+		ENodeStatus m_CurrStatus = ENodeStatus::Invalid;
 	};
 }

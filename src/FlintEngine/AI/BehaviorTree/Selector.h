@@ -6,7 +6,11 @@ namespace bt
 	class Selector
 		: public Composite
 	{
-	public:
-		virtual ENodeResult Run() override;
+	protected:
+		virtual void Init() override;
+		virtual ENodeStatus Update() override;
+
+	private:
+		ChildrenT::iterator m_CurrentChild;
 	};
 }
