@@ -5,6 +5,7 @@
 
 #include <Core/GameObject.h>
 #include <AI/BehaviorTree/Sequence.h>
+#include <AI/BehaviorTree/BehaviorTreeBuilder.h>
 
 DEFINE_COMPONENT(SandboxAI);
 
@@ -24,11 +25,10 @@ void SandboxAI::Update()
 
 std::unique_ptr<bt::Node> SandboxAI::CreateTestBehaviorTree(AIContext& context)
 {
-	std::unique_ptr<bt::Sequence> seq = std::make_unique<bt::Sequence>();
-	seq->AddChild(std::make_unique<PlayerMoveTargetSetBehavior>(context));
-	seq->AddChild(std::make_unique<bt::MoveBehavior>(context));
-
-	return seq;
+	return bt::TreeBuilder::Composite<bt::Sequence>()
+		->Child(std::make_unique<PlayerMoveTargetSetBehavior>(context))
+		.Child(std::make_unique<bt::MoveBehavior>(context))
+		.Finalize();
 }
 
 std::unique_ptr<AIContext> SandboxAI::CreateContext(AIPerception& perception)
