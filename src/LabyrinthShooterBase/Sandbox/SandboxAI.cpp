@@ -1,7 +1,8 @@
 #include "SandboxAI.h"
 
 #include "MoveBehavior.h"
-#include "PlayerMoveTargetSetBehavior.h"
+#include "SetRandomMoveTargetBehavior.h"
+#include "WaitBehavior.h"
 
 #include <Core/GameObject.h>
 #include <AI/BehaviorTree/Sequence.h>
@@ -26,8 +27,9 @@ void SandboxAI::Update()
 std::unique_ptr<bt::Node> SandboxAI::CreateTestBehaviorTree(AIContext& context)
 {
 	return bt::TreeBuilder::Composite<bt::Sequence>()
-		->Child(std::make_unique<PlayerMoveTargetSetBehavior>(context))
+		->Child(std::make_unique<SetRandomMoveTargetBehavior>(context))
 		.Child(std::make_unique<bt::MoveBehavior>(context))
+		.Child(std::make_unique<WaitBehavior>(1.f, context))
 		.Finalize();
 }
 

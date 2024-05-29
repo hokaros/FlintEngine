@@ -22,7 +22,7 @@ namespace bt
 	private:
 		AIContext& m_Context;
 
-		static constexpr float TARGET_TOLERANCE = 50.0f;
+		static constexpr float TARGET_TOLERANCE = 1.0f;
 		static constexpr float TARGET_TOLERANCE_SQ = TARGET_TOLERANCE * TARGET_TOLERANCE;
 	};
 }

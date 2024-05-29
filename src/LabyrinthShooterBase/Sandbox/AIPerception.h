@@ -11,6 +11,9 @@ public:
 	const Vector& GetOwnPosition() const;
 	std::optional<Vector> GetPlayerPosition() const;
 
+	double GetDeltaTime() const;
+
+
 private:
 	const GameObject& m_GameObject;
 

@@ -20,7 +20,7 @@ namespace bt
 		Vector to_target = target_pos - GetOwnPosition();
 		m_Context.GetMover().SetDirection(to_target);
 
-		return ENodeStatus::Success;
+		return ENodeStatus::InProgress;
 	}
 
 	const Vector& MoveBehavior::GetTargetPosition() const

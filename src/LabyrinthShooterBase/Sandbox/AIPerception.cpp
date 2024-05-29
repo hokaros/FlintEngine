@@ -22,3 +22,8 @@ std::optional<Vector> AIPerception::GetPlayerPosition() const
 	// TODO: AI shouldn't always know where the player is
 	return m_Player->GetPosition();
 }
+
+double AIPerception::GetDeltaTime() const
+{
+	return Timer::Main()->GetDeltaTime();
+}
