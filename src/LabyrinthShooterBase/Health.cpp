@@ -5,17 +5,9 @@
 DEFINE_COMPONENT(Health);
 DEFINE_FIELD(Health, m_MaxHealth);
 
-Health::Health()
+void Health::Awake()
 {
 	m_CurrHealth = m_MaxHealth;
-}
-
-Health::Health(int max_health, StatRenderer* health_renderer)
-	: m_MaxHealth(max_health)
-	, m_CurrHealth(max_health)
-	, m_HealthRenderer(health_renderer) 
-{
-
 }
 
 void Health::Start()

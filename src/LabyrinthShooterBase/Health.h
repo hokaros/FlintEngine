@@ -10,9 +10,9 @@ class Health :
 	DECLARE_COMPONENT();
 
 public:
-	Health();
-	Health(int max_health, StatRenderer* health_renderer);
+	Health() = default;
 
+	virtual void Awake() override;
 	virtual void Start() override;
 
 	void Hurt(int hp);
