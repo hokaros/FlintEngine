@@ -41,9 +41,6 @@ class Firearm :
 {
 	DECLARE_COMPONENT();
 public:
-	function<void(GameObject&, int dmg)> onPlayerCollision; // zdarzenie, gdy pocisk trafi w gracza
-
-public:
 	Firearm() = default;
 	Firearm(PrefabRef bulletPrefab, float reloadTime, FirearmType type);
 
@@ -56,6 +53,8 @@ public:
 protected:
 	PrefabRef m_BulletPrefab;
 	DECLARE_FIELD(m_BulletPrefab);
+
+	static void OnPlayerCollision(GameObject& player, int dmg); // Zdarzenie, gdy pocisk trafi w gracza
 
 private:
 	float m_ReloadTime = 1.0f;

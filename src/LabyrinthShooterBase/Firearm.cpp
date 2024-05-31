@@ -43,7 +43,7 @@ bool Firearm::TryShoot()
 	b->SetDirection(m_GameObject->LookingDirection());
 
 	// Zachowanie po kolizji
-	b->onPlayerCollision = onPlayerCollision;
+	b->onPlayerCollision = OnPlayerCollision;
 
 	// Aktualizacja info o prze³adowaniu
 	timeSinceLastShot = 0.0f;
@@ -52,6 +52,12 @@ bool Firearm::TryShoot()
 	return true;
 }
 
-FirearmType Firearm::GetType() const {
+FirearmType Firearm::GetType() const 
+{
 	return m_Type;
+}
+
+void Firearm::OnPlayerCollision(GameObject& player, int dmg)
+{
+	player.FindComponent<Health>()->Hurt(dmg);
 }

@@ -25,6 +25,7 @@ public:
 	BMPStats() = default;
 	~BMPStats();
 
+	virtual void Awake() override;
 	virtual void Render(SceneRenderer& renderer) override;
 	virtual void RenderUpdate(SceneRenderer& renderer) override;
 
