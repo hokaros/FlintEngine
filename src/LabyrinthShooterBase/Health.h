@@ -26,11 +26,13 @@ public:
 private:
 	void OnDeath();
 
+	StatRenderer* FindStatRenderer() const;
+
 private:
 	int m_MaxHealth = 3;
 	DECLARE_FIELD(m_MaxHealth);
 
-	int m_CurrHealth;
+	int m_CurrHealth = 0;
 
 	std::list<std::function<void(Health*)>> m_OnDeath;
 

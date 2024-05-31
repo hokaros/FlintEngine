@@ -53,10 +53,6 @@ GameObject* LabyrinthScene::CreatePlayer(const Vector& position)
 
 	player->SetPosition(position);
 
-	Health* player_health = player->FindComponent<Health>();
-	// TODO: move to Health
-	player_health->SetStatRenderer(m_HealthStats);
-
 	return player;
 }
 

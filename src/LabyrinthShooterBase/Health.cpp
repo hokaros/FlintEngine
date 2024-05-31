@@ -1,6 +1,7 @@
 #include "Health.h"
 
 #include <Core/GameObject.h>
+#include <Scene.h>
 
 DEFINE_COMPONENT(Health);
 DEFINE_FIELD(Health, m_MaxHealth);
@@ -8,6 +9,8 @@ DEFINE_FIELD(Health, m_MaxHealth);
 void Health::Awake()
 {
 	m_CurrHealth = m_MaxHealth;
+
+	m_HealthRenderer = FindStatRenderer();
 }
 
 void Health::Start()
@@ -60,4 +63,14 @@ void Health::OnDeath()
 void Health::SubscribeDeath(std::function<void(Health*)> handler) 
 {
 	m_OnDeath.push_back(handler);
+}
+
+StatRenderer* Health::FindStatRenderer() const
+{
+	// TODO: let's pass this by something other than name
+	GameObject* stats_go = GetOwner().GetScene()->FindGameObjectByName("Health Stats");
+	if (stats_go == nullptr)
+		return nullptr;
+
+	return stats_go->FindComponent<BMPStats>();
 }
