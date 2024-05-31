@@ -18,12 +18,18 @@ protected:
 class BMPStats : public StatRenderer 
 {
 public:
-	BMPStats(SDL_Surface* bitmap, const VectorInt& elementSize, const VectorInt& startPosition);
+	BMPStats(const std::string& bitmap_path, const VectorInt& elementSize, const VectorInt& startPosition);
+	~BMPStats();
 
 	void Render(SceneRenderer& renderer) override;
 
 private:
+	static SDL_Texture* CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer);
+
+private:
 	SDL_Texture* m_Bitmap;
+	std::string m_BitmapPath;
+
 	VectorInt m_ElementSize;
 	VectorInt m_StartPos;
 };

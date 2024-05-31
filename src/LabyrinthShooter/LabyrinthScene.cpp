@@ -41,8 +41,7 @@ void LabyrinthScene::LoadFromFile(const char* file_path)
 
 void LabyrinthScene::LoadStartingObjects()
 {
-	SDL_Surface* heart_bitmap = m_AssetManager.GetSurfaceAsset(s_HeartBitmapPath);
-	m_HealthStats = std::make_unique<BMPStats>(heart_bitmap, VectorInt(30, 30), VectorInt(3, 3));
+	m_HealthStats = std::make_unique<BMPStats>(s_HeartBitmapPath, VectorInt(30, 30), VectorInt(3, 3));
 
 	GameObject* lab_object = FindLabyrinth();
 	FE_ASSERT(lab_object != nullptr, "No labyrinth object loaded");
