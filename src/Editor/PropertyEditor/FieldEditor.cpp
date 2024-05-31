@@ -88,6 +88,24 @@ void FieldEditorVector::Render()
 	}
 }
 
+void FieldEditorVectorInt::Render()
+{
+	VectorInt field_value;
+	m_Field.GetFieldValue(&m_Component, &field_value);
+
+	int field_value_i[2];
+	field_value_i[0] = field_value.x;
+	field_value_i[1] = field_value.y;;
+	if (ImGui::DragInt2(m_FieldLabel.c_str(), field_value_i))
+	{
+		field_value.x = field_value_i[0];
+		field_value.y = field_value_i[1];
+
+		ApplyToGameObject(field_value);
+	}
+}
+
+
 void FieldEditorRgb8::Render()
 {
 	Rgb8 field_value;

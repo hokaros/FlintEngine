@@ -159,6 +159,32 @@ public:
 	STI_DEFINE_TYPECODE_GETTER()
 };
 
+
+template<>
+class SerializableTypeInterface<VectorInt>
+{
+public:
+	static inline void ParseString(const std::string& str, VectorInt& out_value)
+	{
+		size_t comma_pos = str.find(',');
+		FE_ASSERT(comma_pos != (size_t)-1, "Comma not found");
+
+		std::string first_str = str.substr(0, comma_pos);
+
+		FE_ASSERT(str.size() > comma_pos + 1, "Invalid vector string");
+		std::string second_str = str.substr(comma_pos + 1);
+
+		SerializableTypeInterface<int>::ParseString(first_str, out_value.x);
+		SerializableTypeInterface<int>::ParseString(second_str, out_value.y);
+	}
+	static inline std::string ToString(const VectorInt& value)
+	{
+		return std::to_string(value.x) + ", " + std::to_string(value.y);
+	}
+
+	STI_DEFINE_TYPECODE_GETTER()
+};
+
 template<>
 class SerializableTypeInterface<Rgb8>
 {

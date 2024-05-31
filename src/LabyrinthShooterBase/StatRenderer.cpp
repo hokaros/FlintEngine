@@ -7,14 +7,10 @@ void StatRenderer::UpdateStat(int newStat)
 }
 
 
-BMPStats::BMPStats(const std::string& bitmap_path, const VectorInt& elementSize, const VectorInt& startPosition)
-	: m_BitmapPath(bitmap_path)
-	, m_Bitmap(nullptr)
-	, m_ElementSize(elementSize)
-	, m_StartPos(startPosition)
-{
-
-}
+DEFINE_COMPONENT(BMPStats);
+DEFINE_FIELD(BMPStats, m_BitmapPath);
+DEFINE_FIELD(BMPStats, m_ElementSize);
+DEFINE_FIELD(BMPStats, m_StartPos);
 
 BMPStats::~BMPStats()
 {
@@ -40,6 +36,11 @@ void BMPStats::Render(SceneRenderer& renderer)
 
 		dest.pos.x += m_ElementSize.x;
 	}
+}
+
+void BMPStats::RenderUpdate(SceneRenderer& renderer)
+{
+	Render(renderer);
 }
 
 SDL_Texture* BMPStats::CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer)

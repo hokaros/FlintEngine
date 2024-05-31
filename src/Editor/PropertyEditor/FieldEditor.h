@@ -86,6 +86,15 @@ public:
 	virtual void Render() override;
 };
 
+class FieldEditorVectorInt
+	: public FieldEditor
+{
+public:
+	FIELD_EDITOR_DELEGATING_CONSTRUCTOR(FieldEditorVectorInt);
+
+	virtual void Render() override;
+};
+
 class FieldEditorRgb8
 	: public FieldEditor
 {

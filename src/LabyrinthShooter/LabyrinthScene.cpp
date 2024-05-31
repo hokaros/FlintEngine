@@ -5,8 +5,6 @@
 
 #include <Serialization/SceneLoader.h>
 
-static constexpr const char* s_HeartBitmapPath = "heart.bmp";
-
 LabyrinthScene::LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager)
 	: m_PlayerStartingPos(player_pos)
 	, m_AssetManager(asset_manager)
@@ -41,8 +39,7 @@ void LabyrinthScene::LoadFromFile(const char* file_path)
 
 void LabyrinthScene::LoadStartingObjects()
 {
-	m_HealthStats = std::make_unique<BMPStats>(s_HeartBitmapPath, VectorInt(30, 30), VectorInt(3, 3));
-
+	m_HealthStats = FindHealthStats();
 	GameObject* lab_object = FindLabyrinth();
 	FE_ASSERT(lab_object != nullptr, "No labyrinth object loaded");
 	m_Lab = lab_object->FindComponent<LabyrinthSolidifier>();
@@ -64,7 +61,8 @@ GameObject* LabyrinthScene::CreatePlayer(const Vector& position)
 	delete firearms;
 
 	Health* player_health = player->FindComponent<Health>();
-	player_health->SetStatRenderer(m_HealthStats.get());
+	// TODO: move to Health
+	player_health->SetStatRenderer(m_HealthStats);
 	player_health->SubscribeDeath(
 		[](Health* deadPlayer) {
 			printf("Dead\n");
@@ -97,4 +95,12 @@ GameObject* LabyrinthScene::FindLabyrinth()
 GameObject* LabyrinthScene::FindPlayer()
 {
 	return FindGameObjectByName(PLAYER_GO_NAME);
+}
+
+BMPStats* LabyrinthScene::FindHealthStats()
+{
+	GameObject* go = FindGameObjectByName("Health Stats");
+	FE_ASSERT(go != nullptr, "Health Stats not found");
+
+	return go->FindComponent<BMPStats>();
 }

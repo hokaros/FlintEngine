@@ -1,6 +1,7 @@
 #pragma once
 #include <Vector.h>
 #include <SceneRenderer.h>
+#include <ComponentDefinition.h>
 
 // Element wyœwietlaj¹cy pewn¹ statystykê (zdrowie / liczbê graczy itp.)
 class StatRenderer
@@ -15,22 +16,31 @@ protected:
 };
 
 // Element reprezentuj¹cy statystykê, mno¿¹c elementy graficzne (wyœwietlanie serc itp.)
-class BMPStats : public StatRenderer 
+class BMPStats 
+	: public ObjectComponent
+	, public StatRenderer // TODO: why do we need this order of base classes?
 {
+	DECLARE_COMPONENT();
 public:
-	BMPStats(const std::string& bitmap_path, const VectorInt& elementSize, const VectorInt& startPosition);
+	BMPStats() = default;
 	~BMPStats();
 
-	void Render(SceneRenderer& renderer) override;
+	virtual void Render(SceneRenderer& renderer) override;
+	virtual void RenderUpdate(SceneRenderer& renderer) override;
 
 private:
 	static SDL_Texture* CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer);
 
 private:
-	SDL_Texture* m_Bitmap;
-	std::string m_BitmapPath;
+	SDL_Texture* m_Bitmap = nullptr;
+
+	std::string m_BitmapPath = "";
+	DECLARE_FIELD(m_BitmapPath);
 
 	VectorInt m_ElementSize;
+	DECLARE_FIELD(m_ElementSize);
+
 	VectorInt m_StartPos;
+	DECLARE_FIELD(m_StartPos);
 };
 

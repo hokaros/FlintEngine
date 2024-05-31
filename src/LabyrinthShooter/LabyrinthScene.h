@@ -26,6 +26,7 @@ private:
 	virtual bool ShouldRender(GameObject* gameObject);
 	GameObject* FindLabyrinth();
 	GameObject* FindPlayer();
+	BMPStats* FindHealthStats();
 	GameObject* CreatePlayer(const Vector& position);
 
 private:
@@ -33,7 +34,7 @@ private:
 	LabyrinthSolidifier* m_Lab;
 	Vector m_PlayerStartingPos;
 
-	std::unique_ptr<BMPStats> m_HealthStats = nullptr;
+	BMPStats* m_HealthStats = nullptr;
 
 	AssetManager& m_AssetManager;
 };
