@@ -40,11 +40,6 @@ bool Health::IsDead() const
 	return m_CurrHealth <= 0;
 }
 
-void Health::SetStatRenderer(StatRenderer* value)
-{
-	m_HealthRenderer = value;
-}
-
 void Health::OnDeath() 
 {
 	std::cout << "Dead" << std::endl;

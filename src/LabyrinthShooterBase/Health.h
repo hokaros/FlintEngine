@@ -18,8 +18,6 @@ public:
 	void Hurt(int hp);
 	bool IsDead() const;
 
-	void SetStatRenderer(StatRenderer* value);
-
 	// Obs³ugiwanie œmierci z argumentem tego komponentu
 	void SubscribeDeath(std::function<void(Health*)> handler);
 
