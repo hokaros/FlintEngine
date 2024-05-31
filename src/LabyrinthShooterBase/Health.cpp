@@ -44,15 +44,20 @@ void Health::OnDeath()
 {
 	std::cout << "Dead" << std::endl;
 
+	NotifyOnDeath();
+
+	GameObject::Destroy(&GetOwner());
+}
+
+void Health::NotifyOnDeath()
+{
 	for (std::function<void(Health*)> handler : m_OnDeath)
 	{
-		if (handler) 
+		if (handler)
 		{
 			handler(this);
 		}
 	}
-
-	GameObject::Destroy(&GetOwner());
 }
 
 void Health::SubscribeDeath(std::function<void(Health*)> handler) 

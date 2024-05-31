@@ -23,6 +23,7 @@ public:
 
 private:
 	void OnDeath();
+	void NotifyOnDeath();
 
 	StatRenderer* FindStatRenderer() const;
 
