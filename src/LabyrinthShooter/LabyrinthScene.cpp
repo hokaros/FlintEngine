@@ -11,7 +11,7 @@ LabyrinthScene::LabyrinthScene(const Vector& player_pos, AssetManager& asset_man
 	: m_PlayerStartingPos(player_pos)
 	, m_AssetManager(asset_manager)
 {
-	LoadFromFile("Assets/main.scene"); // TODO: get from asset manager
+	LoadFromFile("Assets/main.scene");
 	LoadStartingObjects();
 }
 

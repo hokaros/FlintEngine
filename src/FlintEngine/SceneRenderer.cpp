@@ -167,6 +167,11 @@ Vector SceneRenderer::WorldSpaceToScreenSpace(const Vector& worldSpace) const
 	return ViewportSpaceToScreenSpace(WorldSpaceToViewportSpace(worldSpace));
 }
 
+SDL_Texture* SceneRenderer::CreateTextureFromSurface(SDL_Surface* surface)
+{
+	return SDL_CreateTextureFromSurface(m_Renderer, surface);
+}
+
 Rect SceneRenderer::WorldSpaceToViewportSpace(const Rect& worldSpace) const
 {
 	return Rect(WorldSpaceToViewportSpace(worldSpace.pos), worldSpace.size);

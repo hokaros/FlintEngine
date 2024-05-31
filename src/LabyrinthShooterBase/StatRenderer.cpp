@@ -1,4 +1,5 @@
 #include "StatRenderer.h"
+#include <Window.h>
 
 void StatRenderer::UpdateStat(int newStat) 
 {
@@ -12,7 +13,7 @@ BMPStats::BMPStats(SDL_Surface* bitmap, const VectorInt& elementSize, const Vect
 	, m_StartPos(startPosition)
 {
 
-}
+} // TODO: delete bitmap
 
 void BMPStats::Render(SceneRenderer& renderer)
 {

@@ -14,7 +14,7 @@ SpriteRenderer::SpriteRenderer(const std::string& bitmap_path)
 
 }
 
-SpriteRenderer::~SpriteRenderer() 
+SpriteRenderer::~SpriteRenderer()
 {
 	if (m_Texture != nullptr)
 	{
@@ -40,5 +40,5 @@ SDL_Texture* SpriteRenderer::CreateTextureFromBitmap(const std::string& bitmap_p
 		return nullptr;
 
 	SDL_Surface* bitmap = AssetManager::GetInstance()->GetSurfaceAsset(bitmap_path);
-	return SDL_CreateTextureFromSurface(renderer.GetRenderer(), bitmap);
+	return renderer.CreateTextureFromSurface(bitmap);
 }

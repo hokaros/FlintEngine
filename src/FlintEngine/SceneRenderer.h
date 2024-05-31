@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_main.h>
+
 #include "Draw.h"
 #include "Vector.h"
 
@@ -45,6 +46,8 @@ public:
 
 	Rect WorldSpaceToScreenSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToScreenSpace(const Vector& worldSpace) const;
+
+	SDL_Texture* CreateTextureFromSurface(SDL_Surface* surface);
 
 	~SceneRenderer();
 

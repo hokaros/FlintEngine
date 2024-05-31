@@ -1,5 +1,4 @@
 #pragma once
-#include <Window.h>
 #include <Vector.h>
 #include <SceneRenderer.h>
 
