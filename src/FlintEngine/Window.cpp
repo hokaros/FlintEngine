@@ -3,17 +3,12 @@
 #include "imgui/imgui_impl_sdl2.h"
 #include "imgui/imgui_impl_sdlrenderer2.h"
 
-Window* Window::s_MainWindow = nullptr;
-
 Window::Window(int width, int height)
 	: m_Width(width)
 	, m_Height(height) 
 	, m_SceneRenderer(width, height)
 {
-	if (s_MainWindow == nullptr) 
-	{
-		s_MainWindow = this;
-	}
+
 }
 
 Window::~Window() 
@@ -29,15 +24,6 @@ Window::~Window()
 		SDL_DestroyRenderer(m_Renderer);
 	}
 	SDL_Quit();
-
-	if (s_MainWindow == this) {
-		s_MainWindow = nullptr;
-	}
-}
-
-Window* Window::Main() 
-{
-	return s_MainWindow;
 }
 
 bool Window::Init() 

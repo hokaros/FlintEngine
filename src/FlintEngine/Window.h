@@ -23,8 +23,6 @@ public:
 	int GetWidth() const;
 	int GetHeight() const;
 
-	static Window* Main();
-
 private:
 	void InitImGui();
 	void DeinitImGui();
@@ -39,7 +37,5 @@ private:
 	SDL_Renderer* m_Renderer = nullptr;
 
 	SceneRenderer m_SceneRenderer;
-
-	static Window* s_MainWindow;
 };
 
