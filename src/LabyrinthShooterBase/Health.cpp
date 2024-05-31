@@ -1,5 +1,7 @@
 #include "Health.h"
 
+#include <Core/GameObject.h>
+
 DEFINE_COMPONENT(Health);
 DEFINE_FIELD(Health, m_MaxHealth);
 
@@ -50,6 +52,8 @@ void Health::SetStatRenderer(StatRenderer* value)
 
 void Health::OnDeath() 
 {
+	std::cout << "Dead" << std::endl;
+
 	for (std::function<void(Health*)> handler : m_OnDeath)
 	{
 		if (handler) 
@@ -57,6 +61,8 @@ void Health::OnDeath()
 			handler(this);
 		}
 	}
+
+	GameObject::Destroy(&GetOwner());
 }
 
 void Health::SubscribeDeath(std::function<void(Health*)> handler) 

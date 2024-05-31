@@ -56,12 +56,6 @@ GameObject* LabyrinthScene::CreatePlayer(const Vector& position)
 	Health* player_health = player->FindComponent<Health>();
 	// TODO: move to Health
 	player_health->SetStatRenderer(m_HealthStats);
-	player_health->SubscribeDeath(
-		[](Health* deadPlayer) {
-			printf("Dead\n");
-			GameObject::Destroy(&(deadPlayer->GetOwner()));
-		}
-	);
 
 	return player;
 }
