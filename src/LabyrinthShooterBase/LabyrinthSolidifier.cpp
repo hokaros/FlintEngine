@@ -215,7 +215,8 @@ void LabyrinthSolidifier::Awake()
 	// Stworzenie œcian
 	walls = new GameObject * [labyrinth->ActiveCount()];
 	function<void(Destroyable&)> destroyedHandler = [this](Destroyable& source) {OnWallDestroyedChanged(source); };
-	for (int i = 0; i < labyrinth->ActiveCount(); i++) {
+	for (int i = 0; i < labyrinth->ActiveCount(); i++)
+	{
 		walls[i] = BuildWall(Vector(wallWidth, wallLength));
 
 		std::unique_ptr<Destroyable> destroyable = std::make_unique<Destroyable>();
@@ -229,9 +230,8 @@ void LabyrinthSolidifier::Awake()
 	BuildBorder();
 
 	// Skrajne œciany zawsze widoczne
-	for (int i = 0; i < borderCount; i++) {
-		border[i]->renderUnseen = true;
-
+	for (int i = 0; i < borderCount; i++)
+	{
 		OccludableRectangle* occludable = border[i]->FindComponent<OccludableRectangle>();
 		std::unique_ptr<RectangleRenderer> unoccludable = std::make_unique<RectangleRenderer>();
 		unoccludable->SetColor(occludable->GetColor());

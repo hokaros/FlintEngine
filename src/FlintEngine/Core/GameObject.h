@@ -32,9 +32,6 @@ private:
 class GameObject
 {
 public:
-	bool renderUnseen = false;
-
-public:
 	GameObject();
 	GameObject(const Vector& size);
 	GameObject(const Vector& size, const Vector& position);

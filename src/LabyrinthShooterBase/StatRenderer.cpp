@@ -21,11 +21,6 @@ BMPStats::~BMPStats()
 	}
 }
 
-void BMPStats::Awake()
-{
-	GetOwner().renderUnseen = true;
-}
-
 void BMPStats::Render(SceneRenderer& renderer)
 {
 	if (m_Bitmap == nullptr)
