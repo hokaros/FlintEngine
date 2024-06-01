@@ -2,9 +2,9 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_main.h>
-#include <LabyrinthScene.h>
 #include <GameBase.h>
 #include <AssetManager.h>
+#include <Serialization/SceneLoader.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -25,7 +25,7 @@ int main()
 
 	std::unique_ptr<GameBase> game = CreateGame(window, input); // TODO: pass AssetManager
 
-	game->LoadScene(std::make_unique<LabyrinthScene>());
+	game->LoadScene(SceneLoader::LoadScene("Assets/main.scene")->CreateRuntimeObject());
 	game->Run();
 
 	return 0;
