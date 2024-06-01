@@ -31,6 +31,9 @@ private:
 	int m_MaxHealth = 3;
 	DECLARE_FIELD(m_MaxHealth);
 
+	bool m_RenderHearts = false;
+	DECLARE_FIELD(m_RenderHearts);
+
 	int m_CurrHealth = 0;
 
 	std::list<std::function<void(Health*)>> m_OnDeath;

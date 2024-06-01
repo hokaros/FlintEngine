@@ -5,12 +5,20 @@
 
 DEFINE_COMPONENT(Health);
 DEFINE_FIELD(Health, m_MaxHealth);
+DEFINE_FIELD(Health, m_RenderHearts);
 
 void Health::Awake()
 {
 	m_CurrHealth = m_MaxHealth;
 
-	m_HealthRenderer = FindStatRenderer();
+	if (m_RenderHearts)
+	{
+		m_HealthRenderer = FindStatRenderer();
+	}
+	else
+	{
+		m_HealthRenderer = nullptr;
+	}
 }
 
 void Health::Start()
