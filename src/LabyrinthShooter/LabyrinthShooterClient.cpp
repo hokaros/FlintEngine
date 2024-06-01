@@ -4,6 +4,7 @@
 #include <SDL_main.h>
 #include <LabyrinthScene.h>
 #include <GameBase.h>
+#include <AssetManager.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -22,9 +23,9 @@ int main()
 	InputController input;
 	AssetManager asset_manager;
 
-	std::unique_ptr<GameBase> game = CreateGame(window, input);
+	std::unique_ptr<GameBase> game = CreateGame(window, input); // TODO: pass AssetManager
 
-	game->LoadScene(std::make_unique<LabyrinthScene>(asset_manager));
+	game->LoadScene(std::make_unique<LabyrinthScene>());
 	game->Run();
 
 	return 0;

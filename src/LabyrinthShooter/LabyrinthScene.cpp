@@ -5,8 +5,7 @@
 
 #include <Serialization/SceneLoader.h>
 
-LabyrinthScene::LabyrinthScene(AssetManager& asset_manager)
-	: m_AssetManager(asset_manager)
+LabyrinthScene::LabyrinthScene()
 {
 	LoadFromFile("Assets/main.scene");
 	LoadStartingObjects();

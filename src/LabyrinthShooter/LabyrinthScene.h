@@ -1,6 +1,5 @@
 #pragma once
 #include <Scene.h>
-#include <AssetManager.h>
 #include <LabyrinthSolidifier.h>
 
 // Czas, co jaki zmienia siê labirynt
@@ -12,7 +11,7 @@ class LabyrinthScene
     : public Scene
 {
 public:
-	LabyrinthScene(AssetManager& asset_manager);
+	LabyrinthScene();
 
 private:
 	void LoadFromFile(const char* file_path);
@@ -26,7 +25,5 @@ private:
 private:
 	GameObject* m_Player;
 	LabyrinthSolidifier* m_Lab;
-
-	AssetManager& m_AssetManager;
 };
 
