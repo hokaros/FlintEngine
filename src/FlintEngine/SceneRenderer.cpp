@@ -92,6 +92,12 @@ void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, uint lay
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
+void SceneRenderer::RenderString(const char* text, const Vector& start, int fontSize, uint layer)
+{
+	const Vector screen_space_start = WorldSpaceToScreenSpace(start);
+	DrawStringScreenSpace(screen_space_start.x, screen_space_start.y, text, fontSize, layer);
+}
+
 void SceneRenderer::Clear(const Rgb8& clear_color)
 {
 	m_TargetLayers.ClearLayers();

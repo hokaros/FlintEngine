@@ -23,7 +23,7 @@ void LabyrinthScene::Render(SceneRenderer& renderer)
 	Scene::Render(renderer);
 
 	VectorInt player_label_pos = m_Player->GetPosition() + Vector(-20, -20);
-	renderer.DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, PLAYER_GO_NAME, 10, /*layer*/1);
+	renderer.RenderString(PLAYER_GO_NAME, player_label_pos, /*fontSize*/10, /*layer*/1);
 }
 
 void LabyrinthScene::LoadFromFile(const char* file_path)

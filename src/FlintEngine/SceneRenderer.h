@@ -33,6 +33,8 @@ public:
 	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color, uint layer);
 	void RenderWireRect(const Rect& rect, const Rgb8& color, uint layer);
 
+	void RenderString(const char* text, const Vector& start, int fontSize, uint layer); // Renders string in world space. start is the upper left corner
+
 	void Clear(const Rgb8& clear_color);
 
 	void SetViewport(const Rect& viewport);
