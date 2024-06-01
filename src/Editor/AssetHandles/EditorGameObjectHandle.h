@@ -1,5 +1,5 @@
 #pragma once
-#include <InlineGameObject.h>
+#include <Editables/InlineGameObject.h>
 #include <AssetHandles/IHierarchyEditable.h>
 #include <AssetHandles/ISaveable.h>
 

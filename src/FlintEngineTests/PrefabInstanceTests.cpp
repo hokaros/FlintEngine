@@ -1,5 +1,5 @@
 #include "pch.h"
-#include <PrefabInstance.h>
+#include <Editables/PrefabInstance.h>
 #include <Components/RectangleRenderer.h>
 #include <Components/BoxCollider.h>
 #include "FakeAssetManager.h"

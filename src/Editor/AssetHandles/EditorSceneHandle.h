@@ -1,5 +1,5 @@
 #pragma once
-#include <EditableScene.h>
+#include <Editables/EditableScene.h>
 #include <AssetHandles/IHierarchyEditable.h>
 #include <AssetHandles/ISaveable.h>
 

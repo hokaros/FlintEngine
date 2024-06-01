@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObjectSerializer.h"
-#include "PrefabInstance.h"
+#include <Editables/PrefabInstance.h>
 
 struct PrefabInstanceStringDesc
 {

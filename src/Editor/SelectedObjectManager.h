@@ -1,6 +1,5 @@
 #pragma once
 #include <ObjectManager.h>
-#include <Scene.h>
 
 #include <AssetHandles/EditorUniversalHandle.h>
 

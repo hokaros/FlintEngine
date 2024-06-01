@@ -1,6 +1,6 @@
 #include "AIPerception.h"
 
-#include <Scene.h>
+#include <Core/Scene.h>
 #include <Shared.h>
 
 AIPerception::AIPerception(const GameObject& game_object)

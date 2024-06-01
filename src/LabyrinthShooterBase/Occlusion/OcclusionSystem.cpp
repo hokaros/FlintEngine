@@ -1,5 +1,5 @@
 #include "OcclusionSystem.h"
-#include <Scene.h>
+#include <Core/Scene.h>
 #include <ftl.h>
 
 DEFINE_COMPONENT(OcclusionSystem);

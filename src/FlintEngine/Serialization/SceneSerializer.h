@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObjectSerializer.h"
-#include "Scene.h"
-#include "EditableScene.h"
+#include <Editables/EditableScene.h>
 
 struct SceneStringDesc
 {

@@ -1,7 +1,7 @@
 #include "Health.h"
 
 #include <Core/GameObject.h>
-#include <Scene.h>
+#include <Core/Scene.h>
 
 DEFINE_COMPONENT(Health);
 DEFINE_FIELD(Health, m_MaxHealth);

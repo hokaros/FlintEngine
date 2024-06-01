@@ -1,7 +1,7 @@
 #pragma once
 #include <ComponentFieldDefinition.h>
 #include <imgui/imgui.h>
-#include <IEditableGameObject.h>
+#include <Editables/IEditableGameObject.h>
 #include <AssetHandles/EditorGameObjectHandle.h>
 
 class FieldEditor

@@ -1,7 +1,7 @@
 #include "pch.h"
-#include <EditableScene.h>
-#include <InlineGameObject.h>
-#include <PrefabInstance.h>
+#include <Editables/EditableScene.h>
+#include <Editables/InlineGameObject.h>
+#include <Editables/PrefabInstance.h>
 
 #include "FakeAssetManager.h"
 

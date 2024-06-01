@@ -1,8 +1,8 @@
 #pragma once
-#include <SceneRenderer.h>
 #include <imgui/imgui.h>
-#include <Scene.h>
+
 #include <InputController.h>
+#include <Core/Scene.h>
 #include <Core/GameBase.h>
 #include <AssetHandles/EditorUniversalHandle.h>
 

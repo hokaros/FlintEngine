@@ -1,6 +1,6 @@
 #pragma once
 #include <imgui/imgui.h>
-#include <PrefabInstance.h>
+#include <Editables/PrefabInstance.h>
 #include <AssetHandles/EditorUniversalHandle.h>
 #include "SelectedObjectManager.h"
 #include "Widgets.h"

@@ -1,5 +1,5 @@
 #pragma once
-#include "InlineGameObject.h"
+#include <Editables/InlineGameObject.h>
 #include "ComponentSerializer.h"
 
 class GameObjectStringDescProxy
