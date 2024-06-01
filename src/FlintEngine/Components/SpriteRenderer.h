@@ -9,7 +9,6 @@ class SpriteRenderer :
 	DECLARE_COMPONENT();
 public:
 	SpriteRenderer() = default;
-	SpriteRenderer(const std::string& bitmap_path);
 	~SpriteRenderer();
 
 	void Render(SceneRenderer& renderer) override;

@@ -11,7 +11,6 @@ class RectangleRenderer :
 
 public:
 	RectangleRenderer() = default;
-	RectangleRenderer(const Rgb8& color);
 	void Render(SceneRenderer& renderer) override;
 
 	void SetColor(Rgb8 color);

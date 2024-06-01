@@ -9,12 +9,6 @@ DEFINE_COMPONENT(SpriteRenderer);
 DEFINE_FIELD(SpriteRenderer, m_Layer);
 DEFINE_FIELD(SpriteRenderer, m_BitmapPath);
 
-SpriteRenderer::SpriteRenderer(const std::string& bitmap_path)
-	: m_BitmapPath(bitmap_path)
-{
-
-}
-
 SpriteRenderer::~SpriteRenderer()
 {
 	if (m_Texture != nullptr)

@@ -7,12 +7,6 @@ DEFINE_COMPONENT(RectangleRenderer);
 DEFINE_FIELD(RectangleRenderer, m_Layer);
 DEFINE_FIELD(RectangleRenderer, m_Color);
 
-RectangleRenderer::RectangleRenderer(const Rgb8& color)
-	: m_Color(color)
-{
-
-}
-
 void RectangleRenderer::Render(SceneRenderer& renderer)
 {
 	Rect rect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());

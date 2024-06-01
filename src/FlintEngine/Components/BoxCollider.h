@@ -8,7 +8,6 @@ class BoxCollider
 
 public:
 	BoxCollider() = default;
-	BoxCollider(Vector local_pos, Vector size, bool inside_out = false);
 
 	bool DoesCollide(const BoxCollider& other) const;
 	Rect GetIntersection(const BoxCollider& other) const;

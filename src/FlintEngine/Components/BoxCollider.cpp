@@ -9,13 +9,6 @@ DEFINE_FIELD(BoxCollider, m_Position);
 DEFINE_FIELD(BoxCollider, m_Size);
 DEFINE_FIELD(BoxCollider, m_IsStatic);
 
-BoxCollider::BoxCollider(Vector local_pos, Vector size, bool inside_out)
-	: m_Position(local_pos)
-	, m_Size(size)
-	, m_InsideOutCollision(inside_out)
-{
-}
-
 bool BoxCollider::DoesCollide(const BoxCollider& other) const
 {
 	// Rozpatrzenie kolizji odwrotnych (mog¹ siê znosiæ)
