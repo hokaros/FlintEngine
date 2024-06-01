@@ -52,6 +52,18 @@ public:
 	~SceneRenderer();
 
 private:
+	class RenderTargetScope
+	{
+	public:
+		RenderTargetScope(SDL_Renderer* renderer, SDL_Texture* new_render_target);
+		~RenderTargetScope();
+
+	private:
+		SDL_Texture* m_PrevRenderTarget = nullptr;
+		SDL_Renderer* m_Renderer = nullptr;
+	};
+
+private:
 	Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
 

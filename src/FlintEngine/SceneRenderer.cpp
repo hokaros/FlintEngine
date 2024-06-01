@@ -58,8 +58,7 @@ void SceneRenderer::RenderTexture(SDL_Texture* texture, const Rect& rect, double
 
 void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color)
 {
-	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
-	SDL_SetRenderTarget(m_Renderer, m_OutTexture);
+	RenderTargetScope rt_scope(m_Renderer, m_OutTexture);
 
 	SDL_Rect ssRect = RectToSDLRect(WorldSpaceToScreenSpace(rect));
 
@@ -67,14 +66,11 @@ void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color)
 
 	int result = SDL_RenderFillRect(m_Renderer, &ssRect);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
-
-	SDL_SetRenderTarget(m_Renderer, originalRT);
 }
 
 void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb8& color)
 {
-	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
-	SDL_SetRenderTarget(m_Renderer, m_OutTexture);
+	RenderTargetScope rt_scope(m_Renderer, m_OutTexture);
 
 	Vector ssStart = WorldSpaceToScreenSpace(start);
 	Vector ssEnd = WorldSpaceToScreenSpace(end);
@@ -83,14 +79,11 @@ void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb
 
 	int result = SDL_RenderDrawLine(m_Renderer, ssStart.x, ssStart.y, ssEnd.x, ssEnd.y);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
-
-	SDL_SetRenderTarget(m_Renderer, originalRT);
 }
 
 void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color)
 {
-	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
-	SDL_SetRenderTarget(m_Renderer, m_OutTexture);
+	RenderTargetScope rt_scope(m_Renderer, m_OutTexture);
 
 	SDL_Rect ssRect = RectToSDLRect(WorldSpaceToScreenSpace(rect));
 
@@ -98,8 +91,6 @@ void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color)
 
 	int result = SDL_RenderDrawRect(m_Renderer, &ssRect);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
-
-	SDL_SetRenderTarget(m_Renderer, originalRT);
 }
 
 void SceneRenderer::Clear(const Rgb8& clear_color)
@@ -109,8 +100,7 @@ void SceneRenderer::Clear(const Rgb8& clear_color)
 
 void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fontSize)
 {
-	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
-	SDL_SetRenderTarget(m_Renderer, m_OutTexture);
+	RenderTargetScope rt_scope(m_Renderer, m_OutTexture);
 
 	SDL_Rect src, dest;
 	src.w = 8;
@@ -130,14 +120,11 @@ void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fo
 		x += fontSize;
 		text++;
 	};
-
-	SDL_SetRenderTarget(m_Renderer, originalRT);
 }
 
 void SceneRenderer::RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle)
 {
-	SDL_Texture* originalRT = SDL_GetRenderTarget(m_Renderer);
-	SDL_SetRenderTarget(m_Renderer, m_OutTexture); // TODO: don't replace RTs every Render
+	RenderTargetScope rt_scope(m_Renderer, m_OutTexture);
 
 	FE_ASSERT(m_Renderer != nullptr, "No renderer set");
 
@@ -147,8 +134,6 @@ void SceneRenderer::RenderTextureScreenSpace(SDL_Texture* texture, const Rect& r
 	mid.x = ssRect.w / 2;
 	mid.y = ssRect.h / 2;
 	SDL_RenderCopyEx(m_Renderer, texture, NULL, &(ssRect), angle, &mid, SDL_FLIP_NONE);
-
-	SDL_SetRenderTarget(m_Renderer, originalRT);
 }
 
 SceneRenderer::~SceneRenderer()
@@ -219,4 +204,17 @@ VectorInt SceneRenderer::GetCharCoordinates(char c) const
 	int y = (c_int / 16) * 8;
 
 	return VectorInt(x, y);
+}
+
+
+SceneRenderer::RenderTargetScope::RenderTargetScope(SDL_Renderer* renderer, SDL_Texture* new_render_target)
+	: m_Renderer(renderer)
+{
+	m_PrevRenderTarget = SDL_GetRenderTarget(m_Renderer);
+	SDL_SetRenderTarget(m_Renderer, new_render_target);
+}
+
+SceneRenderer::RenderTargetScope::~RenderTargetScope()
+{
+	SDL_SetRenderTarget(m_Renderer, m_PrevRenderTarget);
 }
