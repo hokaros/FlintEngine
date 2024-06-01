@@ -12,7 +12,7 @@ class LabyrinthScene
     : public Scene
 {
 public:
-	LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager);
+	LabyrinthScene(AssetManager& asset_manager);
 
 private:
 	void LoadFromFile(const char* file_path);
@@ -22,12 +22,10 @@ private:
 	virtual bool ShouldRender(GameObject* gameObject);
 	GameObject* FindLabyrinth();
 	GameObject* FindPlayer();
-	GameObject* CreatePlayer(const Vector& position);
 
 private:
 	GameObject* m_Player;
 	LabyrinthSolidifier* m_Lab;
-	Vector m_PlayerStartingPos;
 
 	AssetManager& m_AssetManager;
 };

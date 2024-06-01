@@ -10,10 +10,7 @@
 
 std::unique_ptr<Game> CreateGame(Window& window, IInputController& input_controller)
 {
-	Vector player_start_pos = Vector(260, 160);
-
-	GameStartInfo gameInfo = GameStartInfo(player_start_pos);
-	return std::make_unique<Game>(&window, &window.GetSceneRenderer(), input_controller, std::move(gameInfo));
+	return std::make_unique<Game>(&window, &window.GetSceneRenderer(), input_controller);
 }
 
 int main()

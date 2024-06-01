@@ -5,9 +5,8 @@
 
 #include <Serialization/SceneLoader.h>
 
-LabyrinthScene::LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager)
-	: m_PlayerStartingPos(player_pos)
-	, m_AssetManager(asset_manager)
+LabyrinthScene::LabyrinthScene(AssetManager& asset_manager)
+	: m_AssetManager(asset_manager)
 {
 	LoadFromFile("Assets/main.scene");
 	LoadStartingObjects();
@@ -26,17 +25,7 @@ void LabyrinthScene::LoadStartingObjects()
 	GameObject* lab_object = FindLabyrinth();
 	FE_ASSERT(lab_object != nullptr, "No labyrinth object loaded");
 	m_Lab = lab_object->FindComponent<LabyrinthSolidifier>();
-	m_Player = CreatePlayer(m_PlayerStartingPos);
-}
-
-GameObject* LabyrinthScene::CreatePlayer(const Vector& position)
-{
-	GameObject* player = FindPlayer();
-	FE_ASSERT(player != nullptr, "No Player loaded");
-
-	player->SetPosition(position);
-
-	return player;
+	m_Player = FindPlayer();
 }
 
 bool LabyrinthScene::ShouldRender(GameObject* go)
