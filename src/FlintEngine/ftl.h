@@ -4,7 +4,7 @@
 namespace ftl
 {
 	template<typename T>
-	bool vector_contains(std::vector<T> vec, const T& wanted_value)
+	bool vector_contains(const std::vector<T>& vec, const T& wanted_value)
 	{
 		for (const T& vec_val : vec)
 		{
@@ -18,7 +18,7 @@ namespace ftl
 	}
 
 	template<typename T>
-	void vector_remove(std::vector<T> vec, const T& value_to_remove)
+	void vector_remove(std::vector<T>& vec, const T& value_to_remove)
 	{
 		for (auto it = vec.begin(); it != vec.end(); it++)
 		{
