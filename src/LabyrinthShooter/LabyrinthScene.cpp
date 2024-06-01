@@ -23,7 +23,6 @@ void LabyrinthScene::LoadFromFile(const char* file_path)
 
 void LabyrinthScene::LoadStartingObjects()
 {
-	m_HealthStats = FindHealthStats();
 	GameObject* lab_object = FindLabyrinth();
 	FE_ASSERT(lab_object != nullptr, "No labyrinth object loaded");
 	m_Lab = lab_object->FindComponent<LabyrinthSolidifier>();
@@ -62,12 +61,4 @@ GameObject* LabyrinthScene::FindLabyrinth()
 GameObject* LabyrinthScene::FindPlayer()
 {
 	return FindGameObjectByName(PLAYER_GO_NAME);
-}
-
-BMPStats* LabyrinthScene::FindHealthStats()
-{
-	GameObject* go = FindGameObjectByName("Health Stats");
-	FE_ASSERT(go != nullptr, "Health Stats not found");
-
-	return go->FindComponent<BMPStats>();
 }

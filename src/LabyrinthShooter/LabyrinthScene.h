@@ -1,7 +1,6 @@
 #pragma once
 #include <Scene.h>
 #include <AssetManager.h>
-#include <StatRenderer.h>
 #include <LabyrinthSolidifier.h>
 
 // Czas, co jaki zmienia siê labirynt
@@ -23,15 +22,12 @@ private:
 	virtual bool ShouldRender(GameObject* gameObject);
 	GameObject* FindLabyrinth();
 	GameObject* FindPlayer();
-	BMPStats* FindHealthStats();
 	GameObject* CreatePlayer(const Vector& position);
 
 private:
 	GameObject* m_Player;
 	LabyrinthSolidifier* m_Lab;
 	Vector m_PlayerStartingPos;
-
-	BMPStats* m_HealthStats = nullptr;
 
 	AssetManager& m_AssetManager;
 };
