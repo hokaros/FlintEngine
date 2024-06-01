@@ -1,10 +1,8 @@
 #pragma once
-#include <SDL.h>
-#include <SDL_main.h>
+#include <Rendering/TargetLayersContainer.h>
 
 #include "Draw.h"
 #include "Vector.h"
-#include <Rendering/TargetLayersContainer.h>
 
 class Window;
 class SceneEditor;
@@ -28,12 +26,12 @@ public:
 
 	SDL_Renderer* GetRenderer();
 
-	SDL_Texture* GetOutputTexture();
+	SDL_Texture* FinalizeFrame();
 
-	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle);
-	void RenderRect(const Rect& rect, const Rgb8& color);
-	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color);
-	void RenderWireRect(const Rect& rect, const Rgb8& color);
+	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, uint layer);
+	void RenderRect(const Rect& rect, const Rgb8& color, uint layer);
+	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color, uint layer);
+	void RenderWireRect(const Rect& rect, const Rgb8& color, uint layer);
 
 	void Clear(const Rgb8& clear_color);
 
@@ -42,8 +40,8 @@ public:
 	Rect& GetViewport();
 
 	// narysowanie napisu txt na ekranie, zaczynaj¹c od punktu (x, y)
-	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize);
-	void RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle);
+	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize, uint layer);
+	void RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, uint layer);
 
 	Rect WorldSpaceToScreenSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToScreenSpace(const Vector& worldSpace) const;
@@ -61,6 +59,8 @@ private:
 
 	bool LoadCharsets();
 	VectorInt GetCharCoordinates(char c) const;
+
+	[[nodiscard]] RenderTargetScope SetTargetLayer(uint layer_index);
 
 private:
 	TargetLayersContainer m_TargetLayers;

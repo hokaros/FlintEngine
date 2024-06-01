@@ -1,4 +1,5 @@
 #include "TargetLayersContainer.h"
+#include <utility.h>
 
 TargetLayersContainer::TargetLayersContainer(const VectorInt& target_size)
 	: m_TargetSize(target_size)
@@ -51,15 +52,6 @@ SDL_Texture* TargetLayersContainer::GetOrCreateLayer(uint layer)
 	return it->second;
 }
 
-void TargetLayersContainer::ForEachLayerAscending(std::function<void(SDL_Texture*)> action) const
-{
-	for (auto it = m_Layers.begin(); it != m_Layers.end(); it++)
-	{
-		SDL_Texture* layer_target = it->second;
-		action(layer_target);
-	}
-}
-
 void TargetLayersContainer::ClearLayers()
 {
 	for (auto& layer : m_Layers)
@@ -68,4 +60,24 @@ void TargetLayersContainer::ClearLayers()
 
 		ClearLayer(layer_tex);
 	}
+}
+
+SDL_Texture* TargetLayersContainer::MergeLayers()
+{
+	SDL_Texture* layer_0 = GetOrCreateLayer(0);
+
+	RenderTargetScope rt_scope(m_Renderer, layer_0);
+
+	for (auto& layer : m_Layers)
+	{
+		const uint index = layer.first;
+		if (index == 0)
+			continue;
+
+		SDL_Texture* layer_tex = layer.second;
+		SDL_SetTextureBlendMode(layer_tex, SDL_BLENDMODE_BLEND);
+		SDL_RenderCopy(m_Renderer, layer_tex, nullptr, nullptr);
+	}
+
+	return layer_0;
 }

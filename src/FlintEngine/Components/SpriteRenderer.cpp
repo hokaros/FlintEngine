@@ -6,6 +6,7 @@
 
 DEFINE_COMPONENT(SpriteRenderer);
 
+DEFINE_FIELD(SpriteRenderer, m_Layer);
 DEFINE_FIELD(SpriteRenderer, m_BitmapPath);
 
 SpriteRenderer::SpriteRenderer(const std::string& bitmap_path)
@@ -31,7 +32,7 @@ void SpriteRenderer::Render(SceneRenderer& renderer)
 
 	Rect dstRect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
 
-	renderer.RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation());
+	renderer.RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation(), m_Layer);
 }
 
 SDL_Texture* SpriteRenderer::CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer)

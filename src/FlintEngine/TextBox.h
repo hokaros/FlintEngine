@@ -9,7 +9,7 @@
 class TextBox
 {
 public:
-	TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, int fontSize);
+	TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, int fontSize, uint layer);
 
 	void Draw(SceneRenderer& renderer);
 	void Update();
@@ -26,6 +26,7 @@ private:
 	Rgb8 m_Outline;
 	Rgb8 m_Fill;
 	int m_FontSize;
+	uint m_Layer;
 
 	std::deque<char> m_Content;
 };

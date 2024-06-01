@@ -8,6 +8,7 @@ void StatRenderer::UpdateStat(int newStat)
 
 
 DEFINE_COMPONENT(BMPStats);
+DEFINE_FIELD(BMPStats, m_Layer);
 DEFINE_FIELD(BMPStats, m_BitmapPath);
 DEFINE_FIELD(BMPStats, m_ElementSize);
 DEFINE_FIELD(BMPStats, m_StartPos);
@@ -37,7 +38,7 @@ void BMPStats::Render(SceneRenderer& renderer)
 
 	for (int i = 0; i < stat; i++) 
 	{
-		renderer.RenderTexture(m_Bitmap, dest, /* angle = */0.0f);
+		renderer.RenderTexture(m_Bitmap, dest, /* angle = */0.0f, m_Layer);
 
 		dest.pos.x += m_ElementSize.x;
 	}

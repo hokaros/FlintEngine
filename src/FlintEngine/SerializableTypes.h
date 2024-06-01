@@ -104,6 +104,22 @@ public:
 };
 
 template<>
+class SerializableTypeInterface<unsigned int>
+{
+public:
+	static inline void ParseString(const std::string& str, unsigned int& out_value)
+	{
+		out_value = std::stoi(str);
+	}
+	static inline std::string ToString(const unsigned int& value)
+	{
+		return std::to_string(value);
+	}
+
+	STI_DEFINE_TYPECODE_GETTER()
+};
+
+template<>
 class SerializableTypeInterface<bool>
 {
 public:

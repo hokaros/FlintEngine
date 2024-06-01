@@ -11,3 +11,15 @@ RenderTargetScope::~RenderTargetScope()
 {
 	SDL_SetRenderTarget(m_Renderer, m_PrevRenderTarget);
 }
+
+TextureBlendModeScope::TextureBlendModeScope(SDL_Texture* texture, SDL_BlendMode blend_mode)
+	: m_Texture(texture)
+{
+	SDL_GetTextureBlendMode(m_Texture, &m_PrevBlendMode);
+	SDL_SetTextureBlendMode(m_Texture, blend_mode);
+}
+
+TextureBlendModeScope::~TextureBlendModeScope()
+{
+	SDL_SetTextureBlendMode(m_Texture, m_PrevBlendMode);
+}

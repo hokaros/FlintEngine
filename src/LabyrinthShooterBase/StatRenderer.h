@@ -35,6 +35,9 @@ private:
 private:
 	SDL_Texture* m_Bitmap = nullptr;
 
+	uint m_Layer = 0;
+	DECLARE_FIELD(m_Layer);
+
 	std::string m_BitmapPath = "";
 	DECLARE_FIELD(m_BitmapPath);
 

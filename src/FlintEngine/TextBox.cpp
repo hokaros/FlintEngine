@@ -1,10 +1,11 @@
 #include "TextBox.h"
 
-TextBox::TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, int fontSize)
+TextBox::TextBox(const SDL_Rect& rect, const Rgb8& outline, const Rgb8& fill, int fontSize, uint layer)
 	: m_Rect(rect)
 	, m_Outline(outline)
 	, m_Fill(fill)
 	, m_FontSize(fontSize) 
+	, m_Layer(layer)
 {
 
 }
@@ -13,8 +14,8 @@ void TextBox::Draw(SceneRenderer& renderer)
 {
 	// Ramka
 	Rect rect = SDLRectToRect(m_Rect);
-	renderer.RenderRect(rect, m_Fill);
-	renderer.RenderWireRect(rect, m_Outline);
+	renderer.RenderRect(rect, m_Fill, m_Layer);
+	renderer.RenderWireRect(rect, m_Outline, m_Layer);
 
 	// Wyœwietlenie zebranego tekstu
 	char buffer[32];
@@ -29,7 +30,8 @@ void TextBox::Draw(SceneRenderer& renderer)
 		m_Rect.x + TEXTBOX_PADDING,
 		m_Rect.y + m_Rect.h / 2 - m_FontSize / 2,
 		buffer,
-		m_FontSize
+		m_FontSize,
+		m_Layer
 	);
 }
 

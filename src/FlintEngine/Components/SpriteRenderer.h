@@ -18,6 +18,9 @@ protected:
 	static SDL_Texture* CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer);
 
 protected:
+	uint m_Layer = 0;
+	DECLARE_FIELD(m_Layer);
+
 	std::string m_BitmapPath = "";
 	DECLARE_FIELD(m_BitmapPath);
 

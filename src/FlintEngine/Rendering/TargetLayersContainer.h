@@ -18,8 +18,8 @@ public:
 	void Init(SDL_Renderer* renderer);
 
 	SDL_Texture* GetOrCreateLayer(uint layer);
-	void ForEachLayerAscending(std::function<void(SDL_Texture*)> action) const;
 	void ClearLayers();
+	SDL_Texture* MergeLayers(); // Merges layers to layer 0 and returns it
 
 private:
 	SDL_Texture* CreateLayer();

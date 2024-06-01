@@ -19,6 +19,8 @@ private:
 private:
 	SceneRenderer& m_Renderer;
 
+	static constexpr uint s_RenderLayer = UINT32_MAX;
+
 	static DebugRenderer* s_Instance;
 };
 

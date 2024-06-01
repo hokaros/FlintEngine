@@ -29,9 +29,9 @@ SDL_Renderer* SceneRenderer::GetRenderer()
 	return m_Renderer;
 }
 
-SDL_Texture* SceneRenderer::GetOutputTexture()
+SDL_Texture* SceneRenderer::FinalizeFrame()
 {
-	return m_TargetLayers.GetOrCreateLayer(0);
+	return m_TargetLayers.MergeLayers();
 }
 
 void SceneRenderer::SetViewport(const Rect& viewport)
@@ -49,15 +49,15 @@ Rect& SceneRenderer::GetViewport()
 	return m_CurrentViewport;
 }
 
-void SceneRenderer::RenderTexture(SDL_Texture* texture, const Rect& rect, double angle)
+void SceneRenderer::RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, uint layer)
 {
 	Rect screen_space_rect = WorldSpaceToScreenSpace(rect);
-	RenderTextureScreenSpace(texture, screen_space_rect, angle);
+	RenderTextureScreenSpace(texture, screen_space_rect, angle, layer);
 }
 
-void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color)
+void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color, uint layer)
 {
-	RenderTargetScope rt_scope(m_Renderer, GetOutputTexture());
+	RenderTargetScope render_scope = SetTargetLayer(layer);
 
 	SDL_Rect ssRect = RectToSDLRect(WorldSpaceToScreenSpace(rect));
 
@@ -67,9 +67,9 @@ void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color)
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb8& color)
+void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb8& color, uint layer)
 {
-	RenderTargetScope rt_scope(m_Renderer, GetOutputTexture());
+	RenderTargetScope render_scope = SetTargetLayer(layer);
 
 	Vector ssStart = WorldSpaceToScreenSpace(start);
 	Vector ssEnd = WorldSpaceToScreenSpace(end);
@@ -80,9 +80,9 @@ void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color)
+void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, uint layer)
 {
-	RenderTargetScope rt_scope(m_Renderer, GetOutputTexture());
+	RenderTargetScope render_scope = SetTargetLayer(layer);
 
 	SDL_Rect ssRect = RectToSDLRect(WorldSpaceToScreenSpace(rect));
 
@@ -94,12 +94,13 @@ void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color)
 
 void SceneRenderer::Clear(const Rgb8& clear_color)
 {
-	RenderRect(GetRenderedRect(), clear_color);
+	m_TargetLayers.ClearLayers();
+	RenderRect(GetRenderedRect(), clear_color, /*layer*/0); // Render on first layer
 }
 
-void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fontSize)
+void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fontSize, uint layer)
 {
-	RenderTargetScope rt_scope(m_Renderer, GetOutputTexture());
+	RenderTargetScope render_scope = SetTargetLayer(layer);
 
 	SDL_Rect src, dest;
 	src.w = 8;
@@ -121,9 +122,9 @@ void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fo
 	};
 }
 
-void SceneRenderer::RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle)
+void SceneRenderer::RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, uint layer)
 {
-	RenderTargetScope rt_scope(m_Renderer, GetOutputTexture());
+	RenderTargetScope render_scope = SetTargetLayer(layer);
 
 	FE_ASSERT(m_Renderer != nullptr, "No renderer set");
 
@@ -202,4 +203,9 @@ VectorInt SceneRenderer::GetCharCoordinates(char c) const
 	int y = (c_int / 16) * 8;
 
 	return VectorInt(x, y);
+}
+
+RenderTargetScope SceneRenderer::SetTargetLayer(uint layer_index)
+{
+	return RenderTargetScope(m_Renderer, m_TargetLayers.GetOrCreateLayer(layer_index));
 }

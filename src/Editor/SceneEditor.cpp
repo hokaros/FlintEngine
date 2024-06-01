@@ -70,7 +70,7 @@ void SceneEditor::Render()
 			IEditableGameObject::RenderUpdate(handle->GetGameObjectHandle()->GetGameObject(), m_SceneRenderer);
 		}
 
-		if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())
+		if (SDL_Texture* renderedTex = m_SceneRenderer.FinalizeFrame())
 		{
 			ImVec2 renderSize = ImGui::GetContentRegionAvail();
 			ImGui::Image((void*)renderedTex, renderSize);

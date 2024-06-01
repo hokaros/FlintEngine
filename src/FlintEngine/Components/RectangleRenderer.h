@@ -2,6 +2,8 @@
 #include "ObjectRenderer.h"
 #include "ComponentDefinition.h"
 #include "Draw.h"
+#include "SceneRenderer.h"
+
 class RectangleRenderer :
 	public ObjectRenderer
 {
@@ -15,8 +17,10 @@ public:
 	void SetColor(Rgb8 color);
 
 private:
-	Rgb8 m_Color;
+	uint m_Layer = 0;
+	DECLARE_FIELD(m_Layer);
 
+	Rgb8 m_Color;
 	DECLARE_FIELD(m_Color);
 };
 

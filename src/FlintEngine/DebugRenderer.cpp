@@ -27,15 +27,15 @@ void DebugRenderer::DrawWireRect(const Rect& rect, const Rgb8& color)
 
 void DebugRenderer::DrawLineImpl(const Vector& start, const Vector& end, const Rgb8& color)
 {
-	m_Renderer.RenderLine(start, end, color);
+	m_Renderer.RenderLine(start, end, color, s_RenderLayer);
 }
 
 void DebugRenderer::DrawRectImpl(const Rect& rect, const Rgb8& color)
 {
-	m_Renderer.RenderRect(rect, color);
+	m_Renderer.RenderRect(rect, color, s_RenderLayer);
 }
 
 void DebugRenderer::DrawWireRectImpl(const Rect& rect, const Rgb8& color)
 {
-	m_Renderer.RenderWireRect(rect, color);
+	m_Renderer.RenderWireRect(rect, color, s_RenderLayer);
 }

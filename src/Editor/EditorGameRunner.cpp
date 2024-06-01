@@ -96,7 +96,7 @@ void EditorGameRunner::RenderControlPanel()
 
 void EditorGameRunner::RenderGameFrame()
 {
-	if (SDL_Texture* renderedTex = m_SceneRenderer.GetOutputTexture())
+	if (SDL_Texture* renderedTex = m_SceneRenderer.FinalizeFrame())
 	{
 		ImVec2 renderSize = ImGui::GetContentRegionAvail();
 		ImGui::Image((void*)renderedTex, renderSize);
