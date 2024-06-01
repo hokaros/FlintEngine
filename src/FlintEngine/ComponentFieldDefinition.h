@@ -65,6 +65,7 @@ private:																			\
 	static ComponentFieldDefinitionTyped<name##_fieldType> name##_fieldDefinition;	\
 public:																				\
 	const ComponentFieldDefinitionTyped<name##_fieldType>& GetFieldDefinition_##name() const; \
+private:
 
 #define FIELD_TYPE(component, field) component##::##field##_fieldType
 
