@@ -25,9 +25,6 @@ public:
 	void InvokeOnNextFrame(function<void()> fun);
 
 protected:
-	virtual std::unique_ptr<Scene> CreateScene();
-
-protected:
 	IInputController& m_InputController;
 	Window* m_Window = nullptr;
 	SceneRenderer* m_SceneRenderer = nullptr;

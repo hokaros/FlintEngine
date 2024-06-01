@@ -88,11 +88,6 @@ void GameBase::InvokeOnNextFrame(function<void()> fun)
 	invokes.push_back(std::move(fun));
 }
 
-std::unique_ptr<Scene> GameBase::CreateScene()
-{
-	return std::make_unique<Scene>();
-}
-
 void GameBase::DebugRender()
 {
 	physicsSystem.DebugRender();
