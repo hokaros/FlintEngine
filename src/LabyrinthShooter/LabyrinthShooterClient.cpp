@@ -2,7 +2,7 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_main.h>
-#include <GameBase.h>
+#include <Core/GameBase.h>
 #include <AssetManager.h>
 #include <Serialization/SceneLoader.h>
 

@@ -3,7 +3,7 @@
 #include <imgui/imgui.h>
 #include <Scene.h>
 #include <InputController.h>
-#include <GameBase.h>
+#include <Core/GameBase.h>
 #include <AssetHandles/EditorUniversalHandle.h>
 
 class EditorInputController
