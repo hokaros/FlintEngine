@@ -22,9 +22,6 @@ void LabyrinthScene::Render(SceneRenderer& renderer)
 {
 	Scene::Render(renderer);
 
-	// Renderowanie nak³adek UI
-	m_HealthStats->Render(renderer); // TODO: remove after implementing rendering layers
-
 	VectorInt player_label_pos = m_Player->GetPosition() + Vector(-20, -20);
 	renderer.DrawStringScreenSpace(player_label_pos.x, player_label_pos.y, PLAYER_GO_NAME, 10, /*layer*/1);
 }
