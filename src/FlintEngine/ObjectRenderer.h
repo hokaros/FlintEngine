@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL.h>
-#include "ObjectComponent.h"
+#include <Core/ObjectComponent.h>
 
 // Komponent rysuj¹cy obiekt
 class ObjectRenderer : public ObjectComponent

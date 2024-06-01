@@ -4,7 +4,7 @@
 #include <optional>
 #include <type_traits>
 
-#include "ObjectComponent.h"
+#include <Core/ObjectComponent.h>
 #include "ComponentFieldDefinition.h"
 
 class ComponentDefinition

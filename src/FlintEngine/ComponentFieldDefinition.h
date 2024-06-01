@@ -2,7 +2,7 @@
 #include <iostream>
 #include <functional>
 
-#include "ObjectComponent.h"
+#include <Core/ObjectComponent.h>
 #include "SerializableTypes.h"
 
 class ComponentFieldDefinition
