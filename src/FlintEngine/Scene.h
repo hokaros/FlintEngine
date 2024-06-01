@@ -14,6 +14,10 @@ public:
 	void PostFrame();
 
 	GameObject* FindGameObjectByName(const std::string& name) const;
+
+	using GameObjectsT = std::list<std::unique_ptr<GameObject>>;
+	GameObjectsT::iterator BeginRootGameObjects();
+	GameObjectsT::iterator EndRootGameObjects();
 	
 	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
 
@@ -26,8 +30,6 @@ public:
 
 private:
 	void RenderBackground(SceneRenderer& renderer);
-
-	virtual bool ShouldRender(GameObject* gameObject);
 
 protected:
 	ObjectManager m_ObjectManager;

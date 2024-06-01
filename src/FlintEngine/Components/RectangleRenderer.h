@@ -14,6 +14,7 @@ public:
 	void Render(SceneRenderer& renderer) override;
 
 	void SetColor(Rgb8 color);
+	const Rgb8& GetColor() const;
 
 private:
 	uint m_Layer = 0;

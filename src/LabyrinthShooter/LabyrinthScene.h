@@ -5,8 +5,6 @@
 // Czas, co jaki zmienia siê labirynt
 #define LAB_TIME 2
 
-#define PLAYER_SIGHT 400
-
 class LabyrinthScene 
     : public Scene
 {
@@ -18,7 +16,6 @@ private:
 
 	void LoadStartingObjects();
 
-	virtual bool ShouldRender(GameObject* gameObject);
 	GameObject* FindLabyrinth();
 	GameObject* FindPlayer();
 

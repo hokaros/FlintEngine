@@ -21,18 +21,7 @@ void Scene::Render(SceneRenderer& renderer)
 
 	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
-		if (go->renderUnseen) 
-		{
-			go->RenderUpdate(renderer);
-			continue;
-		}
-
-		// TODO: we can refactor vision a lot
-		const bool canSee = ShouldRender(go);
-		if (canSee)
-		{
-			go->RenderUpdate(renderer);
-		}
+		go->RenderUpdate(renderer);
 	}
 }
 
@@ -58,6 +47,16 @@ GameObject* Scene::FindGameObjectByName(const std::string& name) const
 	}
 
 	return nullptr;
+}
+
+Scene::GameObjectsT::iterator Scene::BeginRootGameObjects()
+{
+	return m_ObjectManager.GetOwnedObjects().begin();
+}
+
+Scene::GameObjectsT::iterator Scene::EndRootGameObjects()
+{
+	return m_ObjectManager.GetOwnedObjects().end();
 }
 
 void Scene::AddGameObject(std::unique_ptr<GameObject> game_object)
@@ -88,11 +87,6 @@ const Rgb8& Scene::GetBackgroundColor() const
 void Scene::RenderBackground(SceneRenderer& renderer)
 {
 	renderer.Clear(m_BackgroundColor);
-}
-
-bool Scene::ShouldRender(GameObject* gameObject)
-{
-	return true;
 }
 
 const ObjectManager& Scene::GetObjectManager() const

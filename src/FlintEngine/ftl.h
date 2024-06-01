@@ -16,4 +16,19 @@ namespace ftl
 
 		return false;
 	}
+
+	template<typename T>
+	void vector_remove(std::vector<T> vec, const T& value_to_remove)
+	{
+		for (auto it = vec.begin(); it != vec.end(); it++)
+		{
+			const T& vec_val = *it;
+
+			if (vec_val == value_to_remove)
+			{
+				vec.erase(it);
+				return;
+			}
+		}
+	}
 }

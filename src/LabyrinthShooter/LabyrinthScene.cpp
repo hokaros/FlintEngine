@@ -27,20 +27,6 @@ void LabyrinthScene::LoadStartingObjects()
 	m_Player = FindPlayer();
 }
 
-bool LabyrinthScene::ShouldRender(GameObject* go)
-{
-	// Wyœwietlanie tylko, jeœli obiekt jest widziany przez obecnego gracza
-	if ((go->GetPosition() - m_Player->GetPosition()).LengthSquared() > PLAYER_SIGHT * PLAYER_SIGHT)
-		return false;  // zbyt daleko
-
-	// Sprawdzenie, czy œciana stoi na drodze
-	return !m_Lab->GetColliderMemory().Raycast(
-		m_Player->GetMiddle(),
-		go->GetMiddle(),
-		go
-	);
-}
-
 GameObject* LabyrinthScene::FindLabyrinth()
 {
 	return FindGameObjectByName("Labyrinth");

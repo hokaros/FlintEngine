@@ -17,3 +17,8 @@ void RectangleRenderer::SetColor(Rgb8 color)
 {
 	m_Color = color;
 }
+
+const Rgb8& RectangleRenderer::GetColor() const
+{
+	return m_Color;
+}

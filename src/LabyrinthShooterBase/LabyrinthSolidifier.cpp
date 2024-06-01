@@ -1,5 +1,6 @@
 #include "LabyrinthSolidifier.h"
 #include <Components/BoxCollider.h>
+#include "Occlusion/OccludableRectangle.h"
 
 DEFINE_COMPONENT(LabyrinthSolidifier);
 DEFINE_FIELD(LabyrinthSolidifier, position);
@@ -230,6 +231,13 @@ void LabyrinthSolidifier::Awake()
 	// Skrajne œciany zawsze widoczne
 	for (int i = 0; i < borderCount; i++) {
 		border[i]->renderUnseen = true;
+
+		OccludableRectangle* occludable = border[i]->FindComponent<OccludableRectangle>();
+		std::unique_ptr<RectangleRenderer> unoccludable = std::make_unique<RectangleRenderer>();
+		unoccludable->SetColor(occludable->GetColor());
+
+		border[i]->AddComponent(std::move(unoccludable));
+		border[i]->RemoveComponent(occludable);
 	}
 
 	colliderMemory->Refresh(walls, labyrinth->ActiveCount());
