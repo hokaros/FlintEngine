@@ -4,6 +4,7 @@
 
 #include "Draw.h"
 #include "Vector.h"
+#include <Rendering/TargetLayersContainer.h>
 
 class Window;
 class SceneEditor;
@@ -27,7 +28,7 @@ public:
 
 	SDL_Renderer* GetRenderer();
 
-	SDL_Texture* GetOutputTexture() const;
+	SDL_Texture* GetOutputTexture();
 
 	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle);
 	void RenderRect(const Rect& rect, const Rgb8& color);
@@ -52,18 +53,6 @@ public:
 	~SceneRenderer();
 
 private:
-	class RenderTargetScope
-	{
-	public:
-		RenderTargetScope(SDL_Renderer* renderer, SDL_Texture* new_render_target);
-		~RenderTargetScope();
-
-	private:
-		SDL_Texture* m_PrevRenderTarget = nullptr;
-		SDL_Renderer* m_Renderer = nullptr;
-	};
-
-private:
 	Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
 
@@ -74,8 +63,9 @@ private:
 	VectorInt GetCharCoordinates(char c) const;
 
 private:
+	TargetLayersContainer m_TargetLayers;
+
 	SDL_Renderer* m_Renderer = nullptr;
-	SDL_Texture* m_OutTexture = nullptr;
 
 	SDL_Surface* m_Charset = nullptr;
 	SDL_Surface* m_BigCharset = nullptr;
