@@ -18,14 +18,6 @@ void LabyrinthScene::Update()
 	Scene::Update();
 }
 
-void LabyrinthScene::Render(SceneRenderer& renderer)
-{
-	Scene::Render(renderer);
-
-	VectorInt player_label_pos = m_Player->GetPosition() + Vector(-20, -20);
-	renderer.RenderString(PLAYER_GO_NAME, player_label_pos, /*fontSize*/10, /*layer*/1);
-}
-
 void LabyrinthScene::LoadFromFile(const char* file_path)
 {
 	std::unique_ptr<Scene> scene = SceneLoader::LoadScene(file_path)->CreateRuntimeObject();

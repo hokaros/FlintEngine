@@ -95,7 +95,8 @@ void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, uint lay
 void SceneRenderer::RenderString(const char* text, const Vector& start, int fontSize, uint layer)
 {
 	const Vector screen_space_start = WorldSpaceToScreenSpace(start);
-	DrawStringScreenSpace(screen_space_start.x, screen_space_start.y, text, fontSize, layer);
+	const Vector ss_font_size = VectorWorldSpaceToScreenSpace(Vector(fontSize, fontSize));
+	DrawStringScreenSpace(screen_space_start.x, screen_space_start.y, text, ss_font_size.y, layer);
 }
 
 void SceneRenderer::Clear(const Rgb8& clear_color)
@@ -157,6 +158,11 @@ Vector SceneRenderer::WorldSpaceToScreenSpace(const Vector& worldSpace) const
 	return ViewportSpaceToScreenSpace(WorldSpaceToViewportSpace(worldSpace));
 }
 
+Vector SceneRenderer::VectorWorldSpaceToScreenSpace(const Vector& worldSpace) const
+{
+	return VectorViewportSpaceToScreenSpace(VectorWorldSpaceToViewportSpace(worldSpace));
+}
+
 SDL_Texture* SceneRenderer::CreateTextureFromSurface(SDL_Surface* surface)
 {
 	return SDL_CreateTextureFromSurface(m_Renderer, surface);
@@ -164,7 +170,7 @@ SDL_Texture* SceneRenderer::CreateTextureFromSurface(SDL_Surface* surface)
 
 Rect SceneRenderer::WorldSpaceToViewportSpace(const Rect& worldSpace) const
 {
-	return Rect(WorldSpaceToViewportSpace(worldSpace.pos), worldSpace.size);
+	return Rect(WorldSpaceToViewportSpace(worldSpace.pos), VectorWorldSpaceToViewportSpace(worldSpace.size));
 }
 
 Vector SceneRenderer::WorldSpaceToViewportSpace(const Vector& worldSpace) const
@@ -172,17 +178,28 @@ Vector SceneRenderer::WorldSpaceToViewportSpace(const Vector& worldSpace) const
 	return worldSpace - m_CurrentViewport.pos;
 }
 
+Vector SceneRenderer::VectorWorldSpaceToViewportSpace(const Vector& world_space) const
+{
+	return world_space;
+}
+
 Rect SceneRenderer::ViewportSpaceToScreenSpace(const Rect& viewportSpace) const
 {
-	Vector screenSpaceSize = Vector(viewportSpace.size.x * m_RTSize.x / m_CurrentViewport.size.x,
-		viewportSpace.size.y * m_RTSize.y / m_CurrentViewport.size.y);
-	return Rect(ViewportSpaceToScreenSpace(viewportSpace.pos), screenSpaceSize);
+	Vector screenSpacePos = ViewportSpaceToScreenSpace(viewportSpace.pos);
+	Vector screenSpaceSize = VectorViewportSpaceToScreenSpace(viewportSpace.size);
+	return Rect(screenSpacePos, screenSpaceSize);
 }
 
 Vector SceneRenderer::ViewportSpaceToScreenSpace(const Vector& viewportSpace) const
 {
-	return Vector(viewportSpace.x * m_RTSize.x / m_CurrentViewport.size.x,
-		viewportSpace.y * m_RTSize.y / m_CurrentViewport.size.y);
+	float x = viewportSpace.x * m_RTSize.x / m_CurrentViewport.size.x;
+	float y = viewportSpace.y * m_RTSize.y / m_CurrentViewport.size.y;
+	return Vector(x, y);
+}
+
+Vector SceneRenderer::VectorViewportSpaceToScreenSpace(const Vector& viewport_space) const
+{
+	return ViewportSpaceToScreenSpace(viewport_space); // Vector as a point
 }
 
 bool SceneRenderer::LoadCharsets()

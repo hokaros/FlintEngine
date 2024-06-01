@@ -47,6 +47,7 @@ public:
 
 	Rect WorldSpaceToScreenSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToScreenSpace(const Vector& worldSpace) const;
+	Vector VectorWorldSpaceToScreenSpace(const Vector& worldSpace) const;
 
 	SDL_Texture* CreateTextureFromSurface(SDL_Surface* surface);
 
@@ -55,9 +56,11 @@ public:
 private:
 	Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
 	Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
+	Vector VectorWorldSpaceToViewportSpace(const Vector& world_space) const;
 
 	Rect ViewportSpaceToScreenSpace(const Rect& viewportSpace) const;
 	Vector ViewportSpaceToScreenSpace(const Vector& viewportSpace) const;
+	Vector VectorViewportSpaceToScreenSpace(const Vector& viewport_space) const;
 
 	bool LoadCharsets();
 	VectorInt GetCharCoordinates(char c) const;
