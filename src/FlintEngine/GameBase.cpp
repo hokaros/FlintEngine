@@ -14,7 +14,10 @@ GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputControll
 
 bool GameBase::Run()
 {
-	m_CurrScene = CreateScene(); // TODO: inject
+	if (m_CurrScene == nullptr)
+	{
+		m_CurrScene = CreateScene(); // TODO: inject
+	}
 
 	// Pêtla gry
 	SetRunning(true);

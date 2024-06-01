@@ -2,15 +2,15 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_main.h>
-#include "Game.h"
-#include "PlayerPositionsGenerator.h"
+#include <LabyrinthScene.h>
+#include <GameBase.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
-std::unique_ptr<Game> CreateGame(Window& window, IInputController& input_controller)
+std::unique_ptr<GameBase> CreateGame(Window& window, IInputController& input_controller)
 {
-	return std::make_unique<Game>(&window, &window.GetSceneRenderer(), input_controller);
+	return std::make_unique<GameBase>(&window, &window.GetSceneRenderer(), input_controller);
 }
 
 int main()
@@ -20,9 +20,11 @@ int main()
 		return 1;
 
 	InputController input;
+	AssetManager asset_manager;
 
-	std::unique_ptr<Game> game = CreateGame(window, input);
+	std::unique_ptr<GameBase> game = CreateGame(window, input);
 
+	game->LoadScene(std::make_unique<LabyrinthScene>(asset_manager));
 	game->Run();
 
 	return 0;
