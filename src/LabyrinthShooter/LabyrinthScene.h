@@ -15,8 +15,6 @@ class LabyrinthScene
 public:
 	LabyrinthScene(const Vector& player_pos, AssetManager& asset_manager);
 
-	virtual void Update() override;
-
 private:
 	void LoadFromFile(const char* file_path);
 

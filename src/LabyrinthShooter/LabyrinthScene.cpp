@@ -13,11 +13,6 @@ LabyrinthScene::LabyrinthScene(const Vector& player_pos, AssetManager& asset_man
 	LoadStartingObjects();
 }
 
-void LabyrinthScene::Update()
-{
-	Scene::Update();
-}
-
 void LabyrinthScene::LoadFromFile(const char* file_path)
 {
 	std::unique_ptr<Scene> scene = SceneLoader::LoadScene(file_path)->CreateRuntimeObject();
