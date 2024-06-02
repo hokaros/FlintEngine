@@ -3,8 +3,8 @@
 SetRandomMoveTargetBehavior::SetRandomMoveTargetBehavior()
 	: m_LastTarget(0)
 {
-	m_Offsets.push_back(Vector(-50, 0));
-	m_Offsets.push_back(Vector(50, 0));
+	m_Offsets.push_back(Vector(-100, 0));
+	m_Offsets.push_back(Vector(100, 0));
 }
 
 bt::ENodeStatus SetRandomMoveTargetBehavior::Update(AIContext& context)

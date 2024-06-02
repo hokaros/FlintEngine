@@ -3,6 +3,7 @@
 #include <AI/BehaviorTree/MoveBehavior.h>
 #include <AI/BehaviorTree/SetRandomMoveTargetBehavior.h>
 #include <AI/BehaviorTree/WaitBehavior.h>
+#include <AI/BehaviorTree/TimeLimiter.h>
 
 #include <Core/GameObject.h>
 #include <AI/BehaviorTree/Sequence.h>
@@ -28,7 +29,9 @@ std::unique_ptr<bt::Node<AIContext>> SandboxAI::CreateTestBehaviorTree()
 {
 	return bt::TreeBuilder::Composite<bt::Sequence<AIContext>>()
 		->Child(std::make_unique<SetRandomMoveTargetBehavior>())
-		.Child(std::make_unique<bt::MoveBehavior>())
+		.Child(bt::TreeBuilder::Decorator<bt::TimeLimiter>(2.f)
+			->Child(std::make_unique<bt::MoveBehavior>())
+			.Finalize())
 		.Child(std::make_unique<WaitBehavior>(1.f))
 		.Finalize();
 }
