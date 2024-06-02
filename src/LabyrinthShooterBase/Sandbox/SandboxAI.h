@@ -2,7 +2,7 @@
 #include <ComponentDefinition.h>
 #include <AI/BehaviorTree/Node.h>
 
-#include "AIContext.h"
+#include <AI/BehaviorTree/AIContext.h>
 
 class SandboxAI
 	: public ObjectComponent

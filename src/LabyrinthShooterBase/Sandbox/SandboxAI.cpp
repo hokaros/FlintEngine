@@ -1,8 +1,8 @@
 #include "SandboxAI.h"
 
-#include "MoveBehavior.h"
-#include "SetRandomMoveTargetBehavior.h"
-#include "WaitBehavior.h"
+#include <AI/BehaviorTree/MoveBehavior.h>
+#include <AI/BehaviorTree/SetRandomMoveTargetBehavior.h>
+#include <AI/BehaviorTree/WaitBehavior.h>
 
 #include <Core/GameObject.h>
 #include <AI/BehaviorTree/Sequence.h>

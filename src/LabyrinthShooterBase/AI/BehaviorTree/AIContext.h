@@ -1,5 +1,5 @@
 #pragma once
-#include "AIPerception.h"
+#include <AI/AIPerception.h>
 #include "BTNodeMediator.h"
 
 #include <ConstantMover.h>
