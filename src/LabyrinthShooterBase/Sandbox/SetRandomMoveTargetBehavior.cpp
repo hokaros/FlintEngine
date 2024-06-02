@@ -1,19 +1,18 @@
 #include "SetRandomMoveTargetBehavior.h"
 
-SetRandomMoveTargetBehavior::SetRandomMoveTargetBehavior(AIContext& context)
-	: m_Context(context)
-	, m_LastTarget(0)
+SetRandomMoveTargetBehavior::SetRandomMoveTargetBehavior()
+	: m_LastTarget(0)
 {
 	m_Offsets.push_back(Vector(-50, 0));
 	m_Offsets.push_back(Vector(50, 0));
 }
 
-bt::ENodeStatus SetRandomMoveTargetBehavior::Update()
+bt::ENodeStatus SetRandomMoveTargetBehavior::Update(AIContext& context)
 {
 	const Vector& offset = ChooseOffset();
-	const Vector& self_pos = m_Context.GetPerception().GetOwnPosition();
+	const Vector& self_pos = context.GetPerception().GetOwnPosition();
 
-	m_Context.GetBTNodeMediator().SetMoveTarget(self_pos + offset);
+	context.GetBTNodeMediator().SetMoveTarget(self_pos + offset);
 
 	return bt::ENodeStatus::Success;
 }

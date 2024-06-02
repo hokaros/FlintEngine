@@ -2,39 +2,34 @@
 
 namespace bt
 {
-	MoveBehavior::MoveBehavior(AIContext& context)
-		: m_Context(context)
+	ENodeStatus MoveBehavior::Update(AIContext& context)
 	{
-	}
+		const Vector& target_pos = GetTargetPosition(context);
 
-	ENodeStatus MoveBehavior::Update()
-	{
-		const Vector& target_pos = GetTargetPosition();
-
-		if (IsPositionWithinTolerance(target_pos))
+		if (IsPositionWithinTolerance(target_pos, context))
 		{
-			m_Context.GetMover().SetDirection(Vector::ZERO);
+			context.GetMover().SetDirection(Vector::ZERO);
 			return ENodeStatus::Success;
 		}
 
-		Vector to_target = target_pos - GetOwnPosition();
-		m_Context.GetMover().SetDirection(to_target);
+		Vector to_target = target_pos - GetOwnPosition(context);
+		context.GetMover().SetDirection(to_target);
 
 		return ENodeStatus::InProgress;
 	}
 
-	const Vector& MoveBehavior::GetTargetPosition() const
+	const Vector& MoveBehavior::GetTargetPosition(AIContext& context) const
 	{
-		return m_Context.GetBTNodeMediator().GetMoveTarget();
+		return context.GetBTNodeMediator().GetMoveTarget();
 	}
 
-	const Vector& MoveBehavior::GetOwnPosition() const
+	const Vector& MoveBehavior::GetOwnPosition(AIContext& context) const
 	{
-		return m_Context.GetPerception().GetOwnPosition();
+		return context.GetPerception().GetOwnPosition();
 	}
 
-	bool MoveBehavior::IsPositionWithinTolerance(const Vector& position) const
+	bool MoveBehavior::IsPositionWithinTolerance(const Vector& position, AIContext& context) const
 	{
-		return (GetOwnPosition() - position).LengthSquared() <= TARGET_TOLERANCE_SQ;
+		return (GetOwnPosition(context) - position).LengthSquared() <= TARGET_TOLERANCE_SQ;
 	}
 }

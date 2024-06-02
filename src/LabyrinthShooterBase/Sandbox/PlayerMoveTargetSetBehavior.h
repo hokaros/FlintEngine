@@ -5,14 +5,8 @@
 
 
 class PlayerMoveTargetSetBehavior
-	: public bt::Node
+	: public bt::Node<AIContext>
 {
-public:
-	PlayerMoveTargetSetBehavior(AIContext& context);
-
 protected:
-	virtual bt::ENodeStatus Update() override;
-
-private:
-	AIContext& m_Context;
+	virtual bt::ENodeStatus Update(AIContext& context) override;
 };

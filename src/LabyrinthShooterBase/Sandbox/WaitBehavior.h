@@ -3,18 +3,16 @@
 #include "AIContext.h"
 
 class WaitBehavior
-	: public bt::Node
+	: public bt::Node<AIContext>
 {
 public:
-	WaitBehavior(float time, AIContext& context);
+	WaitBehavior(float time);
 
 protected:
 	virtual void Init() override;
-	virtual bt::ENodeStatus Update() override;
+	virtual bt::ENodeStatus Update(AIContext& context) override;
 
 private:
-	AIContext& m_Context;
-
 	float m_TotalTime = 0.f;
 	float m_TimeLeft = 0.f;
 };

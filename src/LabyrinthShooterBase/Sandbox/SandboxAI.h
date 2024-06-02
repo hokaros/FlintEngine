@@ -14,11 +14,11 @@ public:
 	virtual void Update() override;
 
 private:
-	std::unique_ptr<bt::Node> CreateTestBehaviorTree(AIContext& context);
+	std::unique_ptr<bt::Node<AIContext>> CreateTestBehaviorTree();
 	std::unique_ptr<AIContext> CreateContext(AIPerception& perception);
 
 private:
-	std::unique_ptr<bt::Node> m_BehaviorTree = nullptr;
+	std::unique_ptr<bt::Node<AIContext>> m_BehaviorTree = nullptr;
 
 	std::unique_ptr<AIPerception> m_Perception = nullptr;
 	std::unique_ptr<AIContext> m_Context = nullptr;

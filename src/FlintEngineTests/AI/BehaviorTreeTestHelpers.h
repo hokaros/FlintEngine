@@ -4,8 +4,8 @@
 class BehaviorTreeTestHelpers
 {
 public:
-	template<typename T>
-	static T& AddChildTo(bt::Composite& parent)
+	template<typename T, typename ContextT>
+	static T& AddChildTo(bt::Composite<ContextT>& parent)
 	{
 		std::unique_ptr<T> child = std::make_unique<T>();
 		T& child_ref = *child;

@@ -16,20 +16,20 @@ void SandboxAI::Awake()
 	m_Context = CreateContext(*m_Perception);
 
 	// TODO: get tree from file
-	m_BehaviorTree = CreateTestBehaviorTree(*m_Context);
+	m_BehaviorTree = CreateTestBehaviorTree();
 }
 
 void SandboxAI::Update()
 {
-	m_BehaviorTree->Run();
+	m_BehaviorTree->Run(*m_Context);
 }
 
-std::unique_ptr<bt::Node> SandboxAI::CreateTestBehaviorTree(AIContext& context)
+std::unique_ptr<bt::Node<AIContext>> SandboxAI::CreateTestBehaviorTree()
 {
-	return bt::TreeBuilder::Composite<bt::Sequence>()
-		->Child(std::make_unique<SetRandomMoveTargetBehavior>(context))
-		.Child(std::make_unique<bt::MoveBehavior>(context))
-		.Child(std::make_unique<WaitBehavior>(1.f, context))
+	return bt::TreeBuilder::Composite<bt::Sequence<AIContext>>()
+		->Child(std::make_unique<SetRandomMoveTargetBehavior>())
+		.Child(std::make_unique<bt::MoveBehavior>())
+		.Child(std::make_unique<WaitBehavior>(1.f))
 		.Finalize();
 }
 

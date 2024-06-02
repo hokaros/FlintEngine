@@ -4,20 +4,18 @@
 #include "AIContext.h"
 
 class SetRandomMoveTargetBehavior
-	: public bt::Node
+	: public bt::Node<AIContext>
 {
 public:
-	SetRandomMoveTargetBehavior(AIContext& context);
+	SetRandomMoveTargetBehavior();
 
 protected:
-	virtual bt::ENodeStatus Update() override;
+	virtual bt::ENodeStatus Update(AIContext& context) override;
 
 private:
 	const Vector& ChooseOffset();
 
 private:
-	AIContext& m_Context;
-
 	std::vector<Vector> m_Offsets;
 	size_t m_LastTarget;
 };

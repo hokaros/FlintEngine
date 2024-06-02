@@ -7,12 +7,12 @@ namespace bt
 	template<typename CompositeT>
 	class CompositeNodeBuilder
 	{
-		static_assert(std::is_base_of<Composite, CompositeT>());
-
 	public:
+		using NodeT = typename CompositeT::NodeT;
+
 		CompositeNodeBuilder();
 
-		CompositeNodeBuilder<CompositeT>& Child(std::unique_ptr<Node> child);
+		CompositeNodeBuilder<CompositeT>& Child(std::unique_ptr<NodeT> child);
 		std::unique_ptr<CompositeT> Finalize();
 
 	private:
@@ -35,7 +35,7 @@ namespace bt
 	}
 
 	template<typename CompositeT>
-	inline CompositeNodeBuilder<CompositeT>& CompositeNodeBuilder<CompositeT>::Child(std::unique_ptr<Node> child)
+	inline CompositeNodeBuilder<CompositeT>& CompositeNodeBuilder<CompositeT>::Child(std::unique_ptr<NodeT> child)
 	{
 		FE_ASSERT(m_Result != nullptr, "Already finalized");
 

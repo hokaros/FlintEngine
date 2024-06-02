@@ -6,22 +6,17 @@
 namespace bt
 {
 	class MoveBehavior
-		: public Node
+		: public Node<AIContext>
 	{
-	public:
-		MoveBehavior(AIContext& context);
-
 	protected:
-		virtual ENodeStatus Update() override;
+		virtual ENodeStatus Update(AIContext& context) override;
 
 	private:
-		const Vector& GetTargetPosition() const;
-		const Vector& GetOwnPosition() const;
-		bool IsPositionWithinTolerance(const Vector& position) const;
+		const Vector& GetTargetPosition(AIContext& context) const;
+		const Vector& GetOwnPosition(AIContext& context) const;
+		bool IsPositionWithinTolerance(const Vector& position, AIContext& context) const;
 
 	private:
-		AIContext& m_Context;
-
 		static constexpr float TARGET_TOLERANCE = 1.0f;
 		static constexpr float TARGET_TOLERANCE_SQ = TARGET_TOLERANCE * TARGET_TOLERANCE;
 	};
