@@ -11,11 +11,19 @@ struct VectorInt
 public:
     int x;
     int y;
-public:
-    VectorInt();
-    VectorInt(int x, int y);
-    VectorInt(const Vector& other);
 
+public:
+    constexpr VectorInt()
+        : x(0)
+        , y(0)
+    {}
+
+    constexpr VectorInt(int x, int y)
+        : x(x)
+        , y(y)
+    {}
+
+    VectorInt(const Vector& other);
     friend VectorInt operator+(const VectorInt& left, const VectorInt& right);
     friend VectorInt& operator+=(VectorInt& left, const VectorInt& right);
     friend VectorInt operator*(const VectorInt& left, int multiplier);

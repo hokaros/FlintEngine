@@ -121,16 +121,6 @@ Vector Vector::Divide(const Vector& v1, const Vector& v2)
 
 
 
-VectorInt::VectorInt()
-	: x(0), y(0) {
-
-}
-
-VectorInt::VectorInt(int x, int y)
-	: x(x), y(y) {
-
-}
-
 VectorInt::VectorInt(const Vector& other)
 	: x(other.x), y(other.y) {
 

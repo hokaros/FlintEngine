@@ -2,31 +2,15 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_main.h>
-#include <Core/GameBase.h>
-#include <AssetManager.h>
-#include <Serialization/SceneLoader.h>
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-
-std::unique_ptr<GameBase> CreateGame(Window& window, IInputController& input_controller)
-{
-	return std::make_unique<GameBase>(&window, &window.GetSceneRenderer(), input_controller);
-}
+#include <StandaloneGame.h>
 
 int main()
 {
-	Window window(SCREEN_WIDTH, SCREEN_HEIGHT);
-	if (!window.Init())
-		return 1;
+	constexpr VectorInt window_size(800, 600);
+	constexpr const char* starting_scene_path = "Assets/main.scene";
 
-	InputController input;
-	AssetManager asset_manager;
-
-	std::unique_ptr<GameBase> game = CreateGame(window, input); // TODO: pass AssetManager
-
-	game->LoadScene(SceneLoader::LoadScene("Assets/main.scene")->CreateRuntimeObject());
-	game->Run();
+	StandaloneGame game(window_size);
+	game.Run(starting_scene_path);
 
 	return 0;
 }
