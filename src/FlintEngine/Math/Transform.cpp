@@ -75,8 +75,3 @@ Vector Transform::TransformPoint(const Vector& local_point) const
 
 	return from_mid + m_Position + rotatedSize / 2;
 }
-
-Vector Transform::InvTransformPoint(const Vector& outer_point) const
-{
-	return Vector();
-}

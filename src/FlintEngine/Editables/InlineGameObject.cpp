@@ -32,7 +32,7 @@ void InlineGameObject::SetSize(const Vector& size)
 
 void InlineGameObject::SetPosition(const Vector& position)
 {
-	m_GameObject->SetPosition(position);
+	m_GameObject->SetLocalPosition(position);
 }
 
 void InlineGameObject::AddChild(std::unique_ptr<IEditableGameObject> child)

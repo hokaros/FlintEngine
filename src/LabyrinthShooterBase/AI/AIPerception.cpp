@@ -11,7 +11,7 @@ AIPerception::AIPerception(const GameObject& game_object)
 
 const Vector& AIPerception::GetOwnPosition() const
 {
-	return m_GameObject.GetPosition();
+	return m_GameObject.GetWorldPosition();
 }
 
 std::optional<Vector> AIPerception::GetPlayerPosition() const
@@ -20,7 +20,7 @@ std::optional<Vector> AIPerception::GetPlayerPosition() const
 		return std::nullopt;
 
 	// TODO: AI shouldn't always know where the player is
-	return m_Player->GetPosition();
+	return m_Player->GetWorldPosition();
 }
 
 double AIPerception::GetDeltaTime() const

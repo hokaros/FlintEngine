@@ -75,7 +75,8 @@ public:
 	const std::string& GetName() const;
 	void SetName(const std::string& name);
 
-	const Vector& GetPosition() const;
+	Vector GetWorldPosition() const;
+	const Vector& GetLocalPosition() const;
 	const Vector& GetSize() const;
 	float GetRotation() const;
 	Vector LookingDirection() const;
@@ -86,7 +87,7 @@ public:
 	void SetEnabled(bool enabled);
 	bool IsEnabled() const;
 
-	void SetPosition(const Vector& newPosition);
+	void SetLocalPosition(const Vector& newPosition);
 	void Translate(const Vector& offset); // przesuniêcie
 	void SetSize(const Vector& newSize);
 	void Rotate(float angle);

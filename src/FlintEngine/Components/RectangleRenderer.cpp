@@ -9,7 +9,7 @@ DEFINE_FIELD(RectangleRenderer, m_Color);
 
 void RectangleRenderer::Render(SceneRenderer& renderer)
 {
-	Rect rect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
+	Rect rect = Rect(m_GameObject->GetWorldPosition(), m_GameObject->GetSize());
 	renderer.RenderRect(rect, m_Color, m_Layer);
 }
 

@@ -34,7 +34,7 @@ bool Firearm::TryShoot()
 
 	// Ustawienie pozycji
 	Vector relativePos = Vector(Direction::EAST) * m_GameObject->GetSize().x;
-	bullet->SetPosition(m_GameObject->LocalToWorld(relativePos));
+	bullet->SetLocalPosition(m_GameObject->LocalToWorld(relativePos));
 	// Obrót zgodnie z obrotem broni
 	bullet->Rotate(m_GameObject->GetRotation());
 

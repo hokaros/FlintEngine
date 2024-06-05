@@ -32,7 +32,7 @@ TEST(SUITE_NAME, SetsNamePositionAndSize)
 
 	// Assert
 	ASSERT_EQ(overriding_name, result_object->GetName());
-	ASSERT_EQ(overriding_pos, result_object->GetPosition());
+	ASSERT_EQ(overriding_pos, result_object->GetLocalPosition());
 	ASSERT_EQ(overriding_size, result_object->GetSize());
 }
 
@@ -45,7 +45,7 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 
 	GameObject dummy_prefab;
 	dummy_prefab.SetName(original_name);
-	dummy_prefab.SetPosition(original_pos);
+	dummy_prefab.SetLocalPosition(original_pos);
 	FakeAssetManager asset_manager;
 	asset_manager.SetPrefabToReturn(&dummy_prefab);
 
@@ -57,7 +57,7 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 
 	// Assert
 	ASSERT_EQ(original_name, result_object->GetName());
-	ASSERT_EQ(original_pos, result_object->GetPosition());
+	ASSERT_EQ(original_pos, result_object->GetLocalPosition());
 	ASSERT_EQ(overriding_size, result_object->GetSize());
 }
 

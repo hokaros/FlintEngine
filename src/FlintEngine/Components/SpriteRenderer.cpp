@@ -24,7 +24,7 @@ void SpriteRenderer::Render(SceneRenderer& renderer)
 		m_Texture = CreateTextureFromBitmap(m_BitmapPath, renderer);
 	}
 
-	Rect dstRect = Rect(m_GameObject->GetPosition(), m_GameObject->GetSize());
+	Rect dstRect = Rect(m_GameObject->GetWorldPosition(), m_GameObject->GetSize());
 
 	renderer.RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation(), m_Layer);
 }

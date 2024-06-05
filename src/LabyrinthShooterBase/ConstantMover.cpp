@@ -14,7 +14,7 @@ void ConstantMover::Update()
 {
 	// Ruch
 	Vector dPos = moveDir * movementSpeed * Timer::Main()->GetDeltaTime();
-	m_GameObject->SetPosition(m_GameObject->GetPosition() + dPos);
+	m_GameObject->SetLocalPosition(m_GameObject->GetLocalPosition() + dPos);
 }
 
 void ConstantMover::SetDirection(const Vector& newDir) 

@@ -111,8 +111,8 @@ void GameObjectPropertyEditor::AddComponent(const ComponentDefinition* component
 
 void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_object)
 {
-    m_GameObjectPosition[0] = game_object.GetPosition().x;
-    m_GameObjectPosition[1] = game_object.GetPosition().y;
+    m_GameObjectPosition[0] = game_object.GetLocalPosition().x;
+    m_GameObjectPosition[1] = game_object.GetLocalPosition().y;
 
     m_GameObjectSize[0] = game_object.GetSize().x;
     m_GameObjectSize[1] = game_object.GetSize().y;
@@ -123,7 +123,7 @@ void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_o
 void GameObjectPropertyEditor::ApplyValuesToGameObject(EditorGameObjectHandle& game_object)
 {
     Vector target_position = Vector(m_GameObjectPosition);
-    if (game_object.GetResult().GetPosition() != target_position)
+    if (game_object.GetResult().GetLocalPosition() != target_position)
     {
         game_object.SetPosition(target_position);
     }

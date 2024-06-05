@@ -216,6 +216,22 @@ void GameObject::SetName(const std::string& name)
 	this->name = name;
 }
 
+Vector GameObject::GetWorldPosition() const
+{
+	// Initialize as local pos
+	Vector pos = m_Transform.GetPosition();
+
+	// Go through all parents and transform with their Transform
+	GameObject* parent = this->parent;
+	while (parent != nullptr)
+	{
+		pos = parent->m_Transform.TransformPoint(pos);
+		parent = parent->parent;
+	}
+
+	return pos;
+}
+
 const Vector& GameObject::GetSize() const 
 {
 	return m_Transform.GetScale();
@@ -231,7 +247,7 @@ Vector GameObject::LookingDirection() const
 	return m_Transform.GetLookDir();
 }
 
-const Vector& GameObject::GetPosition() const 
+const Vector& GameObject::GetLocalPosition() const 
 {
 	return m_Transform.GetPosition();
 }
@@ -241,25 +257,14 @@ Vector GameObject::GetMiddle() const
 	return m_Transform.GetPosition() + m_Transform.GetScale() / 2.f; // TODO: what about rotation?
 }
 
-void GameObject::SetPosition(const Vector& newPosition) 
+void GameObject::SetLocalPosition(const Vector& newPosition) 
 {
-	Vector offset = newPosition - m_Transform.GetPosition();
 	m_Transform.SetPosition(newPosition);
-
-	for (std::unique_ptr<GameObject>& child : children) 
-	{
-		child->Translate(offset);
-	}
 }
 
 void GameObject::Translate(const Vector& offset) 
 {
 	m_Transform.Translate(offset);
-
-	for (std::unique_ptr<GameObject>& child : children)
-	{
-		child->Translate(offset);
-	}
 }
 
 void GameObject::SetSize(const Vector& newSize) 
@@ -408,7 +413,7 @@ std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab()
 
 	if (m_Position.has_value())
 	{
-		prefab->SetPosition(m_Position.value());
+		prefab->SetLocalPosition(m_Position.value());
 	}
 
 	if (m_Size.has_value())

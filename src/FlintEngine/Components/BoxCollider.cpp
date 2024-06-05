@@ -45,7 +45,7 @@ void BoxCollider::SetSize(const Vector& size)
 Vector BoxCollider::GetWorldPos() const
 {
 	GameObject& go = GetOwner();
-	return m_Position + go.GetPosition();
+	return m_Position + go.GetWorldPosition();
 }
 
 Vector BoxCollider::GetWorldMiddle() const
