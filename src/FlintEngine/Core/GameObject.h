@@ -1,5 +1,5 @@
 #pragma once
-#include <Math/Vector.h>
+#include <Math/Transform.h>
 #include "Timer.h"
 #include "ObjectComponent.h"
 #include "SerializableTypes.h"
@@ -33,6 +33,7 @@ class GameObject
 {
 public:
 	GameObject();
+	// TODO: replace these constructors with 1 which accepts Transform
 	GameObject(const Vector& size);
 	GameObject(const Vector& size, const Vector& position);
 	GameObject(const GameObject& other);
@@ -76,7 +77,7 @@ public:
 
 	const Vector& GetPosition() const;
 	const Vector& GetSize() const;
-	double GetRotation() const;
+	float GetRotation() const;
 	Vector LookingDirection() const;
 	Vector GetMiddle() const;
 	// Piksele, które zajmuje ten obiekt
@@ -88,8 +89,8 @@ public:
 	void SetPosition(const Vector& newPosition);
 	void Translate(const Vector& offset); // przesuniêcie
 	void SetSize(const Vector& newSize);
-	void Rotate(double angle);
-	void SetRotation(double rotation);
+	void Rotate(float angle);
+	void SetRotation(float rotation);
 	// Obraca tak, aby oœ X obiektu by³a skierowana w stronê danego punktu
 	void LookAt(const Vector& point);
 
@@ -112,9 +113,7 @@ private:
 	bool isEnabled = true;
 
 	std::string name = "GameObject";
-	Vector size;
-	Vector position;
-	double rotation = 0.0;
+	Transform m_Transform;
 
 	GameObject* parent = nullptr;
 	std::vector<std::unique_ptr<GameObject>> children;

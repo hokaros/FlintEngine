@@ -4,23 +4,22 @@
 #include "AssetManager.h"
 
 GameObject::GameObject()
-	: size(1, 1) 
+	: GameObject(Vector(1,1))
 {
 }
 
 GameObject::GameObject(const Vector& size)
-	: size(size) 
+	: GameObject(size, Vector(0,0))
 {
 }
 
 GameObject::GameObject(const Vector& size, const Vector& position)
-	: position(position), size(size) 
+	: m_Transform(position, size)
 {
 }
 
 GameObject::GameObject(const GameObject& other) 
-	: size(other.size)
-	, position(other.position)
+	: m_Transform(other.m_Transform)
 	, name(other.name)
 {
 	// Skopiowanie komponentów
@@ -219,36 +218,33 @@ void GameObject::SetName(const std::string& name)
 
 const Vector& GameObject::GetSize() const 
 {
-	return size;
+	return m_Transform.GetScale();
 }
 
-double GameObject::GetRotation() const 
+float GameObject::GetRotation() const 
 {
-	return rotation;
+	return m_Transform.GetRotation();
 }
 
 Vector GameObject::LookingDirection() const 
 {
-	return Vector(
-		cos(rotation * M_PI / 180),
-		sin(rotation * M_PI / 180)
-	);
+	return m_Transform.GetLookDir();
 }
 
 const Vector& GameObject::GetPosition() const 
 {
-	return position;
+	return m_Transform.GetPosition();
 }
 
 Vector GameObject::GetMiddle() const 
 {
-	return position + size / 2;
+	return m_Transform.GetPosition() + m_Transform.GetScale() / 2.f; // TODO: what about rotation?
 }
 
 void GameObject::SetPosition(const Vector& newPosition) 
 {
-	Vector offset = newPosition - position;
-	position = newPosition;
+	Vector offset = newPosition - m_Transform.GetPosition();
+	m_Transform.SetPosition(newPosition);
 
 	for (std::unique_ptr<GameObject>& child : children) 
 	{
@@ -258,7 +254,7 @@ void GameObject::SetPosition(const Vector& newPosition)
 
 void GameObject::Translate(const Vector& offset) 
 {
-	position += offset;
+	m_Transform.Translate(offset);
 
 	for (std::unique_ptr<GameObject>& child : children)
 	{
@@ -268,24 +264,25 @@ void GameObject::Translate(const Vector& offset)
 
 void GameObject::SetSize(const Vector& newSize) 
 {
+	const Vector& size = m_Transform.GetScale();
 	Vector sizeChange(newSize.x / size.x, newSize.y / size.y);
 
-	size.x = newSize.x;
-	size.y = newSize.y;
+	m_Transform.SetScale(newSize);
 
 	// Rozmiar dzieci
 	for (std::unique_ptr<GameObject>& child : children)
 	{
-		Vector childNewSize(child->size.x * sizeChange.x, child->size.y * sizeChange.y);
+		const Vector& child_size = child->GetSize();
+		Vector childNewSize(child_size.x * sizeChange.x, child_size.y * sizeChange.y);
 		child->SetSize(childNewSize);
 	}
 }
 
-void GameObject::Rotate(double angle) 
+void GameObject::Rotate(float angle) 
 {
-	double prevRot = rotation;
-	double newRot = rotation + angle;
-	double newRotRadians = newRot * M_PI / 180;
+	float prevRot = m_Transform.GetRotation();
+	float newRot = prevRot + angle;
+	float newRotRadians = newRot * M_PI / 180;
 
 	Vector middle = GetMiddle();
 	
@@ -306,13 +303,12 @@ void GameObject::Rotate(double angle)
 		child->Translate(dPos);
 	}
 
-
-	rotation += angle;
+	m_Transform.Rotate(angle);
 }
 
-void GameObject::SetRotation(double newRot) 
+void GameObject::SetRotation(float newRot) 
 {
-	double dRot = newRot - rotation;
+	float dRot = newRot - m_Transform.GetRotation();
 	Rotate(dRot);
 }
 
@@ -321,28 +317,13 @@ void GameObject::LookAt(const Vector& point)
 	Vector toPoint = point - GetMiddle();
 	double lookRotation = atan2(toPoint.y, toPoint.x) * 180 / M_PI;
 
-	double dRot = lookRotation - rotation;
+	double dRot = lookRotation - m_Transform.GetRotation();
 	Rotate(dRot);
 }
 
 Vector GameObject::LocalToWorld(const Vector& localPos) const 
 {
-	Vector fromMid = localPos - size / 2;
-	//double radius = fromMid.Length();
-	fromMid.Rotate(rotation * M_PI / 180);
-
-	Vector rotatedSize = size;
-	rotatedSize.Rotate(rotation * M_PI / 180);
-
-	return fromMid + position + rotatedSize / 2;
-	/*double localAngle = atan2(fromMid.y, fromMid.x) * 180 / M_PI;
-	double targetAngle = localAngle - rotation;
-
-	Vector unrotatedPos(
-		cos(targetAngle * M_PI / 180) * radius,
-		sin(targetAngle * M_PI / 180) * radius
-	);*/
-	//return unrotatedPos + position + rotatedSize / 2;
+	return m_Transform.TransformPoint(localPos);
 }
 
 void GameObject::AddChild(std::unique_ptr<GameObject> child)
@@ -391,6 +372,9 @@ void GameObject::SetScene(Scene* scene, SceneKey)
 std::vector<VectorInt>* GameObject::GetPixels() const 
 {
 	std::vector<VectorInt>* pixels = new std::vector<VectorInt>();
+
+	const Vector& size = m_Transform.GetScale();
+	const Vector& position = m_Transform.GetPosition();
 
 	for (int x = 0; x < size.x; x++) 
 	{
