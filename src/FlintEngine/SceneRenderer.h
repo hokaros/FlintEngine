@@ -2,7 +2,6 @@
 #include <Rendering/TargetLayersContainer.h>
 
 #include "Draw.h"
-#include "Vector.h"
 
 class Window;
 class SceneEditor;

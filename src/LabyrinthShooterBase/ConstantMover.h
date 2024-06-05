@@ -1,6 +1,6 @@
 #pragma once
 #include <ComponentDefinition.h>
-#include <Vector.h>
+#include <Math/Vector.h>
 #include <mutex>
 #include <functional>
 

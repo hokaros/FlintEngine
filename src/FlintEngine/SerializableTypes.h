@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 #include "utility.h"
-#include "Vector.h"
+#include <Math/Vector.h>
 #include "Draw.h"
 #include "RuntimeTypeCode.h"
 

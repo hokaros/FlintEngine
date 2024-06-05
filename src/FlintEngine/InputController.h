@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <SDL.h>
-#include "Vector.h"
+#include <Math/Vector.h>
 
 class IInputController
 {

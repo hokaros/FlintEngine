@@ -4,7 +4,7 @@
 
 #include <map>
 #include <functional>
-#include <Vector.h>
+#include <Math/Vector.h>
 #include "RenderingHelpers.h"
 
 typedef unsigned int uint;

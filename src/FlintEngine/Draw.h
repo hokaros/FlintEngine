@@ -6,7 +6,7 @@ extern "C" {
 #include"SDL_main.h"
 }
 
-#include "Vector.h"
+#include <Math/Vector.h>
 
 struct Rgb8
 {
