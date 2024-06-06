@@ -71,11 +71,5 @@ Vector Transform::GetLookDir() const
 
 Vector Transform::TransformPoint(const Vector& local_point) const
 {
-	Vector from_mid = local_point - m_Scale / 2.f;
-	from_mid.Rotate(m_Rotation * M_PI / 180.f);
-
-	Vector rotatedSize = m_Scale;
-	rotatedSize.Rotate(m_Rotation * M_PI / 180.f);
-
-	return from_mid + m_Position + rotatedSize / 2;
+	return Vector::Scale(local_point, m_Scale).GetRotated(m_Rotation * M_PI / 180.f) + m_Position;
 }
