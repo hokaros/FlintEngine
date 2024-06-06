@@ -70,8 +70,8 @@ bool OcclusionSystem::ShouldBeRendered(GameObject& go) const
 
 	// Sprawdzenie, czy œciana stoi na drodze
 	return !m_Lab->GetColliderMemory().Raycast(
-		m_Player->GetMiddle(),
-		go.GetMiddle(),
+		m_Player->GetWorldPosition(),
+		go.GetWorldPosition(),
 		&go
 	);
 }

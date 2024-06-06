@@ -80,7 +80,6 @@ public:
 	const Vector& GetSize() const;
 	float GetRotation() const;
 	Vector LookingDirection() const;
-	Vector GetMiddle() const;
 	// Piksele, które zajmuje ten obiekt
 	std::vector<VectorInt>* GetPixels() const;
 

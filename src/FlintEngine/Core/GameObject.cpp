@@ -252,11 +252,6 @@ const Vector& GameObject::GetLocalPosition() const
 	return m_Transform.GetPosition();
 }
 
-Vector GameObject::GetMiddle() const 
-{
-	return m_Transform.GetPosition() + m_Transform.GetScale() / 2.f; // TODO: what about rotation?
-}
-
 void GameObject::SetLocalPosition(const Vector& newPosition) 
 {
 	m_Transform.SetPosition(newPosition);
@@ -289,13 +284,13 @@ void GameObject::Rotate(float angle)
 	float newRot = prevRot + angle;
 	float newRotRadians = newRot * M_PI / 180;
 
-	Vector middle = GetMiddle();
+	Vector middle = m_Transform.GetPosition();
 	
 	for (std::unique_ptr<GameObject>& child : children)
 	{
 		child->Rotate(angle);
 
-		Vector childMid = child->GetMiddle();
+		Vector childMid = child->GetLocalPosition();
 		double radius = (middle - childMid).Length();
 
 		Vector childNewPos(
@@ -319,7 +314,7 @@ void GameObject::SetRotation(float newRot)
 
 void GameObject::LookAt(const Vector& point) 
 {
-	Vector toPoint = point - GetMiddle();
+	Vector toPoint = point - GetLocalPosition();
 	double lookRotation = atan2(toPoint.y, toPoint.x) * 180 / M_PI;
 
 	double dRot = lookRotation - m_Transform.GetRotation();
