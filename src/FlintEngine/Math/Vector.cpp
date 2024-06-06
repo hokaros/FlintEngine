@@ -31,6 +31,12 @@ void Vector::Rotate(float angle) {
 	y = sin(targetAngle) * length;
 }
 
+Vector Vector::GetRotated(float angle) const {
+	Vector result(*this);
+	result.Rotate(angle);
+	return result;
+}
+
 double Vector::GetAngle() const {
 	return atan2(y, x);
 }

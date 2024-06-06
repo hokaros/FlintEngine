@@ -1,10 +1,14 @@
 #pragma once
 #include "Vector.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 class Transform
 {
 public:
 	Transform(const Vector& position, const Vector& scale);
+	Transform(const Vector& position, float rotationDeg, const Vector& scale);
 	Transform(const Transform& other);
 
 	const Vector& GetPosition() const;

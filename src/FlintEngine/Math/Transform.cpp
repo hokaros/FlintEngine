@@ -1,11 +1,15 @@
 #include "Transform.h"
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-
 Transform::Transform(const Vector& position, const Vector& scale)
 	: m_Position(position)
 	, m_Rotation(0.f)
+	, m_Scale(scale)
+{
+}
+
+Transform::Transform(const Vector& position, float rotation, const Vector& scale)
+	: m_Position(position)
+	, m_Rotation(rotation)
 	, m_Scale(scale)
 {
 }
@@ -66,7 +70,7 @@ Vector Transform::GetLookDir() const
 }
 
 Vector Transform::TransformPoint(const Vector& local_point) const
-{ // TODO: let's test it
+{
 	Vector from_mid = local_point - m_Scale / 2.f;
 	from_mid.Rotate(m_Rotation * M_PI / 180.f);
 
