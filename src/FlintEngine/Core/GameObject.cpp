@@ -264,61 +264,25 @@ void GameObject::Translate(const Vector& offset)
 
 void GameObject::SetSize(const Vector& newSize) 
 {
-	const Vector& size = m_Transform.GetScale();
-	Vector sizeChange(newSize.x / size.x, newSize.y / size.y);
-
 	m_Transform.SetScale(newSize);
-
-	// Rozmiar dzieci
-	for (std::unique_ptr<GameObject>& child : children)
-	{
-		const Vector& child_size = child->GetSize();
-		Vector childNewSize(child_size.x * sizeChange.x, child_size.y * sizeChange.y);
-		child->SetSize(childNewSize);
-	}
 }
 
 void GameObject::Rotate(float angle) 
 {
-	float prevRot = m_Transform.GetRotation();
-	float newRot = prevRot + angle;
-	float newRotRadians = newRot * M_PI / 180;
-
-	Vector middle = m_Transform.GetPosition();
-	
-	for (std::unique_ptr<GameObject>& child : children)
-	{
-		child->Rotate(angle);
-
-		Vector childMid = child->GetLocalPosition();
-		double radius = (middle - childMid).Length();
-
-		Vector childNewPos(
-			cos(newRotRadians) * radius,
-			sin(newRotRadians) * radius
-		);
-		childNewPos += middle;
-		Vector dPos = childNewPos - childMid;
-
-		child->Translate(dPos);
-	}
-
 	m_Transform.Rotate(angle);
 }
 
 void GameObject::SetRotation(float newRot) 
 {
-	float dRot = newRot - m_Transform.GetRotation();
-	Rotate(dRot);
+	m_Transform.SetRotation(newRot);
 }
 
 void GameObject::LookAt(const Vector& point) 
 {
-	Vector toPoint = point - GetLocalPosition();
-	double lookRotation = atan2(toPoint.y, toPoint.x) * 180 / M_PI;
+	const Vector toPoint = point - GetWorldPosition();
+	const float lookRotation = atan2(toPoint.y, toPoint.x) * 180.f / M_PI;
 
-	double dRot = lookRotation - m_Transform.GetRotation();
-	Rotate(dRot);
+	SetRotation(lookRotation);
 }
 
 Vector GameObject::LocalToWorld(const Vector& localPos) const 
