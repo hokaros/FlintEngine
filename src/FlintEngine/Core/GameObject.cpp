@@ -451,7 +451,7 @@ std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab()
 
 	if (m_Position.has_value())
 	{
-		prefab->SetLocalPosition(m_Position.value());
+		prefab->SetWorldPosition(m_Position.value());
 	}
 
 	if (m_Size.has_value())
