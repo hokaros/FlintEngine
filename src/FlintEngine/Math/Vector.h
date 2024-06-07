@@ -123,4 +123,6 @@ public:
 
     Vector GetMiddle() const;
     float CalculateArea() const;
+
+    static Rect FromCenterAndSize(const Vector& center, const Vector& size);
 };
