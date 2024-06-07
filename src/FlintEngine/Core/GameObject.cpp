@@ -216,30 +216,22 @@ void GameObject::SetName(const std::string& name)
 	this->name = name;
 }
 
-Vector GameObject::GetWorldPosition() const
+const Vector& GameObject::GetWorldPosition() const
 {
-	// Initialize as local pos
-	Vector pos = m_Transform.GetPosition();
+	return m_Transform.GetPosition();
+}
 
-	// Go through all parents and transform with their Transform
-	GameObject* parent = this->parent;
-	while (parent != nullptr)
+Vector GameObject::GetLocalPosition() const
+{
+	const Vector& self_world_pos = m_Transform.GetPosition();
+
+	// Position in the parent space
+	if (parent != nullptr)
 	{
-		pos = parent->m_Transform.TransformPoint(pos);
-		parent = parent->parent;
+		return parent->m_Transform.InvTransformPoint(self_world_pos);
 	}
 
-	return pos;
-}
-
-const Vector& GameObject::GetSize() const 
-{
-	return m_Transform.GetScale();
-}
-
-float GameObject::GetRotation() const 
-{
-	return m_Transform.GetRotation();
+	return self_world_pos;
 }
 
 Vector GameObject::LookingDirection() const 
@@ -247,35 +239,81 @@ Vector GameObject::LookingDirection() const
 	return m_Transform.GetLookDir();
 }
 
-const Vector& GameObject::GetLocalPosition() const 
+const Vector& GameObject::GetWorldScale() const
 {
-	return m_Transform.GetPosition();
+	return m_Transform.GetScale();
 }
 
-void GameObject::SetLocalPosition(const Vector& newPosition) 
+Vector GameObject::GetLocalScale() const
+{
+	// Scale in parent space
+	// TODO: implement
+	FE_ASSERT(false, "Implement");
+	return Vector::ZERO;
+}
+
+float GameObject::GetWorldRotation() const
+{
+	return m_Transform.GetRotation();
+}
+
+float GameObject::GetLocalRotation() const
+{
+	// Rotation in parent space
+	// TODO: implement
+	FE_ASSERT(false, "Implement");
+	return 0.0f;
+}
+
+void GameObject::SetWorldPosition(const Vector& newPosition)
 {
 	m_Transform.SetPosition(newPosition);
+}
+
+void GameObject::SetLocalPosition(const Vector& newPosition)
+{
+	Vector wanted_world_pos = newPosition;
+
+	if (parent != nullptr)
+	{
+		// Set position in the parent's coordinates
+		wanted_world_pos = parent->m_Transform.TransformPoint(newPosition);
+	}
+
+	const Vector translation = wanted_world_pos - GetWorldPosition();
+	Translate(translation);
 }
 
 void GameObject::Translate(const Vector& offset) 
 {
 	m_Transform.Translate(offset);
+
+	// Moving the children
+	for (std::unique_ptr<GameObject>& child : children)
+	{
+		child->Translate(offset);
+	}
 }
 
-void GameObject::SetSize(const Vector& newSize) 
+void GameObject::SetWorldScale(const Vector& newScale) 
 {
 	const Vector& size = m_Transform.GetScale();
-	Vector sizeChange(newSize.x / size.x, newSize.y / size.y);
+	Vector sizeChange(newScale.x / size.x, newScale.y / size.y);
 
-	m_Transform.SetScale(newSize);
+	m_Transform.SetScale(newScale);
 
 	// Rozmiar dzieci
 	for (std::unique_ptr<GameObject>& child : children)
 	{
-		const Vector& child_size = child->GetSize();
+		const Vector& child_size = child->GetWorldScale();
 		Vector childNewSize(child_size.x * sizeChange.x, child_size.y * sizeChange.y);
-		child->SetSize(childNewSize);
+		child->SetWorldScale(childNewSize);
 	}
+}
+
+void GameObject::SetLocalScale(const Vector& newScale)
+{
+	FE_ASSERT(false, "Implement");
 }
 
 void GameObject::Rotate(float angle) 
@@ -306,7 +344,7 @@ void GameObject::Rotate(float angle)
 	m_Transform.Rotate(angle);
 }
 
-void GameObject::SetRotation(float newRot) 
+void GameObject::SetWorldRotation(float newRot) 
 {
 	float dRot = newRot - m_Transform.GetRotation();
 	Rotate(dRot);
@@ -314,7 +352,7 @@ void GameObject::SetRotation(float newRot)
 
 void GameObject::LookAt(const Vector& point) 
 {
-	Vector toPoint = point - GetLocalPosition();
+	Vector toPoint = point - GetWorldPosition();
 	double lookRotation = atan2(toPoint.y, toPoint.x) * 180 / M_PI;
 
 	double dRot = lookRotation - m_Transform.GetRotation();
@@ -413,7 +451,7 @@ std::unique_ptr<GameObject> GameObjectFactory::CreatePrefab()
 
 	if (m_Size.has_value())
 	{
-		prefab->SetSize(m_Size.value());
+		prefab->SetWorldScale(m_Size.value());
 	}
 
 	if (m_Name.has_value())

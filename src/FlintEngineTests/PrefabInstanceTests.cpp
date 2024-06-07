@@ -32,8 +32,8 @@ TEST(SUITE_NAME, SetsNamePositionAndSize)
 
 	// Assert
 	ASSERT_EQ(overriding_name, result_object->GetName());
-	ASSERT_EQ(overriding_pos, result_object->GetLocalPosition());
-	ASSERT_EQ(overriding_size, result_object->GetSize());
+	ASSERT_EQ(overriding_pos, result_object->GetWorldPosition());
+	ASSERT_EQ(overriding_size, result_object->GetWorldScale());
 }
 
 TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
@@ -57,8 +57,8 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 
 	// Assert
 	ASSERT_EQ(original_name, result_object->GetName());
-	ASSERT_EQ(original_pos, result_object->GetLocalPosition());
-	ASSERT_EQ(overriding_size, result_object->GetSize());
+	ASSERT_EQ(original_pos, result_object->GetWorldPosition());
+	ASSERT_EQ(overriding_size, result_object->GetWorldScale());
 }
 
 TEST(SUITE_NAME, AddsComponent)

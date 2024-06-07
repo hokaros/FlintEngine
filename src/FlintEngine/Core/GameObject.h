@@ -75,10 +75,12 @@ public:
 	const std::string& GetName() const;
 	void SetName(const std::string& name);
 
-	Vector GetWorldPosition() const;
-	const Vector& GetLocalPosition() const;
-	const Vector& GetSize() const;
-	float GetRotation() const;
+	const Vector& GetWorldPosition() const;
+	Vector GetLocalPosition() const;
+	const Vector& GetWorldScale() const;
+	Vector GetLocalScale() const;
+	float GetWorldRotation() const;
+	float GetLocalRotation() const;
 	Vector LookingDirection() const;
 	// Piksele, które zajmuje ten obiekt
 	std::vector<VectorInt>* GetPixels() const;
@@ -86,11 +88,13 @@ public:
 	void SetEnabled(bool enabled);
 	bool IsEnabled() const;
 
+	void SetWorldPosition(const Vector& newPosition);
 	void SetLocalPosition(const Vector& newPosition);
 	void Translate(const Vector& offset); // przesuniêcie
-	void SetSize(const Vector& newSize);
+	void SetWorldScale(const Vector& newScale);
+	void SetLocalScale(const Vector& newScale);
 	void Rotate(float angle);
-	void SetRotation(float rotation);
+	void SetWorldRotation(float rotation);
 	// Obraca tak, aby oœ X obiektu by³a skierowana w stronê danego punktu
 	void LookAt(const Vector& point);
 

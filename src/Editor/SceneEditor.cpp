@@ -127,7 +127,7 @@ void SceneEditor::MoveViewportToSelectedGameObject()
 void SceneEditor::MoveViewportToGameObject(const GameObject& object)
 {
 	const Vector& new_position = object.GetWorldPosition();
-	const Vector& new_size = object.GetSize();
+	const Vector& new_size = object.GetWorldScale();
 
 	Rect new_viewport = Rect(new_position, new_size);
 

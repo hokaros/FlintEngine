@@ -24,9 +24,11 @@ void SpriteRenderer::Render(SceneRenderer& renderer)
 		m_Texture = CreateTextureFromBitmap(m_BitmapPath, renderer);
 	}
 
-	Rect dstRect = Rect(m_GameObject->GetWorldPosition(), m_GameObject->GetSize());
+	const Vector& world_pos = m_GameObject->GetWorldPosition();
+	const Vector& world_size = m_GameObject->GetWorldScale();
+	const Rect dstRect = Rect(world_pos, world_size);
 
-	renderer.RenderTexture(m_Texture, dstRect, m_GameObject->GetRotation(), m_Layer);
+	renderer.RenderTexture(m_Texture, dstRect, m_GameObject->GetWorldRotation(), m_Layer);
 }
 
 SDL_Texture* SpriteRenderer::CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer)

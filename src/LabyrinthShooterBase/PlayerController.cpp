@@ -69,11 +69,11 @@ void PlayerController::ProcessMovement()
 
 void PlayerController::ProcessAim() 
 {
-	double prevRotation = m_GameObject->GetRotation();
+	float prevRotation = m_GameObject->GetWorldRotation();
 
 	Vector mousePos = input->GetMousePosition();
 	m_GameObject->LookAt(mousePos);
 
-	if (m_GameObject->GetRotation() != prevRotation && onAimChanged)
-		onAimChanged(m_GameObject->GetRotation());
+	if (m_GameObject->GetWorldRotation() != prevRotation && onAimChanged)
+		onAimChanged(m_GameObject->GetWorldRotation());
 }

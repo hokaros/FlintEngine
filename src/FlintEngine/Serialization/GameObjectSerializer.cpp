@@ -21,8 +21,8 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 	std::unique_ptr<GameObjectStringDesc> go_serialized = std::make_unique<GameObjectStringDesc>();
 
 	go_serialized->params.insert({ s_GameObjectNameFieldName, game_object.GetResult().GetName() });
-	go_serialized->params.insert({ s_GameObjectSizeFieldName, STI<Vector>::ToString(game_object.GetResult().GetSize()) });
-	go_serialized->params.insert({ s_GameObjectPositionFieldName, STI<Vector>::ToString(game_object.GetResult().GetLocalPosition()) });
+	go_serialized->params.insert({ s_GameObjectSizeFieldName, STI<Vector>::ToString(game_object.GetResult().GetWorldScale()) });
+	go_serialized->params.insert({ s_GameObjectPositionFieldName, STI<Vector>::ToString(game_object.GetResult().GetWorldPosition()) });
 
 	SerializeComponents(game_object, *go_serialized);
 	SerializeChildren(game_object, *go_serialized);

@@ -76,7 +76,7 @@ void LabyrinthSolidifier::PlaceWalls() {
 			if (labyrinth->WallAtIndex(index)) {
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
-				wall->SetSize(verticalWall);
+				wall->SetWorldScale(verticalWall);
 				wall->FindComponent<BoxCollider>()->SetSize(verticalWall);
 				wall->SetLocalPosition(Vector(x * wallLength, y * wallLength) + position);
 			}
@@ -91,7 +91,7 @@ void LabyrinthSolidifier::PlaceWalls() {
 			if (labyrinth->WallAtIndex(index)) {
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
-				wall->SetSize(horizontalWall);
+				wall->SetWorldScale(horizontalWall);
 				wall->FindComponent<BoxCollider>()->SetSize(horizontalWall);
 				wall->SetLocalPosition(Vector(x * wallLength, y * wallLength) + position);
 			}
@@ -127,7 +127,7 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color
 
 	GameObject* wall = GameObject::Instantiate(*wallPrefabLoaded);
 
-	wall->SetSize(size);
+	wall->SetWorldScale(size);
 	wall->FindComponent<BoxCollider>()->SetSize(size);
 
 	wall->FindComponent<RectangleRenderer>()->SetColor(color);

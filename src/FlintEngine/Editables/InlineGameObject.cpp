@@ -27,12 +27,12 @@ void InlineGameObject::SetName(const std::string& name)
 
 void InlineGameObject::SetSize(const Vector& size)
 {
-	m_GameObject->SetSize(size);
+	m_GameObject->SetWorldScale(size);
 }
 
 void InlineGameObject::SetPosition(const Vector& position)
 {
-	m_GameObject->SetLocalPosition(position);
+	m_GameObject->SetWorldPosition(position);
 }
 
 void InlineGameObject::AddChild(std::unique_ptr<IEditableGameObject> child)

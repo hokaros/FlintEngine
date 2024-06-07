@@ -9,8 +9,11 @@ DEFINE_FIELD(RectangleRenderer, m_Color);
 
 void RectangleRenderer::Render(SceneRenderer& renderer)
 {
-	Rect rect = Rect(m_GameObject->GetWorldPosition(), m_GameObject->GetSize());
-	renderer.RenderRect(rect, m_Color, m_Layer);
+	const Vector& world_pos = m_GameObject->GetWorldPosition();
+	const Vector& world_size = m_GameObject->GetWorldScale();
+	const Rect rect = Rect(world_pos, world_size);
+
+	renderer.RenderRect(rect, m_Color, m_Layer); // TODO: rotation
 }
 
 void RectangleRenderer::SetColor(Rgb8 color)
