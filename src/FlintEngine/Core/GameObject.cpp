@@ -272,7 +272,8 @@ float GameObject::GetLocalRotation() const
 
 void GameObject::SetWorldPosition(const Vector& newPosition)
 {
-	m_Transform.SetPosition(newPosition);
+	const Vector wanted_translation = newPosition - GetWorldPosition();
+	Translate(wanted_translation);
 }
 
 void GameObject::SetLocalPosition(const Vector& newPosition)
