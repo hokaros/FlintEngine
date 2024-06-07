@@ -8,6 +8,7 @@ DEFINE_COMPONENT(SpriteRenderer);
 
 DEFINE_FIELD(SpriteRenderer, m_Layer);
 DEFINE_FIELD(SpriteRenderer, m_BitmapPath);
+DEFINE_FIELD(SpriteRenderer, m_Size);
 
 SpriteRenderer::~SpriteRenderer()
 {
@@ -25,10 +26,14 @@ void SpriteRenderer::Render(SceneRenderer& renderer)
 	}
 
 	const Vector& world_pos = m_GameObject->GetWorldPosition();
-	const Vector& world_size = m_GameObject->GetWorldScale();
-	const Rect dstRect = Rect(world_pos, world_size);
+	const Rect dstRect = Rect(world_pos, GetRenderSize());
 
 	renderer.RenderTexture(m_Texture, dstRect, m_GameObject->GetWorldRotation(), m_Layer);
+}
+
+Vector SpriteRenderer::GetRenderSize() const
+{
+	return m_Size.GetScaled(m_GameObject->GetWorldScale());
 }
 
 SDL_Texture* SpriteRenderer::CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer)

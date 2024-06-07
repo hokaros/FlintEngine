@@ -362,6 +362,11 @@ Vector GameObject::LocalToWorld(const Vector& localPos) const
 	return m_Transform.TransformPoint(localPos);
 }
 
+Vector GameObject::VectorLocalToWorld(const Vector& localVec) const
+{
+	return LocalToWorld(localVec) - LocalToWorld(Vector::ZERO);
+}
+
 void GameObject::AddChild(std::unique_ptr<GameObject> child)
 {
 	child->parent = this;

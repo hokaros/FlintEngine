@@ -100,6 +100,7 @@ public:
 	void LookAt(const Vector& point);
 
 	Vector LocalToWorld(const Vector& localPos) const;
+	Vector VectorLocalToWorld(const Vector& localVec) const;
 
 	void AddChild(std::unique_ptr<GameObject> child);
 	void MoveChild(GameObject* child, IGameObjectContainer& new_container);

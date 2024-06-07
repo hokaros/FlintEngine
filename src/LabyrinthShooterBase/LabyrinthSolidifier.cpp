@@ -76,8 +76,8 @@ void LabyrinthSolidifier::PlaceWalls() {
 			if (labyrinth->WallAtIndex(index)) {
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
-				wall->SetWorldScale(verticalWall);
 				wall->FindComponent<BoxCollider>()->SetSize(verticalWall);
+				wall->FindComponent<RectangleRenderer>()->SetSize(verticalWall);
 				wall->SetLocalPosition(Vector(x * wallLength, y * wallLength) + position);
 			}
 		}
@@ -91,8 +91,8 @@ void LabyrinthSolidifier::PlaceWalls() {
 			if (labyrinth->WallAtIndex(index)) {
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
-				wall->SetWorldScale(horizontalWall);
 				wall->FindComponent<BoxCollider>()->SetSize(horizontalWall);
+				wall->FindComponent<RectangleRenderer>()->SetSize(horizontalWall);
 				wall->SetLocalPosition(Vector(x * wallLength, y * wallLength) + position);
 			}
 		}
@@ -127,10 +127,10 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color
 
 	GameObject* wall = GameObject::Instantiate(*wallPrefabLoaded);
 
-	wall->SetWorldScale(size);
 	wall->FindComponent<BoxCollider>()->SetSize(size);
 
 	wall->FindComponent<RectangleRenderer>()->SetColor(color);
+	wall->FindComponent<RectangleRenderer>()->SetSize(size);
 
 	return wall;
 }
@@ -235,6 +235,7 @@ void LabyrinthSolidifier::Awake()
 		OccludableRectangle* occludable = border[i]->FindComponent<OccludableRectangle>();
 		std::unique_ptr<RectangleRenderer> unoccludable = std::make_unique<RectangleRenderer>();
 		unoccludable->SetColor(occludable->GetColor());
+		unoccludable->SetSize(occludable->GetSize());
 
 		border[i]->AddComponent(std::move(unoccludable));
 		border[i]->RemoveComponent(occludable);

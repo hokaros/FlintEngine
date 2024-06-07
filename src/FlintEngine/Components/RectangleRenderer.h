@@ -16,11 +16,20 @@ public:
 	void SetColor(Rgb8 color);
 	const Rgb8& GetColor() const;
 
+	void SetSize(const Vector& size);
+	const Vector& GetSize() const;
+
+private:
+	Vector GetRenderSize() const;
+
 private:
 	uint m_Layer = 0;
 	DECLARE_FIELD(m_Layer);
 
 	Rgb8 m_Color;
 	DECLARE_FIELD(m_Color);
+
+	Vector m_Size;
+	DECLARE_FIELD(m_Size);
 };
 

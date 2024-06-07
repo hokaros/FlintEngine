@@ -14,6 +14,8 @@ public:
 	void Render(SceneRenderer& renderer) override;
 
 protected:
+	Vector GetRenderSize() const;
+
 	static SDL_Texture* CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer);
 
 protected:
@@ -22,6 +24,9 @@ protected:
 
 	std::string m_BitmapPath = "";
 	DECLARE_FIELD(m_BitmapPath);
+
+	Vector m_Size;
+	DECLARE_FIELD(m_Size);
 
 	SDL_Texture* m_Texture = nullptr;
 };
