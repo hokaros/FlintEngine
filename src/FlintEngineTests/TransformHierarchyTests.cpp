@@ -30,4 +30,28 @@ TEST(SUITE_NAME, ParentTranslationTranslatesChild)
 	ASSERT_VEC_EQ(expected_world_pos, child_object.GetWorldPosition());
 }
 
+TEST(SUITE_NAME, ParentRotationRotatesAndTranslatesChild)
+{
+	// Arrange
+	const Vector parent_start_pos = Vector(-1, 2.5f);
+	const Transform parent_transform = Transform(parent_start_pos, 0.f, Vector(1, 1));
+	GameObject parent_object = GameObject(parent_transform);
+
+	const Vector child_offset = Vector(1.2f, 0.f);
+	const Vector child_start_pos = parent_start_pos + child_offset;
+	const Transform child_transform = Transform(child_start_pos, 0.f, Vector(1, 1));
+	parent_object.AddChild(std::make_unique<GameObject>(child_transform));
+	const GameObject& child_object = *(parent_object.GetChildren()[0]);
+
+	const float in_rotation = 45.f;
+
+	// Act
+	parent_object.Rotate(in_rotation);
+
+	// Assert
+	const Vector expected_child_pos = parent_start_pos + child_offset.GetRotated(DegToRad(in_rotation));
+	ASSERT_VEC_EQ(expected_child_pos, child_object.GetWorldPosition());
+	ASSERT_EQ(in_rotation, child_object.GetWorldRotation());
+}
+
 #undef SUITE_NAME

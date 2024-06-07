@@ -1,6 +1,13 @@
 #pragma once
+
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
+
+constexpr float DegToRad(float degrees)
+{
+    return degrees * M_PI / 180.f;
+}
 
 enum class Direction { NORTH, SOUTH, EAST, WEST };
 
