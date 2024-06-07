@@ -18,6 +18,11 @@ GameObject::GameObject(const Vector& size, const Vector& position)
 {
 }
 
+GameObject::GameObject(const Transform& transform)
+	: m_Transform(transform)
+{
+}
+
 GameObject::GameObject(const GameObject& other) 
 	: m_Transform(other.m_Transform)
 	, name(other.name)

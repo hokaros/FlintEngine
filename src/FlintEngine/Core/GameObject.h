@@ -33,9 +33,10 @@ class GameObject
 {
 public:
 	GameObject();
-	// TODO: replace these constructors with 1 which accepts Transform
 	GameObject(const Vector& size);
 	GameObject(const Vector& size, const Vector& position);
+	// World transform
+	GameObject(const Transform& transform);
 	GameObject(const GameObject& other);
 
 	static GameObject* Instantiate(const Vector& size);

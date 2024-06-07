@@ -1,15 +1,12 @@
 #include "pch.h"
 #include <Math/Transform.h>
+#include "TestHelpers.h"
 
 #ifdef SUITE_NAME
 #error Cannot redefine suite name
 #endif
 
 #define SUITE_NAME Transform
-
-#define ASSERT_VEC_EQ(expected, actual)		\
-	ASSERT_FLOAT_EQ(expected.x, actual.x);	\
-	ASSERT_FLOAT_EQ(expected.y, actual.y);
 
 TEST(SUITE_NAME, IdentityDoesNotChangePoint)
 {
