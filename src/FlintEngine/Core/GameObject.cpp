@@ -334,17 +334,9 @@ void GameObject::Rotate(float angle)
 	{
 		child->Rotate(angle);
 
-		Vector childMid = child->GetLocalPosition();
-		double radius = (middle - childMid).Length();
-
-		Vector childNewPos(
-			cos(newRotRadians) * radius,
-			sin(newRotRadians) * radius
-		);
-		childNewPos += middle;
-		Vector dPos = childNewPos - childMid;
-
-		child->Translate(dPos);
+		const Vector local_pos = child->GetLocalPosition();
+		const Vector target_local_pos = child->GetLocalPosition().GetRotated(DegToRad(angle));
+		child->SetLocalPosition(target_local_pos);
 	}
 
 	m_Transform.Rotate(angle);

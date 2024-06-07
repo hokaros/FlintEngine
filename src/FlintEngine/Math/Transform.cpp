@@ -71,10 +71,10 @@ Vector Transform::GetLookDir() const
 
 Vector Transform::TransformPoint(const Vector& local_point) const
 {
-	return local_point.GetScaled(m_Scale).GetRotated(m_Rotation * M_PI / 180.f) + m_Position;
+	return local_point/*.GetScaled(m_Scale)*/.GetRotated(m_Rotation * M_PI / 180.f) + m_Position;
 }
 
 Vector Transform::InvTransformPoint(const Vector& world_point) const
 {
-	return (world_point - m_Position).GetRotated(-m_Rotation * M_PI / 180.f).GetScaled(m_Scale);
+	return (world_point - m_Position).GetRotated(-m_Rotation * M_PI / 180.f); // .GetScaled(1 / m_Scale);
 }

@@ -33,7 +33,7 @@ bool Firearm::TryShoot()
 	GameObject* bullet = GameObject::Instantiate(*m_BulletPrefab.Get());
 
 	// Ustawienie pozycji
-	Vector relativePos = Vector(Direction::EAST) * m_GameObject->GetLocalScale().x;
+	Vector relativePos = Vector(Direction::EAST) * m_GameObject->GetWorldScale().x; // TODO: local scale
 	bullet->SetWorldPosition(m_GameObject->LocalToWorld(relativePos));
 	// Obrót zgodnie z obrotem broni
 	bullet->Rotate(m_GameObject->GetWorldRotation());
