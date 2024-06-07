@@ -25,6 +25,7 @@ public:
 	Vector GetLookDir() const;
 
 	Vector TransformPoint(const Vector& local_point) const; // Transforms local position to outer space
+	Vector InvTransformPoint(const Vector& world_point) const; // Transforms outer-space position to local space
 
 private:
 	Vector m_Position;
