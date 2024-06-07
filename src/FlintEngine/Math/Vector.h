@@ -90,6 +90,7 @@ public:
     // Obraca o k¹t w radianach
     void Rotate(float angle);
     Vector GetRotated(float angle) const;
+    Vector GetScaled(const Vector& other) const;
     // Zwraca k¹t w radianach wskazywany przez wektor
     double GetAngle() const;
 
