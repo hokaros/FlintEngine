@@ -2,6 +2,7 @@
 
 #include <utility.h>
 #include <AssetManager.h>
+#include "SelectedObjectRenderer.h"
 
 ImU32 Rgb8ToImU32(const Rgb8& rgb)
 {
@@ -42,6 +43,7 @@ void SceneEditor::SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object
 void SceneEditor::Render()
 {
 	FE_ASSERT(m_CurrentScene != nullptr, "Scene should be present. Consider using the default - m_PrefabScene");
+	FE_ASSERT(m_SelectedObjectManager != nullptr, "Selected object manager not set. Please call Init()");
 
 	if (m_RootObject.expired())
 	{
@@ -69,6 +71,7 @@ void SceneEditor::Render()
 		{
 			IEditableGameObject::RenderUpdate(handle->GetGameObjectHandle()->GetGameObject(), m_SceneRenderer);
 		}
+		SelectedObjectRenderer::Render(*m_SelectedObjectManager, m_SceneRenderer);
 
 		if (SDL_Texture* renderedTex = m_SceneRenderer.FinalizeFrame())
 		{
