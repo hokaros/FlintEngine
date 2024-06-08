@@ -10,7 +10,7 @@ ImU32 Rgb8ToImU32(const Rgb8& rgb)
 }
 
 SceneEditor::SceneEditor(SDL_Renderer& renderer, float screenWidth, float screenHeight)
-	: m_SceneRenderer(screenWidth, screenHeight)
+	: m_SceneRenderer(screenWidth*0.5f, screenHeight*0.5f)
 {
 	m_SceneRenderer.Init(&renderer, {});
 	m_SceneRenderer.SetViewport(Rect(Vector(0, 0), Vector(10, 10)));
