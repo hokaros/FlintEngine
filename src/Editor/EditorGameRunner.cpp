@@ -1,5 +1,5 @@
 #include "EditorGameRunner.h"
-#include "ViewportController.h"
+#include <SceneEditor/ViewportController.h>
 
 EditorGameRunner::EditorGameRunner(SDL_Renderer& renderer, float screenWidth, float screenHeight)
 	: m_SceneRenderer(screenWidth, screenHeight)
