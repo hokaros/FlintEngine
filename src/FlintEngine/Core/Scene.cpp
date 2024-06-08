@@ -9,7 +9,7 @@ void Scene::Update()
 {
 	m_ObjectManager.ActivateNewObjects();
 
-	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
+	for (IGameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
 		go->Update();
 	}
@@ -19,7 +19,7 @@ void Scene::Render(SceneRenderer& renderer)
 {
 	RenderBackground(renderer);
 
-	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
+	for (IGameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
 		go->RenderUpdate(renderer);
 	}
@@ -36,9 +36,9 @@ void Scene::PostFrame()
 	m_ObjectManager.DisposeDestroyed();
 }
 
-GameObject* Scene::FindGameObjectByName(const std::string& name) const
+IGameObject* Scene::FindGameObjectByName(const std::string& name) const
 {
-	for (const std::unique_ptr<GameObject>& go : m_ObjectManager.GetOwnedObjects())
+	for (const std::unique_ptr<IGameObject>& go : m_ObjectManager.GetOwnedObjects())
 	{
 		if (go->GetName() == name)
 		{
@@ -59,7 +59,7 @@ Scene::GameObjectsT::iterator Scene::EndRootGameObjects()
 	return m_ObjectManager.GetOwnedObjects().end();
 }
 
-void Scene::AddGameObject(std::unique_ptr<GameObject> game_object)
+void Scene::AddGameObject(std::unique_ptr<IGameObject> game_object)
 {
 	game_object->SetScene(this, {});
 
@@ -68,7 +68,7 @@ void Scene::AddGameObject(std::unique_ptr<GameObject> game_object)
 
 void Scene::MoveObjectsFrom(Scene&& other_scene)
 {
-	for (std::unique_ptr<GameObject>& go : other_scene.m_ObjectManager.GetOwnedObjects())
+	for (std::unique_ptr<IGameObject>& go : other_scene.m_ObjectManager.GetOwnedObjects())
 	{
 		AddGameObject(std::move(go));
 	}

@@ -35,10 +35,9 @@ GameObject::GameObject(const GameObject& other)
 	}
 
 	// Skopiowanie dzieci
-	for (const std::unique_ptr<GameObject>& child : other.children) 
+	for (const std::unique_ptr<IGameObject>& child : other.children) 
 	{
-		std::unique_ptr<GameObject> childCopy = std::make_unique<GameObject>(*child);
-
+		std::unique_ptr<IGameObject> childCopy = child->Copy();
 		AddChild(std::move(childCopy));
 	}
 }
@@ -144,7 +143,7 @@ void GameObject::Update()
 		component->Update();
 	}
 
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->Update();
 	}
@@ -160,7 +159,7 @@ void GameObject::RenderUpdate(SceneRenderer& renderer)
 		component->RenderUpdate(renderer);
 	}
 
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->RenderUpdate(renderer);
 	}
@@ -176,7 +175,7 @@ void GameObject::Start()
 		component->Start();
 	}
 
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->Start();
 	}
@@ -192,7 +191,7 @@ void GameObject::Awake()
 		component->Awake();
 	}
 
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->Awake();
 	}
@@ -205,7 +204,7 @@ void GameObject::OnDestroy()
 		component->OnDestroy();
 	}
 
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->OnDestroy();
 	}
@@ -221,6 +220,11 @@ void GameObject::SetName(const std::string& name)
 	this->name = name;
 }
 
+void GameObject::SetParent(IGameObject* parent)
+{
+	m_Parent = parent;
+}
+
 const Vector& GameObject::GetWorldPosition() const
 {
 	return m_Transform.GetPosition();
@@ -231,9 +235,9 @@ Vector GameObject::GetLocalPosition() const
 	const Vector& self_world_pos = m_Transform.GetPosition();
 
 	// Position in the parent space
-	if (parent != nullptr)
+	if (m_Parent != nullptr)
 	{
-		return parent->m_Transform.InvTransformPoint(self_world_pos);
+		return m_Parent->InvTransformPoint(self_world_pos);
 	}
 
 	return self_world_pos;
@@ -280,14 +284,19 @@ void GameObject::SetLocalPosition(const Vector& newPosition)
 {
 	Vector wanted_world_pos = newPosition;
 
-	if (parent != nullptr)
+	if (m_Parent != nullptr)
 	{
 		// Set position in the parent's coordinates
-		wanted_world_pos = parent->m_Transform.TransformPoint(newPosition);
+		wanted_world_pos = m_Parent->TransformPoint(newPosition);
 	}
 
 	const Vector translation = wanted_world_pos - GetWorldPosition();
 	Translate(translation);
+}
+
+std::unique_ptr<IGameObject> GameObject::Copy() const
+{
+	return std::make_unique<GameObject>(*this);
 }
 
 void GameObject::Translate(const Vector& offset) 
@@ -295,7 +304,7 @@ void GameObject::Translate(const Vector& offset)
 	m_Transform.Translate(offset);
 
 	// Moving the children
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->Translate(offset);
 	}
@@ -309,7 +318,7 @@ void GameObject::SetWorldScale(const Vector& newScale)
 	m_Transform.SetScale(newScale);
 
 	// Rozmiar dzieci
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		const Vector& child_size = child->GetWorldScale();
 		Vector childNewSize(child_size.x * sizeChange.x, child_size.y * sizeChange.y);
@@ -330,7 +339,7 @@ void GameObject::Rotate(float angle)
 
 	Vector middle = m_Transform.GetPosition();
 	
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->Rotate(angle);
 
@@ -357,30 +366,35 @@ void GameObject::LookAt(const Vector& point)
 	Rotate(dRot);
 }
 
-Vector GameObject::LocalToWorld(const Vector& localPos) const 
+Vector GameObject::TransformPoint(const Vector& local_pos) const
 {
-	return m_Transform.TransformPoint(localPos);
+	return m_Transform.TransformPoint(local_pos);
+}
+
+Vector GameObject::InvTransformPoint(const Vector& world_pos) const
+{
+	return m_Transform.InvTransformPoint(world_pos);
 }
 
 Vector GameObject::VectorLocalToWorld(const Vector& localVec) const
 {
-	return LocalToWorld(localVec) - LocalToWorld(Vector::ZERO);
+	return TransformPoint(localVec) - TransformPoint(Vector::ZERO);
 }
 
-void GameObject::AddChild(std::unique_ptr<GameObject> child)
+void GameObject::AddChild(std::unique_ptr<IGameObject> child)
 {
-	child->parent = this;
+	child->SetParent(this);
 
 	children.push_back(std::move(child));
 }
 
-void GameObject::MoveChild(GameObject* child, IGameObjectContainer& new_container) 
+void GameObject::MoveChild(IGameObject* child, IGameObjectContainer& new_container) 
 {
-	child->parent = nullptr;
+	child->SetParent(nullptr);
 
 	for (auto it = children.begin(); it != children.end(); it++)
 	{
-		std::unique_ptr<GameObject>& it_val = *it;
+		std::unique_ptr<IGameObject>& it_val = *it;
 		if (it_val.get() == child)
 		{
 			new_container.AddGameObject(std::move(it_val));
@@ -390,14 +404,14 @@ void GameObject::MoveChild(GameObject* child, IGameObjectContainer& new_containe
 	}
 }
 
-const std::vector<std::unique_ptr<GameObject>>& GameObject::GetChildren() const 
+const std::vector<std::unique_ptr<IGameObject>>& GameObject::GetChildren() const 
 {
 	return children;
 }
 
-GameObject* GameObject::GetParent() const 
+IGameObject* GameObject::GetParent() const 
 {
-	return parent;
+	return m_Parent;
 }
 
 Scene* GameObject::GetScene() const
@@ -432,7 +446,7 @@ void GameObject::SetEnabled(bool enabled)
 {
 	isEnabled = enabled;
 
-	for (std::unique_ptr<GameObject>& child : children)
+	for (std::unique_ptr<IGameObject>& child : children)
 	{
 		child->SetEnabled(enabled);
 	}

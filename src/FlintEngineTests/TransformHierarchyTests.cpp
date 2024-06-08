@@ -17,7 +17,7 @@ TEST(SUITE_NAME, ParentTranslationTranslatesChild)
 	GameObject parent_object(parent_transform);
 
 	parent_object.AddChild(std::make_unique<GameObject>(parent_transform));
-	const GameObject& child_object = *(parent_object.GetChildren()[0]);
+	const GameObject& child_object = static_cast<const GameObject&>(*(parent_object.GetChildren()[0]));
 
 	const Vector in_offset(7.2f, -0.5f);
 
@@ -41,7 +41,7 @@ TEST(SUITE_NAME, ParentRotationRotatesAndTranslatesChild)
 	const Vector child_start_pos = parent_start_pos + child_offset;
 	const Transform child_transform = Transform(child_start_pos, 0.f, Vector(1, 1));
 	parent_object.AddChild(std::make_unique<GameObject>(child_transform));
-	const GameObject& child_object = *(parent_object.GetChildren()[0]);
+	const GameObject& child_object = static_cast<const GameObject&>(*(parent_object.GetChildren()[0]));
 
 	const float in_rotation = 45.f;
 

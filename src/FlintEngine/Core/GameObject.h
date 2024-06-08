@@ -2,6 +2,7 @@
 #include <Math/Transform.h>
 #include "Timer.h"
 #include "ObjectComponent.h"
+#include "IGameObject.h"
 #include "SerializableTypes.h"
 #include <functional>
 #include <math.h>
@@ -13,23 +14,13 @@
 class IGameObjectContainer
 {
 public:
-	virtual void AddGameObject(std::unique_ptr<GameObject>) = 0;
+	virtual void AddGameObject(std::unique_ptr<IGameObject>) = 0;
 
 	virtual ~IGameObjectContainer() = default;
 };
 
-class SceneRenderer;
-class Scene;
-
-class SceneKey
-{
-private:
-	SceneKey() = default;
-
-	friend Scene;
-};
-
 class GameObject
+	: public IGameObject
 {
 public:
 	GameObject();
@@ -47,6 +38,61 @@ public:
 
 	static void Destroy(GameObject* game_object);
 
+public: /* IGameObject */
+	virtual const std::string& GetName() const override;
+	virtual void SetName(const std::string& name) override;
+
+	virtual IGameObject* GetParent() const override;
+	virtual void SetParent(IGameObject* parent) override;
+
+	virtual const std::vector<std::unique_ptr<IGameObject>>& GetChildren() const override;
+	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) override;
+
+	virtual void SetEnabled(bool enabled) override;
+
+	virtual void SetScene(Scene* scene, SceneKey) override;
+
+	virtual std::unique_ptr<IGameObject> Copy() const override;
+
+public: /* ITransformable */
+	virtual const Vector& GetWorldPosition() const override;
+	virtual void SetWorldPosition(const Vector& pos) override;
+	virtual Vector GetLocalPosition() const override;
+	virtual void SetLocalPosition(const Vector& pos) override;
+	// Translate in world space
+	virtual void Translate(const Vector& offset) override;
+
+	virtual const Vector& GetWorldScale() const override;
+	virtual void SetWorldScale(const Vector& scale) override;
+	virtual Vector GetLocalScale() const override;
+	virtual void SetLocalScale(const Vector& scale) override;
+
+	virtual float GetWorldRotation() const override;
+	virtual void SetWorldRotation(float rot) override;
+	virtual float GetLocalRotation() const override;
+	// Rotate in world space
+	virtual void Rotate(float angle) override;
+	// Rotates so that the x-axis of the object is heading towards specified world position
+	virtual void LookAt(const Vector& pos) override;
+
+	// Transforms from local space to world space
+	virtual Vector TransformPoint(const Vector& local_pos) const override;
+	// Transforms from world space to local space
+	virtual Vector InvTransformPoint(const Vector& world_pos) const override;
+
+public: /* IUpdateable */
+	// Called once per frame
+	virtual void Update() override;
+	virtual void RenderUpdate(SceneRenderer& renderer) override;
+
+	// Called before the first frame
+	virtual void Awake() override;
+	// Before the first frame, but after Awake()
+	virtual void Start() override;
+
+	virtual void OnDestroy() override;
+
+	//
 	void AddComponent(std::unique_ptr<ObjectComponent> component);
 	void RemoveComponent(ObjectComponent* component);
 	void RemoveComponent(size_t component_index);
@@ -55,60 +101,25 @@ public:
 	ObjectComponent* GetComponent(size_t idx);
 	// Znajduje komponent okreœlonego typu
 	template<class T>
-	T* FindComponent();
+	T* FindComponent(); // TODO: find by RTC
 	// Znajduje wszystkie komponenty okreœlonego typu
 	template<class T>
 	std::list<T*>* FindComponents();
 	// Znajduje wszystkie komponenty okreœlonego typu u dzieci
 	template<class T>
-	std::list<T*>* FindComponentsInChildren();
-	
+	std::list<T*>* FindComponentsInChildren(); // TODO: find by RTC
 
-	// Raz na klatkê
-	void Update();
-	void RenderUpdate(SceneRenderer& renderer);
-	// Na pocz¹tku gry
-	void Start();
-	// Przed Start()
-	void Awake();
-	void OnDestroy();
-
-	const std::string& GetName() const;
-	void SetName(const std::string& name);
-
-	const Vector& GetWorldPosition() const;
-	Vector GetLocalPosition() const;
-	const Vector& GetWorldScale() const;
-	Vector GetLocalScale() const;
-	float GetWorldRotation() const;
-	float GetLocalRotation() const;
 	Vector LookingDirection() const;
 	// Piksele, które zajmuje ten obiekt
 	std::vector<VectorInt>* GetPixels() const;
 
-	void SetEnabled(bool enabled);
 	bool IsEnabled() const;
 
-	void SetWorldPosition(const Vector& newPosition);
-	void SetLocalPosition(const Vector& newPosition);
-	void Translate(const Vector& offset); // przesuniêcie
-	void SetWorldScale(const Vector& newScale);
-	void SetLocalScale(const Vector& newScale);
-	void Rotate(float angle);
-	void SetWorldRotation(float rotation);
-	// Obraca tak, aby oœ X obiektu by³a skierowana w stronê danego punktu
-	void LookAt(const Vector& point);
-
-	Vector LocalToWorld(const Vector& localPos) const;
 	Vector VectorLocalToWorld(const Vector& localVec) const;
 
-	void AddChild(std::unique_ptr<GameObject> child);
-	void MoveChild(GameObject* child, IGameObjectContainer& new_container);
-	const std::vector<std::unique_ptr<GameObject>>& GetChildren() const;
-	GameObject* GetParent() const;
+	void AddChild(std::unique_ptr<IGameObject> child);
 
 	Scene* GetScene() const;
-	void SetScene(Scene* scene, SceneKey);
 
 	~GameObject() = default;
 
@@ -121,8 +132,8 @@ private:
 	std::string name = "GameObject";
 	Transform m_Transform;
 
-	GameObject* parent = nullptr;
-	std::vector<std::unique_ptr<GameObject>> children;
+	IGameObject* m_Parent = nullptr;
+	std::vector<std::unique_ptr<IGameObject>> children;
 
 	Scene* scene = nullptr;
 };
@@ -217,9 +228,13 @@ std::list<T*>* GameObject::FindComponentsInChildren()
 {
 	std::list<T*>* found = new std::list<T*>();
 
-	for (std::unique_ptr<GameObject>& child : children) 
+	for (std::unique_ptr<IGameObject>& child : children) 
 	{
-		std::list<T*>* foundInChild = child->FindComponents<T>();
+		GameObject* child_go = dynamic_cast<GameObject*>(child.get());
+		if (child_go == nullptr) // TODO: add support for IGameObject
+			continue;
+
+		std::list<T*>* foundInChild = child_go->FindComponents<T>();
 
 		for (T* desired : *foundInChild) 
 		{

@@ -34,6 +34,8 @@ private:
 	void RegisterOccludableImpl(IOccludable& occludable);
 	void UnregisterOccludableImpl(IOccludable& occludable);
 
+	LabyrinthSolidifier* FindLabyrinth() const;
+
 private:
 	std::string m_PlayerName = "Player";
 	DECLARE_FIELD(m_PlayerName);
@@ -41,7 +43,7 @@ private:
 	std::string m_LabName = "Labyrinth";
 	DECLARE_FIELD(m_LabName);
 
-	GameObject* m_Player = nullptr;
+	IGameObject* m_Player = nullptr;
 	LabyrinthSolidifier* m_Lab = nullptr;
 
 	std::vector<IOccludable*> m_Occludables;

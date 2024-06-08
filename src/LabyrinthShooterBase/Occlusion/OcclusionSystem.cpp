@@ -12,7 +12,7 @@ void OcclusionSystem::Awake()
 {
 	Scene* scene = GetOwner().GetScene();
 	m_Player = scene->FindGameObjectByName(m_PlayerName);
-	m_Lab = scene->FindGameObjectByName(m_LabName)->FindComponent<LabyrinthSolidifier>();
+	m_Lab = FindLabyrinth();
 
 	s_Instance = this;
 }
@@ -84,4 +84,18 @@ void OcclusionSystem::RegisterOccludableImpl(IOccludable& occludable)
 void OcclusionSystem::UnregisterOccludableImpl(IOccludable& occludable)
 {
 	ftl::vector_remove(m_Occludables, &occludable);
+}
+
+LabyrinthSolidifier* OcclusionSystem::FindLabyrinth() const
+{
+	Scene* scene = GetOwner().GetScene();
+	IGameObject* lab_igo = scene->FindGameObjectByName(m_LabName);
+	if (lab_igo == nullptr)
+		return nullptr;
+
+	GameObject* lab_go = dynamic_cast<GameObject*>(lab_igo); // TODO: let's remove this
+	if (lab_go == nullptr)
+		return nullptr;
+
+	return lab_go->FindComponent<LabyrinthSolidifier>();
 }

@@ -76,7 +76,11 @@ void Health::SubscribeDeath(std::function<void(Health*)> handler)
 StatRenderer* Health::FindStatRenderer() const
 {
 	// TODO: let's pass this by something other than name
-	GameObject* stats_go = GetOwner().GetScene()->FindGameObjectByName("Health Stats");
+	IGameObject* stats_igo = GetOwner().GetScene()->FindGameObjectByName("Health Stats");
+	if (stats_igo == nullptr)
+		return nullptr;
+
+	GameObject* stats_go = dynamic_cast<GameObject*>(stats_igo); // TODO: let's think how to remove this
 	if (stats_go == nullptr)
 		return nullptr;
 

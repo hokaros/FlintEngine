@@ -17,5 +17,5 @@ public:
 private:
 	const GameObject& m_GameObject;
 
-	const GameObject* m_Player = nullptr;
+	const IGameObject* m_Player = nullptr;
 };
