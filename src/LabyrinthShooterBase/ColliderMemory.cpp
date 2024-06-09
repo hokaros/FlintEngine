@@ -1,6 +1,7 @@
 #include "ColliderMemory.h"
 #include <Window.h>
 #include <Draw.h>
+#include <Components/RectangleRenderer.h>
 
 ColliderMemory::ColliderMemory(size_t width, size_t height)
 	: width(width), height(height) {
@@ -52,9 +53,13 @@ void ColliderMemory::Free(GameObject* collider) {
 }
 
 void ColliderMemory::SetForCollider(GameObject* collider, GameObject* occupier) {
-	std::vector<VectorInt>* pixels = collider->GetPixels();
+	RectangleRenderer* renderer = collider->FindComponent<RectangleRenderer>();
+	if (renderer == nullptr)
+		return;
 
-	for (VectorInt pixel : *pixels) {
+	std::vector<VectorInt> pixels = renderer->GetPixels();
+
+	for (VectorInt pixel : pixels) {
 		if (pixel.x >= 0 && pixel.x < width
 			&& pixel.y >= 0 && pixel.y < height) {
 

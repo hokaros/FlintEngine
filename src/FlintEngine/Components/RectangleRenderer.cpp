@@ -33,6 +33,25 @@ const Vector& RectangleRenderer::GetSize() const
 	return m_Size;
 }
 
+std::vector<VectorInt> RectangleRenderer::GetPixels() const
+{
+	std::vector<VectorInt> pixels;
+
+	const Rect rect = GetRenderRect();
+	const Vector& size = rect.size;
+	const Vector& position = rect.pos;
+
+	for (int x = 0; x < size.x; x++)
+	{
+		for (int y = 0; y < size.y; y++)
+		{
+			pixels.push_back(position + Vector(x, y));
+		}
+	}
+
+	return pixels;
+}
+
 Vector RectangleRenderer::GetRenderSize() const
 {
 	return m_Size.GetScaled(m_GameObject->GetWorldScale());

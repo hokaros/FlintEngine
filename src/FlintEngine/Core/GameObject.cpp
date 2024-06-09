@@ -424,24 +424,6 @@ void GameObject::SetScene(Scene* scene, SceneKey)
 	this->scene = scene;
 }
 
-std::vector<VectorInt>* GameObject::GetPixels() const 
-{
-	std::vector<VectorInt>* pixels = new std::vector<VectorInt>();
-
-	const Vector& size = m_Transform.GetScale();
-	const Vector& position = m_Transform.GetPosition();
-
-	for (int x = 0; x < size.x; x++) 
-	{
-		for (int y = 0; y < size.y; y++) 
-		{
-			pixels->push_back(position + Vector(x, y));
-		} 
-	}
-
-	return pixels;
-}
-
 void GameObject::SetEnabled(bool enabled) 
 {
 	isEnabled = enabled;

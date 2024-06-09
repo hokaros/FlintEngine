@@ -19,6 +19,8 @@ public:
 	void SetSize(const Vector& size);
 	const Vector& GetSize() const;
 
+	std::vector<VectorInt> GetPixels() const;
+
 private:
 	Vector GetRenderSize() const;
 	Rect GetRenderRect() const;

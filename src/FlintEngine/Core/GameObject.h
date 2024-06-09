@@ -110,8 +110,6 @@ public: /* IUpdateable */
 	std::list<T*>* FindComponentsInChildren(); // TODO: find by RTC
 
 	Vector LookingDirection() const;
-	// Piksele, które zajmuje ten obiekt
-	std::vector<VectorInt>* GetPixels() const;
 
 	bool IsEnabled() const;
 
