@@ -21,6 +21,7 @@ public:
 
 private:
 	Vector GetRenderSize() const;
+	Rect GetRenderRect() const;
 
 private:
 	uint m_Layer = 0;

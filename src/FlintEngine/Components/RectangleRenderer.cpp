@@ -10,10 +10,7 @@ DEFINE_FIELD(RectangleRenderer, m_Size);
 
 void RectangleRenderer::Render(SceneRenderer& renderer)
 {
-	const Vector& world_pos = m_GameObject->GetWorldPosition();
-	const Rect rect = Rect(world_pos, GetRenderSize());
-
-	renderer.RenderRect(rect, m_Color, m_Layer); // TODO: rotation
+	renderer.RenderRect(GetRenderRect(), m_Color, m_Layer); // TODO: rotation
 }
 
 void RectangleRenderer::SetColor(Rgb8 color)
@@ -39,4 +36,11 @@ const Vector& RectangleRenderer::GetSize() const
 Vector RectangleRenderer::GetRenderSize() const
 {
 	return m_Size.GetScaled(m_GameObject->GetWorldScale());
+}
+
+Rect RectangleRenderer::GetRenderRect() const
+{
+	const Vector size = GetRenderSize();
+	const Vector pos = m_GameObject->GetWorldPosition() - size / 2.f;
+	return Rect(pos, size);
 }

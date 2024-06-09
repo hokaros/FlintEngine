@@ -15,6 +15,7 @@ public:
 
 protected:
 	Vector GetRenderSize() const;
+	Rect GetRenderRect() const;
 
 	static SDL_Texture* CreateTextureFromBitmap(const std::string& bitmap_path, SceneRenderer& renderer);
 
