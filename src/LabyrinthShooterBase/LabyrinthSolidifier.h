@@ -48,6 +48,8 @@ private:
 	void BuildBorder();
 	GameObject** BuildGateWall(Direction side);
 
+	void SetWallUpperLeft(GameObject& wall, const Vector& pos);
+
 	void OnWallDestroyedChanged(Destroyable& wall);
 
 private:

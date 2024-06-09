@@ -78,7 +78,7 @@ void LabyrinthSolidifier::PlaceWalls() {
 				GameObject* wall = walls[nextWall++];
 				wall->FindComponent<BoxCollider>()->SetSize(verticalWall);
 				wall->FindComponent<RectangleRenderer>()->SetSize(verticalWall);
-				wall->SetLocalPosition(Vector(x * wallLength, y * wallLength) + position);
+				SetWallUpperLeft(*wall, Vector(x * wallLength, y * wallLength) + position);
 			}
 		}
 	}
@@ -93,7 +93,7 @@ void LabyrinthSolidifier::PlaceWalls() {
 				GameObject* wall = walls[nextWall++];
 				wall->FindComponent<BoxCollider>()->SetSize(horizontalWall);
 				wall->FindComponent<RectangleRenderer>()->SetSize(horizontalWall);
-				wall->SetLocalPosition(Vector(x * wallLength, y * wallLength) + position);
+				SetWallUpperLeft(*wall, Vector(x * wallLength, y * wallLength) + position);
 			}
 		}
 	}
@@ -147,10 +147,10 @@ void LabyrinthSolidifier::BuildBorder() {
 	Vector nextPos = position;
 	Vector elemSize(GetSize().x, wallWidth);
 	border[6] = BuildWall(elemSize);
-	border[6]->SetLocalPosition(nextPos);
+	SetWallUpperLeft(*border[6], nextPos);
 	nextPos.y += yCount * wallLength;
 	border[7] = BuildWall(elemSize);
-	border[7]->SetLocalPosition(nextPos);
+	SetWallUpperLeft(*border[7], nextPos);
 }
 
 GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
@@ -168,13 +168,13 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 	if (side == Direction::EAST || side == Direction::WEST) {
 		Vector elemSize(wallWidth, exit.y * wallLength);
 		w[0] = BuildWall(elemSize);
-		w[0]->SetLocalPosition(nextPos);
+		SetWallUpperLeft(*w[0], nextPos);
 		nextPos.y += elemSize.y;
 
 		// Brama
 		elemSize = Vector(wallWidth, wallLength);
 		w[1] = BuildWall(elemSize, m_GateColor);
-		w[1]->SetLocalPosition(nextPos);
+		SetWallUpperLeft(*w[1], nextPos);
 		nextPos.y += elemSize.y;
 
 		elemSize = Vector(
@@ -182,18 +182,18 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 			(yCount - exit.y - 1) * wallLength
 		);
 		w[2] = BuildWall(elemSize);
-		w[2]->SetLocalPosition(nextPos);
+		SetWallUpperLeft(*w[2], nextPos);
 	}
 	else {
 		Vector elemSize(exit.x * wallLength, wallWidth);
 		w[0] = BuildWall(elemSize);
-		w[0]->SetLocalPosition(nextPos);
+		SetWallUpperLeft(*w[0], nextPos);
 		nextPos.x += elemSize.x;
 
 		// Brama
 		elemSize = Vector(wallLength, wallWidth);
 		w[1] = BuildWall(elemSize, m_GateColor);
-		w[1]->SetLocalPosition(nextPos);
+		SetWallUpperLeft(*w[1], nextPos);
 		nextPos.x += elemSize.x;
 
 		elemSize = Vector(
@@ -201,10 +201,16 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 			wallWidth
 		);
 		w[2] = BuildWall(elemSize);
-		w[2]->SetLocalPosition(nextPos);
+		SetWallUpperLeft(*w[2], nextPos);
 	}
 
 	return w;
+}
+
+void LabyrinthSolidifier::SetWallUpperLeft(GameObject& wall, const Vector& pos)
+{
+	const Vector size = wall.FindComponent<BoxCollider>()->GetWorldSize();
+	wall.SetWorldPosition(pos + size / 2.f);
 }
 
 void LabyrinthSolidifier::Awake()
