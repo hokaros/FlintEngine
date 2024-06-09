@@ -26,7 +26,7 @@ protected:
 	std::string m_BitmapPath = "";
 	DECLARE_FIELD(m_BitmapPath);
 
-	Vector m_Size;
+	Vector m_Size = Vector(1, 1);
 	DECLARE_FIELD(m_Size);
 
 	SDL_Texture* m_Texture = nullptr;
