@@ -2,7 +2,7 @@
 
 void IEditableGameObject::CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest)
 {
-	for (const std::unique_ptr<IEditableGameObject>& editable_child : src.GetChildren())
+	for (const std::unique_ptr<IEditableGameObject>& editable_child : src.Serializable_GetChildren())
 	{
 		std::unique_ptr<GameObject> runtime_child = std::make_unique<GameObject>(editable_child->GetResult());
 
@@ -16,7 +16,7 @@ void IEditableGameObject::RenderUpdate(IEditableGameObject& editable, SceneRende
 {
 	editable.GetResult().RenderUpdate(renderer);
 
-	for (const std::unique_ptr<IEditableGameObject>& editable_child : editable.GetChildren())
+	for (const std::unique_ptr<IEditableGameObject>& editable_child : editable.Serializable_GetChildren())
 	{
 		RenderUpdate(*editable_child, renderer);
 	}

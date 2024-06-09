@@ -11,54 +11,54 @@ const GameObject& EditorGameObjectHandle::GetResult() const
 
 void EditorGameObjectHandle::SetPosition(const Vector& pos)
 {
-    GetGameObject().SetPosition(pos);
+    GetGameObject().Serializable_SetPosition(pos);
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::SetSize(const Vector& size)
 {
-    GetGameObject().SetSize(size);
+    GetGameObject().Serializable_SetSize(size);
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::SetName(const std::string& name)
 {
-    GetGameObject().SetName(name);
+    GetGameObject().Serializable_SetName(name);
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::AddComponent(std::unique_ptr<ObjectComponent> component)
 {
-    GetGameObject().AddComponent(std::move(component));
+    GetGameObject().Serializable_AddComponent(std::move(component));
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::ModifyComponentField(std::unique_ptr<ComponentFieldChange> modification)
 {
-    GetGameObject().ModifyComponentField(std::move(modification));
+    GetGameObject().Serializable_ModifyComponentField(std::move(modification));
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::RemoveComponent(size_t component_index)
 {
-    GetGameObject().RemoveComponent(component_index);
+    GetGameObject().Serializable_RemoveComponent(component_index);
     OnUnsavedChange();
 }
 
 const std::vector<std::unique_ptr<IEditableGameObject>>& EditorGameObjectHandle::GetSubRootObjects() const
 {
-    return GetGameObject().GetChildren();
+    return GetGameObject().Serializable_GetChildren();
 }
 
 void EditorGameObjectHandle::AddChild(std::unique_ptr<IEditableGameObject> child)
 {
-    GetGameObject().AddChild(std::move(child));
+    GetGameObject().Serializable_AddChild(std::move(child));
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::DeleteChild(IEditableGameObject& child)
 {
-    GetGameObject().RemoveChild(child);
+    GetGameObject().Serializable_RemoveChild(child);
     OnUnsavedChange();
 }
 

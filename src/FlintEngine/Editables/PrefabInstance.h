@@ -10,21 +10,21 @@ public:
 	virtual GameObject& GetResult() override;
 	virtual const GameObject& GetResult() const override;
 
-	virtual void SetName(const std::string& name) override;
-	virtual void SetSize(const Vector& size) override;
-	virtual void SetPosition(const Vector& position) override;
+	virtual void Serializable_SetName(const std::string& name) override;
+	virtual void Serializable_SetSize(const Vector& size) override;
+	virtual void Serializable_SetPosition(const Vector& position) override;
 
-	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
-	virtual void RemoveChild(IEditableGameObject& child) override;
+	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) override;
+	virtual void Serializable_RemoveChild(IEditableGameObject& child) override;
 
-	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
-	virtual void RemoveComponent(size_t index) override;
-	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) override;
+	virtual void Serializable_AddComponent(std::unique_ptr<ObjectComponent> component) override;
+	virtual void Serializable_RemoveComponent(size_t index) override;
+	virtual void Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) override;
 
-	virtual std::vector<std::unique_ptr<IEditableGameObject>>& GetChildren() override;
-	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetChildren() const override;
+	virtual std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() override;
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() const override;
 
-	virtual EditableGameObjectType GetType() const override;
+	virtual EditableGameObjectType Serializable_GetType() const override;
 
 	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object);
 

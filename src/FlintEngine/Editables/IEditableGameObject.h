@@ -48,21 +48,21 @@ public:
 	virtual GameObject& GetResult() = 0; // Please don't recalculate it on every GetResult() call.
 	virtual const GameObject& GetResult() const = 0;
 
-	virtual void SetName(const std::string& name) = 0;
-	virtual void SetSize(const Vector& size) = 0;
-	virtual void SetPosition(const Vector& position) = 0;
+	virtual void Serializable_SetName(const std::string& name) = 0;
+	virtual void Serializable_SetSize(const Vector& size) = 0;
+	virtual void Serializable_SetPosition(const Vector& position) = 0;
 
-	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) = 0;
-	virtual void RemoveChild(IEditableGameObject& child) = 0;
+	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) = 0;
+	virtual void Serializable_RemoveChild(IEditableGameObject& child) = 0;
 
-	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) = 0;
-	virtual void RemoveComponent(size_t index) = 0;
-	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;
+	virtual void Serializable_AddComponent(std::unique_ptr<ObjectComponent> component) = 0;
+	virtual void Serializable_RemoveComponent(size_t index) = 0;
+	virtual void Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;
 
-	virtual std::vector<std::unique_ptr<IEditableGameObject>>& GetChildren() = 0;
-	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetChildren() const = 0;
+	virtual std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() = 0;
+	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() const = 0;
 
-	virtual EditableGameObjectType GetType() const = 0;
+	virtual EditableGameObjectType Serializable_GetType() const = 0;
 
 	virtual ~IEditableGameObject() = default;
 

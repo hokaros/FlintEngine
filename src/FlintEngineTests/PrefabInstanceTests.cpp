@@ -25,9 +25,9 @@ TEST(SUITE_NAME, SetsNamePositionAndSize)
 	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 
 	// Act
-	prefab_instance->SetName(overriding_name);
-	prefab_instance->SetPosition(overriding_pos);
-	prefab_instance->SetSize(overriding_size);
+	prefab_instance->Serializable_SetName(overriding_name);
+	prefab_instance->Serializable_SetPosition(overriding_pos);
+	prefab_instance->Serializable_SetSize(overriding_size);
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
@@ -52,7 +52,7 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 
 	// Act
-	prefab_instance->SetSize(overriding_size);
+	prefab_instance->Serializable_SetSize(overriding_size);
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
@@ -72,7 +72,7 @@ TEST(SUITE_NAME, AddsComponent)
 	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
 
 	// Act
-	prefab_instance->AddComponent(std::move(added_component));
+	prefab_instance->Serializable_AddComponent(std::move(added_component));
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
@@ -94,7 +94,7 @@ TEST(SUITE_NAME, KeepsOriginalComponentsWhenAddingNew)
 	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
 
 	// Act
-	prefab_instance->AddComponent(std::move(added_component));
+	prefab_instance->Serializable_AddComponent(std::move(added_component));
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
@@ -127,7 +127,7 @@ TEST(SUITE_NAME, ModifiesComponent)
 	field_change->component = instance_component;
 	field_change->field = &instance_component->GetFieldDefinition_m_Size();
 	field_change->SetValue(overriding_size);
-	prefab_instance->ModifyComponentField(std::move(field_change));
+	prefab_instance->Serializable_ModifyComponentField(std::move(field_change));
 
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 

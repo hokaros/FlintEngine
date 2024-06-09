@@ -48,7 +48,7 @@ std::unique_ptr<InlineGameObject> GameObjectSerializer::DeserializePureGameObjec
 		Vector size;
 		STI<Vector>::ParseString(size_it->second, size);
 
-		game_object->SetSize(size);
+		game_object->Serializable_SetSize(size);
 	}
 
 	auto pos_it = desc.params.find(s_GameObjectPositionFieldName);
@@ -57,13 +57,13 @@ std::unique_ptr<InlineGameObject> GameObjectSerializer::DeserializePureGameObjec
 		Vector pos;
 		STI<Vector>::ParseString(pos_it->second, pos);
 
-		game_object->SetPosition(pos);
+		game_object->Serializable_SetPosition(pos);
 	}
 
 	auto name_it = desc.params.find(s_GameObjectNameFieldName);
 	if (name_it != desc.params.end())
 	{
-		game_object->SetName(name_it->second);
+		game_object->Serializable_SetName(name_it->second);
 	}
 
 	return game_object;
@@ -76,14 +76,14 @@ void GameObjectSerializer::DeserializeComponents(InlineGameObject& game_object, 
 		std::unique_ptr<ObjectComponent> component = ComponentSerializer::DeserializeComponent(*component_desc);
 		if (component != nullptr)
 		{
-			game_object.AddComponent(std::move(component));
+			game_object.Serializable_AddComponent(std::move(component));
 		}
 	}
 }
 
 void GameObjectSerializer::SerializeChildren(const InlineGameObject& game_object, GameObjectStringDesc& desc)
 {
-	for (const std::unique_ptr<IEditableGameObject>& child : game_object.GetChildren())
+	for (const std::unique_ptr<IEditableGameObject>& child : game_object.Serializable_GetChildren())
 	{
 		desc.children.push_back(SerializeIEditable(*child));
 	}
@@ -93,13 +93,13 @@ void GameObjectSerializer::DeserializeChildren(InlineGameObject& game_object, co
 {
 	for (const std::unique_ptr<GameObjectStringDescProxy>& child : desc.children)
 	{
-		game_object.AddChild(DeserializeIEditable(*child));
+		game_object.Serializable_AddChild(DeserializeIEditable(*child));
 	}
 }
 
 std::unique_ptr<GameObjectStringDescProxy> GameObjectSerializer::SerializeIEditable(const IEditableGameObject& game_object)
 {
-	switch (game_object.GetType())
+	switch (game_object.Serializable_GetType())
 	{
 	case EditableGameObjectType::InlineGameObject:
 	{

@@ -21,42 +21,42 @@ const GameObject& PrefabInstance::GetResult() const
 	return m_ResultGameObject->GetResult();
 }
 
-void PrefabInstance::SetName(const std::string& name)
+void PrefabInstance::Serializable_SetName(const std::string& name)
 {
 	m_Name = name;
-	m_ResultGameObject->SetName(name);
+	m_ResultGameObject->Serializable_SetName(name);
 }
 
-void PrefabInstance::SetSize(const Vector& size)
+void PrefabInstance::Serializable_SetSize(const Vector& size)
 {
 	m_Size = size;
-	m_ResultGameObject->SetSize(size);
+	m_ResultGameObject->Serializable_SetSize(size);
 }
 
-void PrefabInstance::SetPosition(const Vector& position)
+void PrefabInstance::Serializable_SetPosition(const Vector& position)
 {
 	m_Position = position;
-	m_ResultGameObject->SetPosition(position);
+	m_ResultGameObject->Serializable_SetPosition(position);
 }
 
-void PrefabInstance::AddChild(std::unique_ptr<IEditableGameObject> child)
+void PrefabInstance::Serializable_AddChild(std::unique_ptr<IEditableGameObject> child)
 {
 	m_AdditionalChildren.push_back(&child->GetResult());
-	m_ResultGameObject->AddChild(std::move(child));
+	m_ResultGameObject->Serializable_AddChild(std::move(child));
 }
 
-void PrefabInstance::RemoveChild(IEditableGameObject& child)
+void PrefabInstance::Serializable_RemoveChild(IEditableGameObject& child)
 {
-	m_ResultGameObject->RemoveChild(child);
+	m_ResultGameObject->Serializable_RemoveChild(child);
 }
 
-void PrefabInstance::AddComponent(std::unique_ptr<ObjectComponent> component)
+void PrefabInstance::Serializable_AddComponent(std::unique_ptr<ObjectComponent> component)
 {
 	m_AdditionalComponents.push_back(component.get());
-	m_ResultGameObject->AddComponent(std::move(component));
+	m_ResultGameObject->Serializable_AddComponent(std::move(component));
 }
 
-void PrefabInstance::RemoveComponent(size_t index)
+void PrefabInstance::Serializable_RemoveComponent(size_t index)
 {
 	size_t remaining_original_count = m_OriginalComponentCount - m_RemovedComponents.size();
 	if (index >= remaining_original_count)
@@ -69,10 +69,10 @@ void PrefabInstance::RemoveComponent(size_t index)
 		m_RemovedComponents.push_back(index);
 	}
 
-	m_ResultGameObject->RemoveComponent(index);
+	m_ResultGameObject->Serializable_RemoveComponent(index);
 }
 
-void PrefabInstance::ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
+void PrefabInstance::Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
 {
 	FE_ASSERT(change != nullptr, "No change passed");
 
@@ -81,17 +81,17 @@ void PrefabInstance::ModifyComponentField(std::unique_ptr<ComponentFieldChange> 
 	m_ComponentFieldChanges.push_back(std::move(change));
 }
 
-std::vector<std::unique_ptr<IEditableGameObject>>& PrefabInstance::GetChildren()
+std::vector<std::unique_ptr<IEditableGameObject>>& PrefabInstance::Serializable_GetChildren()
 {
-	return m_ResultGameObject->GetChildren();
+	return m_ResultGameObject->Serializable_GetChildren();
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& PrefabInstance::GetChildren() const
+const std::vector<std::unique_ptr<IEditableGameObject>>& PrefabInstance::Serializable_GetChildren() const
 {
-	return m_ResultGameObject->GetChildren();
+	return m_ResultGameObject->Serializable_GetChildren();
 }
 
-EditableGameObjectType PrefabInstance::GetType() const
+EditableGameObjectType PrefabInstance::Serializable_GetType() const
 {
 	return EditableGameObjectType::PrefabInstance;
 }

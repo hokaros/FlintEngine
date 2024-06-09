@@ -46,19 +46,19 @@ void PrefabInstanceSerializer::DeserializeParamOverrides(const PrefabInstanceStr
 
 		if (key == s_NameKey)
 		{
-			prefab_instance.SetName(value);
+			prefab_instance.Serializable_SetName(value);
 		}
 		else if (key == s_PositionKey)
 		{
 			Vector pos;
 			SerializableTypeInterface<Vector>::ParseString(value, pos);
-			prefab_instance.SetPosition(pos);
+			prefab_instance.Serializable_SetPosition(pos);
 		}
 		else if (key == s_SizeKey)
 		{
 			Vector size;
 			SerializableTypeInterface<Vector>::ParseString(value, size);
-			prefab_instance.SetSize(size);
+			prefab_instance.Serializable_SetSize(size);
 		}
 		else
 		{
@@ -79,7 +79,7 @@ void PrefabInstanceSerializer::DeserializeAdditionalComponents(const PrefabInsta
 {
 	for (const std::unique_ptr<ComponentStringDesc>& comp_desc : desc.m_AdditionalComponents)
 	{
-		prefab_instance.AddComponent(ComponentSerializer::DeserializeComponent(*comp_desc));
+		prefab_instance.Serializable_AddComponent(ComponentSerializer::DeserializeComponent(*comp_desc));
 	}
 }
 
