@@ -65,12 +65,12 @@ OcclusionSystem* OcclusionSystem::GetInstance()
 bool OcclusionSystem::ShouldBeRendered(GameObject& go) const
 {
 	// Wyœwietlanie tylko, jeœli obiekt jest widziany przez obecnego gracza
-	if ((go.GetWorldPosition() - m_Player->GetWorldPosition()).LengthSquared() > PLAYER_SIGHT * PLAYER_SIGHT)
+	if ((go.GetWorldPosition() - m_Player->GetTransformable().GetWorldPosition()).LengthSquared() > PLAYER_SIGHT * PLAYER_SIGHT)
 		return false;  // zbyt daleko
 
 	// Sprawdzenie, czy œciana stoi na drodze
 	return !m_Lab->GetColliderMemory().Raycast(
-		m_Player->GetWorldPosition(),
+		m_Player->GetTransformable().GetWorldPosition(),
 		go.GetWorldPosition(),
 		&go
 	);

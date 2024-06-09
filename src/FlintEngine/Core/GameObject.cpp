@@ -145,7 +145,7 @@ void GameObject::Update()
 
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		child->Update();
+		child->GetUpdateable().Update();
 	}
 }
 
@@ -161,7 +161,7 @@ void GameObject::RenderUpdate(SceneRenderer& renderer)
 
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		child->RenderUpdate(renderer);
+		child->GetUpdateable().RenderUpdate(renderer);
 	}
 }
 
@@ -177,7 +177,7 @@ void GameObject::Start()
 
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		child->Start();
+		child->GetUpdateable().Start();
 	}
 }
 
@@ -193,7 +193,7 @@ void GameObject::Awake()
 
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		child->Awake();
+		child->GetUpdateable().Awake();
 	}
 }
 
@@ -206,7 +206,7 @@ void GameObject::OnDestroy()
 
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		child->OnDestroy();
+		child->GetUpdateable().OnDestroy();
 	}
 }
 
@@ -237,7 +237,7 @@ Vector GameObject::GetLocalPosition() const
 	// Position in the parent space
 	if (m_Parent != nullptr)
 	{
-		return m_Parent->InvTransformPoint(self_world_pos);
+		return m_Parent->GetTransformable().InvTransformPoint(self_world_pos);
 	}
 
 	return self_world_pos;
@@ -287,7 +287,7 @@ void GameObject::SetLocalPosition(const Vector& newPosition)
 	if (m_Parent != nullptr)
 	{
 		// Set position in the parent's coordinates
-		wanted_world_pos = m_Parent->TransformPoint(newPosition);
+		wanted_world_pos = m_Parent->GetTransformable().TransformPoint(newPosition);
 	}
 
 	const Vector translation = wanted_world_pos - GetWorldPosition();
@@ -299,6 +299,26 @@ std::unique_ptr<IGameObject> GameObject::Copy() const
 	return std::make_unique<GameObject>(*this);
 }
 
+IUpdateable& GameObject::GetUpdateable()
+{
+	return *this;
+}
+
+const IUpdateable& GameObject::GetUpdateable() const
+{
+	return *this;
+}
+
+ITransformable& GameObject::GetTransformable()
+{
+	return *this;
+}
+
+const ITransformable& GameObject::GetTransformable() const
+{
+	return *this;
+}
+
 void GameObject::Translate(const Vector& offset) 
 {
 	m_Transform.Translate(offset);
@@ -306,7 +326,7 @@ void GameObject::Translate(const Vector& offset)
 	// Moving the children
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		child->Translate(offset);
+		child->GetTransformable().Translate(offset);
 	}
 }
 
@@ -320,9 +340,9 @@ void GameObject::SetWorldScale(const Vector& newScale)
 	// Rozmiar dzieci
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		const Vector& child_size = child->GetWorldScale();
+		const Vector& child_size = child->GetTransformable().GetWorldScale();
 		Vector childNewSize(child_size.x * sizeChange.x, child_size.y * sizeChange.y);
-		child->SetWorldScale(childNewSize);
+		child->GetTransformable().SetWorldScale(childNewSize);
 	}
 }
 
@@ -341,11 +361,11 @@ void GameObject::Rotate(float angle)
 	
 	for (std::unique_ptr<IGameObject>& child : children)
 	{
-		child->Rotate(angle);
+		child->GetTransformable().Rotate(angle);
 
-		const Vector local_pos = child->GetLocalPosition();
-		const Vector target_local_pos = child->GetLocalPosition().GetRotated(DegToRad(angle));
-		child->SetLocalPosition(target_local_pos);
+		const Vector local_pos = child->GetTransformable().GetLocalPosition();
+		const Vector target_local_pos = child->GetTransformable().GetLocalPosition().GetRotated(DegToRad(angle));
+		child->GetTransformable().SetLocalPosition(target_local_pos);
 	}
 
 	m_Transform.Rotate(angle);

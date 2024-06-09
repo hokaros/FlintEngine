@@ -20,7 +20,7 @@ std::optional<Vector> AIPerception::GetPlayerPosition() const
 		return std::nullopt;
 
 	// TODO: AI shouldn't always know where the player is
-	return m_Player->GetWorldPosition();
+	return m_Player->GetTransformable().GetWorldPosition();
 }
 
 double AIPerception::GetDeltaTime() const

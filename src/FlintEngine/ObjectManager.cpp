@@ -19,7 +19,7 @@ void ObjectManager::DestroyObjectImpl(IGameObject* gameObject, bool detach)
 			return;  // ju¿ usuniêty
 	}
 
-	gameObject->OnDestroy();
+	gameObject->GetUpdateable().OnDestroy();
 
 	m_DestroyedObjects.push_back(gameObject); // zakolejkowanie do usuniêcia
 	gameObject->SetEnabled(false);
@@ -119,11 +119,11 @@ void ObjectManager::ActivateNewObjects()
 {
 	for (IGameObject* go : m_NewMessageSubscribers)
 	{
-		go->Awake();
+		go->GetUpdateable().Awake();
 	}
 	for (IGameObject* go : m_NewMessageSubscribers)
 	{
-		go->Start();
+		go->GetUpdateable().Start();
 	}
 
 	m_NewMessageSubscribers.clear();

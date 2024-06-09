@@ -11,7 +11,7 @@ void Scene::Update()
 
 	for (IGameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
-		go->Update();
+		go->GetUpdateable().Update();
 	}
 }
 
@@ -21,7 +21,7 @@ void Scene::Render(SceneRenderer& renderer)
 
 	for (IGameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
-		go->RenderUpdate(renderer);
+		go->GetUpdateable().RenderUpdate(renderer);
 	}
 }
 

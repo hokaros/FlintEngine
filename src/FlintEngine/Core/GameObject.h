@@ -21,6 +21,8 @@ public:
 
 class GameObject
 	: public IGameObject
+	, public ITransformable
+	, public IUpdateable
 {
 public:
 	GameObject();
@@ -53,6 +55,11 @@ public: /* IGameObject */
 	virtual void SetScene(Scene* scene, SceneKey) override;
 
 	virtual std::unique_ptr<IGameObject> Copy() const override;
+
+	virtual IUpdateable& GetUpdateable() override;
+	virtual const IUpdateable& GetUpdateable() const override;
+	virtual ITransformable& GetTransformable() override;
+	virtual const ITransformable& GetTransformable() const override;
 
 public: /* ITransformable */
 	virtual const Vector& GetWorldPosition() const override;

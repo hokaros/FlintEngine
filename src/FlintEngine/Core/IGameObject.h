@@ -15,8 +15,6 @@ private:
 };
 
 class IGameObject
-	: public IUpdateable
-	, public ITransformable
 {
 public:
 	virtual const std::string& GetName() const = 0;
@@ -33,4 +31,9 @@ public:
 	virtual void SetScene(Scene* scene, SceneKey) = 0;
 
 	virtual std::unique_ptr<IGameObject> Copy() const = 0;
+
+	virtual IUpdateable& GetUpdateable() = 0;
+	virtual const IUpdateable& GetUpdateable() const = 0;
+	virtual ITransformable& GetTransformable() = 0;
+	virtual const ITransformable& GetTransformable() const = 0;
 };
