@@ -145,8 +145,8 @@ void PhysicsSystem::DebugDrawColliders() const
 		{
 			color = Rgb8(0xFF, 0xFF, 0xFF);
 		}
-
-		Vector col_min = collider->GetWorldPos();
+		 // TODO: move this to collider
+		Vector col_min = collider->GetWorldPos() - collider->GetWorldSize()/2.f;
 		Vector col_size = collider->GetWorldSize();
 		Rect rect = Rect(col_min, col_size);
 		DebugRenderer::DrawWireRect(rect, color);

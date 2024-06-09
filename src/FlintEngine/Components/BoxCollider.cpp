@@ -45,17 +45,17 @@ void BoxCollider::SetSize(const Vector& size)
 Vector BoxCollider::GetWorldPos() const
 {
 	GameObject& go = GetOwner();
-	return m_Position + go.GetWorldPosition();
+	return go.TransformPoint(m_Position);
 }
 
 Vector BoxCollider::GetWorldMiddle() const
 {
-	return GetWorldPos() + GetWorldSize() / 2.0f;
+	return GetWorldPos();
 }
 
 Vector BoxCollider::GetWorldSize() const
 {
-	return m_Size;
+	return m_Size.GetScaled(GetOwner().GetWorldScale());
 }
 
 void BoxCollider::Awake()
@@ -76,8 +76,8 @@ void BoxCollider::OnDestroy()
 
 bool BoxCollider::DoesIntersect(const BoxCollider& other) const
 {
-	Vector my_pos = GetWorldPos();
-	Vector other_pos = other.GetWorldPos();
+	Vector my_pos = GetWorldPos() - GetWorldSize() / 2.f;
+	Vector other_pos = other.GetWorldPos() - other.GetWorldSize() / 2.f;
 	Vector my_size = GetWorldSize();
 	Vector other_size = other.GetWorldSize();
 
@@ -110,8 +110,8 @@ bool BoxCollider::DoLinesIntersect(float min1, float max1, float min2, float max
 
 bool BoxCollider::IsInside(const BoxCollider& collider1, const BoxCollider& collider2)
 {
-	Vector pos1 = collider1.GetWorldPos();
-	Vector pos2 = collider2.GetWorldPos();
+	Vector pos1 = collider1.GetWorldPos() - collider1.GetWorldSize()/2.f;
+	Vector pos2 = collider2.GetWorldPos() - collider2.GetWorldSize()/2.f;
 	Vector size1 = collider1.GetWorldSize();
 	Vector size2 = collider2.GetWorldSize();
 
@@ -150,8 +150,8 @@ Vector BoxCollider::LinesIntersection(float min1, float max1, float min2, float 
 }
 
 Rect BoxCollider::GetIntersection(const BoxCollider& other) const {
-	Vector my_pos = GetWorldPos();
-	Vector other_pos = other.GetWorldPos();
+	Vector my_pos = GetWorldPos() - GetWorldSize() / 2.f;
+	Vector other_pos = other.GetWorldPos() - other.GetWorldSize() / 2.f;
 	Vector my_size = GetWorldSize();
 	Vector other_size = other.GetWorldSize();
 
