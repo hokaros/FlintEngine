@@ -42,7 +42,6 @@ class Firearm :
 	DECLARE_COMPONENT();
 public:
 	Firearm() = default;
-	Firearm(PrefabRef bulletPrefab, float reloadTime, FirearmType type);
 
 	void Update() override;
 	// Strzela, jeœli prze³adowano
@@ -62,6 +61,9 @@ private:
 
 	FirearmType m_Type = FirearmType::Basic;
 	DECLARE_FIELD(m_Type);
+
+	float m_BulletOffset = 5.0f;
+	DECLARE_FIELD(m_BulletOffset);
 
 	float timeSinceLastShot = INFINITY;
 

@@ -6,14 +6,7 @@ DEFINE_COMPONENT(Firearm);
 DEFINE_FIELD(Firearm, m_BulletPrefab);
 DEFINE_FIELD(Firearm, m_ReloadTime);
 DEFINE_FIELD(Firearm, m_Type);
-
-Firearm::Firearm(PrefabRef bulletPrefab, float reloadTime, FirearmType type)
-	: m_BulletPrefab(bulletPrefab)
-	, m_ReloadTime(reloadTime)
-	, m_Type(type) 
-{
-
-}
+DEFINE_FIELD(Firearm, m_BulletOffset);
 
 void Firearm::Update() 
 {
@@ -33,7 +26,7 @@ bool Firearm::TryShoot()
 	GameObject* bullet = GameObject::Instantiate(*m_BulletPrefab.Get());
 
 	// Ustawienie pozycji
-	Vector relativePos = Vector(Direction::EAST) * m_GameObject->GetWorldScale().x; // TODO: local scale
+	Vector relativePos = Vector(Direction::EAST) * m_BulletOffset;
 	bullet->SetWorldPosition(m_GameObject->TransformPoint(relativePos));
 	// Obrót zgodnie z obrotem broni
 	bullet->Rotate(m_GameObject->GetWorldRotation());
