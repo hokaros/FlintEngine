@@ -125,3 +125,155 @@ const std::vector<ObjectComponent*>& PrefabInstance::GetAdditionalComponents() c
 {
 	return m_AdditionalComponents;
 }
+
+
+const std::string& PrefabInstance::GetName() const
+{
+	return m_ResultGameObject->GetName();
+}
+
+void PrefabInstance::SetName(const std::string& name)
+{
+	Serializable_SetName(name);
+}
+
+IGameObject* PrefabInstance::GetParent() const
+{
+	return m_ResultGameObject->GetParent();
+}
+
+void PrefabInstance::SetParent(IGameObject* parent)
+{
+	m_ResultGameObject->SetParent(parent);
+}
+
+const std::vector<std::unique_ptr<IGameObject>>& PrefabInstance::GetChildren() const
+{
+	return m_ResultGameObject->GetChildren();
+}
+
+void PrefabInstance::MoveChild(IGameObject* child, IGameObjectContainer& new_container)
+{
+	m_ResultGameObject->MoveChild(child, new_container);
+}
+
+void PrefabInstance::SetEnabled(bool enabled)
+{
+	m_ResultGameObject->SetEnabled(enabled);
+}
+
+void PrefabInstance::SetScene(Scene* scene, SceneKey key)
+{
+	m_ResultGameObject->SetScene(scene, key);
+}
+
+std::unique_ptr<IGameObject> PrefabInstance::Copy() const
+{
+	return m_ResultGameObject->Copy();
+}
+
+IUpdateable& PrefabInstance::GetUpdateable()
+{
+	return m_ResultGameObject->GetUpdateable();
+}
+
+const IUpdateable& PrefabInstance::GetUpdateable() const
+{
+	return m_ResultGameObject->GetUpdateable();
+}
+
+ITransformable& PrefabInstance::GetTransformable()
+{
+	return *this;
+}
+
+const ITransformable& PrefabInstance::GetTransformable() const
+{
+	return *this;
+}
+
+
+const Vector& PrefabInstance::GetWorldPosition() const
+{
+	return m_ResultGameObject->GetTransformable().GetWorldPosition();
+}
+
+void PrefabInstance::SetWorldPosition(const Vector& pos)
+{
+	Serializable_SetPosition(pos);
+}
+
+Vector PrefabInstance::GetLocalPosition() const
+{
+	return m_ResultGameObject->GetTransformable().GetLocalPosition();
+}
+
+void PrefabInstance::SetLocalPosition(const Vector& pos)
+{
+	FE_ASSERT(false, "Unimplemented");
+}
+
+void PrefabInstance::Translate(const Vector& offset)
+{
+	const Vector result_pos = GetWorldPosition() + offset;
+	SetWorldPosition(result_pos);
+}
+
+const Vector& PrefabInstance::GetWorldScale() const
+{
+	return m_ResultGameObject->GetTransformable().GetWorldScale();
+}
+
+void PrefabInstance::SetWorldScale(const Vector& scale)
+{
+	Serializable_SetSize(scale);
+}
+
+Vector PrefabInstance::GetLocalScale() const
+{
+	return m_ResultGameObject->GetTransformable().GetLocalScale();
+}
+
+void PrefabInstance::SetLocalScale(const Vector& scale)
+{
+	FE_ASSERT(false, "Unimplemented");
+}
+
+float PrefabInstance::GetWorldRotation() const
+{
+	return m_ResultGameObject->GetTransformable().GetWorldRotation();
+}
+
+void PrefabInstance::SetWorldRotation(float rot)
+{
+	// TODO: serialize rotation
+	m_ResultGameObject->GetTransformable().SetWorldRotation(rot);
+}
+
+float PrefabInstance::GetLocalRotation() const
+{
+	return m_ResultGameObject->GetTransformable().GetLocalRotation();
+}
+
+void PrefabInstance::Rotate(float angle)
+{
+	// TODO: serialize rotation
+	m_ResultGameObject->GetTransformable().Rotate(angle);
+}
+
+void PrefabInstance::LookAt(const Vector& pos)
+{
+	// TODO: serialize rotation
+	m_ResultGameObject->GetTransformable().LookAt(pos);
+}
+
+
+Vector PrefabInstance::TransformPoint(const Vector& local_pos) const
+{
+	return m_ResultGameObject->GetTransformable().TransformPoint(local_pos);
+}
+
+Vector PrefabInstance::InvTransformPoint(const Vector& world_pos) const
+{
+	return m_ResultGameObject->GetTransformable().InvTransformPoint(world_pos);
+}

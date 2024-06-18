@@ -9,6 +9,8 @@ public:
 	InlineGameObject();
 	InlineGameObject(const GameObject& other);
 
+	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object);
+
 public: // IEditableGameObject
 	virtual GameObject& GetResult() override;
 	virtual const GameObject& GetResult() const override;
@@ -28,8 +30,6 @@ public: // IEditableGameObject
 	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() const override;
 
 	virtual EditableGameObjectType Serializable_GetType() const override;
-
-	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object);
 
 public: // IGameObject
 	virtual const std::string& GetName() const override;
