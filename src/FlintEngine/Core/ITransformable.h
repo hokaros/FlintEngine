@@ -29,4 +29,7 @@ public:
 	virtual Vector TransformPoint(const Vector& local_pos) const = 0;
 	// Transforms from world space to local space
 	virtual Vector InvTransformPoint(const Vector& world_pos) const = 0;
+
+public:
+	Vector VectorLocalToWorld(const Vector& local_vector);
 };
