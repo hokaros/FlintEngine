@@ -210,7 +210,8 @@ Vector PrefabInstance::GetLocalPosition() const
 
 void PrefabInstance::SetLocalPosition(const Vector& pos)
 {
-	FE_ASSERT(false, "Unimplemented");
+	m_ResultGameObject->GetTransformable().SetLocalPosition(pos);
+	m_Position = m_ResultGameObject->GetTransformable().GetWorldPosition();
 }
 
 void PrefabInstance::Translate(const Vector& offset)
@@ -236,7 +237,8 @@ Vector PrefabInstance::GetLocalScale() const
 
 void PrefabInstance::SetLocalScale(const Vector& scale)
 {
-	FE_ASSERT(false, "Unimplemented");
+	m_ResultGameObject->GetTransformable().SetLocalScale(scale);
+	m_Size = m_ResultGameObject->GetTransformable().GetWorldScale();
 }
 
 float PrefabInstance::GetWorldRotation() const
