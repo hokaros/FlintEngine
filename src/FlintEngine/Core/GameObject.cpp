@@ -42,6 +42,21 @@ GameObject::GameObject(const GameObject& other)
 	}
 }
 
+std::unique_ptr<GameObject> GameObject::CopyShallow() const
+{
+	std::unique_ptr<GameObject> new_object = std::make_unique<GameObject>(m_Transform);
+	new_object->name = name;
+
+	// Skopiowanie komponentów
+	for (const std::unique_ptr<ObjectComponent>& component : components)
+	{
+		std::unique_ptr<ObjectComponent> cmpCpy = component->Copy();
+		new_object->AddComponent(std::move(cmpCpy));
+	}
+
+	return new_object;
+}
+
 GameObject* GameObject::Instantiate(const Vector& size)
 {
 	ObjectManager* object_manager = ObjectManager::Main();

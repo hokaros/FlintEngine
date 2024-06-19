@@ -84,8 +84,9 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandl
 		size_t i = 0;
 		for (const std::unique_ptr<IGameObject>& child : hierarchy_node->GetSubRootObjects())
 		{
-			IEditableGameObject& editable_child = static_cast<IEditableGameObject&>(*child);
-			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(editable_child, *m_EditedObjectHandle);
+			IEditableGameObject* editable_child = dynamic_cast<IEditableGameObject*>(child.get());
+			FE_ASSERT(editable_child != nullptr, "Child is not an IEditable");
+			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(*editable_child, *m_EditedObjectHandle);
 			std::shared_ptr<EditorUniversalHandle> uni_han = std::make_shared<EditorUniversalHandle>(child_handle);
 			RenderObjectHierarchy(uni_han, hierarchy_node, i++);
 		}

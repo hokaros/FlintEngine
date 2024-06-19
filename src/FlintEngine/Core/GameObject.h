@@ -32,6 +32,8 @@ public:
 	GameObject(const Transform& transform);
 	GameObject(const GameObject& other);
 
+	std::unique_ptr<GameObject> CopyShallow() const;
+
 	static GameObject* Instantiate(const Vector& size);
 	static GameObject* Instantiate(const Vector& size, const Vector& position);
 	static GameObject* Instantiate(const GameObject& other);

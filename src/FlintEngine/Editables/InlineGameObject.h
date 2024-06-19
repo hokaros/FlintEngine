@@ -7,6 +7,7 @@ class InlineGameObject
 public:
 	InlineGameObject();
 	InlineGameObject(const GameObject& other);
+	InlineGameObject(const InlineGameObject& other);
 
 	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object);
 

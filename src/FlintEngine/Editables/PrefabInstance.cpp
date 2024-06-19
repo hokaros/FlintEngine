@@ -152,7 +152,10 @@ void PrefabInstance::SetScene(Scene* scene, SceneKey key)
 
 std::unique_ptr<IGameObject> PrefabInstance::Copy() const
 {
-	return m_ResultGameObject->Copy();
+	std::unique_ptr<PrefabInstance> cpy = std::make_unique<PrefabInstance>(m_PrefabPath);
+	cpy->m_ResultGameObject = std::make_unique<InlineGameObject>(*m_ResultGameObject);
+
+	return cpy;
 }
 
 IUpdateable& PrefabInstance::GetUpdateable()
