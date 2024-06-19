@@ -83,7 +83,25 @@ void GameObject::Destroy(GameObject* game_object)
 	ObjectManager::Main()->DestroyObject(game_object);
 }
 
-void GameObject::AddComponent(std::unique_ptr<ObjectComponent> component) 
+void GameObject::RemoveChild(IGameObject& child)
+{
+	for (auto it = children.begin(); it != children.end(); it++)
+	{
+		std::unique_ptr<IGameObject>& c = *it;
+		if (c.get() == &child)
+		{
+			children.erase(it);
+			return;
+		}
+	}
+}
+
+std::vector<std::unique_ptr<IGameObject>>& GameObject::GetChildren()
+{
+	return children;
+}
+
+void GameObject::AddComponent(std::unique_ptr<ObjectComponent> component)
 {
 	component->SetOwner(this);
 	components.push_back(std::move(component));

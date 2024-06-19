@@ -21,7 +21,7 @@ public:
 	void RemoveComponent(size_t component_index);
 
 	// IHierarchyEditable
-	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& GetSubRootObjects() const override;
+	virtual const std::vector<std::unique_ptr<IGameObject>>& GetSubRootObjects() const override;
 	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
 	virtual void DeleteChild(IEditableGameObject& child) override;
 	virtual const char* GetName() const override;

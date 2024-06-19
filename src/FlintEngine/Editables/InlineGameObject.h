@@ -21,8 +21,8 @@ public: // IEditableGameObject
 	virtual void Serializable_RemoveComponent(size_t index) override;
 	virtual void Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) override;
 
-	virtual std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() override;
-	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() const override;
+	virtual std::vector<std::unique_ptr<IGameObject>>& Serializable_GetChildren() override;
+	virtual const std::vector<std::unique_ptr<IGameObject>>& Serializable_GetChildren() const override;
 
 	virtual EditableGameObjectType Serializable_GetType() const override;
 
@@ -49,7 +49,5 @@ public: // IGameObject
 
 private:
 	std::unique_ptr<GameObject> m_GameObject;
-
-	std::vector<std::unique_ptr<IEditableGameObject>> m_ChildrenEditables;
 };
 

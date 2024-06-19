@@ -10,8 +10,8 @@ public:
 	std::unique_ptr<Scene> CreateRuntimeObject() const;
 
 	void AddRootObject(std::unique_ptr<IEditableGameObject> game_object);
-	void RemoveRootObject(IEditableGameObject& game_object);
-	const std::vector<std::unique_ptr<IEditableGameObject>>& GetRootObjects() const;
+	void RemoveRootObject(IGameObject& game_object);
+	const std::vector<std::unique_ptr<IGameObject>>& GetRootObjects() const;
 
 	void SetBackgroundColor(const Rgb8& color);
 	const Rgb8& GetBackgroundColor() const;
@@ -20,7 +20,7 @@ private:
 	void CopyObjectsToScene(Scene& scene) const;
 
 private:
-	std::vector<std::unique_ptr<IEditableGameObject>> m_RootObjects;
+	std::vector<std::unique_ptr<IGameObject>> m_RootObjects;
 	Rgb8 m_BackgroundColor = Rgb8(200, 200, 200);
 
 	Scene m_ResultScene;

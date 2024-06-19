@@ -22,9 +22,10 @@ std::unique_ptr<EditableScene> SceneSerializer::Deserialize(const SceneStringDes
 
 void SceneSerializer::SerializeGameObjects(const EditableScene& scene, SceneStringDesc& scene_serialized)
 {
-    for (const std::unique_ptr<IEditableGameObject>& go : scene.GetRootObjects())
+    for (const std::unique_ptr<IGameObject>& go : scene.GetRootObjects())
     {
-        std::unique_ptr<GameObjectStringDescProxy> go_serialized = GameObjectSerializer::SerializeIEditable(*go);
+        const IEditableGameObject& editable_go = static_cast<const IEditableGameObject&>(*go);
+        std::unique_ptr<GameObjectStringDescProxy> go_serialized = GameObjectSerializer::SerializeIEditable(editable_go);
         scene_serialized.game_objects.push_back(std::move(go_serialized));
     }
 }

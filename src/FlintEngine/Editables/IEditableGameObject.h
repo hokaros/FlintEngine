@@ -46,6 +46,7 @@ class IEditableGameObject
 	: public IGameObject
 {
 public:
+	// TODO: remove
 	virtual GameObject& GetResult() = 0; // Please don't recalculate it on every GetResult() call.
 	virtual const GameObject& GetResult() const = 0;
 
@@ -56,15 +57,15 @@ public:
 	virtual void Serializable_RemoveComponent(size_t index) = 0;
 	virtual void Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;
 
-	virtual std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() = 0;
-	virtual const std::vector<std::unique_ptr<IEditableGameObject>>& Serializable_GetChildren() const = 0;
+	virtual std::vector<std::unique_ptr<IGameObject>>& Serializable_GetChildren() = 0;
+	virtual const std::vector<std::unique_ptr<IGameObject>>& Serializable_GetChildren() const = 0;
 
 	virtual EditableGameObjectType Serializable_GetType() const = 0;
 
 	virtual ~IEditableGameObject() = default;
 
 	static void CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest);
-	static void RenderUpdate(IEditableGameObject& editable, SceneRenderer& renderer);
+	static void RenderUpdate(IEditableGameObject& editable, SceneRenderer& renderer); // TODO: remove
 };
 
 template<typename ValueT>

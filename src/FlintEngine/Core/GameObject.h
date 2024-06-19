@@ -100,6 +100,10 @@ public: /* IUpdateable */
 	virtual void OnDestroy() override;
 
 	//
+	// TODO: add to IGameObject interface
+	void RemoveChild(IGameObject& child);
+	std::vector<std::unique_ptr<IGameObject>>& GetChildren(); // TODO: remove
+
 	void AddComponent(std::unique_ptr<ObjectComponent> component);
 	void RemoveComponent(ObjectComponent* component);
 	void RemoveComponent(size_t component_index);

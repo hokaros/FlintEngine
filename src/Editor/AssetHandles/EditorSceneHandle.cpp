@@ -36,7 +36,7 @@ void EditorSceneHandle::OnUnsavedChange()
     m_HasUnsavedChanges = true;
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& EditorSceneHandle::GetSubRootObjects() const
+const std::vector<std::unique_ptr<IGameObject>>& EditorSceneHandle::GetSubRootObjects() const
 {
     return m_Scene->GetRootObjects();
 }

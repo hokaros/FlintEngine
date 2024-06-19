@@ -63,12 +63,12 @@ void PrefabInstance::Serializable_ModifyComponentField(std::unique_ptr<Component
 	m_ComponentFieldChanges.push_back(std::move(change));
 }
 
-std::vector<std::unique_ptr<IEditableGameObject>>& PrefabInstance::Serializable_GetChildren()
+std::vector<std::unique_ptr<IGameObject>>& PrefabInstance::Serializable_GetChildren()
 {
 	return m_ResultGameObject->Serializable_GetChildren();
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& PrefabInstance::Serializable_GetChildren() const
+const std::vector<std::unique_ptr<IGameObject>>& PrefabInstance::Serializable_GetChildren() const
 {
 	return m_ResultGameObject->Serializable_GetChildren();
 }

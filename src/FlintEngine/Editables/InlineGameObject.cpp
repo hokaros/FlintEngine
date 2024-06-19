@@ -22,20 +22,12 @@ const GameObject& InlineGameObject::GetResult() const
 
 void InlineGameObject::Serializable_AddChild(std::unique_ptr<IEditableGameObject> child)
 {
-	m_ChildrenEditables.push_back(std::move(child));
+	m_GameObject->AddChild(std::move(child));
 }
 
 void InlineGameObject::Serializable_RemoveChild(IEditableGameObject& child)
 {
-	for (auto it = m_ChildrenEditables.begin(); it != m_ChildrenEditables.end(); it++)
-	{
-		std::unique_ptr<IEditableGameObject>& c = *it;
-		if (c.get() == &child)
-		{
-			m_ChildrenEditables.erase(it);
-			return;
-		}
-	}
+	m_GameObject->RemoveChild(child);
 }
 
 void InlineGameObject::Serializable_AddComponent(std::unique_ptr<ObjectComponent> component)
@@ -55,14 +47,14 @@ void InlineGameObject::Serializable_ModifyComponentField(std::unique_ptr<Compone
 	change->field->SetFieldValue(change->component, change->GetValue());
 }
 
-std::vector<std::unique_ptr<IEditableGameObject>>& InlineGameObject::Serializable_GetChildren()
+std::vector<std::unique_ptr<IGameObject>>& InlineGameObject::Serializable_GetChildren()
 {
-	return m_ChildrenEditables;
+	return m_GameObject->GetChildren();
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& InlineGameObject::Serializable_GetChildren() const
+const std::vector<std::unique_ptr<IGameObject>>& InlineGameObject::Serializable_GetChildren() const
 {
-	return m_ChildrenEditables;
+	return m_GameObject->GetChildren();
 }
 
 EditableGameObjectType InlineGameObject::Serializable_GetType() const

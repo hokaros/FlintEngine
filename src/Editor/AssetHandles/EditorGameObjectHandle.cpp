@@ -45,7 +45,7 @@ void EditorGameObjectHandle::RemoveComponent(size_t component_index)
     OnUnsavedChange();
 }
 
-const std::vector<std::unique_ptr<IEditableGameObject>>& EditorGameObjectHandle::GetSubRootObjects() const
+const std::vector<std::unique_ptr<IGameObject>>& EditorGameObjectHandle::GetSubRootObjects() const
 {
     return GetGameObject().Serializable_GetChildren();
 }
