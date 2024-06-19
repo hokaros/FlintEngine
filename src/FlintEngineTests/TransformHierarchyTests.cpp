@@ -54,4 +54,29 @@ TEST(SUITE_NAME, ParentRotationRotatesAndTranslatesChild)
 	ASSERT_EQ(in_rotation, child_object.GetWorldRotation());
 }
 
+TEST(SUITE_NAME, SetLocalPositionDoesNotChangeRotationOrScale)
+{
+	// Arrange
+	const Vector parent_pos = Vector(-1, 2.5f);
+	const float parent_rotation = 45.f;
+	const Vector parent_scale = Vector(1.25f, 3.7f);
+	const Transform parent_transform = Transform(parent_pos, parent_rotation, parent_scale);
+
+	const Vector child_pos = parent_transform.TransformPoint(Vector(2.f, 2.6f));
+	const float child_start_rot = 27.f;
+	const Vector child_start_scale = Vector(0.5f, 0.4f);
+	const Transform child_transform = Transform(child_pos, child_start_rot, child_start_scale);
+
+	GameObject parent_object = GameObject(parent_transform);
+	parent_object.AddChild(std::make_unique<GameObject>(child_transform));
+	GameObject& child_object = static_cast<GameObject&>(*(parent_object.GetChildren()[0]));
+
+	// Act
+	child_object.SetLocalPosition(Vector(-50.f, -50.f));
+
+	// Assert
+	ASSERT_EQ(child_start_rot, child_object.GetWorldRotation());
+	ASSERT_VEC_EQ(child_start_scale, child_object.GetWorldScale());
+}
+
 #undef SUITE_NAME
