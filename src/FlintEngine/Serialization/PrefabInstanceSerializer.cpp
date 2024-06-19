@@ -46,19 +46,19 @@ void PrefabInstanceSerializer::DeserializeParamOverrides(const PrefabInstanceStr
 
 		if (key == s_NameKey)
 		{
-			prefab_instance.Serializable_SetName(value);
+			prefab_instance.SetName(value);
 		}
 		else if (key == s_PositionKey)
 		{
 			Vector pos;
 			SerializableTypeInterface<Vector>::ParseString(value, pos);
-			prefab_instance.Serializable_SetPosition(pos);
+			prefab_instance.GetTransformable().SetWorldPosition(pos);
 		}
 		else if (key == s_SizeKey)
 		{
 			Vector size;
 			SerializableTypeInterface<Vector>::ParseString(value, size);
-			prefab_instance.Serializable_SetSize(size);
+			prefab_instance.GetTransformable().SetWorldScale(size);
 		}
 		else
 		{

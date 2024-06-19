@@ -33,7 +33,7 @@ TEST(SUITE_NAME, AddsSingleInlineObject)
 	const std::string object_name = "My unique inline game object";
 
 	std::unique_ptr<InlineGameObject> game_object = std::make_unique<InlineGameObject>();
-	game_object->Serializable_SetName(object_name);
+	game_object->SetName(object_name);
 
 	EditableScene editable_scene;
 	editable_scene.AddRootObject(std::move(game_object));
@@ -60,7 +60,7 @@ TEST(SUITE_NAME, AddsSinglePrefabInstance)
 	asset_manager.SetPrefabToReturn(&dummy_prefab);
 
 	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
-	prefab_instance->Serializable_SetName(object_name);
+	prefab_instance->SetName(object_name);
 
 	EditableScene editable_scene;
 	editable_scene.AddRootObject(std::move(prefab_instance));
@@ -83,10 +83,10 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	const std::string child_object_name = "Sweet child o' mine";
 
 	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
-	editable_root_object->Serializable_SetName(root_object_name);
+	editable_root_object->SetName(root_object_name);
 
 	std::unique_ptr<InlineGameObject> editable_child = std::make_unique<InlineGameObject>();
-	editable_child->Serializable_SetName(child_object_name);
+	editable_child->SetName(child_object_name);
 	editable_root_object->Serializable_AddChild(std::move(editable_child));
 
 	EditableScene editable_scene;
@@ -120,10 +120,10 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	asset_manager.SetPrefabToReturn(&dummy_prefab);
 
 	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
-	editable_root_object->Serializable_SetName(root_object_name);
+	editable_root_object->SetName(root_object_name);
 
 	std::unique_ptr<PrefabInstance> prefab_instance_child = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
-	prefab_instance_child->Serializable_SetName(child_object_name);
+	prefab_instance_child->SetName(child_object_name);
 	editable_root_object->Serializable_AddChild(std::move(prefab_instance_child));
 
 	EditableScene editable_scene;

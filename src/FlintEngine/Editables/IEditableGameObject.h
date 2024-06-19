@@ -43,14 +43,11 @@ enum class EditableGameObjectType
 
 // Interface for GameObject wrappers suited for editing within the Editor
 class IEditableGameObject
+	: public IGameObject
 {
 public:
 	virtual GameObject& GetResult() = 0; // Please don't recalculate it on every GetResult() call.
 	virtual const GameObject& GetResult() const = 0;
-
-	virtual void Serializable_SetName(const std::string& name) = 0;
-	virtual void Serializable_SetSize(const Vector& size) = 0;
-	virtual void Serializable_SetPosition(const Vector& position) = 0;
 
 	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) = 0;
 	virtual void Serializable_RemoveChild(IEditableGameObject& child) = 0;

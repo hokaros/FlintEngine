@@ -48,7 +48,7 @@ std::unique_ptr<InlineGameObject> GameObjectSerializer::DeserializePureGameObjec
 		Vector size;
 		STI<Vector>::ParseString(size_it->second, size);
 
-		game_object->Serializable_SetSize(size);
+		game_object->GetTransformable().SetWorldScale(size);
 	}
 
 	auto pos_it = desc.params.find(s_GameObjectPositionFieldName);
@@ -57,13 +57,13 @@ std::unique_ptr<InlineGameObject> GameObjectSerializer::DeserializePureGameObjec
 		Vector pos;
 		STI<Vector>::ParseString(pos_it->second, pos);
 
-		game_object->Serializable_SetPosition(pos);
+		game_object->GetTransformable().SetWorldPosition(pos);
 	}
 
 	auto name_it = desc.params.find(s_GameObjectNameFieldName);
 	if (name_it != desc.params.end())
 	{
-		game_object->Serializable_SetName(name_it->second);
+		game_object->SetName(name_it->second);
 	}
 
 	return game_object;

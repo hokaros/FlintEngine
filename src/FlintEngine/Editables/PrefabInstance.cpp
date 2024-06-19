@@ -21,24 +21,6 @@ const GameObject& PrefabInstance::GetResult() const
 	return m_ResultGameObject->GetResult();
 }
 
-void PrefabInstance::Serializable_SetName(const std::string& name)
-{
-	m_Name = name;
-	m_ResultGameObject->Serializable_SetName(name);
-}
-
-void PrefabInstance::Serializable_SetSize(const Vector& size)
-{
-	m_Size = size;
-	m_ResultGameObject->Serializable_SetSize(size);
-}
-
-void PrefabInstance::Serializable_SetPosition(const Vector& position)
-{
-	m_Position = position;
-	m_ResultGameObject->Serializable_SetPosition(position);
-}
-
 void PrefabInstance::Serializable_AddChild(std::unique_ptr<IEditableGameObject> child)
 {
 	m_AdditionalChildren.push_back(&child->GetResult());
@@ -134,7 +116,8 @@ const std::string& PrefabInstance::GetName() const
 
 void PrefabInstance::SetName(const std::string& name)
 {
-	Serializable_SetName(name);
+	m_Name = name;
+	m_ResultGameObject->SetName(name);
 }
 
 IGameObject* PrefabInstance::GetParent() const
@@ -200,7 +183,8 @@ const Vector& PrefabInstance::GetWorldPosition() const
 
 void PrefabInstance::SetWorldPosition(const Vector& pos)
 {
-	Serializable_SetPosition(pos);
+	m_Position = pos;
+	m_ResultGameObject->GetTransformable().SetWorldPosition(pos);
 }
 
 Vector PrefabInstance::GetLocalPosition() const
@@ -227,7 +211,8 @@ const Vector& PrefabInstance::GetWorldScale() const
 
 void PrefabInstance::SetWorldScale(const Vector& scale)
 {
-	Serializable_SetSize(scale);
+	m_Size = scale;
+	m_ResultGameObject->GetTransformable().SetWorldScale(scale);
 }
 
 Vector PrefabInstance::GetLocalScale() const

@@ -11,19 +11,19 @@ const GameObject& EditorGameObjectHandle::GetResult() const
 
 void EditorGameObjectHandle::SetPosition(const Vector& pos)
 {
-    GetGameObject().Serializable_SetPosition(pos);
+    GetGameObject().GetTransformable().SetWorldPosition(pos);
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::SetSize(const Vector& size)
 {
-    GetGameObject().Serializable_SetSize(size);
+    GetGameObject().GetTransformable().SetWorldScale(size);
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::SetName(const std::string& name)
 {
-    GetGameObject().Serializable_SetName(name);
+    GetGameObject().SetName(name);
     OnUnsavedChange();
 }
 

@@ -20,21 +20,6 @@ const GameObject& InlineGameObject::GetResult() const
 	return *m_GameObject;
 }
 
-void InlineGameObject::Serializable_SetName(const std::string& name)
-{
-	m_GameObject->SetName(name);
-}
-
-void InlineGameObject::Serializable_SetSize(const Vector& size)
-{
-	m_GameObject->SetWorldScale(size);
-}
-
-void InlineGameObject::Serializable_SetPosition(const Vector& position)
-{
-	m_GameObject->SetWorldPosition(position);
-}
-
 void InlineGameObject::Serializable_AddChild(std::unique_ptr<IEditableGameObject> child)
 {
 	m_ChildrenEditables.push_back(std::move(child));

@@ -3,7 +3,6 @@
 
 class InlineGameObject
     : public IEditableGameObject
-	, public IGameObject
 {
 public:
 	InlineGameObject();
@@ -14,10 +13,6 @@ public:
 public: // IEditableGameObject
 	virtual GameObject& GetResult() override;
 	virtual const GameObject& GetResult() const override;
-
-	virtual void Serializable_SetName(const std::string& name) override; // TODO: remove
-	virtual void Serializable_SetSize(const Vector& size) override; // TODO: remove
-	virtual void Serializable_SetPosition(const Vector& position) override; // TODO: remove
 
 	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) override;
 	virtual void Serializable_RemoveChild(IEditableGameObject& child) override;

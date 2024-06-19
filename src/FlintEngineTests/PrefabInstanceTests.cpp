@@ -25,9 +25,9 @@ TEST(SUITE_NAME, SetsNamePositionAndSize)
 	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 
 	// Act
-	prefab_instance->Serializable_SetName(overriding_name);
-	prefab_instance->Serializable_SetPosition(overriding_pos);
-	prefab_instance->Serializable_SetSize(overriding_size);
+	prefab_instance->SetName(overriding_name);
+	prefab_instance->SetWorldPosition(overriding_pos);
+	prefab_instance->SetWorldScale(overriding_size);
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
@@ -52,7 +52,7 @@ TEST(SUITE_NAME, KeepsNameAndPositionIfNotOverriden)
 	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 
 	// Act
-	prefab_instance->Serializable_SetSize(overriding_size);
+	prefab_instance->SetWorldScale(overriding_size);
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
