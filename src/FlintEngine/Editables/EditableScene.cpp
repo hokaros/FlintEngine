@@ -59,10 +59,7 @@ void EditableScene::CopyObjectsToScene(Scene& scene) const
 {
 	for (const std::unique_ptr<IGameObject>& object : m_RootObjects)
 	{
-		const IEditableGameObject& editable_object = static_cast<const IEditableGameObject&>(*object);
-		std::unique_ptr<GameObject> runtime_object = std::make_unique<GameObject>(editable_object.GetResult()); // copy
-
-		IEditableGameObject::CopyChildrenToRuntimeObject(editable_object, *runtime_object);
+		std::unique_ptr<IGameObject> runtime_object = object->Copy();
 
 		scene.AddGameObject(std::move(runtime_object));
 	}

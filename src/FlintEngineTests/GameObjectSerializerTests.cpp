@@ -17,7 +17,7 @@ TEST(GameObjectSerializer, DeserializesSizePositionAndName)
 	std::unique_ptr<InlineGameObject> deserialized = GameObjectSerializer::DeserializeGameObject(serialized);
 
 	// Assert
-	EXPECT_EQ(deserialized->GetResult().GetWorldPosition(), pos);
-	EXPECT_EQ(deserialized->GetResult().GetWorldScale(), size);
-	EXPECT_EQ(deserialized->GetResult().GetName(), name);
+	EXPECT_EQ(deserialized->GetTransformable().GetWorldPosition(), pos);
+	EXPECT_EQ(deserialized->GetTransformable().GetWorldScale(), size);
+	EXPECT_EQ(deserialized->GetName(), name);
 }

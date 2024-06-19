@@ -124,13 +124,13 @@ void SceneEditor::MoveViewportToSelectedGameObject()
 	if (go_handle == nullptr)
 		return;
 
-	MoveViewportToGameObject(go_handle->GetResult());
+	MoveViewportToGameObject(go_handle->GetGameObject());
 }
 
-void SceneEditor::MoveViewportToGameObject(const GameObject& object)
+void SceneEditor::MoveViewportToGameObject(const IGameObject& object)
 {
-	const Vector& new_position = object.GetWorldPosition();
-	const Vector& new_size = object.GetWorldScale();
+	const Vector& new_position = object.GetTransformable().GetWorldPosition();
+	const Vector& new_size = object.GetTransformable().GetWorldScale();
 
 	Rect new_viewport = Rect(new_position, new_size);
 

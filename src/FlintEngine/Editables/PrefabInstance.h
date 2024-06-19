@@ -19,8 +19,8 @@ public:
 	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object);
 
 public: // IEditableGameObject
-	virtual GameObject& GetResult() override;
-	virtual const GameObject& GetResult() const override;
+	virtual GameObject& GetResult_Depr() override;
+	virtual const GameObject& GetResult_Depr() const override;
 
 	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) override;
 	virtual void Serializable_RemoveChild(IEditableGameObject& child) override;
@@ -90,7 +90,7 @@ private:
 	std::optional<Vector> m_Size;
 	std::optional<Vector> m_Position;
 
-	std::vector<GameObject*> m_AdditionalChildren;
+	std::vector<IEditableGameObject*> m_AdditionalChildren;
 
 	size_t m_OriginalComponentCount;
 	std::vector<ObjectComponent*> m_AdditionalComponents;

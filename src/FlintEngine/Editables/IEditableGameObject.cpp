@@ -6,7 +6,7 @@ void IEditableGameObject::CopyChildrenToRuntimeObject(const IEditableGameObject&
 	{
 		const IEditableGameObject* editable_child = dynamic_cast<const IEditableGameObject*>(child.get());
 		// TODO: don't require IEditableGameObject here
-		std::unique_ptr<GameObject> runtime_child = std::make_unique<GameObject>(editable_child->GetResult());
+		std::unique_ptr<GameObject> runtime_child = std::make_unique<GameObject>(editable_child->GetResult_Depr());
 
 		CopyChildrenToRuntimeObject(*editable_child, *runtime_child);
 

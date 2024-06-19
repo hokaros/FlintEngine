@@ -9,7 +9,7 @@ class EditorGameObjectHandle
 {
 public:
 	virtual IEditableGameObject& GetGameObject() const = 0;
-	const GameObject& GetResult() const;
+	const GameObject& GetResult_Depr() const;
 
 	// Modifying the underlying object
 	void SetPosition(const Vector& pos);

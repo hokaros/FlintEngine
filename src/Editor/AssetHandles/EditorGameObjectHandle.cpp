@@ -4,9 +4,9 @@
 #include <AssetManager.h>
 
 
-const GameObject& EditorGameObjectHandle::GetResult() const
+const GameObject& EditorGameObjectHandle::GetResult_Depr() const
 {
-    return GetGameObject().GetResult();
+    return GetGameObject().GetResult_Depr();
 }
 
 void EditorGameObjectHandle::SetPosition(const Vector& pos)
@@ -64,7 +64,7 @@ void EditorGameObjectHandle::DeleteChild(IEditableGameObject& child)
 
 const char* EditorGameObjectHandle::GetName() const
 {
-    return GetGameObject().GetResult().GetName().c_str();
+    return GetGameObject().GetName().c_str();
 }
 
 bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) const

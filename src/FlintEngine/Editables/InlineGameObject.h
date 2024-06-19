@@ -11,8 +11,8 @@ public:
 	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object);
 
 public: // IEditableGameObject
-	virtual GameObject& GetResult() override;
-	virtual const GameObject& GetResult() const override;
+	virtual GameObject& GetResult_Depr() override;
+	virtual const GameObject& GetResult_Depr() const override;
 
 	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) override;
 	virtual void Serializable_RemoveChild(IEditableGameObject& child) override;

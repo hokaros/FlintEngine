@@ -47,8 +47,8 @@ class IEditableGameObject
 {
 public:
 	// TODO: remove
-	virtual GameObject& GetResult() = 0; // Please don't recalculate it on every GetResult() call.
-	virtual const GameObject& GetResult() const = 0;
+	virtual GameObject& GetResult_Depr() = 0; // Please don't recalculate it on every GetResult() call.
+	virtual const GameObject& GetResult_Depr() const = 0;
 
 	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) = 0;
 	virtual void Serializable_RemoveChild(IEditableGameObject& child) = 0;

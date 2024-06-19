@@ -21,7 +21,7 @@ void GameObjectPropertyEditor::SetGameObject(std::weak_ptr<EditorUniversalHandle
     if (go_handle == nullptr)
         return;
 
-    const GameObject& go = go_handle->GetResult();
+    const GameObject& go = go_handle->GetResult_Depr();
     InitValuesFromGameObject(go);
     LoadComponents(*go_handle);
 
@@ -90,7 +90,7 @@ void GameObjectPropertyEditor::LoadComponents(EditorGameObjectHandle& game_objec
     m_ComponentEditors.clear();
 
     size_t component_idx = 0;
-    for (const std::unique_ptr<ObjectComponent>& component : game_object.GetResult().GetAllComponents())
+    for (const std::unique_ptr<ObjectComponent>& component : game_object.GetResult_Depr().GetAllComponents())
     {
         std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(game_object, *component, component_idx);
         comp_editor->RegisterActionObserver(this);
@@ -123,19 +123,19 @@ void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_o
 void GameObjectPropertyEditor::ApplyValuesToGameObject(EditorGameObjectHandle& game_object)
 {
     Vector target_position = Vector(m_GameObjectPosition);
-    if (game_object.GetResult().GetWorldPosition() != target_position)
+    if (game_object.GetGameObject().GetTransformable().GetWorldPosition() != target_position)
     {
         game_object.SetPosition(target_position);
     }
 
     Vector target_size = Vector(m_GameObjectSize);
-    if (game_object.GetResult().GetWorldScale() != target_size)
+    if (game_object.GetGameObject().GetTransformable().GetWorldScale() != target_size)
     {
         game_object.SetSize(target_size);
     }
 
     std::string target_name = std::string(m_GameObjectName);
-    if (game_object.GetResult().GetName() != target_name)
+    if (game_object.GetGameObject().GetName() != target_name)
     {
         game_object.SetName(target_name);
     }

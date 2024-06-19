@@ -10,12 +10,12 @@ InlineGameObject::InlineGameObject(const GameObject& other)
 {
 }
 
-GameObject& InlineGameObject::GetResult()
+GameObject& InlineGameObject::GetResult_Depr()
 {
 	return *m_GameObject;
 }
 
-const GameObject& InlineGameObject::GetResult() const
+const GameObject& InlineGameObject::GetResult_Depr() const
 {
 	return *m_GameObject;
 }
@@ -67,7 +67,6 @@ std::unique_ptr<GameObject> InlineGameObject::ToRuntimeObject(std::unique_ptr<In
 	if (editable_object == nullptr)
 		return nullptr;
 
-	CopyChildrenToRuntimeObject(*editable_object, editable_object->GetResult());
 	return std::move(editable_object->m_GameObject);
 }
 

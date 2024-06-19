@@ -11,19 +11,19 @@ PrefabInstance::PrefabInstance(const std::string& prefab_path)
 	m_ResultGameObject = std::make_unique<InlineGameObject>(*prefab);
 }
 
-GameObject& PrefabInstance::GetResult()
+GameObject& PrefabInstance::GetResult_Depr()
 {
-	return m_ResultGameObject->GetResult();
+	return m_ResultGameObject->GetResult_Depr();
 }
 
-const GameObject& PrefabInstance::GetResult() const
+const GameObject& PrefabInstance::GetResult_Depr() const
 {
-	return m_ResultGameObject->GetResult();
+	return m_ResultGameObject->GetResult_Depr();
 }
 
 void PrefabInstance::Serializable_AddChild(std::unique_ptr<IEditableGameObject> child)
 {
-	m_AdditionalChildren.push_back(&child->GetResult());
+	m_AdditionalChildren.push_back(child.get());
 	m_ResultGameObject->Serializable_AddChild(std::move(child));
 }
 

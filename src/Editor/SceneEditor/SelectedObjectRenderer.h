@@ -7,7 +7,7 @@ public:
 	static void Render(SelectedObjectManager& selection_manager, SceneRenderer& renderer);
 
 private:
-	static void RenderGameObject(GameObject& game_object, SceneRenderer& renderer);
+	static void RenderGameObject(IGameObject& game_object, SceneRenderer& renderer);
 
 private:
 	static constexpr uint SELECTION_RENDER_LAYER = UINT32_MAX;

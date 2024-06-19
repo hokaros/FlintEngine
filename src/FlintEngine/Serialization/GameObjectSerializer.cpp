@@ -20,9 +20,9 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 {
 	std::unique_ptr<GameObjectStringDesc> go_serialized = std::make_unique<GameObjectStringDesc>();
 
-	go_serialized->params.insert({ s_GameObjectNameFieldName, game_object.GetResult().GetName() });
-	go_serialized->params.insert({ s_GameObjectSizeFieldName, STI<Vector>::ToString(game_object.GetResult().GetWorldScale()) });
-	go_serialized->params.insert({ s_GameObjectPositionFieldName, STI<Vector>::ToString(game_object.GetResult().GetWorldPosition()) });
+	go_serialized->params.insert({ s_GameObjectNameFieldName, game_object.GetName() });
+	go_serialized->params.insert({ s_GameObjectSizeFieldName, STI<Vector>::ToString(game_object.GetTransformable().GetWorldScale()) });
+	go_serialized->params.insert({ s_GameObjectPositionFieldName, STI<Vector>::ToString(game_object.GetTransformable().GetWorldPosition()) });
 
 	SerializeComponents(game_object, *go_serialized);
 	SerializeChildren(game_object, *go_serialized);
@@ -32,7 +32,7 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 
 void GameObjectSerializer::SerializeComponents(const InlineGameObject& game_object, GameObjectStringDesc& desc)
 {
-	for (const std::unique_ptr<ObjectComponent>& component : game_object.GetResult().GetAllComponents())
+	for (const std::unique_ptr<ObjectComponent>& component : game_object.GetResult_Depr().GetAllComponents())
 	{
 		desc.components.push_back(ComponentSerializer::SerializeComponent(*component));
 	}
