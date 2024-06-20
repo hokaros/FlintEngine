@@ -40,13 +40,6 @@ const GameObject& InlineGameObject::GetResult_Depr() const
 	return *m_GameObject;
 }
 
-void InlineGameObject::Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
-{
-	FE_ASSERT(change != nullptr, "No change passed");
-
-	change->field->SetFieldValue(change->component, change->GetValue());
-}
-
 EditableGameObjectType InlineGameObject::Serializable_GetType() const
 {
 	return EditableGameObjectType::InlineGameObject;
@@ -115,6 +108,11 @@ void InlineGameObject::AddComponent(std::unique_ptr<ObjectComponent> component)
 void InlineGameObject::RemoveComponent(size_t component_index)
 {
 	m_GameObject->RemoveComponent(component_index);
+}
+
+void InlineGameObject::ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
+{
+	m_GameObject->ModifyComponentField(std::move(change));
 }
 
 void InlineGameObject::SetEnabled(bool enabled)

@@ -1,7 +1,8 @@
 #include "GameObject.h"
 #include "ObjectComponent.h"
-#include "ObjectManager.h"
-#include "AssetManager.h"
+#include <ObjectManager.h>
+#include <AssetManager.h>
+#include <ComponentFieldDefinition.h>
 
 GameObject::GameObject()
 	: GameObject(Vector(1,1))
@@ -138,6 +139,13 @@ void GameObject::RemoveComponent(ObjectComponent* component)
 void GameObject::RemoveComponent(size_t component_index)
 {
 	RemoveComponent(GetComponent(component_index));
+}
+
+void GameObject::ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
+{
+	FE_ASSERT(change != nullptr, "No change passed");
+
+	change->field->SetFieldValue(change->component, change->GetValue());
 }
 
 std::vector<std::unique_ptr<ObjectComponent>>& GameObject::GetAllComponents()

@@ -127,7 +127,7 @@ TEST(SUITE_NAME, ModifiesComponent)
 	field_change->component = instance_component;
 	field_change->field = &instance_component->GetFieldDefinition_m_Size();
 	field_change->SetValue(overriding_size);
-	prefab_instance->Serializable_ModifyComponentField(std::move(field_change));
+	prefab_instance->ModifyComponentField(std::move(field_change));
 
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 

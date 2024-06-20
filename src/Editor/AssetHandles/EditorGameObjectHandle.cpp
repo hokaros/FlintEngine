@@ -35,7 +35,7 @@ void EditorGameObjectHandle::AddComponent(std::unique_ptr<ObjectComponent> compo
 
 void EditorGameObjectHandle::ModifyComponentField(std::unique_ptr<ComponentFieldChange> modification)
 {
-    GetGameObject().Serializable_ModifyComponentField(std::move(modification));
+    GetGameObject().ModifyComponentField(std::move(modification));
     OnUnsavedChange();
 }
 

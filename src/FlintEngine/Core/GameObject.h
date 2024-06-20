@@ -57,6 +57,7 @@ public: /* IGameObject */
 	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const override;
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
 	virtual void RemoveComponent(size_t component_index) override;
+	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) override;
 
 	virtual void SetEnabled(bool enabled) override;
 

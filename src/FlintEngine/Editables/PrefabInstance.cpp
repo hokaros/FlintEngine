@@ -21,15 +21,6 @@ const GameObject& PrefabInstance::GetResult_Depr() const
 	return m_ResultGameObject->GetResult_Depr();
 }
 
-void PrefabInstance::Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
-{
-	FE_ASSERT(change != nullptr, "No change passed");
-
-	change->field->SetFieldValue(change->component, change->GetValue());
-
-	m_ComponentFieldChanges.push_back(std::move(change));
-}
-
 EditableGameObjectType PrefabInstance::Serializable_GetType() const
 {
 	return EditableGameObjectType::PrefabInstance;
@@ -135,6 +126,13 @@ void PrefabInstance::RemoveComponent(size_t index)
 	}
 
 	m_ResultGameObject->RemoveComponent(index);
+}
+
+void PrefabInstance::ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
+{
+	FE_ASSERT(change != nullptr, "No change passed");
+
+	change->field->SetFieldValue(change->component, change->GetValue());
 }
 
 void PrefabInstance::SetEnabled(bool enabled)

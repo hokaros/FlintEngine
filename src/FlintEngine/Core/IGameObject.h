@@ -1,6 +1,7 @@
 #pragma once
 #include <Math/Vector.h>
 #include <IUpdateable.h>
+#include <ComponentFieldChange.h>
 #include "ITransformable.h"
 #include "ObjectComponent.h"
 
@@ -32,6 +33,7 @@ public:
 	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const = 0;
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) = 0;
 	virtual void RemoveComponent(size_t component_index) = 0;
+	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;
 
 	virtual void SetEnabled(bool enabled) = 0;
 
