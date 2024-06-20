@@ -79,7 +79,7 @@ void PrefabInstanceSerializer::DeserializeAdditionalComponents(const PrefabInsta
 {
 	for (const std::unique_ptr<ComponentStringDesc>& comp_desc : desc.m_AdditionalComponents)
 	{
-		prefab_instance.Serializable_AddComponent(ComponentSerializer::DeserializeComponent(*comp_desc));
+		prefab_instance.AddComponent(ComponentSerializer::DeserializeComponent(*comp_desc));
 	}
 }
 

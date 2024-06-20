@@ -40,16 +40,6 @@ const GameObject& InlineGameObject::GetResult_Depr() const
 	return *m_GameObject;
 }
 
-void InlineGameObject::Serializable_AddComponent(std::unique_ptr<ObjectComponent> component)
-{
-	m_GameObject->AddComponent(std::move(component));
-}
-
-void InlineGameObject::Serializable_RemoveComponent(size_t index)
-{
-	m_GameObject->RemoveComponent(index);
-}
-
 void InlineGameObject::Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
 {
 	FE_ASSERT(change != nullptr, "No change passed");
@@ -114,6 +104,17 @@ void InlineGameObject::MoveChild(IGameObject* child, IGameObjectContainer& new_c
 const std::vector<std::unique_ptr<ObjectComponent>>& InlineGameObject::GetAllComponents() const
 {
 	return m_GameObject->GetAllComponents();
+}
+
+
+void InlineGameObject::AddComponent(std::unique_ptr<ObjectComponent> component)
+{
+	m_GameObject->AddComponent(std::move(component));
+}
+
+void InlineGameObject::RemoveComponent(size_t component_index)
+{
+	m_GameObject->RemoveComponent(component_index);
 }
 
 void InlineGameObject::SetEnabled(bool enabled)

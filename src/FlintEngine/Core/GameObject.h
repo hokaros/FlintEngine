@@ -55,6 +55,8 @@ public: /* IGameObject */
 	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) override;
 
 	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const override;
+	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
+	virtual void RemoveComponent(size_t component_index) override;
 
 	virtual void SetEnabled(bool enabled) override;
 
@@ -108,9 +110,7 @@ public: /* IUpdateable */
 	//
 	std::vector<std::unique_ptr<IGameObject>>& GetChildren(); // TODO: remove
 
-	void AddComponent(std::unique_ptr<ObjectComponent> component);
 	void RemoveComponent(ObjectComponent* component);
-	void RemoveComponent(size_t component_index);
 	std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents();
 	ObjectComponent* GetComponent(size_t idx);
 	// Znajduje wszystkie komponenty okreœlonego typu

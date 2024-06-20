@@ -30,6 +30,8 @@ public:
 	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) = 0;
 
 	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const = 0;
+	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) = 0;
+	virtual void RemoveComponent(size_t component_index) = 0;
 
 	virtual void SetEnabled(bool enabled) = 0;
 

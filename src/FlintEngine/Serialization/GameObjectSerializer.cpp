@@ -76,7 +76,7 @@ void GameObjectSerializer::DeserializeComponents(InlineGameObject& game_object, 
 		std::unique_ptr<ObjectComponent> component = ComponentSerializer::DeserializeComponent(*component_desc);
 		if (component != nullptr)
 		{
-			game_object.Serializable_AddComponent(std::move(component));
+			game_object.AddComponent(std::move(component));
 		}
 	}
 }

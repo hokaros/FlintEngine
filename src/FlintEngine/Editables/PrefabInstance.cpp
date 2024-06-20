@@ -21,28 +21,6 @@ const GameObject& PrefabInstance::GetResult_Depr() const
 	return m_ResultGameObject->GetResult_Depr();
 }
 
-void PrefabInstance::Serializable_AddComponent(std::unique_ptr<ObjectComponent> component)
-{
-	m_AdditionalComponents.push_back(component.get());
-	m_ResultGameObject->Serializable_AddComponent(std::move(component));
-}
-
-void PrefabInstance::Serializable_RemoveComponent(size_t index)
-{
-	size_t remaining_original_count = m_OriginalComponentCount - m_RemovedComponents.size();
-	if (index >= remaining_original_count)
-	{ // The component is non-original
-		size_t index_in_additional = index - remaining_original_count;
-		m_AdditionalComponents.erase(m_AdditionalComponents.cbegin() + index_in_additional);
-	}
-	else
-	{ // Removing original component
-		m_RemovedComponents.push_back(index);
-	}
-
-	m_ResultGameObject->Serializable_RemoveComponent(index);
-}
-
 void PrefabInstance::Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
 {
 	FE_ASSERT(change != nullptr, "No change passed");
@@ -134,6 +112,29 @@ void PrefabInstance::MoveChild(IGameObject* child, IGameObjectContainer& new_con
 const std::vector<std::unique_ptr<ObjectComponent>>& PrefabInstance::GetAllComponents() const
 {
 	return m_ResultGameObject->GetAllComponents();
+}
+
+
+void PrefabInstance::AddComponent(std::unique_ptr<ObjectComponent> component)
+{
+	m_AdditionalComponents.push_back(component.get());
+	m_ResultGameObject->AddComponent(std::move(component));
+}
+
+void PrefabInstance::RemoveComponent(size_t index)
+{
+	size_t remaining_original_count = m_OriginalComponentCount - m_RemovedComponents.size();
+	if (index >= remaining_original_count)
+	{ // The component is non-original
+		size_t index_in_additional = index - remaining_original_count;
+		m_AdditionalComponents.erase(m_AdditionalComponents.cbegin() + index_in_additional);
+	}
+	else
+	{ // Removing original component
+		m_RemovedComponents.push_back(index);
+	}
+
+	m_ResultGameObject->RemoveComponent(index);
 }
 
 void PrefabInstance::SetEnabled(bool enabled)

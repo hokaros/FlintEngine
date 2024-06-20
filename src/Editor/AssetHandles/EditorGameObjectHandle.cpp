@@ -29,7 +29,7 @@ void EditorGameObjectHandle::SetName(const std::string& name)
 
 void EditorGameObjectHandle::AddComponent(std::unique_ptr<ObjectComponent> component)
 {
-    GetGameObject().Serializable_AddComponent(std::move(component));
+    GetGameObject().AddComponent(std::move(component));
     OnUnsavedChange();
 }
 
@@ -41,7 +41,7 @@ void EditorGameObjectHandle::ModifyComponentField(std::unique_ptr<ComponentField
 
 void EditorGameObjectHandle::RemoveComponent(size_t component_index)
 {
-    GetGameObject().Serializable_RemoveComponent(component_index);
+    GetGameObject().RemoveComponent(component_index);
     OnUnsavedChange();
 }
 

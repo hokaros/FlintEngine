@@ -72,7 +72,7 @@ TEST(SUITE_NAME, AddsComponent)
 	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
 
 	// Act
-	prefab_instance->Serializable_AddComponent(std::move(added_component));
+	prefab_instance->AddComponent(std::move(added_component));
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
@@ -94,7 +94,7 @@ TEST(SUITE_NAME, KeepsOriginalComponentsWhenAddingNew)
 	std::unique_ptr<RectangleRenderer> added_component = std::make_unique<RectangleRenderer>();
 
 	// Act
-	prefab_instance->Serializable_AddComponent(std::move(added_component));
+	prefab_instance->AddComponent(std::move(added_component));
 	std::unique_ptr<GameObject> result_object = PrefabInstance::ToRuntimeObject(std::move(prefab_instance));
 
 	// Assert
