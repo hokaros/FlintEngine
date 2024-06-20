@@ -43,6 +43,8 @@ public: // IGameObject
 	virtual void RemoveChild(IGameObject& child) override;
 	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) override;
 
+	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const override;
+
 	virtual void SetEnabled(bool enabled) override;
 
 	virtual void SetScene(Scene* scene, SceneKey) override;

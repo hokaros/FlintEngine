@@ -54,6 +54,8 @@ public: /* IGameObject */
 	virtual void RemoveChild(IGameObject& child) override;
 	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) override;
 
+	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const override;
+
 	virtual void SetEnabled(bool enabled) override;
 
 	virtual void SetScene(Scene* scene, SceneKey) override;
@@ -110,11 +112,7 @@ public: /* IUpdateable */
 	void RemoveComponent(ObjectComponent* component);
 	void RemoveComponent(size_t component_index);
 	std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents();
-	const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const;
 	ObjectComponent* GetComponent(size_t idx);
-	// Znajduje komponent okreœlonego typu
-	template<class T>
-	T* FindComponent(); // TODO: find by RTC
 	// Znajduje wszystkie komponenty okreœlonego typu
 	template<class T>
 	std::list<T*>* FindComponents();
@@ -202,18 +200,6 @@ public:
 
 
 
-template<class T>
-T* GameObject::FindComponent() {
-	for (std::unique_ptr<ObjectComponent>& component : components) 
-	{
-		T* desired = dynamic_cast<T*>(component.get());
-		if (desired != nullptr) 
-		{
-			return desired;
-		}
-	}
-	return NULL;
-}
 
 template<class T>
 std::list<T*>* GameObject::FindComponents() 

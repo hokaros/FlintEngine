@@ -141,6 +141,11 @@ void PrefabInstance::MoveChild(IGameObject* child, IGameObjectContainer& new_con
 	m_ResultGameObject->MoveChild(child, new_container);
 }
 
+const std::vector<std::unique_ptr<ObjectComponent>>& PrefabInstance::GetAllComponents() const
+{
+	return m_ResultGameObject->GetAllComponents();
+}
+
 void PrefabInstance::SetEnabled(bool enabled)
 {
 	m_ResultGameObject->SetEnabled(enabled);

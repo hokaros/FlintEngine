@@ -121,6 +121,11 @@ void InlineGameObject::MoveChild(IGameObject* child, IGameObjectContainer& new_c
 	m_GameObject->MoveChild(child, new_container);
 }
 
+const std::vector<std::unique_ptr<ObjectComponent>>& InlineGameObject::GetAllComponents() const
+{
+	return m_GameObject->GetAllComponents();
+}
+
 void InlineGameObject::SetEnabled(bool enabled)
 {
 	m_GameObject->SetEnabled(enabled);
