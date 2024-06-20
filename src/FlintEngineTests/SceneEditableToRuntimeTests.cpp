@@ -122,7 +122,7 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
 	editable_root_object->SetName(root_object_name);
 
-	std::unique_ptr<PrefabInstance> prefab_instance_child = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
+	std::unique_ptr<IEditableGameObject> prefab_instance_child = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 	prefab_instance_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(prefab_instance_child));
 

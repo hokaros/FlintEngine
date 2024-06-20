@@ -2,23 +2,38 @@
 #include "AssetManager.h"
 
 PrefabInstance::PrefabInstance(const std::string& prefab_path)
-	: m_PrefabPath(prefab_path)
+	: GameObject(*AssetManager::GetInstance()->GetPrefab(prefab_path))
+	, m_PrefabPath(prefab_path)
 {
 	const GameObject* prefab = AssetManager::GetInstance()->GetPrefab(m_PrefabPath);
 	FE_ASSERT(prefab != nullptr, "No prefab");
 
 	m_OriginalComponentCount = prefab->GetAllComponents().size();
-	m_ResultGameObject = std::make_unique<InlineGameObject>(*prefab);
+}
+
+PrefabInstance::PrefabInstance(const PrefabInstance& other)
+	: GameObject(other)
+	, m_PrefabPath(other.m_PrefabPath)
+	, m_Name(other.m_Name)
+	, m_Size(other.m_Size)
+	, m_Position(other.m_Position)
+	// TODO: additional children
+	, m_OriginalComponentCount(other.m_OriginalComponentCount)
+	// TODO: additional components
+	// TODO: removed components
+	// TODO: component field changes
+{
+
 }
 
 GameObject& PrefabInstance::GetResult_Depr()
 {
-	return m_ResultGameObject->GetResult_Depr();
+	return *this;
 }
 
 const GameObject& PrefabInstance::GetResult_Depr() const
 {
-	return m_ResultGameObject->GetResult_Depr();
+	return *this;
 }
 
 EditableGameObjectType PrefabInstance::Serializable_GetType() const
@@ -28,7 +43,7 @@ EditableGameObjectType PrefabInstance::Serializable_GetType() const
 
 std::unique_ptr<GameObject> PrefabInstance::ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object)
 {
-	return InlineGameObject::ToRuntimeObject(std::move(editable_object->m_ResultGameObject));
+	return std::move(editable_object);
 }
 
 const std::string& PrefabInstance::GetPrefabPath() const
@@ -59,57 +74,57 @@ const std::vector<ObjectComponent*>& PrefabInstance::GetAdditionalComponents() c
 
 const std::string& PrefabInstance::GetName() const
 {
-	return m_ResultGameObject->GetName();
+	return GameObject::GetName();
 }
 
 void PrefabInstance::SetName(const std::string& name)
 {
 	m_Name = name;
-	m_ResultGameObject->SetName(name);
+	GameObject::SetName(name);
 }
 
 IGameObject* PrefabInstance::GetParent() const
 {
-	return m_ResultGameObject->GetParent();
+	return GameObject::GetParent();
 }
 
 void PrefabInstance::SetParent(IGameObject* parent)
 {
-	m_ResultGameObject->SetParent(parent);
+	GameObject::SetParent(parent);
 }
 
 const std::vector<std::unique_ptr<IGameObject>>& PrefabInstance::GetChildren() const
 {
-	return m_ResultGameObject->GetChildren();
+	return GameObject::GetChildren();
 }
 
 void PrefabInstance::AddChild(std::unique_ptr<IGameObject> child)
 {
 	// TODO: add to additional children
-	m_ResultGameObject->AddChild(std::move(child));
+	GameObject::AddChild(std::move(child));
 }
 
 void PrefabInstance::RemoveChild(IGameObject& child)
 {
 	// TODO: remove from additional children
-	m_ResultGameObject->RemoveChild(child);
+	GameObject::RemoveChild(child);
 }
 
 void PrefabInstance::MoveChild(IGameObject* child, IGameObjectContainer& new_container)
 {
-	m_ResultGameObject->MoveChild(child, new_container);
+	GameObject::MoveChild(child, new_container);
 }
 
 const std::vector<std::unique_ptr<ObjectComponent>>& PrefabInstance::GetAllComponents() const
 {
-	return m_ResultGameObject->GetAllComponents();
+	return GameObject::GetAllComponents();
 }
 
 
 void PrefabInstance::AddComponent(std::unique_ptr<ObjectComponent> component)
 {
 	m_AdditionalComponents.push_back(component.get());
-	m_ResultGameObject->AddComponent(std::move(component));
+	GameObject::AddComponent(std::move(component));
 }
 
 void PrefabInstance::RemoveComponent(size_t index)
@@ -125,7 +140,7 @@ void PrefabInstance::RemoveComponent(size_t index)
 		m_RemovedComponents.push_back(index);
 	}
 
-	m_ResultGameObject->RemoveComponent(index);
+	GameObject::RemoveComponent(index);
 }
 
 void PrefabInstance::ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
@@ -137,30 +152,29 @@ void PrefabInstance::ModifyComponentField(std::unique_ptr<ComponentFieldChange> 
 
 void PrefabInstance::SetEnabled(bool enabled)
 {
-	m_ResultGameObject->SetEnabled(enabled);
+	GameObject::SetEnabled(enabled);
 }
 
 void PrefabInstance::SetScene(Scene* scene, SceneKey key)
 {
-	m_ResultGameObject->SetScene(scene, key);
+	GameObject::SetScene(scene, key);
 }
 
 std::unique_ptr<IGameObject> PrefabInstance::Copy() const
 {
-	std::unique_ptr<PrefabInstance> cpy = std::make_unique<PrefabInstance>(m_PrefabPath);
-	cpy->m_ResultGameObject = std::make_unique<InlineGameObject>(*m_ResultGameObject);
+	PrefabInstance* cpy = new PrefabInstance(*this);
 
-	return cpy;
+	return std::unique_ptr<IEditableGameObject>(cpy);
 }
 
 IUpdateable& PrefabInstance::GetUpdateable()
 {
-	return m_ResultGameObject->GetUpdateable();
+	return GameObject::GetUpdateable();
 }
 
 const IUpdateable& PrefabInstance::GetUpdateable() const
 {
-	return m_ResultGameObject->GetUpdateable();
+	return GameObject::GetUpdateable();
 }
 
 ITransformable& PrefabInstance::GetTransformable()
@@ -176,89 +190,88 @@ const ITransformable& PrefabInstance::GetTransformable() const
 
 const Vector& PrefabInstance::GetWorldPosition() const
 {
-	return m_ResultGameObject->GetTransformable().GetWorldPosition();
+	return GameObject::GetWorldPosition();
 }
 
 void PrefabInstance::SetWorldPosition(const Vector& pos)
 {
 	m_Position = pos;
-	m_ResultGameObject->GetTransformable().SetWorldPosition(pos);
+	GameObject::SetWorldPosition(pos);
 }
 
 Vector PrefabInstance::GetLocalPosition() const
 {
-	return m_ResultGameObject->GetTransformable().GetLocalPosition();
+	return GameObject::GetLocalPosition();
 }
 
 void PrefabInstance::SetLocalPosition(const Vector& pos)
 {
-	m_ResultGameObject->GetTransformable().SetLocalPosition(pos);
-	m_Position = m_ResultGameObject->GetTransformable().GetWorldPosition();
+	GameObject::SetLocalPosition(pos);
+	m_Position = GetWorldPosition();
 }
 
 void PrefabInstance::Translate(const Vector& offset)
 {
-	const Vector result_pos = GetWorldPosition() + offset;
-	SetWorldPosition(result_pos);
+	GameObject::Translate(offset);
 }
 
 const Vector& PrefabInstance::GetWorldScale() const
 {
-	return m_ResultGameObject->GetTransformable().GetWorldScale();
+	return GameObject::GetWorldScale();
 }
 
 void PrefabInstance::SetWorldScale(const Vector& scale)
 {
 	m_Size = scale;
-	m_ResultGameObject->GetTransformable().SetWorldScale(scale);
+	GameObject::SetWorldScale(scale);
 }
 
 Vector PrefabInstance::GetLocalScale() const
 {
-	return m_ResultGameObject->GetTransformable().GetLocalScale();
+	return GameObject::GetLocalScale();
 }
 
 void PrefabInstance::SetLocalScale(const Vector& scale)
 {
-	m_ResultGameObject->GetTransformable().SetLocalScale(scale);
-	m_Size = m_ResultGameObject->GetTransformable().GetWorldScale();
+	GameObject::SetLocalScale(scale);
+	m_Size = GetWorldScale();
 }
 
 float PrefabInstance::GetWorldRotation() const
 {
-	return m_ResultGameObject->GetTransformable().GetWorldRotation();
+	return GameObject::GetWorldRotation();
 }
 
 void PrefabInstance::SetWorldRotation(float rot)
 {
 	// TODO: serialize rotation
-	m_ResultGameObject->GetTransformable().SetWorldRotation(rot);
+	GameObject::SetWorldRotation(rot);
 }
 
 float PrefabInstance::GetLocalRotation() const
 {
-	return m_ResultGameObject->GetTransformable().GetLocalRotation();
+	return GameObject::GetLocalRotation();
 }
 
 void PrefabInstance::Rotate(float angle)
 {
 	// TODO: serialize rotation
-	m_ResultGameObject->GetTransformable().Rotate(angle);
+	GameObject::Rotate(angle);
 }
 
 void PrefabInstance::LookAt(const Vector& pos)
 {
 	// TODO: serialize rotation
-	m_ResultGameObject->GetTransformable().LookAt(pos);
+	GameObject::LookAt(pos);
 }
 
 
 Vector PrefabInstance::TransformPoint(const Vector& local_pos) const
 {
-	return m_ResultGameObject->GetTransformable().TransformPoint(local_pos);
+	return GameObject::TransformPoint(local_pos);
 }
 
 Vector PrefabInstance::InvTransformPoint(const Vector& world_pos) const
 {
-	return m_ResultGameObject->GetTransformable().InvTransformPoint(world_pos);
+	return GameObject::InvTransformPoint(world_pos);
 }

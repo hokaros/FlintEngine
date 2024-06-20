@@ -2,11 +2,12 @@
 #include "InlineGameObject.h"
 
 class PrefabInstance
-    : public IEditableGameObject
-	, public ITransformable
+	: public GameObject
+    , public IEditableGameObject
 {
 public:
 	PrefabInstance(const std::string& prefab_path);
+	PrefabInstance(const PrefabInstance& other);
 
 public:
 	const std::string& GetPrefabPath() const;
@@ -80,7 +81,6 @@ public: // ITransformable
 	virtual Vector InvTransformPoint(const Vector& world_pos) const override;
 
 private:
-	std::unique_ptr<InlineGameObject> m_ResultGameObject;
 	std::string m_PrefabPath;
 
 	std::optional<std::string> m_Name;
