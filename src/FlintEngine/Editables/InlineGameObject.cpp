@@ -57,16 +57,6 @@ void InlineGameObject::Serializable_ModifyComponentField(std::unique_ptr<Compone
 	change->field->SetFieldValue(change->component, change->GetValue());
 }
 
-std::vector<std::unique_ptr<IGameObject>>& InlineGameObject::Serializable_GetChildren()
-{
-	return m_GameObject->GetChildren();
-}
-
-const std::vector<std::unique_ptr<IGameObject>>& InlineGameObject::Serializable_GetChildren() const
-{
-	return m_GameObject->GetChildren();
-}
-
 EditableGameObjectType InlineGameObject::Serializable_GetType() const
 {
 	return EditableGameObjectType::InlineGameObject;

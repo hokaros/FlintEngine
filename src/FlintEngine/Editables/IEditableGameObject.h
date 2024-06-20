@@ -54,9 +54,6 @@ public:
 	virtual void Serializable_RemoveComponent(size_t index) = 0;
 	virtual void Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;
 
-	virtual std::vector<std::unique_ptr<IGameObject>>& Serializable_GetChildren() = 0;
-	virtual const std::vector<std::unique_ptr<IGameObject>>& Serializable_GetChildren() const = 0;
-
 	virtual EditableGameObjectType Serializable_GetType() const = 0;
 
 	virtual ~IEditableGameObject() = default;

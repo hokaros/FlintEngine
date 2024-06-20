@@ -2,7 +2,7 @@
 
 void IEditableGameObject::CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest)
 {
-	for (const std::unique_ptr<IGameObject>& child : src.Serializable_GetChildren())
+	for (const std::unique_ptr<IGameObject>& child : src.GetChildren())
 	{
 		const IEditableGameObject* editable_child = dynamic_cast<const IEditableGameObject*>(child.get());
 		// TODO: don't require IEditableGameObject here

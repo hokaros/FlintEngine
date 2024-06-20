@@ -83,10 +83,12 @@ void GameObjectSerializer::DeserializeComponents(InlineGameObject& game_object, 
 
 void GameObjectSerializer::SerializeChildren(const InlineGameObject& game_object, GameObjectStringDesc& desc)
 {
-	for (const std::unique_ptr<IGameObject>& child : game_object.Serializable_GetChildren())
+	for (const std::unique_ptr<IGameObject>& child : game_object.GetChildren())
 	{
-		const IEditableGameObject& editable_child = static_cast<const IEditableGameObject&>(*child);
-		desc.children.push_back(SerializeIEditable(editable_child));
+		const IEditableGameObject* editable_child = dynamic_cast<const IEditableGameObject*>(child.get());
+		FE_ASSERT(editable_child != nullptr, "Child is not IEditableGameObject");
+
+		desc.children.push_back(SerializeIEditable(*editable_child));
 	}
 }
 
