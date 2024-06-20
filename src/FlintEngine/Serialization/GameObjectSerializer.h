@@ -5,7 +5,7 @@
 class GameObjectStringDescProxy
 {
 public:
-	virtual EditableGameObjectType GetType() const = 0;
+	virtual GameObjectType GetType() const = 0;
 
 	virtual ~GameObjectStringDescProxy() = default;
 };
@@ -26,7 +26,7 @@ public:
 	GameObjectStringDesc& GetDesc();
 	const GameObjectStringDesc& GetDesc() const;
 
-	virtual EditableGameObjectType GetType() const override;
+	virtual GameObjectType GetType() const override;
 
 private:
 	std::unique_ptr<GameObjectStringDesc> m_Desc;

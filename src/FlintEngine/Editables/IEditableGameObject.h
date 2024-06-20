@@ -16,12 +16,6 @@ private:
 	ValueT m_Value;
 };
 
-enum class EditableGameObjectType
-{
-	InlineGameObject,
-	PrefabInstance
-};
-
 // Interface for GameObject wrappers suited for editing within the Editor
 class IEditableGameObject
 	: public IGameObject
@@ -30,8 +24,6 @@ public:
 	// TODO: remove
 	virtual GameObject& GetResult_Depr() = 0; // Please don't recalculate it on every GetResult() call.
 	virtual const GameObject& GetResult_Depr() const = 0;
-
-	virtual EditableGameObjectType Serializable_GetType() const = 0;
 
 	virtual ~IEditableGameObject() = default;
 };

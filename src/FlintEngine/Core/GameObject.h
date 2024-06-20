@@ -70,6 +70,8 @@ public: /* IGameObject */
 	virtual ITransformable& GetTransformable() override;
 	virtual const ITransformable& GetTransformable() const override;
 
+	virtual GameObjectType GetGameObjectType() const { return GameObjectType::GameObject; }
+
 public: /* ITransformable */
 	virtual const Vector& GetWorldPosition() const override;
 	virtual void SetWorldPosition(const Vector& pos) override;

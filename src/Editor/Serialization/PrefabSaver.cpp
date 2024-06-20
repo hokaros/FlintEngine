@@ -40,7 +40,7 @@ void PrefabSaver::SaveGameObject(const GameObjectStringDescProxy& game_object)
 {
     switch (game_object.GetType())
     {
-    case EditableGameObjectType::InlineGameObject:
+    case GameObjectType::GameObject:
         m_IndentPrinter.PrintLine("GameObject");
         m_IndentPrinter.IncreaseIndent();
 
@@ -49,7 +49,7 @@ void PrefabSaver::SaveGameObject(const GameObjectStringDescProxy& game_object)
         m_IndentPrinter.DecreaseIndent();
         break;
 
-    case EditableGameObjectType::PrefabInstance:
+    case GameObjectType::PrefabInstance:
         m_IndentPrinter.PrintLine("PrefabInstance");
         m_IndentPrinter.IncreaseIndent();
 

@@ -16,6 +16,12 @@ private:
 	friend Scene;
 };
 
+enum class GameObjectType
+{
+	GameObject,
+	PrefabInstance
+};
+
 class IGameObject
 {
 public:
@@ -45,6 +51,8 @@ public:
 	virtual const IUpdateable& GetUpdateable() const = 0;
 	virtual ITransformable& GetTransformable() = 0;
 	virtual const ITransformable& GetTransformable() const = 0;
+
+	virtual GameObjectType GetGameObjectType() const = 0;
 
 	virtual ~IGameObject() = default;
 

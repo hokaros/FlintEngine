@@ -27,11 +27,6 @@ const GameObject& InlineGameObject::GetResult_Depr() const
 	return *this;
 }
 
-EditableGameObjectType InlineGameObject::Serializable_GetType() const
-{
-	return EditableGameObjectType::InlineGameObject;
-}
-
 std::unique_ptr<GameObject> InlineGameObject::ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object)
 {
 	return std::move(editable_object);

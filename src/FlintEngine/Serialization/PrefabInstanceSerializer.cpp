@@ -99,7 +99,7 @@ const PrefabInstanceStringDesc& PrefabInstanceStringDescEndpoint::GetDesc() cons
 	return *m_Desc;
 }
 
-EditableGameObjectType PrefabInstanceStringDescEndpoint::GetType() const
+GameObjectType PrefabInstanceStringDescEndpoint::GetType() const
 {
-	return EditableGameObjectType::PrefabInstance;
+	return GameObjectType::PrefabInstance;
 }

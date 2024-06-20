@@ -36,11 +36,6 @@ const GameObject& PrefabInstance::GetResult_Depr() const
 	return *this;
 }
 
-EditableGameObjectType PrefabInstance::Serializable_GetType() const
-{
-	return EditableGameObjectType::PrefabInstance;
-}
-
 std::unique_ptr<GameObject> PrefabInstance::ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object)
 {
 	return std::move(editable_object);

@@ -21,7 +21,7 @@ public:
 	PrefabInstanceStringDesc& GetDesc();
 	const PrefabInstanceStringDesc& GetDesc() const;
 
-	virtual EditableGameObjectType GetType() const override;
+	virtual GameObjectType GetType() const override;
 
 private:
 	std::unique_ptr<PrefabInstanceStringDesc> m_Desc;

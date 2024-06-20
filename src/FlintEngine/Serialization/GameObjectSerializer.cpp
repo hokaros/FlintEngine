@@ -102,14 +102,14 @@ void GameObjectSerializer::DeserializeChildren(InlineGameObject& game_object, co
 
 std::unique_ptr<GameObjectStringDescProxy> GameObjectSerializer::SerializeIEditable(const IEditableGameObject& game_object)
 {
-	switch (game_object.Serializable_GetType())
+	switch (game_object.GetGameObjectType())
 	{
-	case EditableGameObjectType::InlineGameObject:
+	case GameObjectType::GameObject:
 	{
 		const InlineGameObject& inline_object = static_cast<const InlineGameObject&>(game_object);
 		return std::make_unique<InlineGameObjectStringDescEndpoint>(SerializeGameObject(inline_object));
 	}
-	case EditableGameObjectType::PrefabInstance:
+	case GameObjectType::PrefabInstance:
 	{
 		const PrefabInstance& prefab_instance = static_cast<const PrefabInstance&>(game_object);
 		return std::make_unique<PrefabInstanceStringDescEndpoint>(PrefabInstanceSerializer::Serialize(prefab_instance));
@@ -124,12 +124,12 @@ std::unique_ptr<IEditableGameObject> GameObjectSerializer::DeserializeIEditable(
 {
 	switch (desc.GetType())
 	{
-	case EditableGameObjectType::InlineGameObject:
+	case GameObjectType::GameObject:
 	{
 		const InlineGameObjectStringDescEndpoint& inline_endpoint = static_cast<const InlineGameObjectStringDescEndpoint&>(desc);
 		return DeserializeGameObject(inline_endpoint.GetDesc());
 	}
-	case EditableGameObjectType::PrefabInstance:
+	case GameObjectType::PrefabInstance:
 	{
 		const PrefabInstanceStringDescEndpoint& prefab_instance = static_cast<const PrefabInstanceStringDescEndpoint&>(desc);
 		return PrefabInstanceSerializer::Deserialize(prefab_instance.GetDesc());
@@ -157,7 +157,7 @@ const GameObjectStringDesc& InlineGameObjectStringDescEndpoint::GetDesc() const
 	return *m_Desc;
 }
 
-EditableGameObjectType InlineGameObjectStringDescEndpoint::GetType() const
+GameObjectType InlineGameObjectStringDescEndpoint::GetType() const
 {
-	return EditableGameObjectType::InlineGameObject;
+	return GameObjectType::GameObject;
 }

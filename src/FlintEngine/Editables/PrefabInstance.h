@@ -23,8 +23,6 @@ public: // IEditableGameObject
 	virtual GameObject& GetResult_Depr() override;
 	virtual const GameObject& GetResult_Depr() const override;
 
-	virtual EditableGameObjectType Serializable_GetType() const override;
-
 public: // IGameObject
 	virtual const std::string& GetName() const override;
 	virtual void SetName(const std::string& name) override;
@@ -52,6 +50,8 @@ public: // IGameObject
 	virtual const IUpdateable& GetUpdateable() const override;
 	virtual ITransformable& GetTransformable() override;
 	virtual const ITransformable& GetTransformable() const override;
+
+	virtual GameObjectType GetGameObjectType() const { return GameObjectType::PrefabInstance; }
 
 public: // ITransformable
 	// TODO: getters are all direct proxies, can we split const and non-const ITransformable?
