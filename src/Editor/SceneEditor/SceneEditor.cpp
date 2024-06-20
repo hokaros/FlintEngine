@@ -69,7 +69,8 @@ void SceneEditor::Render()
 			handle != nullptr 
 			&& handle->GetGameObjectHandle() != nullptr)
 		{
-			IEditableGameObject::RenderUpdate(handle->GetGameObjectHandle()->GetGameObject(), m_SceneRenderer);
+			IEditableGameObject& game_object = handle->GetGameObjectHandle()->GetGameObject();
+			game_object.GetUpdateable().RenderUpdate(m_SceneRenderer);
 		}
 		SelectedObjectRenderer::Render(*m_SelectedObjectManager, m_SceneRenderer);
 

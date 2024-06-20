@@ -13,8 +13,3 @@ void IEditableGameObject::CopyChildrenToRuntimeObject(const IEditableGameObject&
 		dest.AddChild(std::move(runtime_child));
 	}
 }
-
-void IEditableGameObject::RenderUpdate(IEditableGameObject& editable, SceneRenderer& renderer)
-{
-	editable.GetUpdateable().RenderUpdate(renderer);
-}

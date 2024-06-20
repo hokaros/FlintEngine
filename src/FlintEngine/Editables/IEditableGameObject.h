@@ -62,7 +62,6 @@ public:
 	virtual ~IEditableGameObject() = default;
 
 	static void CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest);
-	static void RenderUpdate(IEditableGameObject& editable, SceneRenderer& renderer); // TODO: remove
 };
 
 template<typename ValueT>
