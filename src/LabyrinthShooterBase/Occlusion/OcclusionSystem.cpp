@@ -89,11 +89,7 @@ void OcclusionSystem::UnregisterOccludableImpl(IOccludable& occludable)
 LabyrinthSolidifier* OcclusionSystem::FindLabyrinth() const
 {
 	Scene* scene = GetOwner().GetScene();
-	IGameObject* lab_igo = scene->FindGameObjectByName(m_LabName);
-	if (lab_igo == nullptr)
-		return nullptr;
-
-	GameObject* lab_go = dynamic_cast<GameObject*>(lab_igo); // TODO: let's remove this
+	IGameObject* lab_go = scene->FindGameObjectByName(m_LabName);
 	if (lab_go == nullptr)
 		return nullptr;
 
