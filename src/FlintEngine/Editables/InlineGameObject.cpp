@@ -116,6 +116,16 @@ const std::vector<std::unique_ptr<IGameObject>>& InlineGameObject::GetChildren()
 	return m_GameObject->GetChildren();
 }
 
+void InlineGameObject::AddChild(std::unique_ptr<IGameObject> child)
+{
+	m_GameObject->AddChild(std::move(child));
+}
+
+void InlineGameObject::RemoveChild(IGameObject& child)
+{
+	m_GameObject->RemoveChild(child);
+}
+
 void InlineGameObject::MoveChild(IGameObject* child, IGameObjectContainer& new_container)
 {
 	m_GameObject->MoveChild(child, new_container);

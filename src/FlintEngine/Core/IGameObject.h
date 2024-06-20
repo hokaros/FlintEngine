@@ -24,6 +24,8 @@ public:
 	virtual void SetParent(IGameObject* parent) = 0;
 
 	virtual const std::vector<std::unique_ptr<IGameObject>>& GetChildren() const = 0;
+	virtual void AddChild(std::unique_ptr<IGameObject> child) = 0;
+	virtual void RemoveChild(IGameObject& child) = 0;
 	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) = 0;
 
 	virtual void SetEnabled(bool enabled) = 0;

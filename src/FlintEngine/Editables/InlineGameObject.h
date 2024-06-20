@@ -35,6 +35,8 @@ public: // IGameObject
 	virtual void SetParent(IGameObject* parent) override;
 
 	virtual const std::vector<std::unique_ptr<IGameObject>>& GetChildren() const override;
+	virtual void AddChild(std::unique_ptr<IGameObject> child) override;
+	virtual void RemoveChild(IGameObject& child) override;
 	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) override;
 
 	virtual void SetEnabled(bool enabled) override;

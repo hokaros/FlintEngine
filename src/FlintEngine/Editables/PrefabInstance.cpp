@@ -135,6 +135,18 @@ const std::vector<std::unique_ptr<IGameObject>>& PrefabInstance::GetChildren() c
 	return m_ResultGameObject->GetChildren();
 }
 
+void PrefabInstance::AddChild(std::unique_ptr<IGameObject> child)
+{
+	// TODO: add to additional children
+	m_ResultGameObject->AddChild(std::move(child));
+}
+
+void PrefabInstance::RemoveChild(IGameObject& child)
+{
+	// TODO: remove from additional children
+	m_ResultGameObject->RemoveChild(child);
+}
+
 void PrefabInstance::MoveChild(IGameObject* child, IGameObjectContainer& new_container)
 {
 	m_ResultGameObject->MoveChild(child, new_container);
