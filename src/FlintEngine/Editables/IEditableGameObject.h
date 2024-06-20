@@ -55,8 +55,6 @@ public:
 	virtual EditableGameObjectType Serializable_GetType() const = 0;
 
 	virtual ~IEditableGameObject() = default;
-
-	static void CopyChildrenToRuntimeObject(const IEditableGameObject& src, GameObject& dest);
 };
 
 template<typename ValueT>
