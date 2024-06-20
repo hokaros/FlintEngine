@@ -46,6 +46,8 @@ public:
 	virtual ITransformable& GetTransformable() = 0;
 	virtual const ITransformable& GetTransformable() const = 0;
 
+	virtual ~IGameObject() = default;
+
 public:
 	// Finds a component of given type
 	template<class T>

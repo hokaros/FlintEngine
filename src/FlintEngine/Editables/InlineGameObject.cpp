@@ -1,43 +1,30 @@
 #include "InlineGameObject.h"
 
 InlineGameObject::InlineGameObject()
-	: m_GameObject(std::make_unique<GameObject>())
+	: GameObject()
 {
 }
 
 InlineGameObject::InlineGameObject(const GameObject& other)
-	: m_GameObject(other.CopyShallow())
+	: GameObject(other)
 {
-	for (const std::unique_ptr<IGameObject>& child : other.GetChildren())
-	{
-		const GameObject* child_go = dynamic_cast<const GameObject*>(child.get()); // TODO: remove dynamic cast
-		if (child_go != nullptr)
-		{
-			std::unique_ptr<InlineGameObject> editable_copy = std::make_unique<InlineGameObject>(*child_go);
-			m_GameObject->AddChild(std::move(editable_copy));
-		}
-		else
-		{
-			FE_ASSERT(dynamic_cast<const IEditableGameObject*>(child.get()) != nullptr, "Child should be editable");
-			m_GameObject->AddChild(child->Copy());
-		}
-	}
+
 }
 
 InlineGameObject::InlineGameObject(const InlineGameObject& other)
-	: InlineGameObject(*other.m_GameObject)
+	: GameObject(other)
 {
 
 }
 
 GameObject& InlineGameObject::GetResult_Depr()
 {
-	return *m_GameObject;
+	return *this;
 }
 
 const GameObject& InlineGameObject::GetResult_Depr() const
 {
-	return *m_GameObject;
+	return *this;
 }
 
 EditableGameObjectType InlineGameObject::Serializable_GetType() const
@@ -47,105 +34,103 @@ EditableGameObjectType InlineGameObject::Serializable_GetType() const
 
 std::unique_ptr<GameObject> InlineGameObject::ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object)
 {
-	if (editable_object == nullptr)
-		return nullptr;
-
-	return std::move(editable_object->m_GameObject);
+	return std::move(editable_object);
 }
 
 
 const std::string& InlineGameObject::GetName() const
 {
-	return m_GameObject->GetName();
+	return GameObject::GetName();
 }
 
 void InlineGameObject::SetName(const std::string& name)
 {
-	m_GameObject->SetName(name);
+	GameObject::SetName(name);
 }
 
 IGameObject* InlineGameObject::GetParent() const
 {
-	return m_GameObject->GetParent();
+	return GameObject::GetParent();
 }
 
 void InlineGameObject::SetParent(IGameObject* parent)
 {
-	m_GameObject->SetParent(parent);
+	GameObject::SetParent(parent);
 }
 
 const std::vector<std::unique_ptr<IGameObject>>& InlineGameObject::GetChildren() const
 {
-	return m_GameObject->GetChildren();
+	return GameObject::GetChildren();
 }
 
 void InlineGameObject::AddChild(std::unique_ptr<IGameObject> child)
 {
-	m_GameObject->AddChild(std::move(child));
+	GameObject::AddChild(std::move(child));
 }
 
 void InlineGameObject::RemoveChild(IGameObject& child)
 {
-	m_GameObject->RemoveChild(child);
+	GameObject::RemoveChild(child);
 }
 
 void InlineGameObject::MoveChild(IGameObject* child, IGameObjectContainer& new_container)
 {
-	m_GameObject->MoveChild(child, new_container);
+	GameObject::MoveChild(child, new_container);
 }
 
 const std::vector<std::unique_ptr<ObjectComponent>>& InlineGameObject::GetAllComponents() const
 {
-	return m_GameObject->GetAllComponents();
+	return GameObject::GetAllComponents();
 }
 
 
 void InlineGameObject::AddComponent(std::unique_ptr<ObjectComponent> component)
 {
-	m_GameObject->AddComponent(std::move(component));
+	GameObject::AddComponent(std::move(component));
 }
 
 void InlineGameObject::RemoveComponent(size_t component_index)
 {
-	m_GameObject->RemoveComponent(component_index);
+	GameObject::RemoveComponent(component_index);
 }
 
 void InlineGameObject::ModifyComponentField(std::unique_ptr<ComponentFieldChange> change)
 {
-	m_GameObject->ModifyComponentField(std::move(change));
+	GameObject::ModifyComponentField(std::move(change));
 }
 
 void InlineGameObject::SetEnabled(bool enabled)
 {
-	m_GameObject->SetEnabled(enabled);
+	GameObject::SetEnabled(enabled);
 }
 
 void InlineGameObject::SetScene(Scene* scene, SceneKey key)
 {
-	m_GameObject->SetScene(scene, key);
+	GameObject::SetScene(scene, key);
 }
 
 std::unique_ptr<IGameObject> InlineGameObject::Copy() const
 {
-	return std::make_unique<InlineGameObject>(*m_GameObject);
+	InlineGameObject* cpy = new InlineGameObject(*this);
+	return std::unique_ptr<IEditableGameObject>(cpy);
 }
 
 IUpdateable& InlineGameObject::GetUpdateable()
 {
-	return m_GameObject->GetUpdateable();
+	return GameObject::GetUpdateable();
 }
 
 const IUpdateable& InlineGameObject::GetUpdateable() const
 {
-	return m_GameObject->GetUpdateable();
+	return GameObject::GetUpdateable();
 }
 
 ITransformable& InlineGameObject::GetTransformable()
 {
-	return m_GameObject->GetTransformable();
+	return GameObject::GetTransformable();
 }
 
 const ITransformable& InlineGameObject::GetTransformable() const
 {
-	return m_GameObject->GetTransformable();
+	return GameObject::GetTransformable();
 }

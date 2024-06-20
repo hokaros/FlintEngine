@@ -129,7 +129,7 @@ public: /* IUpdateable */
 
 	Scene* GetScene() const;
 
-	~GameObject() = default;
+	virtual ~GameObject() = default;
 
 protected:
 	std::vector<std::unique_ptr<ObjectComponent>> components;

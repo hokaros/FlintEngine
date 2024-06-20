@@ -2,7 +2,8 @@
 #include "IEditableGameObject.h"
 
 class InlineGameObject
-    : public IEditableGameObject
+	: public GameObject
+    , public IEditableGameObject
 {
 public:
 	InlineGameObject();
@@ -44,8 +45,5 @@ public: // IGameObject
 	virtual const IUpdateable& GetUpdateable() const override;
 	virtual ITransformable& GetTransformable() override;
 	virtual const ITransformable& GetTransformable() const override;
-
-private:
-	std::unique_ptr<GameObject> m_GameObject;
 };
 

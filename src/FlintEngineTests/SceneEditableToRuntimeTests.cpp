@@ -85,7 +85,7 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
 	editable_root_object->SetName(root_object_name);
 
-	std::unique_ptr<InlineGameObject> editable_child = std::make_unique<InlineGameObject>();
+	std::unique_ptr<IEditableGameObject> editable_child = std::make_unique<InlineGameObject>();
 	editable_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(editable_child));
 
