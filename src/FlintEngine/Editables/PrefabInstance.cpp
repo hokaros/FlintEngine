@@ -21,17 +21,6 @@ const GameObject& PrefabInstance::GetResult_Depr() const
 	return m_ResultGameObject->GetResult_Depr();
 }
 
-void PrefabInstance::Serializable_AddChild(std::unique_ptr<IEditableGameObject> child)
-{
-	m_AdditionalChildren.push_back(child.get());
-	m_ResultGameObject->Serializable_AddChild(std::move(child));
-}
-
-void PrefabInstance::Serializable_RemoveChild(IEditableGameObject& child)
-{
-	m_ResultGameObject->Serializable_RemoveChild(child);
-}
-
 void PrefabInstance::Serializable_AddComponent(std::unique_ptr<ObjectComponent> component)
 {
 	m_AdditionalComponents.push_back(component.get());

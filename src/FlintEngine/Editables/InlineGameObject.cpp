@@ -40,16 +40,6 @@ const GameObject& InlineGameObject::GetResult_Depr() const
 	return *m_GameObject;
 }
 
-void InlineGameObject::Serializable_AddChild(std::unique_ptr<IEditableGameObject> child)
-{
-	m_GameObject->AddChild(std::move(child));
-}
-
-void InlineGameObject::Serializable_RemoveChild(IEditableGameObject& child)
-{
-	m_GameObject->RemoveChild(child);
-}
-
 void InlineGameObject::Serializable_AddComponent(std::unique_ptr<ObjectComponent> component)
 {
 	m_GameObject->AddComponent(std::move(component));

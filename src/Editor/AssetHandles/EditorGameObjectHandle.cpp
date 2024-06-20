@@ -52,13 +52,13 @@ const std::vector<std::unique_ptr<IGameObject>>& EditorGameObjectHandle::GetSubR
 
 void EditorGameObjectHandle::AddChild(std::unique_ptr<IEditableGameObject> child)
 {
-    GetGameObject().Serializable_AddChild(std::move(child));
+    GetGameObject().AddChild(std::move(child));
     OnUnsavedChange();
 }
 
 void EditorGameObjectHandle::DeleteChild(IEditableGameObject& child)
 {
-    GetGameObject().Serializable_RemoveChild(child);
+    GetGameObject().RemoveChild(child);
     OnUnsavedChange();
 }
 

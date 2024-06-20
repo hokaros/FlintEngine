@@ -50,9 +50,6 @@ public:
 	virtual GameObject& GetResult_Depr() = 0; // Please don't recalculate it on every GetResult() call.
 	virtual const GameObject& GetResult_Depr() const = 0;
 
-	virtual void Serializable_AddChild(std::unique_ptr<IEditableGameObject> child) = 0;
-	virtual void Serializable_RemoveChild(IEditableGameObject& child) = 0;
-
 	virtual void Serializable_AddComponent(std::unique_ptr<ObjectComponent> component) = 0;
 	virtual void Serializable_RemoveComponent(size_t index) = 0;
 	virtual void Serializable_ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) = 0;

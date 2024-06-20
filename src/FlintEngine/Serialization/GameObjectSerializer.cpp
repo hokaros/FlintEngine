@@ -94,7 +94,7 @@ void GameObjectSerializer::DeserializeChildren(InlineGameObject& game_object, co
 {
 	for (const std::unique_ptr<GameObjectStringDescProxy>& child : desc.children)
 	{
-		game_object.Serializable_AddChild(DeserializeIEditable(*child));
+		game_object.AddChild(DeserializeIEditable(*child));
 	}
 }
 
