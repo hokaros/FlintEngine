@@ -51,7 +51,7 @@ void AssetManager::AddSurfaceAsset(const char* path)
 void AssetManager::AddPrefab(const char* path)
 {
 	std::string full_path = GetFullPath(path);
-	std::unique_ptr<GameObject> prefab = InlineGameObject::ToRuntimeObject(GameObjectLoader::LoadPrefab(full_path.c_str()));
+	std::unique_ptr<GameObject> prefab = GameObjectLoader::LoadPrefab(full_path.c_str());
 	if (prefab == nullptr)
 	{
 		FE_LOG("Cannot load prefab: %s", path);

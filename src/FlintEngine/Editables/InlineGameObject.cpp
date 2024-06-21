@@ -17,11 +17,6 @@ InlineGameObject::InlineGameObject(const InlineGameObject& other)
 
 }
 
-std::unique_ptr<GameObject> InlineGameObject::ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object)
-{
-	return std::move(editable_object);
-}
-
 
 const std::string& InlineGameObject::GetName() const
 {

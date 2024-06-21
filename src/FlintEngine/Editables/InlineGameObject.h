@@ -9,8 +9,6 @@ public:
 	InlineGameObject(const GameObject& other);
 	InlineGameObject(const InlineGameObject& other);
 
-	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object);
-
 public: // GameObject
 	virtual const std::string& GetName() const override;
 	virtual void SetName(const std::string& name) override;
