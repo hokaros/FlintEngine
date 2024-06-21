@@ -79,11 +79,6 @@ void PrefabInstance::SetParent(GameObject* parent)
 	GameObject::SetParent(parent);
 }
 
-const std::vector<std::unique_ptr<GameObject>>& PrefabInstance::GetChildren() const
-{
-	return GameObject::GetChildren();
-}
-
 void PrefabInstance::AddChild(std::unique_ptr<GameObject> child)
 {
 	// TODO: add to additional children
@@ -98,12 +93,8 @@ void PrefabInstance::RemoveChild(GameObject& child)
 
 void PrefabInstance::MoveChild(GameObject* child, IGameObjectContainer& new_container)
 {
+	// TODO: remove from additional children
 	GameObject::MoveChild(child, new_container);
-}
-
-const std::vector<std::unique_ptr<ObjectComponent>>& PrefabInstance::GetAllComponents() const
-{
-	return GameObject::GetAllComponents();
 }
 
 
@@ -136,16 +127,6 @@ void PrefabInstance::ModifyComponentField(std::unique_ptr<ComponentFieldChange> 
 	change->field->SetFieldValue(change->component, change->GetValue());
 }
 
-void PrefabInstance::SetEnabled(bool enabled)
-{
-	GameObject::SetEnabled(enabled);
-}
-
-void PrefabInstance::SetScene(Scene* scene, SceneKey key)
-{
-	GameObject::SetScene(scene, key);
-}
-
 std::unique_ptr<GameObject> PrefabInstance::Copy() const
 {
 	PrefabInstance* cpy = new PrefabInstance(*this);
@@ -153,41 +134,12 @@ std::unique_ptr<GameObject> PrefabInstance::Copy() const
 	return std::unique_ptr<GameObject>(cpy);
 }
 
-IUpdateable& PrefabInstance::GetUpdateable()
-{
-	return GameObject::GetUpdateable();
-}
 
-const IUpdateable& PrefabInstance::GetUpdateable() const
-{
-	return GameObject::GetUpdateable();
-}
-
-ITransformable& PrefabInstance::GetTransformable()
-{
-	return *this;
-}
-
-const ITransformable& PrefabInstance::GetTransformable() const
-{
-	return *this;
-}
-
-
-const Vector& PrefabInstance::GetWorldPosition() const
-{
-	return GameObject::GetWorldPosition();
-}
 
 void PrefabInstance::SetWorldPosition(const Vector& pos)
 {
 	m_Position = pos;
 	GameObject::SetWorldPosition(pos);
-}
-
-Vector PrefabInstance::GetLocalPosition() const
-{
-	return GameObject::GetLocalPosition();
 }
 
 void PrefabInstance::SetLocalPosition(const Vector& pos)
@@ -201,20 +153,10 @@ void PrefabInstance::Translate(const Vector& offset)
 	GameObject::Translate(offset);
 }
 
-const Vector& PrefabInstance::GetWorldScale() const
-{
-	return GameObject::GetWorldScale();
-}
-
 void PrefabInstance::SetWorldScale(const Vector& scale)
 {
 	m_Size = scale;
 	GameObject::SetWorldScale(scale);
-}
-
-Vector PrefabInstance::GetLocalScale() const
-{
-	return GameObject::GetLocalScale();
 }
 
 void PrefabInstance::SetLocalScale(const Vector& scale)
@@ -223,20 +165,10 @@ void PrefabInstance::SetLocalScale(const Vector& scale)
 	m_Size = GetWorldScale();
 }
 
-float PrefabInstance::GetWorldRotation() const
-{
-	return GameObject::GetWorldRotation();
-}
-
 void PrefabInstance::SetWorldRotation(float rot)
 {
 	// TODO: serialize rotation
 	GameObject::SetWorldRotation(rot);
-}
-
-float PrefabInstance::GetLocalRotation() const
-{
-	return GameObject::GetLocalRotation();
 }
 
 void PrefabInstance::Rotate(float angle)
@@ -249,15 +181,4 @@ void PrefabInstance::LookAt(const Vector& pos)
 {
 	// TODO: serialize rotation
 	GameObject::LookAt(pos);
-}
-
-
-Vector PrefabInstance::TransformPoint(const Vector& local_pos) const
-{
-	return GameObject::TransformPoint(local_pos);
-}
-
-Vector PrefabInstance::InvTransformPoint(const Vector& world_pos) const
-{
-	return GameObject::InvTransformPoint(world_pos);
 }
