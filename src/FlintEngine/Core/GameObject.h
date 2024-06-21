@@ -2,7 +2,8 @@
 #include <Math/Transform.h>
 #include "Timer.h"
 #include "ObjectComponent.h"
-#include "IGameObject.h"
+#include "ITransformable.h"
+#include "ComponentFieldChange.h"
 #include "SerializableTypes.h"
 #include <functional>
 #include <math.h>
@@ -12,6 +13,7 @@
 #include <list>
 
 class GameObject;
+class Scene;
 
 class IGameObjectContainer
 {
@@ -19,6 +21,20 @@ public:
 	virtual void AddGameObject(std::unique_ptr<GameObject>) = 0;
 
 	virtual ~IGameObjectContainer() = default;
+};
+
+class SceneKey
+{
+private:
+	SceneKey() = default;
+
+	friend Scene;
+};
+
+enum class GameObjectType
+{
+	GameObject,
+	PrefabInstance
 };
 
 class GameObject

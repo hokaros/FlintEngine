@@ -1,5 +1,5 @@
 #pragma once
-#include "IEditableGameObject.h"
+#include <Core/GameObject.h>
 
 class InlineGameObject
 	: public GameObject

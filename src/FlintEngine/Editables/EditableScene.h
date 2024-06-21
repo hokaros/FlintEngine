@@ -1,6 +1,6 @@
 #pragma once
 #include <Core/Scene.h>
-#include "IEditableGameObject.h"
+#include <Core/GameObject.h>
 
 class EditableScene
 {

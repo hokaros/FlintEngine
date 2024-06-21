@@ -1,5 +1,6 @@
 #include "PrefabInstance.h"
 #include "AssetManager.h"
+#include <ComponentFieldDefinition.h>
 
 PrefabInstance::PrefabInstance(const std::string& prefab_path)
 	: GameObject(*AssetManager::GetInstance()->GetPrefab(prefab_path))
