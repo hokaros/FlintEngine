@@ -1,5 +1,7 @@
 #include "Transform.h"
 
+const Transform Transform::IDENTITY = Transform(Vector(0, 0), 0.0f, Vector(1, 1));
+
 Transform::Transform(const Vector& position, const Vector& scale)
 	: m_Position(position)
 	, m_Rotation(0.f)

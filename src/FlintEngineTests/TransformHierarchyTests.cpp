@@ -79,4 +79,25 @@ TEST(SUITE_NAME, SetLocalPositionDoesNotChangeRotationOrScale)
 	ASSERT_VEC_EQ(child_start_scale, child_object.GetWorldScale());
 }
 
+TEST(SUITE_NAME, ParentScalingScalesChild)
+{
+	// Arrange
+	GameObject parent_object = GameObject(Transform::IDENTITY);
+
+	const Vector child_start_scale = Vector(0.5f, 0.4f);
+	const Transform in_child_transform = Transform(Vector::ZERO, 0.0f, child_start_scale);
+
+	parent_object.AddChild(std::make_unique<GameObject>(in_child_transform));
+	GameObject& child_object = *(parent_object.GetChildren()[0]);
+
+	// Act
+	const Vector new_scale = Vector(1.25f, 2.7f);
+	parent_object.SetWorldScale(new_scale);
+
+	// Assert
+	const Vector expected_child_scale = child_start_scale.GetScaled(new_scale); // Because parent scale was 1,1 at first
+	ASSERT_EQ(expected_child_scale, child_object.GetWorldScale());
+	ASSERT_EQ(child_start_scale, child_object.GetLocalScale());
+}
+
 #undef SUITE_NAME
