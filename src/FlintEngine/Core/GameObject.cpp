@@ -297,9 +297,15 @@ const Vector& GameObject::GetWorldScale() const
 Vector GameObject::GetLocalScale() const
 {
 	// Scale in parent space
-	// TODO: implement
-	FE_ASSERT(false, "Implement");
-	return Vector::ZERO;
+	if (m_Parent == nullptr)
+	{
+		return m_Transform.GetScale();
+	}
+	else
+	{
+		const Vector& parent_scale = m_Parent->GetWorldScale();
+		return m_Transform.GetScale().GetScaled(Vector(1 / parent_scale.x, 1 / parent_scale.y));
+	}
 }
 
 float GameObject::GetWorldRotation() const
@@ -310,9 +316,15 @@ float GameObject::GetWorldRotation() const
 float GameObject::GetLocalRotation() const
 {
 	// Rotation in parent space
-	// TODO: implement
-	FE_ASSERT(false, "Implement");
-	return 0.0f;
+	if (m_Parent == nullptr)
+	{
+		return m_Transform.GetRotation();
+	}
+	else
+	{
+		const float parent_rot = m_Parent->GetWorldRotation();
+		return m_Transform.GetRotation() - parent_rot;
+	}
 }
 
 void GameObject::SetWorldPosition(const Vector& newPosition)
