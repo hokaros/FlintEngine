@@ -20,12 +20,12 @@ private:
 	class RemoveObjectOperation
 	{
 	public:
-		RemoveObjectOperation(IEditableGameObject& removed_object, IHierarchyEditable& parent);
+		RemoveObjectOperation(GameObject& removed_object, IHierarchyEditable& parent);
 
 		void Execute();
 
 	private:
-		IEditableGameObject& m_RemovedObject;
+		GameObject& m_RemovedObject;
 		IHierarchyEditable& m_Parent;
 	};
 

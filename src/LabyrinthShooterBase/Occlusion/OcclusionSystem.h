@@ -43,7 +43,7 @@ private:
 	std::string m_LabName = "Labyrinth";
 	DECLARE_FIELD(m_LabName);
 
-	IGameObject* m_Player = nullptr;
+	GameObject* m_Player = nullptr;
 	LabyrinthSolidifier* m_Lab = nullptr;
 
 	std::vector<IOccludable*> m_Occludables;

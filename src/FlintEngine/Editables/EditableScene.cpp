@@ -4,7 +4,7 @@ void EditableScene::Render(SceneRenderer& renderer)
 {
 	m_ResultScene.Render(renderer);
 
-	for (std::unique_ptr<IGameObject>& root_object : m_RootObjects)
+	for (std::unique_ptr<GameObject>& root_object : m_RootObjects)
 	{
 		root_object->GetUpdateable().RenderUpdate(renderer);
 	}
@@ -21,16 +21,16 @@ std::unique_ptr<Scene> EditableScene::CreateRuntimeObject() const
 	return runtime_scene;
 }
 
-void EditableScene::AddRootObject(std::unique_ptr<IEditableGameObject> game_object)
+void EditableScene::AddRootObject(std::unique_ptr<GameObject> game_object)
 {
 	m_RootObjects.push_back(std::move(game_object));
 }
 
-void EditableScene::RemoveRootObject(IGameObject& game_object)
+void EditableScene::RemoveRootObject(GameObject& game_object)
 {
 	for (auto it = m_RootObjects.begin(); it != m_RootObjects.end(); it++)
 	{
-		std::unique_ptr<IGameObject>& c = *it;
+		std::unique_ptr<GameObject>& c = *it;
 		if (c.get() == &game_object)
 		{
 			m_RootObjects.erase(it);
@@ -39,7 +39,7 @@ void EditableScene::RemoveRootObject(IGameObject& game_object)
 	}
 }
 
-const std::vector<std::unique_ptr<IGameObject>>& EditableScene::GetRootObjects() const
+const std::vector<std::unique_ptr<GameObject>>& EditableScene::GetRootObjects() const
 {
 	return m_RootObjects;
 }
@@ -57,10 +57,10 @@ const Rgb8& EditableScene::GetBackgroundColor() const
 
 void EditableScene::CopyObjectsToScene(Scene& scene) const
 {
-	for (const std::unique_ptr<IGameObject>& object : m_RootObjects)
+	for (const std::unique_ptr<GameObject>& object : m_RootObjects)
 	{
-		std::unique_ptr<IGameObject> runtime_object = object->Copy();
+		std::unique_ptr<GameObject> runtime_object = std::make_unique<GameObject>(*object);
 
-		scene.AddGameObject(std::move(runtime_object));
+		scene.AddGameObject(object->Copy());
 	}
 }

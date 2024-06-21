@@ -42,10 +42,10 @@ TEST(SUITE_NAME, AddsSingleInlineObject)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<IGameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const std::list<std::unique_ptr<GameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
 	ASSERT_TRUE(runtime_objects.size() == 1);
 
-	const std::unique_ptr<IGameObject>& runtime_object = runtime_objects.front();
+	const std::unique_ptr<GameObject>& runtime_object = runtime_objects.front();
 	ASSERT_EQ(object_name, runtime_object->GetName());
 }
 
@@ -69,10 +69,10 @@ TEST(SUITE_NAME, AddsSinglePrefabInstance)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<IGameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const std::list<std::unique_ptr<GameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
 	ASSERT_TRUE(runtime_objects.size() == 1);
 
-	const std::unique_ptr<IGameObject>& runtime_object = runtime_objects.front();
+	const std::unique_ptr<GameObject>& runtime_object = runtime_objects.front();
 	ASSERT_EQ(object_name, runtime_object->GetName());
 }
 
@@ -85,7 +85,7 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
 	editable_root_object->SetName(root_object_name);
 
-	std::unique_ptr<IEditableGameObject> editable_child = std::make_unique<InlineGameObject>();
+	std::unique_ptr<InlineGameObject> editable_child = std::make_unique<InlineGameObject>();
 	editable_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(editable_child));
 
@@ -96,16 +96,16 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<IGameObject>>& runtime_root_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const std::list<std::unique_ptr<GameObject>>& runtime_root_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
 	ASSERT_TRUE(runtime_root_objects.size() == 1);
 
-	const std::unique_ptr<IGameObject>& runtime_root_object = runtime_root_objects.front();
+	const std::unique_ptr<GameObject>& runtime_root_object = runtime_root_objects.front();
 	ASSERT_EQ(root_object_name, runtime_root_object->GetName());
 
-	const std::vector<std::unique_ptr<IGameObject>>& runtime_root_object_children = runtime_root_object->GetChildren();
+	const std::vector<std::unique_ptr<GameObject>>& runtime_root_object_children = runtime_root_object->GetChildren();
 	ASSERT_TRUE(runtime_root_object_children.size() == 1);
 
-	const std::unique_ptr<IGameObject>& runtime_child = runtime_root_object_children.front();
+	const std::unique_ptr<GameObject>& runtime_child = runtime_root_object_children.front();
 	ASSERT_EQ(child_object_name, runtime_child->GetName());
 }
 
@@ -122,7 +122,7 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
 	editable_root_object->SetName(root_object_name);
 
-	std::unique_ptr<IEditableGameObject> prefab_instance_child = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
+	std::unique_ptr<PrefabInstance> prefab_instance_child = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 	prefab_instance_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(prefab_instance_child));
 
@@ -133,16 +133,16 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<IGameObject>>& runtime_root_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const std::list<std::unique_ptr<GameObject>>& runtime_root_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
 	ASSERT_TRUE(runtime_root_objects.size() == 1);
 
-	const std::unique_ptr<IGameObject>& runtime_root_object = runtime_root_objects.front();
+	const std::unique_ptr<GameObject>& runtime_root_object = runtime_root_objects.front();
 	ASSERT_EQ(root_object_name, runtime_root_object->GetName());
 
-	const std::vector<std::unique_ptr<IGameObject>>& runtime_root_object_children = runtime_root_object->GetChildren();
+	const std::vector<std::unique_ptr<GameObject>>& runtime_root_object_children = runtime_root_object->GetChildren();
 	ASSERT_TRUE(runtime_root_object_children.size() == 1);
 
-	const std::unique_ptr<IGameObject>& runtime_child = runtime_root_object_children.front();
+	const std::unique_ptr<GameObject>& runtime_child = runtime_root_object_children.front();
 	ASSERT_EQ(child_object_name, runtime_child->GetName());
 }
 

@@ -4,11 +4,6 @@
 #include <AssetManager.h>
 
 
-const GameObject& EditorGameObjectHandle::GetResult_Depr() const
-{
-    return GetGameObject().GetResult_Depr();
-}
-
 void EditorGameObjectHandle::SetPosition(const Vector& pos)
 {
     GetGameObject().GetTransformable().SetWorldPosition(pos);
@@ -45,18 +40,18 @@ void EditorGameObjectHandle::RemoveComponent(size_t component_index)
     OnUnsavedChange();
 }
 
-const std::vector<std::unique_ptr<IGameObject>>& EditorGameObjectHandle::GetSubRootObjects() const
+const std::vector<std::unique_ptr<GameObject>>& EditorGameObjectHandle::GetSubRootObjects() const
 {
     return GetGameObject().GetChildren();
 }
 
-void EditorGameObjectHandle::AddChild(std::unique_ptr<IEditableGameObject> child)
+void EditorGameObjectHandle::AddChild(std::unique_ptr<GameObject> child)
 {
     GetGameObject().AddChild(std::move(child));
     OnUnsavedChange();
 }
 
-void EditorGameObjectHandle::DeleteChild(IEditableGameObject& child)
+void EditorGameObjectHandle::DeleteChild(GameObject& child)
 {
     GetGameObject().RemoveChild(child);
     OnUnsavedChange();
@@ -80,7 +75,7 @@ EditorPrefabHandle::EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab,
     FE_ASSERT(m_Prefab != nullptr, "No prefab passed to PrefabHandle");
 }
 
-IEditableGameObject& EditorPrefabHandle::GetGameObject() const
+GameObject& EditorPrefabHandle::GetGameObject() const
 {
     return *m_Prefab;
 }
@@ -111,13 +106,13 @@ void EditorPrefabHandle::OnUnsavedChange()
 }
 
 
-EditorIEditableGameObjectHandle::EditorIEditableGameObjectHandle(IEditableGameObject& game_object, ISaveable& root_asset)
+EditorIEditableGameObjectHandle::EditorIEditableGameObjectHandle(GameObject& game_object, ISaveable& root_asset)
     : m_EditableObject(game_object)
     , m_RootAsset(root_asset)
 {
 }
 
-IEditableGameObject& EditorIEditableGameObjectHandle::GetGameObject() const
+GameObject& EditorIEditableGameObjectHandle::GetGameObject() const
 {
     return m_EditableObject;
 }

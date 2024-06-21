@@ -69,7 +69,7 @@ void SceneEditor::Render()
 			handle != nullptr 
 			&& handle->GetGameObjectHandle() != nullptr)
 		{
-			IEditableGameObject& game_object = handle->GetGameObjectHandle()->GetGameObject();
+			GameObject& game_object = handle->GetGameObjectHandle()->GetGameObject();
 			game_object.GetUpdateable().RenderUpdate(m_SceneRenderer);
 		}
 		SelectedObjectRenderer::Render(*m_SelectedObjectManager, m_SceneRenderer);
@@ -128,7 +128,7 @@ void SceneEditor::MoveViewportToSelectedGameObject()
 	MoveViewportToGameObject(go_handle->GetGameObject());
 }
 
-void SceneEditor::MoveViewportToGameObject(const IGameObject& object)
+void SceneEditor::MoveViewportToGameObject(const GameObject& object)
 {
 	const Vector& new_position = object.GetTransformable().GetWorldPosition();
 	const Vector& new_size = object.GetTransformable().GetWorldScale();

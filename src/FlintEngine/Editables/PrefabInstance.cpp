@@ -26,16 +26,6 @@ PrefabInstance::PrefabInstance(const PrefabInstance& other)
 
 }
 
-GameObject& PrefabInstance::GetResult_Depr()
-{
-	return *this;
-}
-
-const GameObject& PrefabInstance::GetResult_Depr() const
-{
-	return *this;
-}
-
 std::unique_ptr<GameObject> PrefabInstance::ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object)
 {
 	return std::move(editable_object);
@@ -78,34 +68,34 @@ void PrefabInstance::SetName(const std::string& name)
 	GameObject::SetName(name);
 }
 
-IGameObject* PrefabInstance::GetParent() const
+GameObject* PrefabInstance::GetParent() const
 {
 	return GameObject::GetParent();
 }
 
-void PrefabInstance::SetParent(IGameObject* parent)
+void PrefabInstance::SetParent(GameObject* parent)
 {
 	GameObject::SetParent(parent);
 }
 
-const std::vector<std::unique_ptr<IGameObject>>& PrefabInstance::GetChildren() const
+const std::vector<std::unique_ptr<GameObject>>& PrefabInstance::GetChildren() const
 {
 	return GameObject::GetChildren();
 }
 
-void PrefabInstance::AddChild(std::unique_ptr<IGameObject> child)
+void PrefabInstance::AddChild(std::unique_ptr<GameObject> child)
 {
 	// TODO: add to additional children
 	GameObject::AddChild(std::move(child));
 }
 
-void PrefabInstance::RemoveChild(IGameObject& child)
+void PrefabInstance::RemoveChild(GameObject& child)
 {
 	// TODO: remove from additional children
 	GameObject::RemoveChild(child);
 }
 
-void PrefabInstance::MoveChild(IGameObject* child, IGameObjectContainer& new_container)
+void PrefabInstance::MoveChild(GameObject* child, IGameObjectContainer& new_container)
 {
 	GameObject::MoveChild(child, new_container);
 }
@@ -155,11 +145,11 @@ void PrefabInstance::SetScene(Scene* scene, SceneKey key)
 	GameObject::SetScene(scene, key);
 }
 
-std::unique_ptr<IGameObject> PrefabInstance::Copy() const
+std::unique_ptr<GameObject> PrefabInstance::Copy() const
 {
 	PrefabInstance* cpy = new PrefabInstance(*this);
 
-	return std::unique_ptr<IEditableGameObject>(cpy);
+	return std::unique_ptr<GameObject>(cpy);
 }
 
 IUpdateable& PrefabInstance::GetUpdateable()

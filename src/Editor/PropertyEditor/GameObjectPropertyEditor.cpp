@@ -21,7 +21,7 @@ void GameObjectPropertyEditor::SetGameObject(std::weak_ptr<EditorUniversalHandle
     if (go_handle == nullptr)
         return;
 
-    const GameObject& go = go_handle->GetResult_Depr();
+    const GameObject& go = go_handle->GetGameObject();
     InitValuesFromGameObject(go);
     LoadComponents(*go_handle);
 
@@ -90,7 +90,7 @@ void GameObjectPropertyEditor::LoadComponents(EditorGameObjectHandle& game_objec
     m_ComponentEditors.clear();
 
     size_t component_idx = 0;
-    for (const std::unique_ptr<ObjectComponent>& component : game_object.GetResult_Depr().GetAllComponents())
+    for (const std::unique_ptr<ObjectComponent>& component : game_object.GetGameObject().GetAllComponents())
     {
         std::unique_ptr<ComponentEditor> comp_editor = std::make_unique<ComponentEditor>(game_object, *component, component_idx);
         comp_editor->RegisterActionObserver(this);

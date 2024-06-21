@@ -18,9 +18,9 @@ public:
 	virtual void OnUnsavedChange() override;
 
 	// IHierarchyEditable
-	virtual const std::vector<std::unique_ptr<IGameObject>>& GetSubRootObjects() const override;
-	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
-	virtual void DeleteChild(IEditableGameObject& child) override;
+	virtual const std::vector<std::unique_ptr<GameObject>>& GetSubRootObjects() const override;
+	virtual void AddChild(std::unique_ptr<GameObject> child) override;
+	virtual void DeleteChild(GameObject& child) override;
 	virtual const char* GetName() const override;
 
 	bool operator==(const EditorSceneHandle& other) const;

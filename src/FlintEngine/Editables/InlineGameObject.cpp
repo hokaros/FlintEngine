@@ -17,16 +17,6 @@ InlineGameObject::InlineGameObject(const InlineGameObject& other)
 
 }
 
-GameObject& InlineGameObject::GetResult_Depr()
-{
-	return *this;
-}
-
-const GameObject& InlineGameObject::GetResult_Depr() const
-{
-	return *this;
-}
-
 std::unique_ptr<GameObject> InlineGameObject::ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object)
 {
 	return std::move(editable_object);
@@ -43,32 +33,32 @@ void InlineGameObject::SetName(const std::string& name)
 	GameObject::SetName(name);
 }
 
-IGameObject* InlineGameObject::GetParent() const
+GameObject* InlineGameObject::GetParent() const
 {
 	return GameObject::GetParent();
 }
 
-void InlineGameObject::SetParent(IGameObject* parent)
+void InlineGameObject::SetParent(GameObject* parent)
 {
 	GameObject::SetParent(parent);
 }
 
-const std::vector<std::unique_ptr<IGameObject>>& InlineGameObject::GetChildren() const
+const std::vector<std::unique_ptr<GameObject>>& InlineGameObject::GetChildren() const
 {
 	return GameObject::GetChildren();
 }
 
-void InlineGameObject::AddChild(std::unique_ptr<IGameObject> child)
+void InlineGameObject::AddChild(std::unique_ptr<GameObject> child)
 {
 	GameObject::AddChild(std::move(child));
 }
 
-void InlineGameObject::RemoveChild(IGameObject& child)
+void InlineGameObject::RemoveChild(GameObject& child)
 {
 	GameObject::RemoveChild(child);
 }
 
-void InlineGameObject::MoveChild(IGameObject* child, IGameObjectContainer& new_container)
+void InlineGameObject::MoveChild(GameObject* child, IGameObjectContainer& new_container)
 {
 	GameObject::MoveChild(child, new_container);
 }
@@ -104,10 +94,10 @@ void InlineGameObject::SetScene(Scene* scene, SceneKey key)
 	GameObject::SetScene(scene, key);
 }
 
-std::unique_ptr<IGameObject> InlineGameObject::Copy() const
+std::unique_ptr<GameObject> InlineGameObject::Copy() const
 {
 	InlineGameObject* cpy = new InlineGameObject(*this);
-	return std::unique_ptr<IEditableGameObject>(cpy);
+	return std::unique_ptr<GameObject>(cpy);
 }
 
 IUpdateable& InlineGameObject::GetUpdateable()

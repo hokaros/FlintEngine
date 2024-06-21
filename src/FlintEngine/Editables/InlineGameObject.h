@@ -3,7 +3,6 @@
 
 class InlineGameObject
 	: public GameObject
-    , public IEditableGameObject
 {
 public:
 	InlineGameObject();
@@ -12,21 +11,17 @@ public:
 
 	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<InlineGameObject> editable_object);
 
-public: // IEditableGameObject
-	virtual GameObject& GetResult_Depr() override;
-	virtual const GameObject& GetResult_Depr() const override;
-
-public: // IGameObject
+public: // GameObject
 	virtual const std::string& GetName() const override;
 	virtual void SetName(const std::string& name) override;
 
-	virtual IGameObject* GetParent() const override;
-	virtual void SetParent(IGameObject* parent) override;
+	virtual GameObject* GetParent() const override;
+	virtual void SetParent(GameObject* parent) override;
 
-	virtual const std::vector<std::unique_ptr<IGameObject>>& GetChildren() const override;
-	virtual void AddChild(std::unique_ptr<IGameObject> child) override;
-	virtual void RemoveChild(IGameObject& child) override;
-	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) override;
+	virtual const std::vector<std::unique_ptr<GameObject>>& GetChildren() const override;
+	virtual void AddChild(std::unique_ptr<GameObject> child) override;
+	virtual void RemoveChild(GameObject& child) override;
+	virtual void MoveChild(GameObject* child, IGameObjectContainer& new_container) override;
 
 	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const override;
 	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
@@ -37,7 +32,7 @@ public: // IGameObject
 
 	virtual void SetScene(Scene* scene, SceneKey) override;
 
-	virtual std::unique_ptr<IGameObject> Copy() const override;
+	virtual std::unique_ptr<GameObject> Copy() const override;
 
 	virtual IUpdateable& GetUpdateable() override;
 	virtual const IUpdateable& GetUpdateable() const override;

@@ -25,7 +25,7 @@ private:
 	void ProcessShortcuts();
 
 	void MoveViewportToSelectedGameObject();
-	void MoveViewportToGameObject(const IGameObject& object);
+	void MoveViewportToGameObject(const GameObject& object);
 
 	static Rgb8 GetNegativeColor(const Rgb8& color);
 

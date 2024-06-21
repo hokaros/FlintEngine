@@ -38,8 +38,8 @@ public:
 	static std::unique_ptr<GameObjectStringDesc> SerializeGameObject(const InlineGameObject& game_object);
 	static std::unique_ptr<InlineGameObject> DeserializeGameObject(const GameObjectStringDesc& desc);
 
-	static std::unique_ptr<GameObjectStringDescProxy> SerializeIEditable(const IEditableGameObject& game_object);
-	static std::unique_ptr<IEditableGameObject> DeserializeIEditable(const GameObjectStringDescProxy& desc);
+	static std::unique_ptr<GameObjectStringDescProxy> SerializeIEditable(const GameObject& game_object);
+	static std::unique_ptr<GameObject> DeserializeIEditable(const GameObjectStringDescProxy& desc);
 
 private:
 	static std::unique_ptr<InlineGameObject> DeserializePureGameObject(const GameObjectStringDesc& desc);

@@ -4,7 +4,7 @@
 class IObjectManagerObserver
 {
 public:
-	virtual void OnObjectDestroying(IGameObject& object) = 0;
+	virtual void OnObjectDestroying(GameObject& object) = 0;
 
 	virtual ~IObjectManagerObserver() = default;
 };
@@ -18,20 +18,20 @@ public:
 	~ObjectManager();
 
 	// Dodaje obiekt do zarz¹dzanych
-	virtual void AddGameObject(std::unique_ptr<IGameObject> object) override;
+	virtual void AddGameObject(std::unique_ptr<GameObject> object) override;
 
-	void AddToMessageSubscribers(IGameObject* object);
+	void AddToMessageSubscribers(GameObject* object);
 
-	void AddNewObject(std::unique_ptr<IGameObject> object);
-	void DestroyObject(IGameObject* object);
+	void AddNewObject(std::unique_ptr<GameObject> object);
+	void DestroyObject(GameObject* object);
 	void DestroyAll();
 
 	void DisposeDestroyed();
 	void ActivateNewObjects();
 
-	const std::list<IGameObject*>& GetAllMessageSubscribers() const;
-	const std::list<std::unique_ptr<IGameObject>>& GetOwnedObjects() const;
-	std::list<std::unique_ptr<IGameObject>>& GetOwnedObjects();
+	const std::list<GameObject*>& GetAllMessageSubscribers() const;
+	const std::list<std::unique_ptr<GameObject>>& GetOwnedObjects() const;
+	std::list<std::unique_ptr<GameObject>>& GetOwnedObjects();
 
 	void Subscribe(IObjectManagerObserver& observer);
 
@@ -42,15 +42,15 @@ public:
 
 	static ObjectManager* Main();
 private:
-	void DestroyObjectImpl(IGameObject* gameObject, bool detach = true);
+	void DestroyObjectImpl(GameObject* gameObject, bool detach = true);
 
-	void NotifyObjectDestroying(IGameObject* object);
+	void NotifyObjectDestroying(GameObject* object);
 
 private:
-	std::list<IGameObject*> m_MessageSubscribers;
-	std::list<std::unique_ptr<IGameObject>> m_OwnedObjects;
-	std::list<IGameObject*> m_DestroyedObjects;
-	std::list<IGameObject*> m_NewMessageSubscribers;
+	std::list<GameObject*> m_MessageSubscribers;
+	std::list<std::unique_ptr<GameObject>> m_OwnedObjects;
+	std::list<GameObject*> m_DestroyedObjects;
+	std::list<GameObject*> m_NewMessageSubscribers;
 
 	std::vector<IObjectManagerObserver*> m_Observers;
 

@@ -13,13 +13,13 @@ public:
 	void ResetScene();
 	void PostFrame();
 
-	IGameObject* FindGameObjectByName(const std::string& name) const;
+	GameObject* FindGameObjectByName(const std::string& name) const;
 
-	using GameObjectsT = std::list<std::unique_ptr<IGameObject>>;
+	using GameObjectsT = std::list<std::unique_ptr<GameObject>>;
 	GameObjectsT::iterator BeginRootGameObjects();
 	GameObjectsT::iterator EndRootGameObjects();
 	
-	virtual void AddGameObject(std::unique_ptr<IGameObject> game_object) override;
+	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
 
 	void MoveObjectsFrom(Scene&& other_scene);
 

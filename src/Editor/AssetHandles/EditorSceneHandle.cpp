@@ -36,18 +36,18 @@ void EditorSceneHandle::OnUnsavedChange()
     m_HasUnsavedChanges = true;
 }
 
-const std::vector<std::unique_ptr<IGameObject>>& EditorSceneHandle::GetSubRootObjects() const
+const std::vector<std::unique_ptr<GameObject>>& EditorSceneHandle::GetSubRootObjects() const
 {
     return m_Scene->GetRootObjects();
 }
 
-void EditorSceneHandle::AddChild(std::unique_ptr<IEditableGameObject> child)
+void EditorSceneHandle::AddChild(std::unique_ptr<GameObject> child)
 {
     m_Scene->AddRootObject(std::move(child));
     OnUnsavedChange();
 }
 
-void EditorSceneHandle::DeleteChild(IEditableGameObject& child)
+void EditorSceneHandle::DeleteChild(GameObject& child)
 {
     m_Scene->RemoveRootObject(child);
     OnUnsavedChange();

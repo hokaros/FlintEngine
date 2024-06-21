@@ -32,7 +32,7 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 
 void GameObjectSerializer::SerializeComponents(const InlineGameObject& game_object, GameObjectStringDesc& desc)
 {
-	for (const std::unique_ptr<ObjectComponent>& component : game_object.GetResult_Depr().GetAllComponents())
+	for (const std::unique_ptr<ObjectComponent>& component : game_object.GetAllComponents())
 	{
 		desc.components.push_back(ComponentSerializer::SerializeComponent(*component));
 	}
@@ -83,12 +83,9 @@ void GameObjectSerializer::DeserializeComponents(InlineGameObject& game_object, 
 
 void GameObjectSerializer::SerializeChildren(const InlineGameObject& game_object, GameObjectStringDesc& desc)
 {
-	for (const std::unique_ptr<IGameObject>& child : game_object.GetChildren())
+	for (const std::unique_ptr<GameObject>& child : game_object.GetChildren())
 	{
-		const IEditableGameObject* editable_child = dynamic_cast<const IEditableGameObject*>(child.get());
-		FE_ASSERT(editable_child != nullptr, "Child is not IEditableGameObject");
-
-		desc.children.push_back(SerializeIEditable(*editable_child));
+		desc.children.push_back(SerializeIEditable(*child));
 	}
 }
 
@@ -100,7 +97,7 @@ void GameObjectSerializer::DeserializeChildren(InlineGameObject& game_object, co
 	}
 }
 
-std::unique_ptr<GameObjectStringDescProxy> GameObjectSerializer::SerializeIEditable(const IEditableGameObject& game_object)
+std::unique_ptr<GameObjectStringDescProxy> GameObjectSerializer::SerializeIEditable(const GameObject& game_object)
 {
 	switch (game_object.GetGameObjectType())
 	{
@@ -120,7 +117,7 @@ std::unique_ptr<GameObjectStringDescProxy> GameObjectSerializer::SerializeIEdita
 	}
 }
 
-std::unique_ptr<IEditableGameObject> GameObjectSerializer::DeserializeIEditable(const GameObjectStringDescProxy& desc)
+std::unique_ptr<GameObject> GameObjectSerializer::DeserializeIEditable(const GameObjectStringDescProxy& desc)
 {
 	switch (desc.GetType())
 	{
@@ -136,7 +133,7 @@ std::unique_ptr<IEditableGameObject> GameObjectSerializer::DeserializeIEditable(
 	}
 	default:
 		FE_ASSERT(false, "Unimplemented proxying");
-		return std::unique_ptr<IEditableGameObject>();
+		return std::unique_ptr<GameObject>();
 	}
 }
 

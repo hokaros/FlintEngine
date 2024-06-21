@@ -11,17 +11,18 @@
 
 #include <list>
 
+class GameObject;
+
 class IGameObjectContainer
 {
 public:
-	virtual void AddGameObject(std::unique_ptr<IGameObject>) = 0;
+	virtual void AddGameObject(std::unique_ptr<GameObject>) = 0;
 
 	virtual ~IGameObjectContainer() = default;
 };
 
 class GameObject
-	: public IGameObject
-	, public ITransformable
+	: public ITransformable
 	, public IUpdateable
 {
 public:
@@ -43,32 +44,32 @@ public:
 	static void Destroy(GameObject* game_object);
 
 public: /* IGameObject */
-	virtual const std::string& GetName() const override;
-	virtual void SetName(const std::string& name) override;
+	virtual const std::string& GetName() const;
+	virtual void SetName(const std::string& name);
 
-	virtual IGameObject* GetParent() const override;
-	virtual void SetParent(IGameObject* parent) override;
+	virtual GameObject* GetParent() const;
+	virtual void SetParent(GameObject* parent);
 
-	virtual const std::vector<std::unique_ptr<IGameObject>>& GetChildren() const override;
-	virtual void AddChild(std::unique_ptr<IGameObject> child) override;
-	virtual void RemoveChild(IGameObject& child) override;
-	virtual void MoveChild(IGameObject* child, IGameObjectContainer& new_container) override;
+	virtual const std::vector<std::unique_ptr<GameObject>>& GetChildren() const;
+	virtual void AddChild(std::unique_ptr<GameObject> child);
+	virtual void RemoveChild(GameObject& child);
+	virtual void MoveChild(GameObject* child, IGameObjectContainer& new_container);
 
-	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const override;
-	virtual void AddComponent(std::unique_ptr<ObjectComponent> component) override;
-	virtual void RemoveComponent(size_t component_index) override;
-	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change) override;
+	virtual const std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents() const;
+	virtual void AddComponent(std::unique_ptr<ObjectComponent> component);
+	virtual void RemoveComponent(size_t component_index);
+	virtual void ModifyComponentField(std::unique_ptr<ComponentFieldChange> change);
 
-	virtual void SetEnabled(bool enabled) override;
+	virtual void SetEnabled(bool enabled);
 
-	virtual void SetScene(Scene* scene, SceneKey) override;
+	virtual void SetScene(Scene* scene, SceneKey);
 
-	virtual std::unique_ptr<IGameObject> Copy() const override;
+	virtual std::unique_ptr<GameObject> Copy() const;
 
-	virtual IUpdateable& GetUpdateable() override;
-	virtual const IUpdateable& GetUpdateable() const override;
-	virtual ITransformable& GetTransformable() override;
-	virtual const ITransformable& GetTransformable() const override;
+	virtual IUpdateable& GetUpdateable();
+	virtual const IUpdateable& GetUpdateable() const;
+	virtual ITransformable& GetTransformable();
+	virtual const ITransformable& GetTransformable() const;
 
 	virtual GameObjectType GetGameObjectType() const { return GameObjectType::GameObject; }
 
@@ -111,11 +112,14 @@ public: /* IUpdateable */
 	virtual void OnDestroy() override;
 
 	//
-	std::vector<std::unique_ptr<IGameObject>>& GetChildren(); // TODO: remove
+	std::vector<std::unique_ptr<GameObject>>& GetChildren(); // TODO: remove
 
 	void RemoveComponent(ObjectComponent* component);
 	std::vector<std::unique_ptr<ObjectComponent>>& GetAllComponents();
 	ObjectComponent* GetComponent(size_t idx);
+	// Finds a component of given type
+	template<class T>
+	T* FindComponent(); // TODO: find by RTC
 	// Znajduje wszystkie komponenty okreœlonego typu
 	template<class T>
 	std::list<T*>* FindComponents();
@@ -142,8 +146,8 @@ private:
 	std::string name = "GameObject";
 	Transform m_Transform;
 
-	IGameObject* m_Parent = nullptr;
-	std::vector<std::unique_ptr<IGameObject>> children;
+	GameObject* m_Parent = nullptr;
+	std::vector<std::unique_ptr<GameObject>> children;
 
 	Scene* scene = nullptr;
 };
@@ -205,6 +209,20 @@ public:
 
 
 template<class T>
+T* GameObject::FindComponent()
+{
+	for (const std::unique_ptr<ObjectComponent>& component : GetAllComponents())
+	{
+		T* desired = dynamic_cast<T*>(component.get());
+		if (desired != nullptr)
+		{
+			return desired;
+		}
+	}
+	return nullptr;
+}
+
+template<class T>
 std::list<T*>* GameObject::FindComponents() 
 {
 	std::list<T*>* found = new std::list<T*>();
@@ -226,13 +244,9 @@ std::list<T*>* GameObject::FindComponentsInChildren()
 {
 	std::list<T*>* found = new std::list<T*>();
 
-	for (std::unique_ptr<IGameObject>& child : children) 
+	for (std::unique_ptr<GameObject>& child : children) 
 	{
-		GameObject* child_go = dynamic_cast<GameObject*>(child.get());
-		if (child_go == nullptr) // TODO: add support for IGameObject
-			continue;
-
-		std::list<T*>* foundInChild = child_go->FindComponents<T>();
+		std::list<T*>* foundInChild = child->FindComponents<T>();
 
 		for (T* desired : *foundInChild) 
 		{

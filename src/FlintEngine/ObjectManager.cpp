@@ -12,9 +12,9 @@ void ObjectManager::SetAsMain()
 	s_Main = this;
 }
 
-void ObjectManager::DestroyObjectImpl(IGameObject* gameObject, bool detach)
+void ObjectManager::DestroyObjectImpl(GameObject* gameObject, bool detach)
 {
-	for (IGameObject* destroyedObj : m_DestroyedObjects) {
+	for (GameObject* destroyedObj : m_DestroyedObjects) {
 		if (destroyedObj == gameObject)
 			return;  // ju¿ usuniêty
 	}
@@ -31,7 +31,7 @@ void ObjectManager::DestroyObjectImpl(IGameObject* gameObject, bool detach)
 	}
 }
 
-void ObjectManager::NotifyObjectDestroying(IGameObject* object)
+void ObjectManager::NotifyObjectDestroying(GameObject* object)
 {
 	if (object == nullptr)
 		return;
@@ -58,25 +58,25 @@ ObjectManager::~ObjectManager()
 	}
 }
 
-void ObjectManager::AddNewObject(std::unique_ptr<IGameObject> gameObject)
+void ObjectManager::AddNewObject(std::unique_ptr<GameObject> gameObject)
 {
 	AddToMessageSubscribers(gameObject.get());
 
 	AddGameObject(std::move(gameObject));
 }
 
-void ObjectManager::AddGameObject(std::unique_ptr<IGameObject> gameObject)
+void ObjectManager::AddGameObject(std::unique_ptr<GameObject> gameObject)
 {
 	m_OwnedObjects.push_back(std::move(gameObject));
 }
 
-void ObjectManager::AddToMessageSubscribers(IGameObject* gameObject)
+void ObjectManager::AddToMessageSubscribers(GameObject* gameObject)
 {
 	m_NewMessageSubscribers.push_back(gameObject);
 	m_MessageSubscribers.push_back(gameObject);
 }
 
-void ObjectManager::DestroyObject(IGameObject* gameObject) 
+void ObjectManager::DestroyObject(GameObject* gameObject) 
 {
 	NotifyObjectDestroying(gameObject);
 
@@ -85,7 +85,7 @@ void ObjectManager::DestroyObject(IGameObject* gameObject)
 
 void ObjectManager::DestroyAll()
 {
-	for (std::unique_ptr<IGameObject>& go : m_OwnedObjects)
+	for (std::unique_ptr<GameObject>& go : m_OwnedObjects)
 	{
 		DestroyObject(go.get());
 	}
@@ -93,9 +93,9 @@ void ObjectManager::DestroyAll()
 
 void ObjectManager::DisposeDestroyed() 
 {
-	auto should_dispose = [this](const IGameObject* go) -> bool
+	auto should_dispose = [this](const GameObject* go) -> bool
 	{
-		for (IGameObject* destroyedGO : m_DestroyedObjects)
+		for (GameObject* destroyedGO : m_DestroyedObjects)
 		{
 			if (destroyedGO == go)
 			{
@@ -107,7 +107,7 @@ void ObjectManager::DisposeDestroyed()
 
 	m_NewMessageSubscribers.remove_if(should_dispose);
 	m_MessageSubscribers.remove_if(should_dispose);
-	m_OwnedObjects.remove_if([&should_dispose](const std::unique_ptr<IGameObject>& ptr) 
+	m_OwnedObjects.remove_if([&should_dispose](const std::unique_ptr<GameObject>& ptr) 
 		{
 			return should_dispose(ptr.get()); 
 		});
@@ -117,11 +117,11 @@ void ObjectManager::DisposeDestroyed()
 
 void ObjectManager::ActivateNewObjects()
 {
-	for (IGameObject* go : m_NewMessageSubscribers)
+	for (GameObject* go : m_NewMessageSubscribers)
 	{
 		go->GetUpdateable().Awake();
 	}
-	for (IGameObject* go : m_NewMessageSubscribers)
+	for (GameObject* go : m_NewMessageSubscribers)
 	{
 		go->GetUpdateable().Start();
 	}
@@ -129,17 +129,17 @@ void ObjectManager::ActivateNewObjects()
 	m_NewMessageSubscribers.clear();
 }
 
-const std::list<IGameObject*>& ObjectManager::GetAllMessageSubscribers() const 
+const std::list<GameObject*>& ObjectManager::GetAllMessageSubscribers() const 
 {
 	return m_MessageSubscribers;
 }
 
-const std::list<std::unique_ptr<IGameObject>>& ObjectManager::GetOwnedObjects() const
+const std::list<std::unique_ptr<GameObject>>& ObjectManager::GetOwnedObjects() const
 {
 	return m_OwnedObjects;
 }
 
-std::list<std::unique_ptr<IGameObject>>& ObjectManager::GetOwnedObjects()
+std::list<std::unique_ptr<GameObject>>& ObjectManager::GetOwnedObjects()
 {
 	return m_OwnedObjects;
 }

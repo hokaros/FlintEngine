@@ -123,7 +123,7 @@ TEST(SUITE_NAME, ModifiesComponent)
 	// Act
 	using FieldChangeT = ComponentFieldChangeContained<Vector>;
 	std::unique_ptr<FieldChangeT> field_change = std::make_unique<FieldChangeT>();
-	BoxCollider* instance_component = prefab_instance->GetResult_Depr().FindComponent<BoxCollider>();
+	BoxCollider* instance_component = prefab_instance->FindComponent<BoxCollider>();
 	field_change->component = instance_component;
 	field_change->field = &instance_component->GetFieldDefinition_m_Size();
 	field_change->SetValue(overriding_size);

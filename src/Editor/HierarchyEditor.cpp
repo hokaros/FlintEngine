@@ -82,11 +82,9 @@ void HierarchyEditor::RenderObjectHierarchy(std::shared_ptr<EditorUniversalHandl
 	if (node_open)
 	{
 		size_t i = 0;
-		for (const std::unique_ptr<IGameObject>& child : hierarchy_node->GetSubRootObjects())
+		for (const std::unique_ptr<GameObject>& child : hierarchy_node->GetSubRootObjects())
 		{
-			IEditableGameObject* editable_child = dynamic_cast<IEditableGameObject*>(child.get());
-			FE_ASSERT(editable_child != nullptr, "Child is not an IEditable");
-			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(*editable_child, *m_EditedObjectHandle);
+			std::shared_ptr<EditorGameObjectHandle> child_handle = std::make_shared<EditorIEditableGameObjectHandle>(*child, *m_EditedObjectHandle);
 			std::shared_ptr<EditorUniversalHandle> uni_han = std::make_shared<EditorUniversalHandle>(child_handle);
 			RenderObjectHierarchy(uni_han, hierarchy_node, i++);
 		}
@@ -103,8 +101,8 @@ void HierarchyEditor::RenderObjectContextMenu(std::shared_ptr<EditorUniversalHan
 		{
 			ImGui::CloseCurrentPopup();
 
-			std::unique_ptr<IEditableGameObject> editor_child = std::make_unique<InlineGameObject>();
-			edited_node->AddChild(std::move(editor_child));
+			std::unique_ptr<GameObject> added_child = std::make_unique<InlineGameObject>();
+			edited_node->AddChild(std::move(added_child));
 		}
 
 		if (ImGui::Button("Add prefab child"))
@@ -157,7 +155,7 @@ void HierarchyEditor::AddPrefabChild(IHierarchyEditable& parent, std::string pre
 	}
 }
 
-HierarchyEditor::RemoveObjectOperation::RemoveObjectOperation(IEditableGameObject& removed_object, IHierarchyEditable& parent)
+HierarchyEditor::RemoveObjectOperation::RemoveObjectOperation(GameObject& removed_object, IHierarchyEditable& parent)
 	: m_RemovedObject(removed_object)
 	, m_Parent(parent)
 {

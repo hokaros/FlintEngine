@@ -13,7 +13,7 @@ void SelectedObjectRenderer::Render(SelectedObjectManager& selection_manager, Sc
 	RenderGameObject(go_handle->GetGameObject(), renderer);
 }
 
-void SelectedObjectRenderer::RenderGameObject(IGameObject& game_object, SceneRenderer& renderer)
+void SelectedObjectRenderer::RenderGameObject(GameObject& game_object, SceneRenderer& renderer)
 {
 	constexpr float axis_length = 5.0f; // TODO: make this viewport-size-reactive
 

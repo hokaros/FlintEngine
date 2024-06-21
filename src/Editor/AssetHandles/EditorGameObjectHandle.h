@@ -8,8 +8,7 @@ class EditorGameObjectHandle
 	, public IHierarchyEditable
 {
 public:
-	virtual IEditableGameObject& GetGameObject() const = 0;
-	const GameObject& GetResult_Depr() const;
+	virtual GameObject& GetGameObject() const = 0;
 
 	// Modifying the underlying object
 	void SetPosition(const Vector& pos);
@@ -21,9 +20,9 @@ public:
 	void RemoveComponent(size_t component_index);
 
 	// IHierarchyEditable
-	virtual const std::vector<std::unique_ptr<IGameObject>>& GetSubRootObjects() const override;
-	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) override;
-	virtual void DeleteChild(IEditableGameObject& child) override;
+	virtual const std::vector<std::unique_ptr<GameObject>>& GetSubRootObjects() const override;
+	virtual void AddChild(std::unique_ptr<GameObject> child) override;
+	virtual void DeleteChild(GameObject& child) override;
 	virtual const char* GetName() const override;
 
 	bool operator==(const EditorGameObjectHandle& other) const;
@@ -35,7 +34,7 @@ class EditorPrefabHandle
 public:
 	EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab, const std::string& prefab_path);
 
-	virtual IEditableGameObject& GetGameObject() const override;
+	virtual GameObject& GetGameObject() const override;
 
 	// ISaveable
 	virtual void Save() override;
@@ -53,9 +52,9 @@ class EditorIEditableGameObjectHandle
 	: public EditorGameObjectHandle
 {
 public:
-	EditorIEditableGameObjectHandle(IEditableGameObject& game_object, ISaveable& root_asset);
+	EditorIEditableGameObjectHandle(GameObject& game_object, ISaveable& root_asset);
 
-	virtual IEditableGameObject& GetGameObject() const override;
+	virtual GameObject& GetGameObject() const override;
 
 	// ISaveable
 	virtual void Save() override;
@@ -63,6 +62,6 @@ public:
 	virtual void OnUnsavedChange() override;
 
 private:
-	IEditableGameObject& m_EditableObject;
+	GameObject& m_EditableObject;
 	ISaveable& m_RootAsset;
 };

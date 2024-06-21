@@ -1,13 +1,13 @@
 #pragma once
 
-class IEditableGameObject;
+class GameObject;
 
 class IHierarchyEditable
 {
 public:
-	virtual const std::vector<std::unique_ptr<IGameObject>>& GetSubRootObjects() const = 0;
-	virtual void AddChild(std::unique_ptr<IEditableGameObject> child) = 0;
-	virtual void DeleteChild(IEditableGameObject& child) = 0;
+	virtual const std::vector<std::unique_ptr<GameObject>>& GetSubRootObjects() const = 0;
+	virtual void AddChild(std::unique_ptr<GameObject> child) = 0;
+	virtual void DeleteChild(GameObject& child) = 0;
 
 	virtual const char* GetName() const = 0;
 
