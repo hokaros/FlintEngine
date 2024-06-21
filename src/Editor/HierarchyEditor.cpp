@@ -101,8 +101,7 @@ void HierarchyEditor::RenderObjectContextMenu(std::shared_ptr<EditorUniversalHan
 		{
 			ImGui::CloseCurrentPopup();
 
-			std::unique_ptr<GameObject> added_child = std::make_unique<InlineGameObject>();
-			edited_node->AddChild(std::move(added_child));
+			edited_node->AddChild(std::make_unique<GameObject>());
 		}
 
 		if (ImGui::Button("Add prefab child"))

@@ -68,7 +68,7 @@ bool EditorGameObjectHandle::operator==(const EditorGameObjectHandle& other) con
 }
 
 
-EditorPrefabHandle::EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab, const std::string& prefab_path)
+EditorPrefabHandle::EditorPrefabHandle(std::unique_ptr<GameObject> prefab, const std::string& prefab_path)
     : m_Prefab(std::move(prefab))
     , m_PrefabPath(prefab_path)
 {

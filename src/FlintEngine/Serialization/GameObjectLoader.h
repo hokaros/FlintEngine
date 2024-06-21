@@ -19,7 +19,7 @@ public:
 
 	std::unique_ptr<GameObjectStringDesc> LoadGameObject(std::string& first_unconsumed_line);
 
-	static std::unique_ptr<InlineGameObject> LoadPrefab(const char* file_path);
+	static std::unique_ptr<GameObject> LoadPrefab(const char* file_path);
 	static std::unique_ptr<GameObjectStringDesc> LoadPrefabDesc(const char* file_path);
 
 	static std::unique_ptr<GameObjectStringDescProxy> ParseChildByKey(const std::string& key, std::fstream& file, size_t start_indent, std::string& first_unconsumed_line);

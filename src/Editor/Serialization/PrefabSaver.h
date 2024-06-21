@@ -6,11 +6,11 @@
 class PrefabSaver
 {
 public:
-	static void SavePrefab(const InlineGameObject& prefab, const char* file_path);
+	static void SavePrefab(const GameObject& prefab, const char* file_path);
 
 	PrefabSaver(std::fstream& prefab_file, size_t start_indent);
 	PrefabSaver(const IndentPrinter& indent_printer);
-	void SavePrefab(const InlineGameObject& prefab);
+	void SavePrefab(const GameObject& prefab);
 	void SaveGameObject(const GameObjectStringDescProxy& game_object);
 
 public:

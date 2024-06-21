@@ -1,6 +1,5 @@
 #include "pch.h"
 #include <Editables/EditableScene.h>
-#include <Editables/InlineGameObject.h>
 #include <Editables/PrefabInstance.h>
 
 #include "FakeAssetManager.h"
@@ -32,7 +31,7 @@ TEST(SUITE_NAME, AddsSingleInlineObject)
 	// Arrange
 	const std::string object_name = "My unique inline game object";
 
-	std::unique_ptr<InlineGameObject> game_object = std::make_unique<InlineGameObject>();
+	std::unique_ptr<GameObject> game_object = std::make_unique<GameObject>();
 	game_object->SetName(object_name);
 
 	EditableScene editable_scene;
@@ -82,10 +81,10 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	const std::string root_object_name = "Good old root object";
 	const std::string child_object_name = "Sweet child o' mine";
 
-	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
+	std::unique_ptr<GameObject> editable_root_object = std::make_unique<GameObject>();
 	editable_root_object->SetName(root_object_name);
 
-	std::unique_ptr<InlineGameObject> editable_child = std::make_unique<InlineGameObject>();
+	std::unique_ptr<GameObject> editable_child = std::make_unique<GameObject>();
 	editable_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(editable_child));
 
@@ -119,7 +118,7 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	FakeAssetManager asset_manager;
 	asset_manager.SetPrefabToReturn(&dummy_prefab);
 
-	std::unique_ptr<InlineGameObject> editable_root_object = std::make_unique<InlineGameObject>();
+	std::unique_ptr<GameObject> editable_root_object = std::make_unique<GameObject>();
 	editable_root_object->SetName(root_object_name);
 
 	std::unique_ptr<PrefabInstance> prefab_instance_child = std::make_unique<PrefabInstance>("irrelevant_path.prefab");

@@ -1,5 +1,5 @@
 #pragma once
-#include "InlineGameObject.h"
+#include <Core/GameObject.h>
 
 class PrefabInstance
 	: public GameObject

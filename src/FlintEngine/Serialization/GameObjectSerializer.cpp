@@ -7,16 +7,16 @@ static constexpr const char* s_GameObjectNameFieldName = "m_Name";
 static constexpr const char* s_GameObjectSizeFieldName = "m_Size";
 static constexpr const char* s_GameObjectPositionFieldName = "m_Pos";
 
-std::unique_ptr<InlineGameObject> GameObjectSerializer::DeserializeGameObject(const GameObjectStringDesc& desc)
+std::unique_ptr<GameObject> GameObjectSerializer::DeserializeGameObject(const GameObjectStringDesc& desc)
 {
-	std::unique_ptr<InlineGameObject> game_object = DeserializePureGameObject(desc);
+	std::unique_ptr<GameObject> game_object = DeserializePureGameObject(desc);
 	DeserializeComponents(*game_object, desc);
 	DeserializeChildren(*game_object, desc);
 
 	return game_object;
 }
 
-std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(const InlineGameObject& game_object)
+std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(const GameObject& game_object)
 {
 	std::unique_ptr<GameObjectStringDesc> go_serialized = std::make_unique<GameObjectStringDesc>();
 
@@ -30,7 +30,7 @@ std::unique_ptr<GameObjectStringDesc> GameObjectSerializer::SerializeGameObject(
 	return go_serialized;
 }
 
-void GameObjectSerializer::SerializeComponents(const InlineGameObject& game_object, GameObjectStringDesc& desc)
+void GameObjectSerializer::SerializeComponents(const GameObject& game_object, GameObjectStringDesc& desc)
 {
 	for (const std::unique_ptr<ObjectComponent>& component : game_object.GetAllComponents())
 	{
@@ -38,9 +38,9 @@ void GameObjectSerializer::SerializeComponents(const InlineGameObject& game_obje
 	}
 }
 
-std::unique_ptr<InlineGameObject> GameObjectSerializer::DeserializePureGameObject(const GameObjectStringDesc& desc)
+std::unique_ptr<GameObject> GameObjectSerializer::DeserializePureGameObject(const GameObjectStringDesc& desc)
 {
-	std::unique_ptr<InlineGameObject> game_object = std::make_unique<InlineGameObject>();
+	std::unique_ptr<GameObject> game_object = std::make_unique<GameObject>();
 
 	auto size_it = desc.params.find(s_GameObjectSizeFieldName);
 	if (size_it != desc.params.end())
@@ -69,7 +69,7 @@ std::unique_ptr<InlineGameObject> GameObjectSerializer::DeserializePureGameObjec
 	return game_object;
 }
 
-void GameObjectSerializer::DeserializeComponents(InlineGameObject& game_object, const GameObjectStringDesc& desc)
+void GameObjectSerializer::DeserializeComponents(GameObject& game_object, const GameObjectStringDesc& desc)
 {
 	for (const std::unique_ptr<ComponentStringDesc>& component_desc : desc.components)
 	{
@@ -81,7 +81,7 @@ void GameObjectSerializer::DeserializeComponents(InlineGameObject& game_object, 
 	}
 }
 
-void GameObjectSerializer::SerializeChildren(const InlineGameObject& game_object, GameObjectStringDesc& desc)
+void GameObjectSerializer::SerializeChildren(const GameObject& game_object, GameObjectStringDesc& desc)
 {
 	for (const std::unique_ptr<GameObject>& child : game_object.GetChildren())
 	{
@@ -89,7 +89,7 @@ void GameObjectSerializer::SerializeChildren(const InlineGameObject& game_object
 	}
 }
 
-void GameObjectSerializer::DeserializeChildren(InlineGameObject& game_object, const GameObjectStringDesc& desc)
+void GameObjectSerializer::DeserializeChildren(GameObject& game_object, const GameObjectStringDesc& desc)
 {
 	for (const std::unique_ptr<GameObjectStringDescProxy>& child : desc.children)
 	{
@@ -103,7 +103,7 @@ std::unique_ptr<GameObjectStringDescProxy> GameObjectSerializer::SerializeIEdita
 	{
 	case GameObjectType::GameObject:
 	{
-		const InlineGameObject& inline_object = static_cast<const InlineGameObject&>(game_object);
+		const GameObject& inline_object = static_cast<const GameObject&>(game_object);
 		return std::make_unique<InlineGameObjectStringDescEndpoint>(SerializeGameObject(inline_object));
 	}
 	case GameObjectType::PrefabInstance:

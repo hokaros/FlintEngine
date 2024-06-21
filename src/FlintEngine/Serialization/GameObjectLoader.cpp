@@ -5,7 +5,7 @@
 #include "GameObjectSerializer.h"
 #include "PrefabInstanceLoader.h"
 
-std::unique_ptr<InlineGameObject> GameObjectLoader::LoadPrefab(const char* file_path)
+std::unique_ptr<GameObject> GameObjectLoader::LoadPrefab(const char* file_path)
 {
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = LoadPrefabDesc(file_path);
     if (prefab_serialized == nullptr)

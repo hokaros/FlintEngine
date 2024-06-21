@@ -6,11 +6,11 @@
 
 std::unique_ptr<EditorPrefabHandle> AssetOpener::OpenPrefab(const std::string& prefab_path)
 {
-	std::unique_ptr<InlineGameObject> prefab = GameObjectLoader::LoadPrefab(prefab_path.c_str());
+	std::unique_ptr<GameObject> prefab = GameObjectLoader::LoadPrefab(prefab_path.c_str());
 	if (prefab == nullptr)
 	{ // Make new prefab if file not present
 		FE_LOG("Creating new prefab");
-		prefab = std::make_unique<InlineGameObject>();
+		prefab = std::make_unique<GameObject>();
 	}
 
 	return std::make_unique<EditorPrefabHandle>(std::move(prefab), prefab_path);

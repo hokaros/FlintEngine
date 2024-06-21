@@ -1,5 +1,5 @@
 #pragma once
-#include <Editables/InlineGameObject.h>
+#include <Core/GameObject.h>
 #include <AssetHandles/IHierarchyEditable.h>
 #include <AssetHandles/ISaveable.h>
 
@@ -32,7 +32,7 @@ class EditorPrefabHandle
 	: public EditorGameObjectHandle
 {
 public:
-	EditorPrefabHandle(std::unique_ptr<InlineGameObject> prefab, const std::string& prefab_path);
+	EditorPrefabHandle(std::unique_ptr<GameObject> prefab, const std::string& prefab_path);
 
 	virtual GameObject& GetGameObject() const override;
 
@@ -42,7 +42,7 @@ public:
 	virtual void OnUnsavedChange() override;
 
 private:
-	std::unique_ptr<InlineGameObject> m_Prefab;
+	std::unique_ptr<GameObject> m_Prefab;
 	std::string m_PrefabPath;
 
 	bool m_HasUnsavedChanges = false;

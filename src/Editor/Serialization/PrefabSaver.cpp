@@ -3,7 +3,7 @@
 
 
 
-void PrefabSaver::SavePrefab(const InlineGameObject& prefab, const char* file_path)
+void PrefabSaver::SavePrefab(const GameObject& prefab, const char* file_path)
 {
     std::fstream prefab_file;
     prefab_file.open(file_path, std::ios::out);
@@ -30,7 +30,7 @@ PrefabSaver::PrefabSaver(const IndentPrinter& indent_printer)
 {
 }
 
-void PrefabSaver::SavePrefab(const InlineGameObject& prefab)
+void PrefabSaver::SavePrefab(const GameObject& prefab)
 {
     std::unique_ptr<GameObjectStringDesc> prefab_serialized = GameObjectSerializer::SerializeGameObject(prefab);
     SaveInlineGameObject(*prefab_serialized);
