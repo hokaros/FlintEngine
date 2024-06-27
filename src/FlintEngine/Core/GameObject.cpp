@@ -454,6 +454,11 @@ Vector GameObject::VectorLocalToWorld(const Vector& localVec) const
 	return TransformPoint(localVec) - TransformPoint(Vector::ZERO);
 }
 
+Vector GameObject::VectorWorldToLocal(const Vector& worldVec) const
+{
+	return InvTransformPoint(worldVec) - InvTransformPoint(Vector::ZERO);
+}
+
 void GameObject::AddChild(std::unique_ptr<GameObject> child)
 {
 	child->SetParent(this);

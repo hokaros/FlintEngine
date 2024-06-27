@@ -148,6 +148,7 @@ public: /* IUpdateable */
 	bool IsEnabled() const;
 
 	Vector VectorLocalToWorld(const Vector& localVec) const;
+	Vector VectorWorldToLocal(const Vector& worldVec) const;
 
 	Scene* GetScene() const;
 
