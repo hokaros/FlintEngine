@@ -393,9 +393,14 @@ void GameObject::SetWorldScale(const Vector& newScale)
 	// Rozmiar dzieci
 	for (std::unique_ptr<GameObject>& child : children)
 	{
-		const Vector& child_size = child->GetTransformable().GetWorldScale();
-		Vector childNewSize(child_size.x * sizeChange.x, child_size.y * sizeChange.y);
-		child->GetTransformable().SetWorldScale(childNewSize);
+		const Vector child_prev_size = child->GetTransformable().GetWorldScale();
+		const Vector child_new_size = child_prev_size.GetScaled(sizeChange);
+		child->GetTransformable().SetWorldScale(child_new_size);
+
+		const Vector prev_to_child = child->GetWorldPosition() - GetWorldPosition();
+		const Vector new_to_child = prev_to_child.GetScaled(sizeChange);
+		const Vector d_to_child = new_to_child - prev_to_child;
+		child->Translate(d_to_child);
 	}
 }
 
