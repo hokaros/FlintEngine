@@ -96,8 +96,8 @@ TEST(SUITE_NAME, ParentScalingScalesChild)
 
 	// Assert
 	const Vector expected_child_scale = child_start_scale.GetScaled(new_scale); // Because parent scale was 1,1 at first
-	ASSERT_EQ(expected_child_scale, child_object.GetWorldScale());
-	ASSERT_EQ(child_start_scale, child_object.GetLocalScale());
+	ASSERT_VEC_EQ(expected_child_scale, child_object.GetWorldScale());
+	ASSERT_VEC_EQ(child_start_scale, child_object.GetLocalScale());
 }
 
 TEST(SUITE_NAME, ParentScalingTranslatesChildOnXAxis)
@@ -117,8 +117,8 @@ TEST(SUITE_NAME, ParentScalingTranslatesChildOnXAxis)
 
 	// Assert
 	const Vector expected_child_pos = child_start_pos.GetScaled(new_scale);
-	ASSERT_EQ(expected_child_pos, child_object.GetWorldPosition());
-	ASSERT_EQ(child_start_pos, child_object.GetLocalPosition());
+	ASSERT_VEC_EQ(expected_child_pos, child_object.GetWorldPosition());
+	ASSERT_VEC_EQ(child_start_pos, child_object.GetLocalPosition());
 }
 
 TEST(SUITE_NAME, ParentScalingTranslatesChildOnBothAxes)
@@ -138,8 +138,8 @@ TEST(SUITE_NAME, ParentScalingTranslatesChildOnBothAxes)
 
 	// Assert
 	const Vector expected_child_pos = child_start_pos.GetScaled(new_scale);
-	ASSERT_EQ(expected_child_pos, child_object.GetWorldPosition());
-	ASSERT_EQ(child_start_pos, child_object.GetLocalPosition());
+	ASSERT_VEC_EQ(expected_child_pos, child_object.GetWorldPosition());
+	ASSERT_VEC_EQ(child_start_pos, child_object.GetLocalPosition());
 }
 
 #undef SUITE_NAME
