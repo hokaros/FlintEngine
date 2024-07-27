@@ -297,9 +297,15 @@ const Vector& GameObject::GetWorldScale() const
 Vector GameObject::GetLocalScale() const
 {
 	// Scale in parent space
-	// TODO: implement
-	FE_ASSERT(false, "Implement");
-	return Vector::ZERO;
+	if (m_Parent == nullptr)
+	{
+		return m_Transform.GetScale();
+	}
+	else
+	{
+		const Vector& parent_scale = m_Parent->GetWorldScale();
+		return m_Transform.GetScale().GetScaled(Vector(1 / parent_scale.x, 1 / parent_scale.y));
+	}
 }
 
 float GameObject::GetWorldRotation() const
@@ -310,9 +316,15 @@ float GameObject::GetWorldRotation() const
 float GameObject::GetLocalRotation() const
 {
 	// Rotation in parent space
-	// TODO: implement
-	FE_ASSERT(false, "Implement");
-	return 0.0f;
+	if (m_Parent == nullptr)
+	{
+		return m_Transform.GetRotation();
+	}
+	else
+	{
+		const float parent_rot = m_Parent->GetWorldRotation();
+		return m_Transform.GetRotation() - parent_rot;
+	}
 }
 
 void GameObject::SetWorldPosition(const Vector& newPosition)
@@ -371,25 +383,40 @@ void GameObject::Translate(const Vector& offset)
 	}
 }
 
-void GameObject::SetWorldScale(const Vector& newScale) 
+void GameObject::SetWorldScale(const Vector& new_scale) 
 {
 	const Vector& size = m_Transform.GetScale();
-	Vector sizeChange(newScale.x / size.x, newScale.y / size.y);
+	Vector sizeChange(new_scale.x / size.x, new_scale.y / size.y);
 
-	m_Transform.SetScale(newScale);
+	m_Transform.SetScale(new_scale);
 
 	// Rozmiar dzieci
 	for (std::unique_ptr<GameObject>& child : children)
 	{
-		const Vector& child_size = child->GetTransformable().GetWorldScale();
-		Vector childNewSize(child_size.x * sizeChange.x, child_size.y * sizeChange.y);
-		child->GetTransformable().SetWorldScale(childNewSize);
+		const Vector child_prev_size = child->GetTransformable().GetWorldScale();
+		const Vector child_new_size = child_prev_size.GetScaled(sizeChange);
+		child->GetTransformable().SetWorldScale(child_new_size);
+
+		const Vector prev_to_child = child->GetWorldPosition() - GetWorldPosition();
+		const Vector new_to_child = prev_to_child.GetScaled(sizeChange);
+		const Vector d_to_child = new_to_child - prev_to_child;
+		child->Translate(d_to_child);
 	}
 }
 
-void GameObject::SetLocalScale(const Vector& newScale)
+void GameObject::SetLocalScale(const Vector& new_scale)
 {
-	FE_ASSERT(false, "Implement");
+	// Scale in parent space
+	if (m_Parent == nullptr)
+	{
+		SetWorldScale(new_scale);
+	}
+	else
+	{
+		const Vector& parent_scale = m_Parent->GetWorldScale();
+		const Vector target_world_scale = new_scale.GetScaled(parent_scale);
+		SetWorldScale(target_world_scale);
+	}
 }
 
 void GameObject::Rotate(float angle) 
@@ -440,6 +467,11 @@ Vector GameObject::InvTransformPoint(const Vector& world_pos) const
 Vector GameObject::VectorLocalToWorld(const Vector& localVec) const
 {
 	return TransformPoint(localVec) - TransformPoint(Vector::ZERO);
+}
+
+Vector GameObject::VectorWorldToLocal(const Vector& worldVec) const
+{
+	return InvTransformPoint(worldVec) - InvTransformPoint(Vector::ZERO);
 }
 
 void GameObject::AddChild(std::unique_ptr<GameObject> child)

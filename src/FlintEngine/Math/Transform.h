@@ -27,6 +27,9 @@ public:
 	Vector TransformPoint(const Vector& local_point) const; // Transforms local position to outer space
 	Vector InvTransformPoint(const Vector& world_point) const; // Transforms outer-space position to local space
 
+public:
+	static const Transform IDENTITY;
+
 private:
 	Vector m_Position;
 	float m_Rotation;

@@ -4,15 +4,27 @@
 #include <AssetManager.h>
 
 
-void EditorGameObjectHandle::SetPosition(const Vector& pos)
+void EditorGameObjectHandle::SetWorldPosition(const Vector& pos)
 {
     GetGameObject().GetTransformable().SetWorldPosition(pos);
     OnUnsavedChange();
 }
 
-void EditorGameObjectHandle::SetSize(const Vector& size)
+void EditorGameObjectHandle::SetLocalPosition(const Vector& pos)
+{
+    GetGameObject().SetLocalPosition(pos);
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::SetWorldScale(const Vector& size)
 {
     GetGameObject().GetTransformable().SetWorldScale(size);
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::SetLocalScale(const Vector& scale)
+{
+    GetGameObject().SetLocalScale(scale);
     OnUnsavedChange();
 }
 
