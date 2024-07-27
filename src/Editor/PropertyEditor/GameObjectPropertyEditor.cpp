@@ -115,7 +115,7 @@ void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_o
     m_GameObjectPosition[1] = game_object.GetLocalPosition().y;
 
     m_GameObjectSize[0] = game_object.GetWorldScale().x;
-    m_GameObjectSize[1] = game_object.GetWorldScale().y;
+    m_GameObjectSize[1] = game_object.GetWorldScale().y; // TODO: local scale
 
     strcpy_s(m_GameObjectName, game_object.GetName().c_str());
 }
@@ -131,7 +131,7 @@ void GameObjectPropertyEditor::ApplyValuesToGameObject(EditorGameObjectHandle& g
     Vector target_size = Vector(m_GameObjectSize);
     if (game_object.GetGameObject().GetTransformable().GetWorldScale() != target_size)
     {
-        game_object.SetSize(target_size);
+        game_object.SetWorldScale(target_size);
     }
 
     std::string target_name = std::string(m_GameObjectName);
