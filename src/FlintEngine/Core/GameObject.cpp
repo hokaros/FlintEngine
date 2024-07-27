@@ -383,12 +383,12 @@ void GameObject::Translate(const Vector& offset)
 	}
 }
 
-void GameObject::SetWorldScale(const Vector& newScale) 
+void GameObject::SetWorldScale(const Vector& new_scale) 
 {
 	const Vector& size = m_Transform.GetScale();
-	Vector sizeChange(newScale.x / size.x, newScale.y / size.y);
+	Vector sizeChange(new_scale.x / size.x, new_scale.y / size.y);
 
-	m_Transform.SetScale(newScale);
+	m_Transform.SetScale(new_scale);
 
 	// Rozmiar dzieci
 	for (std::unique_ptr<GameObject>& child : children)
@@ -404,9 +404,19 @@ void GameObject::SetWorldScale(const Vector& newScale)
 	}
 }
 
-void GameObject::SetLocalScale(const Vector& newScale)
+void GameObject::SetLocalScale(const Vector& new_scale)
 {
-	FE_ASSERT(false, "Implement");
+	// Scale in parent space
+	if (m_Parent == nullptr)
+	{
+		SetWorldScale(new_scale);
+	}
+	else
+	{
+		const Vector& parent_scale = m_Parent->GetWorldScale();
+		const Vector target_world_scale = new_scale.GetScaled(parent_scale);
+		SetWorldScale(target_world_scale);
+	}
 }
 
 void GameObject::Rotate(float angle) 
