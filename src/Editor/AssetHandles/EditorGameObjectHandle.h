@@ -11,8 +11,13 @@ public:
 	virtual GameObject& GetGameObject() const = 0;
 
 	// Modifying the underlying object
+	// TODO: rename to SetWorldPosition
 	void SetPosition(const Vector& pos);
+	void SetLocalPosition(const Vector& pos);
+
 	void SetSize(const Vector& size);
+	void SetLocalScale(const Vector& scale);
+
 	void SetName(const std::string& name);
 
 	void AddComponent(std::unique_ptr<ObjectComponent> component);

@@ -111,8 +111,8 @@ void GameObjectPropertyEditor::AddComponent(const ComponentDefinition* component
 
 void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_object)
 {
-    m_GameObjectPosition[0] = game_object.GetWorldPosition().x;
-    m_GameObjectPosition[1] = game_object.GetWorldPosition().y;
+    m_GameObjectPosition[0] = game_object.GetLocalPosition().x;
+    m_GameObjectPosition[1] = game_object.GetLocalPosition().y;
 
     m_GameObjectSize[0] = game_object.GetWorldScale().x;
     m_GameObjectSize[1] = game_object.GetWorldScale().y;
@@ -123,9 +123,9 @@ void GameObjectPropertyEditor::InitValuesFromGameObject(const GameObject& game_o
 void GameObjectPropertyEditor::ApplyValuesToGameObject(EditorGameObjectHandle& game_object)
 {
     Vector target_position = Vector(m_GameObjectPosition);
-    if (game_object.GetGameObject().GetTransformable().GetWorldPosition() != target_position)
+    if (game_object.GetGameObject().GetTransformable().GetLocalPosition() != target_position)
     {
-        game_object.SetPosition(target_position);
+        game_object.SetLocalPosition(target_position);
     }
 
     Vector target_size = Vector(m_GameObjectSize);

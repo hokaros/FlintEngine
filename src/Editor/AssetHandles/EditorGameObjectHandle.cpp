@@ -10,9 +10,21 @@ void EditorGameObjectHandle::SetPosition(const Vector& pos)
     OnUnsavedChange();
 }
 
+void EditorGameObjectHandle::SetLocalPosition(const Vector& pos)
+{
+    GetGameObject().SetLocalPosition(pos);
+    OnUnsavedChange();
+}
+
 void EditorGameObjectHandle::SetSize(const Vector& size)
 {
     GetGameObject().GetTransformable().SetWorldScale(size);
+    OnUnsavedChange();
+}
+
+void EditorGameObjectHandle::SetLocalScale(const Vector& scale)
+{
+    GetGameObject().SetLocalScale(scale);
     OnUnsavedChange();
 }
 
