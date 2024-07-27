@@ -3,13 +3,15 @@
 
 const Vector Vector::ZERO = Vector(0.0f, 0.0f);
 
-void Vector::Normalize() {
+Vector& Vector::Normalize() {
 	float length = Length();
-	if (length == 0)
-		return;
+	if (length != 0)
+	{
+		x /= length;
+		y /= length;
+	}
 
-	x /= length;
-	y /= length;
+	return *this;
 }
 
 void Vector::Sort() {

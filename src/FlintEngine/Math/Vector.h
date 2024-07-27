@@ -89,7 +89,8 @@ public:
     {}
 
     // Sprowadza do d³ugoœci 1
-    void Normalize();
+    Vector& Normalize();
+
     // Sprawia, ¿e x <= y
     void Sort();
     float Length() const;

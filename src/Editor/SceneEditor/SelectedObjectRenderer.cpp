@@ -22,13 +22,13 @@ void SelectedObjectRenderer::RenderGameObject(GameObject& game_object, SceneRend
 	const Vector object_pos = transformable.GetWorldPosition();
 
 	{
-		const Vector object_local_x = transformable.VectorLocalToWorld(Vector(1, 0));
+		const Vector object_local_x = transformable.VectorLocalToWorld(Vector(1, 0)).Normalize();
 		const Vector x_axis_end = object_pos + object_local_x * axis_length;
 		renderer.RenderLine(object_pos, x_axis_end, X_AXIS_COLOR, SELECTION_RENDER_LAYER);
 	}
 
 	{
-		const Vector object_local_y = transformable.VectorLocalToWorld(Vector(0, 1));
+		const Vector object_local_y = transformable.VectorLocalToWorld(Vector(0, 1)).Normalize();
 		const Vector y_axis_end = object_pos + object_local_y * axis_length;
 		renderer.RenderLine(object_pos, y_axis_end, Y_AXIS_COLOR, SELECTION_RENDER_LAYER);
 	}
