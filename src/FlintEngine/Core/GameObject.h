@@ -5,6 +5,7 @@
 #include "ITransformable.h"
 #include "ComponentFieldChange.h"
 #include "SerializableTypes.h"
+#include "IGameObjectContainer.h"
 #include <functional>
 #include <math.h>
 #include <mutex>
@@ -12,16 +13,7 @@
 
 #include <list>
 
-class GameObject;
 class Scene;
-
-class IGameObjectContainer
-{
-public:
-	virtual void AddGameObject(std::unique_ptr<GameObject>) = 0;
-
-	virtual ~IGameObjectContainer() = default;
-};
 
 class SceneKey
 {
