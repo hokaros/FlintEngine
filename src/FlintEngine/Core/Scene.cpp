@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include <Navigation/NavmeshGenerator.h>
 
 void Scene::OnLoaded()
 {
@@ -18,6 +19,7 @@ void Scene::Update()
 void Scene::Render(SceneRenderer& renderer)
 {
 	RenderBackground(renderer);
+	m_Navmesh.Render(renderer);
 
 	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
@@ -92,4 +94,19 @@ void Scene::RenderBackground(SceneRenderer& renderer)
 const ObjectManager& Scene::GetObjectManager() const
 {
 	return m_ObjectManager;
+}
+
+void Scene::RegenerateNavmesh()
+{
+	Navigation::NavmeshGenerator::Generate(*this, m_Navmesh);
+}
+
+void Scene::SetNavmesh(const Navigation::Navmesh& other)
+{
+	m_Navmesh = other;
+}
+
+const Navigation::Navmesh& Scene::GetNavmesh() const
+{
+	return m_Navmesh;
 }

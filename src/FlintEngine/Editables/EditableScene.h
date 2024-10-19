@@ -16,6 +16,8 @@ public:
 	void SetBackgroundColor(const Rgb8& color);
 	const Rgb8& GetBackgroundColor() const;
 
+	void RegenerateNavmesh();
+
 private:
 	void CopyObjectsToScene(Scene& scene) const;
 

@@ -16,6 +16,8 @@ private:
 	void InitValuesFromScene(EditableScene& scene);
 	void ApplyValuesToScene(EditableScene& scene);
 
+	void RenderActions(EditableScene& scene);
+
 	EditorSceneHandle* GetSceneHandle();
 	const EditorSceneHandle* GetSceneHandle() const;
 

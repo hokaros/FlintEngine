@@ -18,6 +18,8 @@ std::unique_ptr<Scene> EditableScene::CreateRuntimeObject() const
 
 	CopyObjectsToScene(*runtime_scene);
 
+	runtime_scene->SetNavmesh(m_ResultScene.GetNavmesh());
+
 	return runtime_scene;
 }
 
@@ -53,6 +55,11 @@ void EditableScene::SetBackgroundColor(const Rgb8& color)
 const Rgb8& EditableScene::GetBackgroundColor() const
 {
 	return m_BackgroundColor;
+}
+
+void EditableScene::RegenerateNavmesh()
+{
+	m_ResultScene.RegenerateNavmesh();
 }
 
 void EditableScene::CopyObjectsToScene(Scene& scene) const
