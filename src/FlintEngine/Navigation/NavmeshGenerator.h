@@ -10,5 +10,8 @@ namespace Navigation
 	{
 	public:
 		static void Generate(const IGameObjectContainer& context, Navmesh& navmesh);
+
+	private:
+		static void PrepareTestNavmesh(Navmesh& navmesh);
 	};
 }

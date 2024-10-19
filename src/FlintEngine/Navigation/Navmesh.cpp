@@ -3,12 +3,7 @@
 #include <SceneRenderer.h>
 #include <utility.h>
 
-Navigation::Navmesh::Navmesh()
-{
-	PrepareTestNavmesh();
-}
-
-void Navigation::Navmesh::Render(SceneRenderer& renderer)
+void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 {
 	for (const IndexTriangle& tri : m_Triangles)
 	{
@@ -16,13 +11,20 @@ void Navigation::Navmesh::Render(SceneRenderer& renderer)
 	}
 }
 
-void Navigation::Navmesh::PrepareTestNavmesh()
+void Navigation::Navmesh::Clear()
 {
-	m_Vertices.push_back(Vector(0, 0));
-	m_Vertices.push_back(Vector(3, 3));
-	m_Vertices.push_back(Vector(0, 3));
+	m_Vertices.clear();
+	m_Triangles.clear();
+}
 
-	m_Triangles.push_back(IndexTriangle(0, 1, 2));
+void Navigation::Navmesh::AddVertex(Vector&& v)
+{
+	m_Vertices.push_back(std::move(v));
+}
+
+void Navigation::Navmesh::AddTriangle(IndexTriangle&& tri)
+{
+	m_Triangles.push_back(std::move(tri));
 }
 
 const Vector& Navigation::Navmesh::GetPosAtIndex(int idx) const

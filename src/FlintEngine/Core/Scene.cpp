@@ -1,6 +1,11 @@
 #include "Scene.h"
 #include <Navigation/NavmeshGenerator.h>
 
+Scene::Scene()
+{
+	RegenerateNavmesh();
+}
+
 void Scene::OnLoaded()
 {
 	m_ObjectManager.SetAsMain();
@@ -98,6 +103,7 @@ const ObjectManager& Scene::GetObjectManager() const
 
 void Scene::RegenerateNavmesh()
 {
+	m_Navmesh.Clear();
 	Navigation::NavmeshGenerator::Generate(*this, m_Navmesh);
 }
 

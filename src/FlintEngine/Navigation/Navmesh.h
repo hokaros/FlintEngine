@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <Math/Vector.h>
+#include <Math/GeometryStructures.h>
 
 class SceneRenderer;
 
@@ -9,28 +10,11 @@ namespace Navigation
 	class Navmesh
 	{
 	public:
-		Navmesh();
+		void Render(SceneRenderer& renderer) const;
 
-		void Render(SceneRenderer& renderer);
-
-	private:
-		void PrepareTestNavmesh();
-
-	private:
-		struct IndexTriangle
-		{
-		public:
-			int idx1 = -1;
-			int idx2 = -1;
-			int idx3 = -1;
-
-		public:
-			constexpr IndexTriangle(int idx1, int idx2, int idx3)
-				: idx1(idx1)
-				, idx2(idx2)
-				, idx3(idx3)
-			{}
-		};
+		void Clear();
+		void AddVertex(Vector&& v);
+		void AddTriangle(IndexTriangle&& tri);
 
 	private:
 		const Vector& GetPosAtIndex(int idx) const;
