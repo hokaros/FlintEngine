@@ -6,6 +6,8 @@ class Walkable
 {
 	DECLARE_COMPONENT();
 public:
+	virtual void RenderEditorSelected(SceneRenderer& renderer) override;
+
 	const Vector& GetSize() const;
 
 private:
