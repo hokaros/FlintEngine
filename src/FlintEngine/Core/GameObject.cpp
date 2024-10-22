@@ -206,6 +206,22 @@ void GameObject::RenderUpdate(SceneRenderer& renderer)
 	}
 }
 
+void GameObject::RenderEditorSelected(SceneRenderer& renderer)
+{
+	if (!isEnabled)
+		return;
+
+	for (std::unique_ptr<ObjectComponent>& component : components)
+	{
+		component->RenderEditorSelected(renderer);
+	}
+
+	for (std::unique_ptr<GameObject>& child : children)
+	{
+		child->GetUpdateable().RenderEditorSelected(renderer);
+	}
+}
+
 void GameObject::Start() 
 {
 	if (!isEnabled)

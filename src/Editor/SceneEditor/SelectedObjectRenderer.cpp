@@ -15,6 +15,12 @@ void SelectedObjectRenderer::Render(SelectedObjectManager& selection_manager, Sc
 
 void SelectedObjectRenderer::RenderGameObject(GameObject& game_object, SceneRenderer& renderer)
 {
+	game_object.RenderEditorSelected(renderer);
+	RenderAxes(game_object, renderer);
+}
+
+void SelectedObjectRenderer::RenderAxes(GameObject& game_object, SceneRenderer& renderer)
+{
 	constexpr float axis_length = 5.0f; // TODO: make this viewport-size-reactive
 
 	ITransformable& transformable = game_object.GetTransformable();

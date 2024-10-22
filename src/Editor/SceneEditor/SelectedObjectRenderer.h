@@ -8,6 +8,7 @@ public:
 
 private:
 	static void RenderGameObject(GameObject& game_object, SceneRenderer& renderer);
+	static void RenderAxes(GameObject& game_object, SceneRenderer& renderer);
 
 private:
 	static constexpr uint SELECTION_RENDER_LAYER = UINT32_MAX;

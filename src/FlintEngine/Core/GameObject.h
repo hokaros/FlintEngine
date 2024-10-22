@@ -51,7 +51,7 @@ public:
 
 	static void Destroy(GameObject* game_object);
 
-public: /* IGameObject */
+public:
 	virtual const std::string& GetName() const;
 	virtual void SetName(const std::string& name);
 
@@ -111,6 +111,7 @@ public: /* IUpdateable */
 	// Called once per frame
 	virtual void Update() override;
 	virtual void RenderUpdate(SceneRenderer& renderer) override;
+	virtual void RenderEditorSelected(SceneRenderer& renderer) override;
 
 	// Called before the first frame
 	virtual void Awake() override;
