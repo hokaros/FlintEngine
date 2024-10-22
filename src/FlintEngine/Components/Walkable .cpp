@@ -10,8 +10,7 @@ void Walkable::RenderEditorSelected(SceneRenderer& renderer)
 {
 	const Rgb8 color = Rgb8(0x30, 0x83, 0xdb);
 	const Rect rect = Rect(m_GameObject->GetWorldPosition(), m_Size);
-	// TODO: wire rect
-	renderer.RenderRect(rect, color, 0);
+	renderer.RenderWireRect(rect, color, 0);
 }
 
 const Vector& Walkable::GetSize() const
