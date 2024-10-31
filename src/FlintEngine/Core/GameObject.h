@@ -262,6 +262,7 @@ inline void GameObject::FindComponentsInHierarchies(const std::vector<std::uniqu
 {
 	for (const std::unique_ptr<GameObject>& root_object : in_root_objects)
 	{
+		root_object->FindComponents<T>(out_components);
 		root_object->FindComponentsInChildren<T>(out_components);
 	}
 }
