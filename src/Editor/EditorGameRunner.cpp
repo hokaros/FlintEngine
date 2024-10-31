@@ -49,7 +49,7 @@ void EditorGameRunner::StartGame()
 
 	m_RunningGame = std::make_unique<GameBase>(/*window*/nullptr, &m_SceneRenderer, m_InputController);
 	m_RunningGame->LoadScene(
-		scene_to_run->GetScene().CreateRuntimeObject()
+		std::make_unique<Scene>(scene_to_run->GetScene())
 	);
 }
 

@@ -32,9 +32,9 @@ private:
 private:
 	SceneRenderer m_SceneRenderer;
 
-	EditableScene* m_CurrentScene;
+	Scene* m_CurrentScene;
 
-	EditableScene m_PrefabScene;
+	Scene m_PrefabScene;
 
 	ViewportController viewportController;
 

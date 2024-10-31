@@ -4,14 +4,14 @@
 
 
 
-EditorSceneHandle::EditorSceneHandle(std::unique_ptr<EditableScene> scene, const std::string& scene_path)
+EditorSceneHandle::EditorSceneHandle(std::unique_ptr<Scene> scene, const std::string& scene_path)
     : m_Scene(std::move(scene))
     , m_ScenePath(scene_path)
 {
     FE_ASSERT(m_Scene != nullptr, "No scene passed to SceneHandle");
 }
 
-EditableScene& EditorSceneHandle::GetScene() const
+Scene& EditorSceneHandle::GetScene() const
 {
     return *m_Scene;
 }
@@ -38,18 +38,18 @@ void EditorSceneHandle::OnUnsavedChange()
 
 const std::vector<std::unique_ptr<GameObject>>& EditorSceneHandle::GetSubRootObjects() const
 {
-    return m_Scene->GetRootObjects();
+    return m_Scene->GetGameObjects();
 }
 
 void EditorSceneHandle::AddChild(std::unique_ptr<GameObject> child)
 {
-    m_Scene->AddRootObject(std::move(child));
+    m_Scene->AddGameObject(std::move(child));
     OnUnsavedChange();
 }
 
 void EditorSceneHandle::DeleteChild(GameObject& child)
 {
-    m_Scene->RemoveRootObject(child);
+    m_Scene->RemoveGameObject(child);
     OnUnsavedChange();
 }
 

@@ -12,11 +12,11 @@ public:
 	void SetScene(std::weak_ptr<EditorUniversalHandle> scene);
 
 private:
-	void RenderSceneEditor(EditableScene& scene);
-	void InitValuesFromScene(EditableScene& scene);
-	void ApplyValuesToScene(EditableScene& scene);
+	void RenderSceneEditor(Scene& scene);
+	void InitValuesFromScene(Scene& scene);
+	void ApplyValuesToScene(Scene& scene);
 
-	void RenderActions(EditableScene& scene);
+	void RenderActions(Scene& scene);
 
 	EditorSceneHandle* GetSceneHandle();
 	const EditorSceneHandle* GetSceneHandle() const;

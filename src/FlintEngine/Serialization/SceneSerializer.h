@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObjectSerializer.h"
-#include <Editables/EditableScene.h>
+#include <Core/Scene.h>
 
 struct SceneStringDesc
 {
@@ -11,14 +11,14 @@ struct SceneStringDesc
 class SceneSerializer
 {
 public:
-	static std::unique_ptr<SceneStringDesc> Serialize(const EditableScene& scene);
-	static std::unique_ptr<EditableScene> Deserialize(const SceneStringDesc& scene_desc);
+	static std::unique_ptr<SceneStringDesc> Serialize(const Scene& scene);
+	static std::unique_ptr<Scene> Deserialize(const SceneStringDesc& scene_desc);
 
 private:
-	static void SerializeGameObjects(const EditableScene& scene, SceneStringDesc& scene_serialized);
-	static void SerializeSceneParams(const EditableScene& scene, SceneStringDesc& scene_serialized);
+	static void SerializeGameObjects(const Scene& scene, SceneStringDesc& scene_serialized);
+	static void SerializeSceneParams(const Scene& scene, SceneStringDesc& scene_serialized);
 
-	static void DeserializeGameObjects(const SceneStringDesc& scene_serialized, EditableScene& scene);
-	static void DeserializeSceneParams(const SceneStringDesc& scene_serialized, EditableScene& scene);
+	static void DeserializeGameObjects(const SceneStringDesc& scene_serialized, Scene& scene);
+	static void DeserializeSceneParams(const SceneStringDesc& scene_serialized, Scene& scene);
 };
 

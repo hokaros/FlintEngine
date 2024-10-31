@@ -3,7 +3,7 @@
 #include <fstream>
 #include "GameObjectLoader.h"
 
-std::unique_ptr<EditableScene> SceneLoader::LoadScene(const char* file_path)
+std::unique_ptr<Scene> SceneLoader::LoadScene(const char* file_path)
 {
 	std::unique_ptr<SceneStringDesc> scene_serialized = LoadSceneDesc(file_path);
 	if (scene_serialized == nullptr)

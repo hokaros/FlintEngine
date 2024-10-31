@@ -20,6 +20,7 @@ public:
 	// Dodaje obiekt do zarz¹dzanych
 	virtual void AddGameObject(std::unique_ptr<GameObject> object) override;
 	virtual const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const override;
+	void RemoveGameObject(GameObject& game_object);
 
 	void AddToMessageSubscribers(GameObject* object);
 

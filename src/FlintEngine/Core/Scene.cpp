@@ -1,9 +1,11 @@
 #include "Scene.h"
 #include <Navigation/NavmeshGenerator.h>
 
-Scene::Scene()
+Scene::Scene(const Scene& other)
+	: m_BackgroundColor(other.m_BackgroundColor)
+	, m_Navmesh(other.m_Navmesh)
 {
-	RegenerateNavmesh();
+	CopyObjectsFrom(other);
 }
 
 void Scene::OnLoaded()
@@ -78,11 +80,24 @@ const std::vector<std::unique_ptr<GameObject>>& Scene::GetGameObjects() const
 	return m_ObjectManager.GetOwnedObjects();
 }
 
+void Scene::RemoveGameObject(GameObject& game_object)
+{
+	m_ObjectManager.RemoveGameObject(game_object);
+}
+
 void Scene::MoveObjectsFrom(Scene&& other_scene)
 {
 	for (std::unique_ptr<GameObject>& go : other_scene.m_ObjectManager.GetOwnedObjects())
 	{
 		AddGameObject(std::move(go));
+	}
+}
+
+void Scene::CopyObjectsFrom(const Scene& other)
+{
+	for (const std::unique_ptr<GameObject>& object : other.m_ObjectManager.GetOwnedObjects())
+	{
+		AddGameObject(object->Copy());
 	}
 }
 

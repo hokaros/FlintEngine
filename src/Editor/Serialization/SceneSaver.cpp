@@ -3,7 +3,7 @@
 #include <Serialization/SceneLoader.h>
 #include "PrefabSaver.h"
 
-void SceneSaver::SaveScene(const EditableScene& scene, const char* file_path)
+void SceneSaver::SaveScene(const Scene& scene, const char* file_path)
 {
     std::fstream scene_file;
     scene_file.open(file_path, std::ios::out);
@@ -25,7 +25,7 @@ SceneSaver::SceneSaver(std::fstream& scene_file)
 
 }
 
-void SceneSaver::SaveScene(const EditableScene& scene)
+void SceneSaver::SaveScene(const Scene& scene)
 {
     std::unique_ptr<SceneStringDesc> scene_serialized = SceneSerializer::Serialize(scene);
 

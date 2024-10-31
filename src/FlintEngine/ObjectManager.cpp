@@ -77,6 +77,12 @@ const std::vector<std::unique_ptr<GameObject>>& ObjectManager::GetGameObjects() 
 	return m_OwnedObjects;
 }
 
+void ObjectManager::RemoveGameObject(GameObject& game_object)
+{
+	DestroyObjectImpl(&game_object, true);
+	DisposeDestroyed();
+}
+
 void ObjectManager::AddToMessageSubscribers(GameObject* gameObject)
 {
 	m_NewMessageSubscribers.push_back(gameObject);

@@ -1,5 +1,5 @@
 #pragma once
-#include <Editables/EditableScene.h>
+#include <Core/Scene.h>
 #include <AssetHandles/IHierarchyEditable.h>
 #include <AssetHandles/ISaveable.h>
 
@@ -8,9 +8,9 @@ class EditorSceneHandle
 	, public IHierarchyEditable
 {
 public:
-	EditorSceneHandle(std::unique_ptr<EditableScene> scene, const std::string& scene_path);
+	EditorSceneHandle(std::unique_ptr<Scene> scene, const std::string& scene_path);
 
-	EditableScene& GetScene() const;
+	Scene& GetScene() const;
 
 	// ISaveable
 	virtual void Save() override;
@@ -26,7 +26,7 @@ public:
 	bool operator==(const EditorSceneHandle& other) const;
 
 private:
-	std::unique_ptr<EditableScene> m_Scene;
+	std::unique_ptr<Scene> m_Scene;
 	std::string m_ScenePath;
 
 	bool m_HasUnsavedChanges = false;

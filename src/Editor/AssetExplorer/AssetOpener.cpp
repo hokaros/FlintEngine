@@ -18,11 +18,11 @@ std::unique_ptr<EditorPrefabHandle> AssetOpener::OpenPrefab(const std::string& p
 
 std::unique_ptr<EditorSceneHandle> AssetOpener::OpenScene(const std::string& scene_path)
 {
-	std::unique_ptr<EditableScene> scene = SceneLoader::LoadScene(scene_path.c_str());
+	std::unique_ptr<Scene> scene = SceneLoader::LoadScene(scene_path.c_str());
 	if (scene == nullptr)
 	{
 		FE_LOG("Creating new scene");
-		scene = std::make_unique<EditableScene>();
+		scene = std::make_unique<Scene>();
 	}
 
 	return std::make_unique<EditorSceneHandle>(std::move(scene), scene_path);

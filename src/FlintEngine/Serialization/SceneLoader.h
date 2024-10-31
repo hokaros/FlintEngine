@@ -12,7 +12,7 @@ class SceneLoader
 	: private IndentFileParser<SceneParsingState>
 {
 public:
-	static std::unique_ptr<EditableScene> LoadScene(const char* file_path);
+	static std::unique_ptr<Scene> LoadScene(const char* file_path);
 	static std::unique_ptr<SceneStringDesc> LoadSceneDesc(const char* file_path);
 
 	static constexpr const char* s_GameObjectsKey = "game_objects";

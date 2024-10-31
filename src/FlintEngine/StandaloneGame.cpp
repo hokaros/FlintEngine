@@ -15,7 +15,7 @@ void StandaloneGame::Run(const char* starting_scene_path)
 
 	GameBase game(&m_Window, &m_Window.GetSceneRenderer(), m_Input);
 
-	game.LoadScene(SceneLoader::LoadScene(starting_scene_path)->CreateRuntimeObject());
+	game.LoadScene(SceneLoader::LoadScene(starting_scene_path));
 
 	game.Run();
 }

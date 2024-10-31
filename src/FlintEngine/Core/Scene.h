@@ -8,7 +8,8 @@ class Scene
 	: public IGameObjectContainer
 {
 public:
-	Scene();
+	Scene() = default;
+	Scene(const Scene& other);
 
 	virtual void OnLoaded();
 	virtual void Update();
@@ -24,8 +25,10 @@ public:
 	
 	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
 	virtual const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const override;
+	void RemoveGameObject(GameObject& game_object);
 
 	void MoveObjectsFrom(Scene&& other_scene);
+	void CopyObjectsFrom(const Scene& other);
 
 	void SetBackgroundColor(const Rgb8& color);
 	const Rgb8& GetBackgroundColor() const;

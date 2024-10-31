@@ -28,11 +28,11 @@ void ScenePropertyEditor::SetScene(std::weak_ptr<EditorUniversalHandle> handle)
     if (scene_handle == nullptr)
         return;
 
-    EditableScene& scene = scene_handle->GetScene();
+    Scene& scene = scene_handle->GetScene();
     InitValuesFromScene(scene);
 }
 
-void ScenePropertyEditor::RenderSceneEditor(EditableScene& scene)
+void ScenePropertyEditor::RenderSceneEditor(Scene& scene)
 {
     ImGui::Text("Scene properties");
     RenderActions(scene);
@@ -40,16 +40,16 @@ void ScenePropertyEditor::RenderSceneEditor(EditableScene& scene)
     ApplyValuesToScene(scene);
 }
 
-void ScenePropertyEditor::InitValuesFromScene(EditableScene& scene)
+void ScenePropertyEditor::InitValuesFromScene(Scene& scene)
 {
 }
 
-void ScenePropertyEditor::ApplyValuesToScene(EditableScene& scene)
+void ScenePropertyEditor::ApplyValuesToScene(Scene& scene)
 {
 
 }
 
-void ScenePropertyEditor::RenderActions(EditableScene& scene)
+void ScenePropertyEditor::RenderActions(Scene& scene)
 {
     if (ImGui::Button("Generate Navmesh"))
     {
