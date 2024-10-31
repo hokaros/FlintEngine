@@ -1,11 +1,22 @@
 #include "NavmeshGenerator.h"
+
 #include <iostream>
+#include <Components/WalkableSurface.h>
+#include <Components/BoxCollider.h>
+#include <Core/GameObject.h>
 
 namespace Navigation
 {
 	void NavmeshGenerator::Generate(const IGameObjectContainer& context, Navmesh& navmesh)
 	{
-		// TODO: get all colliders
+		const std::vector<std::unique_ptr<GameObject>>& game_objects = context.GetGameObjects();
+
+		std::vector<WalkableSurface*> walkables;
+		GameObject::FindComponentsInHierarchies(game_objects, walkables);
+
+		std::vector<BoxCollider*> colliders;
+		GameObject::FindComponentsInHierarchies(game_objects, colliders);
+
 		std::cout << "Generating NavMesh" << std::endl;
 		PrepareTestNavmesh(navmesh);
 	}

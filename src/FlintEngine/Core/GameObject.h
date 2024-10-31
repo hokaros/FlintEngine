@@ -148,7 +148,7 @@ public: /* IUpdateable */
 	virtual ~GameObject() = default;
 
 	template<class T>
-	static void FindComponentInHierarchies(const std::vector<std::unique_ptr<GameObject>>& in_root_objects, std::vector<T*>& out_components);
+	static void FindComponentsInHierarchies(const std::vector<std::unique_ptr<GameObject>>& in_root_objects, std::vector<T*>& out_components);
 
 protected:
 	std::vector<std::unique_ptr<ObjectComponent>> components;
@@ -258,12 +258,10 @@ void GameObject::FindComponentsInChildren(std::vector<T*>& out_components)
 }
 
 template<class T>
-inline void GameObject::FindComponentInHierarchies(const std::vector<std::unique_ptr<GameObject>>& in_root_objects, std::vector<T*>& out_components)
+inline void GameObject::FindComponentsInHierarchies(const std::vector<std::unique_ptr<GameObject>>& in_root_objects, std::vector<T*>& out_components)
 {
-	FE_ASSERT(false, "Implement");
-
 	for (const std::unique_ptr<GameObject>& root_object : in_root_objects)
 	{
-
+		root_object->FindComponentsInChildren<T>(out_components);
 	}
 }
