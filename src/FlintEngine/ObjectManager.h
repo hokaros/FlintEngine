@@ -19,6 +19,7 @@ public:
 
 	// Dodaje obiekt do zarz¹dzanych
 	virtual void AddGameObject(std::unique_ptr<GameObject> object) override;
+	virtual const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const override;
 
 	void AddToMessageSubscribers(GameObject* object);
 
@@ -30,8 +31,8 @@ public:
 	void ActivateNewObjects();
 
 	const std::list<GameObject*>& GetAllMessageSubscribers() const;
-	const std::list<std::unique_ptr<GameObject>>& GetOwnedObjects() const;
-	std::list<std::unique_ptr<GameObject>>& GetOwnedObjects();
+	const std::vector<std::unique_ptr<GameObject>>& GetOwnedObjects() const;
+	std::vector<std::unique_ptr<GameObject>>& GetOwnedObjects();
 
 	void Subscribe(IObjectManagerObserver& observer);
 
@@ -48,7 +49,7 @@ private:
 
 private:
 	std::list<GameObject*> m_MessageSubscribers;
-	std::list<std::unique_ptr<GameObject>> m_OwnedObjects;
+	std::vector<std::unique_ptr<GameObject>> m_OwnedObjects;
 	std::list<GameObject*> m_DestroyedObjects;
 	std::list<GameObject*> m_NewMessageSubscribers;
 

@@ -1,5 +1,7 @@
 #include "ObjectManager.h"
 
+#include <ftl.h>
+
 ObjectManager* ObjectManager::s_Main = nullptr;
 
 ObjectManager* ObjectManager::Main() 
@@ -70,6 +72,11 @@ void ObjectManager::AddGameObject(std::unique_ptr<GameObject> gameObject)
 	m_OwnedObjects.push_back(std::move(gameObject));
 }
 
+const std::vector<std::unique_ptr<GameObject>>& ObjectManager::GetGameObjects() const
+{
+	return m_OwnedObjects;
+}
+
 void ObjectManager::AddToMessageSubscribers(GameObject* gameObject)
 {
 	m_NewMessageSubscribers.push_back(gameObject);
@@ -107,10 +114,10 @@ void ObjectManager::DisposeDestroyed()
 
 	m_NewMessageSubscribers.remove_if(should_dispose);
 	m_MessageSubscribers.remove_if(should_dispose);
-	m_OwnedObjects.remove_if([&should_dispose](const std::unique_ptr<GameObject>& ptr) 
-		{
-			return should_dispose(ptr.get()); 
-		});
+	ftl::vector_remove_if(m_OwnedObjects, [&should_dispose](const std::unique_ptr<GameObject>& ptr) 
+	{
+		return should_dispose(ptr.get()); 
+	});
 
 	m_DestroyedObjects.clear();
 }
@@ -134,12 +141,12 @@ const std::list<GameObject*>& ObjectManager::GetAllMessageSubscribers() const
 	return m_MessageSubscribers;
 }
 
-const std::list<std::unique_ptr<GameObject>>& ObjectManager::GetOwnedObjects() const
+const std::vector<std::unique_ptr<GameObject>>& ObjectManager::GetOwnedObjects() const
 {
 	return m_OwnedObjects;
 }
 
-std::list<std::unique_ptr<GameObject>>& ObjectManager::GetOwnedObjects()
+std::vector<std::unique_ptr<GameObject>>& ObjectManager::GetOwnedObjects()
 {
 	return m_OwnedObjects;
 }

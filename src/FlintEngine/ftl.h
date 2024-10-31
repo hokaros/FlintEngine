@@ -31,4 +31,22 @@ namespace ftl
 			}
 		}
 	}
+
+	template<typename T, typename PredT>
+	void vector_remove_if(std::vector<T>& vec, PredT&& predicate)
+	{
+		for (auto it = vec.begin(); it != vec.end();)
+		{
+			const T& vec_val = *it;
+
+			if (predicate(vec_val))
+			{
+				it = vec.erase(it);
+			}
+			else
+			{
+				it++;
+			}
+		}
+	}
 }

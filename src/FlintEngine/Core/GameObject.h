@@ -131,7 +131,7 @@ public: /* IUpdateable */
 	T* FindComponent(); // TODO: find by RTC
 	// Znajduje wszystkie komponenty okreœlonego typu
 	template<class T>
-	std::list<T*>* FindComponents();
+	std::list<T*>* FindComponents(); // TODO: niezwracanie pointera
 	// Znajduje wszystkie komponenty okreœlonego typu u dzieci
 	template<class T>
 	std::list<T*>* FindComponentsInChildren(); // TODO: find by RTC
@@ -146,6 +146,9 @@ public: /* IUpdateable */
 	Scene* GetScene() const;
 
 	virtual ~GameObject() = default;
+
+	template<class T>
+	static void FindComponentInHierarchies(const std::vector<std::unique_ptr<GameObject>>& in_root_objects, std::vector<T*>& out_components);
 
 protected:
 	std::vector<std::unique_ptr<ObjectComponent>> components;
@@ -267,4 +270,15 @@ std::list<T*>* GameObject::FindComponentsInChildren()
 	}
 
 	return found;
+}
+
+template<class T>
+inline void GameObject::FindComponentInHierarchies(const std::vector<std::unique_ptr<GameObject>>& in_root_objects, std::vector<T*>& out_components)
+{
+	FE_ASSERT(false, "Implement");
+
+	for (const std::unique_ptr<GameObject>& root_object : in_root_objects)
+	{
+
+	}
 }

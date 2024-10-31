@@ -1,7 +1,7 @@
 #pragma once
 #include <ComponentDefinition.h>
 
-class Walkable
+class WalkableSurface
 	: public ObjectComponent
 {
 	DECLARE_COMPONENT();

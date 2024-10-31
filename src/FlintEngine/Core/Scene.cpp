@@ -73,6 +73,11 @@ void Scene::AddGameObject(std::unique_ptr<GameObject> game_object)
 	m_ObjectManager.AddNewObject(std::move(game_object));
 }
 
+const std::vector<std::unique_ptr<GameObject>>& Scene::GetGameObjects() const
+{
+	return m_ObjectManager.GetOwnedObjects();
+}
+
 void Scene::MoveObjectsFrom(Scene&& other_scene)
 {
 	for (std::unique_ptr<GameObject>& go : other_scene.m_ObjectManager.GetOwnedObjects())

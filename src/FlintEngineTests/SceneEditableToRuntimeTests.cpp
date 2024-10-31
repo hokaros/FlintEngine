@@ -41,7 +41,7 @@ TEST(SUITE_NAME, AddsSingleInlineObject)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<GameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const std::vector<std::unique_ptr<GameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
 	ASSERT_TRUE(runtime_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_object = runtime_objects.front();
@@ -68,7 +68,7 @@ TEST(SUITE_NAME, AddsSinglePrefabInstance)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<GameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const Scene::GameObjectsT& runtime_objects = runtime_scene->GetGameObjects();
 	ASSERT_TRUE(runtime_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_object = runtime_objects.front();
@@ -95,7 +95,7 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<GameObject>>& runtime_root_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const Scene::GameObjectsT& runtime_root_objects = runtime_scene->GetGameObjects();
 	ASSERT_TRUE(runtime_root_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_root_object = runtime_root_objects.front();
@@ -132,7 +132,7 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
 
 	// Assert
-	const std::list<std::unique_ptr<GameObject>>& runtime_root_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
+	const Scene::GameObjectsT& runtime_root_objects = runtime_scene->GetGameObjects();
 	ASSERT_TRUE(runtime_root_objects.size() == 1);
 
 	const std::unique_ptr<GameObject>& runtime_root_object = runtime_root_objects.front();

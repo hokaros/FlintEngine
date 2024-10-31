@@ -18,11 +18,12 @@ public:
 
 	GameObject* FindGameObjectByName(const std::string& name) const;
 
-	using GameObjectsT = std::list<std::unique_ptr<GameObject>>;
+	using GameObjectsT = std::vector<std::unique_ptr<GameObject>>;
 	GameObjectsT::iterator BeginRootGameObjects();
 	GameObjectsT::iterator EndRootGameObjects();
 	
 	virtual void AddGameObject(std::unique_ptr<GameObject> game_object) override;
+	virtual const std::vector<std::unique_ptr<GameObject>>& GetGameObjects() const override;
 
 	void MoveObjectsFrom(Scene&& other_scene);
 
