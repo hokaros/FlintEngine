@@ -131,10 +131,10 @@ public: /* IUpdateable */
 	T* FindComponent(); // TODO: find by RTC
 	// Znajduje wszystkie komponenty okreœlonego typu
 	template<class T>
-	std::list<T*>* FindComponents(); // TODO: niezwracanie pointera
+	void FindComponents(std::vector<T*>& out_components);
 	// Znajduje wszystkie komponenty okreœlonego typu u dzieci
 	template<class T>
-	std::list<T*>* FindComponentsInChildren(); // TODO: find by RTC
+	void FindComponentsInChildren(std::vector<T*>& out_components); // TODO: find by RTC
 
 	Vector LookingDirection() const;
 
@@ -236,40 +236,25 @@ T* GameObject::FindComponent()
 }
 
 template<class T>
-std::list<T*>* GameObject::FindComponents() 
+void GameObject::FindComponents(std::vector<T*>& out_components)
 {
-	std::list<T*>* found = new std::list<T*>();
-
 	for (std::unique_ptr<ObjectComponent>& component : components) 
 	{
-		T* desired = dynamic_cast<T*>(component.get());
+		T* desired = dynamic_cast<T*>(component.get()); // TODO: match by RTC
 		if (desired != nullptr) 
 		{
-			found->push_back(desired);
+			out_components.push_back(desired);
 		}
 	}
-
-	return found;
 }
 
 template<class T>
-std::list<T*>* GameObject::FindComponentsInChildren() 
+void GameObject::FindComponentsInChildren(std::vector<T*>& out_components) 
 {
-	std::list<T*>* found = new std::list<T*>();
-
 	for (std::unique_ptr<GameObject>& child : children) 
 	{
-		std::list<T*>* foundInChild = child->FindComponents<T>();
-
-		for (T* desired : *foundInChild) 
-		{
-			found->push_back(desired);
-		}
-
-		delete foundInChild;
+		child->FindComponents<T>(out_components);
 	}
-
-	return found;
 }
 
 template<class T>

@@ -59,9 +59,10 @@ Firearm* PlayerEquipment::GetCurrentWeapon()
 
 void PlayerEquipment::LoadWeaponsFromChildren() 
 {
-	std::list<Firearm*>* firearms = m_GameObject->FindComponentsInChildren<Firearm>();
+	std::vector<Firearm*> firearms;
+	m_GameObject->FindComponentsInChildren<Firearm>(firearms);
 
-	for (Firearm* firearm : *firearms) 
+	for (Firearm* firearm : firearms) 
 	{
 		if (firearm->GetType() == FirearmType::Basic) 
 		{
@@ -72,6 +73,4 @@ void PlayerEquipment::LoadWeaponsFromChildren()
 			superWpn = firearm;
 		}
 	}
-
-	delete firearms;
 }
