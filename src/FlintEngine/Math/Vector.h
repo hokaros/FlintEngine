@@ -118,6 +118,10 @@ public:
     static Vector Scale(const Vector& v1, const Vector& v2);
     static Vector Divide(const Vector& v1, const Vector& v2);
 
+    static float GetDistance(const std::pair<Vector, Vector>& pair);
+    static float GetDistanceSq(const std::pair<Vector, Vector>& pair);
+    static float GetDistanceSq(const Vector& p1, const Vector& p2);
+
     // Sta³e
     static const Vector ZERO;
 };

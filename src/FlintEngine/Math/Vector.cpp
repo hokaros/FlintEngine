@@ -131,6 +131,21 @@ Vector Vector::Divide(const Vector& v1, const Vector& v2)
 	return Vector(v1.x / v2.x, v1.y / v2.y);
 }
 
+float Vector::GetDistance(const std::pair<Vector, Vector>& pair)
+{
+	return (pair.first - pair.second).Length();
+}
+
+float Vector::GetDistanceSq(const std::pair<Vector, Vector>& pair)
+{
+	return GetDistanceSq(pair.first, pair.second);
+}
+
+float Vector::GetDistanceSq(const Vector& p1, const Vector& p2)
+{
+	return (p1 - p2).LengthSquared();
+}
+
 
 
 VectorInt::VectorInt(const Vector& other)

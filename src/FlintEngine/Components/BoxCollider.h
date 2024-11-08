@@ -12,6 +12,7 @@ public:
 	bool DoesCollide(const BoxCollider& other) const;
 	Rect GetIntersection(const BoxCollider& other) const;
 	bool IsStatic() const;
+	void GetVertices(std::vector<Vector>& out_vertices) const;
 
 	void OnCollision(BoxCollider& other);
 

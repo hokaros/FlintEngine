@@ -9,6 +9,7 @@ public:
 	virtual void RenderEditorSelected(SceneRenderer& renderer) override;
 
 	const Vector& GetSize() const;
+	void GetVertices(std::vector<Vector>& out_vertices) const;
 
 private:
 	Vector m_Size;

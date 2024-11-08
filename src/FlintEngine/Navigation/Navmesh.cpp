@@ -22,9 +22,25 @@ void Navigation::Navmesh::AddVertex(Vector&& v)
 	m_Vertices.push_back(std::move(v));
 }
 
+void Navigation::Navmesh::AddVertices(const std::vector<Vector>& vertices)
+{
+	for (const Vector& v : vertices)
+	{
+		m_Vertices.push_back(v);
+	}
+}
+
 void Navigation::Navmesh::AddTriangle(IndexTriangle&& tri)
 {
 	m_Triangles.push_back(std::move(tri));
+}
+
+void Navigation::Navmesh::AddTriangles(const std::vector<IndexTriangle>& triangles)
+{
+	for (const IndexTriangle& tri : triangles)
+	{
+		m_Triangles.push_back(tri);
+	}
 }
 
 const Vector& Navigation::Navmesh::GetPosAtIndex(int idx) const

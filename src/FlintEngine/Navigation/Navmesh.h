@@ -14,7 +14,9 @@ namespace Navigation
 
 		void Clear();
 		void AddVertex(Vector&& v);
+		void AddVertices(const std::vector<Vector>& vertices);
 		void AddTriangle(IndexTriangle&& tri);
+		void AddTriangles(const std::vector<IndexTriangle>& triangles);
 
 	private:
 		const Vector& GetPosAtIndex(int idx) const;
