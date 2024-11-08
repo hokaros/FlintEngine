@@ -1,5 +1,5 @@
 #include "pch.h"
-#include <Editables/EditableScene.h>
+#include <Core/Scene.h>
 #include <Editables/PrefabInstance.h>
 
 #include "FakeAssetManager.h"
@@ -17,10 +17,10 @@ TEST(SUITE_NAME, SetsBackgroundColor)
 	const Rgb8 color = Rgb8(0x01, 0x03, 0x02);
 
 	// Act
-	EditableScene editable_scene;
+	Scene editable_scene;
 	editable_scene.SetBackgroundColor(color);
 
-	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
+	std::unique_ptr<Scene> runtime_scene = std::make_unique<Scene>(editable_scene);
 
 	// Assert
 	ASSERT_EQ(color, runtime_scene->GetBackgroundColor());
@@ -34,11 +34,11 @@ TEST(SUITE_NAME, AddsSingleInlineObject)
 	std::unique_ptr<GameObject> game_object = std::make_unique<GameObject>();
 	game_object->SetName(object_name);
 
-	EditableScene editable_scene;
-	editable_scene.AddRootObject(std::move(game_object));
+	Scene editable_scene;
+	editable_scene.AddGameObject(std::move(game_object));
 
 	// Act
-	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
+	std::unique_ptr<Scene> runtime_scene = std::make_unique<Scene>(editable_scene);
 
 	// Assert
 	const std::vector<std::unique_ptr<GameObject>>& runtime_objects = runtime_scene->GetObjectManager().GetOwnedObjects();
@@ -61,11 +61,11 @@ TEST(SUITE_NAME, AddsSinglePrefabInstance)
 	std::unique_ptr<PrefabInstance> prefab_instance = std::make_unique<PrefabInstance>("irrelevant_path.prefab");
 	prefab_instance->SetName(object_name);
 
-	EditableScene editable_scene;
-	editable_scene.AddRootObject(std::move(prefab_instance));
+	Scene editable_scene;
+	editable_scene.AddGameObject(std::move(prefab_instance));
 
 	// Act
-	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
+	std::unique_ptr<Scene> runtime_scene = std::make_unique<Scene>(editable_scene);
 
 	// Assert
 	const Scene::GameObjectsT& runtime_objects = runtime_scene->GetGameObjects();
@@ -88,11 +88,11 @@ TEST(SUITE_NAME, Adds2InlineObjectsHierarchy)
 	editable_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(editable_child));
 
-	EditableScene editable_scene;
-	editable_scene.AddRootObject(std::move(editable_root_object));
+	Scene editable_scene;
+	editable_scene.AddGameObject(std::move(editable_root_object));
 
 	// Act
-	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
+	std::unique_ptr<Scene> runtime_scene = std::make_unique<Scene>(editable_scene);
 
 	// Assert
 	const Scene::GameObjectsT& runtime_root_objects = runtime_scene->GetGameObjects();
@@ -125,11 +125,11 @@ TEST(SUITE_NAME, AddsInlineObjectAndPrefabInstanceChild)
 	prefab_instance_child->SetName(child_object_name);
 	editable_root_object->AddChild(std::move(prefab_instance_child));
 
-	EditableScene editable_scene;
-	editable_scene.AddRootObject(std::move(editable_root_object));
+	Scene editable_scene;
+	editable_scene.AddGameObject(std::move(editable_root_object));
 
 	// Act
-	std::unique_ptr<Scene> runtime_scene = editable_scene.CreateRuntimeObject();
+	std::unique_ptr<Scene> runtime_scene = std::make_unique<Scene>(editable_scene);
 
 	// Assert
 	const Scene::GameObjectsT& runtime_root_objects = runtime_scene->GetGameObjects();
