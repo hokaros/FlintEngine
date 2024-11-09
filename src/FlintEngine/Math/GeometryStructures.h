@@ -14,3 +14,5 @@ public:
 		, idx3(idx3)
 	{}
 };
+
+using IndexPair = std::pair<size_t, size_t>;

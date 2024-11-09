@@ -2,6 +2,7 @@
 #include <SDL_stdinc.h>
 
 const Vector Vector::ZERO = Vector(0.0f, 0.0f);
+const Vector Vector::INVALID = Vector(INFINITY, INFINITY);
 
 Vector& Vector::Normalize() {
 	float length = Length();
@@ -75,6 +76,10 @@ Vector operator-(const Vector& left, const Vector& right) {
 	return result;
 }
 
+Vector operator-(const Vector& v) {
+	return Vector(-v.x, -v.y);
+}
+
 Vector operator*(const Vector& left, float multiplier) {
 	Vector result;
 	result.x = left.x * multiplier;
@@ -114,21 +119,29 @@ bool operator!=(const Vector& left, const Vector& right)
 	return !(left == right);
 }
 
-double Vector::GetAngle(const Vector& v1, const Vector& v2) {
+double Vector::GetAngle(const Vector& v1, const Vector& v2)
+{
 	return v1.GetAngle() - v2.GetAngle();
 }
 
-Vector Vector::Scale(const Vector& v1, const Vector& v2) {
+Vector Vector::Scale(const Vector& v1, const Vector& v2)
+{
 	return Vector(v1.x * v2.x, v1.y * v2.y);
 }
 
-Vector Vector::GetScaled(const Vector& other) const {
+Vector Vector::GetScaled(const Vector& other) const
+{
 	return Scale(*this, other);
 }
 
 Vector Vector::Divide(const Vector& v1, const Vector& v2)
 {
 	return Vector(v1.x / v2.x, v1.y / v2.y);
+}
+
+float Vector::Dot(const Vector& v1, const Vector& v2)
+{
+	return v1.Length() * v2.Length() * cos(GetAngle(v1, v2));
 }
 
 float Vector::GetDistance(const std::pair<Vector, Vector>& pair)

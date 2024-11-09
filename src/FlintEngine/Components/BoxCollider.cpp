@@ -29,6 +29,11 @@ bool BoxCollider::DoesCollide(const BoxCollider& other) const
 	return intersect;
 }
 
+bool BoxCollider::DoesLineIntersect(const Vector& line_start, const Vector& line_end) const
+{
+	return false; // TODO
+}
+
 void BoxCollider::OnCollision(BoxCollider& other)
 {
 	if (onCollision)
@@ -184,7 +189,7 @@ bool BoxCollider::IsStatic() const
 	return m_IsStatic;
 }
 
-void BoxCollider::GetVertices(std::vector<Vector>& out_vertices) const
+void BoxCollider::GetVertices(std::vector<Vector>& out_vertices, std::vector<IndexPair>& out_edges) const
 {
 	const Vector top_left = m_Position - Vector(m_Size.x, m_Size.y) / 2.f;
 	const Vector top_right = top_left + Vector(m_Size.x, 0);
@@ -192,8 +197,21 @@ void BoxCollider::GetVertices(std::vector<Vector>& out_vertices) const
 	const Vector bottom_right = bottom_left + Vector(m_Size.x, 0);
 
 	const GameObject& owner = GetOwner();
+
 	out_vertices.push_back(owner.TransformPoint(top_left));
+	const size_t top_left_idx = out_vertices.size() - 1;
+
 	out_vertices.push_back(owner.TransformPoint(top_right));
+	const size_t top_right_idx = out_vertices.size() - 1;
+
 	out_vertices.push_back(owner.TransformPoint(bottom_left));
+	const size_t bottom_left_idx = out_vertices.size() - 1;
+
 	out_vertices.push_back(owner.TransformPoint(bottom_right));
+	const size_t bottom_right_idx = out_vertices.size() - 1;
+
+	out_edges.push_back({ top_left_idx, top_right_idx });
+	out_edges.push_back({ top_left_idx, bottom_left_idx });
+	out_edges.push_back({ bottom_left_idx, bottom_right_idx });
+	out_edges.push_back({ bottom_right_idx, top_right_idx });
 }

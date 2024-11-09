@@ -105,6 +105,7 @@ public:
     friend Vector operator+(const Vector& left, const Vector& right);
     friend Vector& operator+=(Vector& left, const Vector& right);
     friend Vector operator-(const Vector& left, const Vector& right);
+    friend Vector operator-(const Vector& v);
     friend Vector operator*(const Vector& left, float multiplier);
     friend Vector& operator*=(Vector& left, float multiplier);
     friend Vector operator/(const Vector& left, float dividor);
@@ -117,6 +118,7 @@ public:
     // Component-wise multiplication
     static Vector Scale(const Vector& v1, const Vector& v2);
     static Vector Divide(const Vector& v1, const Vector& v2);
+    static float Dot(const Vector& v1, const Vector& v2);
 
     static float GetDistance(const std::pair<Vector, Vector>& pair);
     static float GetDistanceSq(const std::pair<Vector, Vector>& pair);
@@ -124,6 +126,7 @@ public:
 
     // Sta³e
     static const Vector ZERO;
+    static const Vector INVALID;
 };
 
 struct Rect 
