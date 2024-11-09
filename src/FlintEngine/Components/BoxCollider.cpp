@@ -31,6 +31,35 @@ bool BoxCollider::DoesCollide(const BoxCollider& other) const
 
 bool BoxCollider::DoesLineIntersect(const Vector& line_start, const Vector& line_end) const
 {
+	if (DoesContainPoint(line_start) || DoesContainPoint(line_end))
+		return true;
+
+	if (DoesSegmentIntersectBoundary(line_start, line_end))
+		return true;
+
+	return false;
+}
+
+bool BoxCollider::DoesContainPoint(const Vector& p) const
+{
+	const Vector box_min = GetWorldPos() - GetWorldSize() / 2.f;
+	const Vector box_max = box_min + GetWorldSize();
+
+	const bool box_contains = p.x >= box_min.x && p.x <= box_max.x
+		&& p.y >= box_min.y && p.y <= box_max.y;
+
+	if (m_InsideOutCollision)
+	{
+		return !box_contains;
+	}
+	else
+	{
+		return box_contains;
+	}
+}
+
+bool BoxCollider::DoesSegmentIntersectBoundary(const Vector& seg_start, const Vector& seg_end) const
+{
 	return false; // TODO
 }
 
@@ -128,7 +157,6 @@ bool BoxCollider::IsInside(const BoxCollider& collider1, const BoxCollider& coll
 	if (!IsLineInside(yMin1, yMax1, yMin2, yMax2))
 		return false;
 
-
 	float xMin1 = pos1.x;
 	float xMax1 = xMin1 + size1.x;
 	float xMin2 = pos2.x;
@@ -140,12 +168,14 @@ bool BoxCollider::IsInside(const BoxCollider& collider1, const BoxCollider& coll
 	return true;
 }
 
-bool BoxCollider::IsLineInside(float min1, float max1, float min2, float max2) {
+bool BoxCollider::IsLineInside(float min1, float max1, float min2, float max2)
+{
 	return (min1 >= min2 && max1 <= max2)
 		|| (min2 >= min1 && max2 <= max1);
 }
 
-Vector BoxCollider::LinesIntersection(float min1, float max1, float min2, float max2) {
+Vector BoxCollider::LinesIntersection(float min1, float max1, float min2, float max2)
+{
 	if (!DoLinesIntersect(min1, max1, min2, max2))
 		return Vector(0, 0);
 
@@ -154,7 +184,8 @@ Vector BoxCollider::LinesIntersection(float min1, float max1, float min2, float 
 	return Vector(start, end);
 }
 
-Rect BoxCollider::GetIntersection(const BoxCollider& other) const {
+Rect BoxCollider::GetIntersection(const BoxCollider& other) const
+{
 	Vector my_pos = GetWorldPos() - GetWorldSize() / 2.f;
 	Vector other_pos = other.GetWorldPos() - other.GetWorldSize() / 2.f;
 	Vector my_size = GetWorldSize();

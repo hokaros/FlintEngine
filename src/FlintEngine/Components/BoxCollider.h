@@ -12,6 +12,8 @@ public:
 
 	bool DoesCollide(const BoxCollider& other) const;
 	bool DoesLineIntersect(const Vector& line_start, const Vector& line_end) const;
+	bool DoesContainPoint(const Vector& p) const;
+	bool DoesSegmentIntersectBoundary(const Vector& seg_start, const Vector& seg_end) const;
 	Rect GetIntersection(const BoxCollider& other) const;
 	bool IsStatic() const;
 	void GetVertices(std::vector<Vector>& out_vertices, std::vector<IndexPair>& out_edges) const;
