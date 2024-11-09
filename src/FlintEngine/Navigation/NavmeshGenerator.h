@@ -51,8 +51,6 @@ namespace Navigation
 			bool IsColliderLink(IndexPair link) const;
 
 			static bool DoLinesCross(const PointPair& line1, const PointPair& line2);
-			static Vector GetInfiniteLineCrossing(const PointPair& line1, const PointPair& line2);
-			static bool IsPointBetweenPoints(const Vector& point, const PointPair& points);
 
 		private:
 			const std::vector<BoxCollider*>& m_Colliders;

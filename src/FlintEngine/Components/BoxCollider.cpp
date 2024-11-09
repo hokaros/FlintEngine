@@ -1,4 +1,5 @@
 #include "BoxCollider.h"
+
 #include "PhysicsSystem.h"
 #include <Core/GameObject.h>
 
@@ -45,8 +46,8 @@ bool BoxCollider::DoesContainPoint(const Vector& p) const
 	const Vector box_min = GetWorldPos() - GetWorldSize() / 2.f;
 	const Vector box_max = box_min + GetWorldSize();
 
-	const bool box_contains = p.x >= box_min.x && p.x <= box_max.x
-		&& p.y >= box_min.y && p.y <= box_max.y;
+	const bool box_contains = p.x > box_min.x && p.x < box_max.x
+		&& p.y > box_min.y && p.y < box_max.y;
 
 	if (m_InsideOutCollision)
 	{
@@ -60,7 +61,40 @@ bool BoxCollider::DoesContainPoint(const Vector& p) const
 
 bool BoxCollider::DoesSegmentIntersectBoundary(const Vector& seg_start, const Vector& seg_end) const
 {
-	return false; // TODO
+	const Segment target_seg = Segment(seg_start, seg_end);
+	return DoesSegmentIntersectBoundary(target_seg);
+}
+
+bool BoxCollider::DoesSegmentIntersectBoundary(const Segment& segment) const
+{
+	const Vector top_left = m_Position - Vector(m_Size.x, m_Size.y) / 2.f;
+	const Vector top_right = top_left + Vector(m_Size.x, 0);
+	const Vector bottom_left = top_left + Vector(0, m_Size.y);
+	const Vector bottom_right = bottom_left + Vector(m_Size.x, 0);
+
+	const GameObject& owner = GetOwner();
+	const Vector top_left_world = owner.TransformPoint(top_left);
+	const Vector top_right_world = owner.TransformPoint(top_right);
+	const Vector bottom_left_world = owner.TransformPoint(bottom_left);
+	const Vector bottom_right_world = owner.TransformPoint(bottom_right);
+
+	const Segment left_boundary_world = Segment(top_left_world, bottom_left_world);
+	if (left_boundary_world.DoesCross(segment))
+		return true;
+
+	const Segment right_boundary_world = Segment(top_right_world, bottom_right_world);
+	if (right_boundary_world.DoesCross(segment))
+		return true;
+
+	const Segment top_boundary_world = Segment(top_left_world, top_right_world);
+	if (top_boundary_world.DoesCross(segment))
+		return true;
+
+	const Segment bottom_boundary_world = Segment(bottom_left_world, bottom_right_world);
+	if (bottom_boundary_world.DoesCross(segment))
+		return true;
+
+	return false;
 }
 
 void BoxCollider::OnCollision(BoxCollider& other)

@@ -1,6 +1,8 @@
 #pragma once
 #include "Vector.h"
 
+struct Segment;
+
 struct Line
 {
 public:
@@ -15,6 +17,7 @@ public:
 
 	static Line FromSegment(const Vector& p1, const Vector& p2);
 	static Line FromSegment(const std::pair<Vector, Vector>& points);
+	static Line FromSegment(const Segment& segment);
 
 	Vector GetCrossingPoint(const Line& other) const;
 	float GetYAtX(float x) const;

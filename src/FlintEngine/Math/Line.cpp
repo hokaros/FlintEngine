@@ -1,5 +1,7 @@
 #include "Line.h"
 
+#include "Segment.h"
+
 Line Line::FromSegment(const Vector& p1, const Vector& p2)
 {
 	return Line(p1, p2 - p1);
@@ -8,6 +10,11 @@ Line Line::FromSegment(const Vector& p1, const Vector& p2)
 Line Line::FromSegment(const std::pair<Vector, Vector>& points)
 {
 	return FromSegment(points.first, points.second);
+}
+
+Line Line::FromSegment(const Segment& segment)
+{
+	return FromSegment(segment.start, segment.end);
 }
 
 Vector Line::GetCrossingPoint(const Line& other) const

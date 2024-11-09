@@ -7,6 +7,7 @@
 #include <Core/GameObject.h>
 #include <ftl.h>
 #include <Math/Line.h>
+#include <Math/Segment.h>
 
 namespace Navigation
 {
@@ -188,7 +189,7 @@ namespace Navigation
 	{
 		for (IndexPair in_pair : all_pairs)
 		{
-			if (IsColliderLink(in_pair) || !IsLineOfSight(in_pair))
+			if (IsColliderLink(in_pair) || IsLineOfSight(in_pair))
 			{
 				out_links.push_back(in_pair);
 			}
@@ -247,38 +248,11 @@ namespace Navigation
 
 	bool NavmeshGenerator::VertexLinker::DoLinesCross(const PointPair& line1, const PointPair& line2)
 	{
-		const Vector infinite_line_crossing = GetInfiniteLineCrossing(line1, line2);
-		if (infinite_line_crossing == Vector::INVALID)
-			return false;
-
-		return IsPointBetweenPoints(infinite_line_crossing, line1) && IsPointBetweenPoints(infinite_line_crossing, line2);
-	}
-
-	Vector NavmeshGenerator::VertexLinker::GetInfiniteLineCrossing(const PointPair& segment1, const PointPair& segment2)
-	{
-		const Line line1 = Line::FromSegment(segment1);
-		const Line line2 = Line::FromSegment(segment2);
-
-		return line1.GetCrossingPoint(line2);
-	}
-
-	bool NavmeshGenerator::VertexLinker::IsPointBetweenPoints(const Vector& target, const PointPair& points)
-	{
-		const Vector from_p1_to_p2 = points.second - points.first;
-		const Vector from_p1_to_target = target - points.first;
-		if (abs(Vector::GetAngle(from_p1_to_p2, from_p1_to_target)) >= M_PI / 2.0)
-			return false; // behind p1
-
-		const Vector from_p2_to_p1 = -from_p1_to_p2;
-		const Vector from_p2_to_target = target - points.second;
-		if (abs(Vector::GetAngle(from_p2_to_p1, from_p2_to_target)) >= M_PI / 2.0)
-			return false; // behind p2
-
-		return true;
+		return Segment(line1).DoesCross(Segment(line2));
 	}
 
 	bool NavmeshGenerator::VertexLinker::IsColliderLink(IndexPair link) const
 	{
-		return ftl::vector_contains(m_ColliderLinks, link);
+		return ftl::vector_contains(m_ColliderLinks, link) || ftl::vector_contains(m_ColliderLinks, { link.second, link.first });
 	}
 }
