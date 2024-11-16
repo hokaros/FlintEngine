@@ -66,6 +66,8 @@ namespace Navigation
 		out_navmesh.AddTriangles(triangles);
 		
 		out_navmesh.AddEdges(links);
+
+		// TODO: don't add triangles which are from colliders (it's a problem only if we have triangular colliders)
 	}
 
 	void NavmeshGenerator::GetTrianglesFromLinks(const std::vector<std::pair<size_t, size_t>>& point_pairs, std::vector<IndexTriangle>& out_triangles)
@@ -115,7 +117,7 @@ namespace Navigation
 		auto it = m_PointNeighbours.find(p);
 		if (it == m_PointNeighbours.end())
 		{
-			auto& emplace_res = m_PointNeighbours.emplace();
+			auto& emplace_res = m_PointNeighbours.emplace(p, std::vector<size_t>());
 			it = emplace_res.first;
 		}
 

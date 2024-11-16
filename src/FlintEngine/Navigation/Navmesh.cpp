@@ -5,8 +5,8 @@
 
 void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 {
-	//RenderTriangles(renderer);
-	RenderEdges(renderer);
+	RenderTriangles(renderer);
+	//RenderEdges(renderer);
 }
 
 void Navigation::Navmesh::Clear()
