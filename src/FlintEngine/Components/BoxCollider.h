@@ -12,7 +12,8 @@ public:
 	BoxCollider() = default;
 
 	bool DoesCollide(const BoxCollider& other) const;
-	bool DoesLineIntersect(const Vector& line_start, const Vector& line_end) const;
+	bool DoesSegmentIntersect(const Vector& line_start, const Vector& line_end) const;
+	bool DoesSegmentIntersect(const Segment& seg) const;
 	bool DoesContainPoint(const Vector& p) const;
 	bool DoesSegmentIntersectBoundary(const Vector& seg_start, const Vector& seg_end) const;
 	bool DoesSegmentIntersectBoundary(const Segment& segment) const;

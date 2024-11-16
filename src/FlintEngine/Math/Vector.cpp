@@ -15,6 +15,13 @@ Vector& Vector::Normalize() {
 	return *this;
 }
 
+const Vector Vector::GetNormalized() const {
+	Vector result = Vector(*this);
+	result.Normalize();
+
+	return result;
+}
+
 void Vector::Sort() {
 	if (x <= y)
 		return;

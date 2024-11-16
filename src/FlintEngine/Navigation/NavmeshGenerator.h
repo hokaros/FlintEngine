@@ -2,6 +2,7 @@
 #include <Core/IGameObjectContainer.h>
 #include "Navmesh.h"
 #include <map>
+#include <Math/Segment.h>
 
 class Scene;
 class WalkableSurface;
@@ -45,12 +46,10 @@ namespace Navigation
 
 			bool IsLineOfSight(IndexPair pair) const;
 			bool IsLineOfSight(const Vector& p1, const Vector& p2) const;
-			bool AnyLinkInLine(const Vector& p1, const Vector& p2) const;
-			bool AnyColliderInLine(const Vector& p1, const Vector& p2) const;
+			bool AnyLinkInLine(const Segment& line) const;
+			bool AnyColliderInLine(const Segment& line) const;
 
 			bool IsColliderLink(IndexPair link) const;
-
-			static bool DoLinesCross(const PointPair& line1, const PointPair& line2);
 
 		private:
 			const std::vector<BoxCollider*>& m_Colliders;

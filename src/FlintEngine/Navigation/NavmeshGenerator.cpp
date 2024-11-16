@@ -64,6 +64,8 @@ namespace Navigation
 		std::vector<IndexTriangle> triangles;
 		GetTrianglesFromLinks(links, triangles);
 		out_navmesh.AddTriangles(triangles);
+		
+		out_navmesh.AddEdges(links);
 	}
 
 	void NavmeshGenerator::GetTrianglesFromLinks(const std::vector<std::pair<size_t, size_t>>& point_pairs, std::vector<IndexTriangle>& out_triangles)
@@ -207,16 +209,19 @@ namespace Navigation
 
 	bool NavmeshGenerator::VertexLinker::IsLineOfSight(const Vector& p1, const Vector& p2) const
 	{
-		if (AnyLinkInLine(p1, p2))
+		const float tolerance = 0.00001f;
+		const Segment segment_with_tolerance = Segment(p1, p2).GetShortenedSegment(tolerance);
+
+		if (AnyLinkInLine(segment_with_tolerance))
 			return false;
 
-		if (AnyColliderInLine(p1, p2))
+		if (AnyColliderInLine(segment_with_tolerance))
 			return false;
 
 		return true;
 	}
 
-	bool NavmeshGenerator::VertexLinker::AnyLinkInLine(const Vector& p1, const Vector& p2) const
+	bool NavmeshGenerator::VertexLinker::AnyLinkInLine(const Segment& line) const
 	{
 		FE_ASSERT(m_CurrentLinks != nullptr, "No links set");
 
@@ -224,7 +229,7 @@ namespace Navigation
 		{
 			const Vector& link_p1 = m_Vertices[link.first];
 			const Vector& link_p2 = m_Vertices[link.second];
-			if (DoLinesCross({ p1, p2 }, { link_p1, link_p2 }))
+			if (line.DoesCross(Segment(link_p1, link_p2)))
 			{
 				return true;
 			}
@@ -233,22 +238,17 @@ namespace Navigation
 		return false;
 	}
 
-	bool NavmeshGenerator::VertexLinker::AnyColliderInLine(const Vector& p1, const Vector& p2) const
+	bool NavmeshGenerator::VertexLinker::AnyColliderInLine(const Segment& line) const
 	{
 		for (const BoxCollider* collider : m_Colliders)
 		{
-			if (collider->DoesLineIntersect(p1, p2))
+			if (collider->DoesSegmentIntersect(line))
 			{
 				return true;
 			}
 		}
 
 		return false;
-	}
-
-	bool NavmeshGenerator::VertexLinker::DoLinesCross(const PointPair& line1, const PointPair& line2)
-	{
-		return Segment(line1).DoesCross(Segment(line2));
 	}
 
 	bool NavmeshGenerator::VertexLinker::IsColliderLink(IndexPair link) const

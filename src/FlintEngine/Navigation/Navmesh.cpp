@@ -5,10 +5,8 @@
 
 void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 {
-	for (const IndexTriangle& tri : m_Triangles)
-	{
-		RenderTriangle(tri, renderer);
-	}
+	//RenderTriangles(renderer);
+	RenderEdges(renderer);
 }
 
 void Navigation::Navmesh::Clear()
@@ -43,11 +41,27 @@ void Navigation::Navmesh::AddTriangles(const std::vector<IndexTriangle>& triangl
 	}
 }
 
+void Navigation::Navmesh::AddEdges(const std::vector<IndexPair>& edges)
+{
+	for (const IndexPair& e : edges)
+	{
+		m_Edges.push_back(e);
+	}
+}
+
 const Vector& Navigation::Navmesh::GetPosAtIndex(int idx) const
 {
 	FE_ASSERT(idx >= 0 && idx < m_Vertices.size(), "Index out of bounds");
 
 	return m_Vertices[idx];
+}
+
+void Navigation::Navmesh::RenderTriangles(SceneRenderer& renderer) const
+{
+	for (const IndexTriangle& tri : m_Triangles)
+	{
+		RenderTriangle(tri, renderer);
+	}
 }
 
 void Navigation::Navmesh::RenderTriangle(const IndexTriangle& tri, SceneRenderer& renderer) const
@@ -64,4 +78,23 @@ void Navigation::Navmesh::RenderTriangle(const IndexTriangle& tri, SceneRenderer
 	renderer.RenderLine(pos3, pos1, color, layer);
 
 	// TODO: filling the triangle
+}
+
+void Navigation::Navmesh::RenderEdges(SceneRenderer& renderer) const
+{
+	for (const IndexPair& e : m_Edges)
+	{
+		RenderEdge(e, renderer);
+	}
+}
+
+void Navigation::Navmesh::RenderEdge(const IndexPair& e, SceneRenderer& renderer) const
+{
+	const Rgb8 color = Rgb8(0xFF, 0, 0);
+	const uint layer = 1;
+
+	const Vector& pos1 = GetPosAtIndex(e.first);
+	const Vector& pos2 = GetPosAtIndex(e.second);
+
+	renderer.RenderLine(pos1, pos2, color, layer);
 }

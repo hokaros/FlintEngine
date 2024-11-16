@@ -30,7 +30,7 @@ bool BoxCollider::DoesCollide(const BoxCollider& other) const
 	return intersect;
 }
 
-bool BoxCollider::DoesLineIntersect(const Vector& line_start, const Vector& line_end) const
+bool BoxCollider::DoesSegmentIntersect(const Vector& line_start, const Vector& line_end) const
 {
 	if (DoesContainPoint(line_start) || DoesContainPoint(line_end))
 		return true;
@@ -41,13 +41,18 @@ bool BoxCollider::DoesLineIntersect(const Vector& line_start, const Vector& line
 	return false;
 }
 
+bool BoxCollider::DoesSegmentIntersect(const Segment& seg) const
+{
+	return DoesSegmentIntersect(seg.start, seg.end);
+}
+
 bool BoxCollider::DoesContainPoint(const Vector& p) const
 {
 	const Vector box_min = GetWorldPos() - GetWorldSize() / 2.f;
 	const Vector box_max = box_min + GetWorldSize();
 
-	const bool box_contains = p.x > box_min.x && p.x < box_max.x
-		&& p.y > box_min.y && p.y < box_max.y;
+	const bool box_contains = p.x >= box_min.x && p.x <= box_max.x
+		&& p.y >= box_min.y && p.y <= box_max.y;
 
 	if (m_InsideOutCollision)
 	{

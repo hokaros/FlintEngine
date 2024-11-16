@@ -90,6 +90,7 @@ public:
 
     // Sprowadza do d³ugoœci 1
     Vector& Normalize();
+    const Vector GetNormalized() const;
 
     // Sprawia, ¿e x <= y
     void Sort();
