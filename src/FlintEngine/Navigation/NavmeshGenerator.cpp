@@ -42,6 +42,8 @@ namespace Navigation
 		linker.Link(links);
 
 		TransferLinksToNavmesh(vertices, links, navmesh);
+
+		// TODO: creating a graph from the triangles
 	}
 
 	void NavmeshGenerator::GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& collider_links)
@@ -168,7 +170,6 @@ namespace Navigation
 		{
 			for (size_t j = i + 1; j < m_Vertices.size(); j++)
 			{
-				// TODO: check if is line of sight
 				out_pairs.push_back({ i, j });
 			}
 		}
@@ -193,7 +194,7 @@ namespace Navigation
 	{
 		for (IndexPair in_pair : all_pairs)
 		{
-			if (IsColliderLink(in_pair) || IsLineOfSight(in_pair))
+			if (IsColliderLink(in_pair) || IsLineOfSight(in_pair)) // TODO: check if within walkable surface
 			{
 				out_links.push_back(in_pair);
 			}
