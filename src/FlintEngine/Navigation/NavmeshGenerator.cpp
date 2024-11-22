@@ -5,7 +5,7 @@
 #include <Components/WalkableSurface.h>
 #include <Components/BoxCollider.h>
 #include <Core/GameObject.h>
-#include <ftl.h>
+#include <FTL/VectorOperations.h>
 #include <Math/Line.h>
 #include <Math/Segment.h>
 

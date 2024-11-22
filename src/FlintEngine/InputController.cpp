@@ -2,7 +2,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl2.h"
 
-#include "ftl.h"
+#include <FTL/VectorOperations.h>
 
 IInputController* IInputController::s_Main{ nullptr };
 

@@ -1,6 +1,6 @@
 #include "OcclusionSystem.h"
 #include <Core/Scene.h>
-#include <ftl.h>
+#include <FTL/VectorOperations.h>
 
 DEFINE_COMPONENT(OcclusionSystem);
 DEFINE_FIELD(OcclusionSystem, m_PlayerName);
