@@ -49,4 +49,25 @@ namespace ftl
 			}
 		}
 	}
+
+	template<typename T>
+	void vector_reverse(std::vector<T>& vec)
+	{
+		auto it = vec.begin();
+		auto rev_it = vec.rbegin();
+
+		while (it != rev_it.base())
+		{
+			T from_rev = *rev_it;
+			*rev_it = *it;
+			*it = from_rev;
+
+			it++;
+			if (it == rev_it.base())
+			{
+				break;
+			}
+			rev_it++;
+		}
+	}
 }

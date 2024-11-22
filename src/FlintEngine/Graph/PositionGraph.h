@@ -12,6 +12,8 @@ namespace graph
 		{}
 
 		bool operator==(const NodeId& other) const;
+		bool operator!=(const NodeId& other) const;
+		bool operator<(const NodeId& other) const;
 
 	public:
 		size_t id;
@@ -25,6 +27,8 @@ namespace graph
 		PositionNode(NodeId id, const Vector& position);
 
 		NodeId GetId() const;
+		const Vector& GetPos() const;
+		const std::vector<NodeId>& GetNeighbours() const;
 
 		void AddLink2Side(PositionNode& other);
 
@@ -40,10 +44,14 @@ namespace graph
 	class PositionGraph
 	{
 	public:
-		PositionNode& CreateNode(const Vector& position);
+		NodeId CreateNode(const Vector& position);
 
-		PositionNode* GetNodeById(NodeId id);
 		const PositionNode* GetNodeById(NodeId id) const;
+
+		void AddLink2Side(NodeId node1, NodeId node2);
+
+	private:
+		PositionNode* GetNodeById_NotConst(NodeId id);
 
 	private:
 		std::vector<PositionNode> m_Nodes;

@@ -15,6 +15,16 @@ namespace graph
 		return m_Id;
 	}
 
+	const Vector& PositionNode::GetPos() const
+	{
+		return m_Position;
+	}
+
+	const std::vector<NodeId>& PositionNode::GetNeighbours() const
+	{
+		return m_Neighbours;
+	}
+
 	void PositionNode::AddLink2Side(PositionNode& other)
 	{
 		AddLinkTo(other);
@@ -26,13 +36,15 @@ namespace graph
 		m_Neighbours.push_back(other.m_Id);
 	}
 
-	PositionNode& PositionGraph::CreateNode(const Vector& position)
+	NodeId PositionGraph::CreateNode(const Vector& position)
 	{
-		NodeId next_node_id = NodeId(m_Nodes.size());
-		return m_Nodes.emplace_back(next_node_id, position);
+		NodeId node_id = NodeId(m_Nodes.size());
+		m_Nodes.emplace_back(node_id, position);
+
+		return node_id;
 	}
 
-	PositionNode* PositionGraph::GetNodeById(NodeId id)
+	PositionNode* PositionGraph::GetNodeById_NotConst(NodeId id)
 	{
 		const PositionGraph* const_this = this;
 		return const_cast<PositionNode*>(const_this->GetNodeById(id));
@@ -47,8 +59,23 @@ namespace graph
 		return &m_Nodes[index];
 	}
 
+	void PositionGraph::AddLink2Side(NodeId node_id1, NodeId node_id2)
+	{
+		GetNodeById_NotConst(node_id1)->AddLink2Side(*GetNodeById_NotConst(node_id2));
+	}
+
 	bool NodeId::operator==(const NodeId& other) const
 	{
 		return id == other.id;
+	}
+
+	bool NodeId::operator!=(const NodeId& other) const
+	{
+		return id != other.id;
+	}
+
+	bool NodeId::operator<(const NodeId& other) const
+	{
+		return id < other.id;
 	}
 }

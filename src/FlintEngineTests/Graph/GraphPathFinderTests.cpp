@@ -16,81 +16,79 @@ TEST(SUITE_NAME, FindsDirectConnection)
 {
 	// Arrange
 	PositionGraph graph;
-	PositionNode& start_node = graph.CreateNode(Vector(0, 0));
-	PositionNode& end_node = graph.CreateNode(Vector(5, 7));
-	end_node.AddLink2Side(start_node);
+	NodeId start_node = graph.CreateNode(Vector(0, 0));
+	NodeId end_node = graph.CreateNode(Vector(5, 7));
+	graph.AddLink2Side(start_node, end_node);
 
 	// Act
-	GraphPathFinder pathfinder(graph);
-	std::vector<NodeId> path = pathfinder.FindPath(start_node.GetId(), end_node.GetId());
+	std::vector<NodeId> path = GraphPathFinder::FindPath(graph, start_node, end_node);
 
 	// Assert
 	ASSERT_EQ(1, path.size());
-	ASSERT_EQ(1, path[0] == end_node.GetId());
+	ASSERT_EQ(1, path[0] == end_node);
 }
 
 TEST(SUITE_NAME, FindsLongPathWithoutBranching)
 {
 	// Arrange
 	PositionGraph graph;
-	PositionNode& start_node = graph.CreateNode(Vector(0, 0));
+	NodeId start_node = graph.CreateNode(Vector(0, 0));
 
-	PositionNode& node1 = graph.CreateNode(Vector(5, 7));
-	node1.AddLink2Side(start_node);
+	NodeId node1 = graph.CreateNode(Vector(5, 7));
+	graph.AddLink2Side(start_node, node1);
 
-	PositionNode& node2 = graph.CreateNode(Vector(-2, 10));
-	node2.AddLink2Side(node1);
+	NodeId node2 = graph.CreateNode(Vector(-2, 10));
+	graph.AddLink2Side(node1, node2);
 
-	PositionNode& node3 = graph.CreateNode(Vector(100, 1));
-	node3.AddLink2Side(node2);
+	NodeId node3 = graph.CreateNode(Vector(100, 1));
+	graph.AddLink2Side(node2, node3);
 
-	PositionNode& end_node = graph.CreateNode(Vector(50, 50));
-	end_node.AddLink2Side(node3);
+	NodeId end_node = graph.CreateNode(Vector(50, 50));
+	graph.AddLink2Side(node3, end_node);
 
 	// Act
-	GraphPathFinder pathfinder(graph);
-	std::vector<NodeId> path = pathfinder.FindPath(start_node.GetId(), end_node.GetId());
+	std::vector<NodeId> path = GraphPathFinder::FindPath(graph, start_node, end_node);
 
 	// Assert
 	ASSERT_EQ(4, path.size());
-	ASSERT_EQ(node1.GetId(),  path[0]);
-	ASSERT_EQ(node2.GetId(), path[1]);
-	ASSERT_EQ(node3.GetId(), path[2]);
-	ASSERT_EQ(end_node.GetId(), path[3]);
+	ASSERT_EQ(node1, path[0]);
+	ASSERT_EQ(node2, path[1]);
+	ASSERT_EQ(node3, path[2]);
+	ASSERT_EQ(end_node, path[3]);
 }
 
 TEST(SUITE_NAME, FindsShorterPathInTripleBranch)
 {
 	// Arrange
 	PositionGraph graph;
-	PositionNode& start_node = graph.CreateNode(Vector(0, 0));
+	NodeId start_node = graph.CreateNode(Vector(0, 0));
 
-	PositionNode& branch1_point = graph.CreateNode(Vector(0, 10));
-	branch1_point.AddLink2Side(start_node);
+	NodeId branch1_point = graph.CreateNode(Vector(0, 10));
+	graph.AddLink2Side(start_node, branch1_point);
 
-	PositionNode& branch2_point1 = graph.CreateNode(Vector(1, 1));
-	branch2_point1.AddLink2Side(start_node);
+	NodeId branch2_point1 = graph.CreateNode(Vector(1, 1));
+	graph.AddLink2Side(start_node, branch2_point1);
 
-	PositionNode& branch2_point2(graph.CreateNode(Vector(3, 3)));
-	branch2_point2.AddLink2Side(branch2_point1);
+	NodeId branch2_point2(graph.CreateNode(Vector(3, 3)));
+	graph.AddLink2Side(branch2_point1, branch2_point2);
 
-	PositionNode& branch3_point = graph.CreateNode(Vector(9, 0));
-	branch3_point.AddLink2Side(start_node);
+	NodeId branch3_point = graph.CreateNode(Vector(9, 0));
+	graph.AddLink2Side(branch3_point, start_node);
 
-	PositionNode& end_node = graph.CreateNode(Vector(10, 10));
-	end_node.AddLink2Side(branch1_point);
-	end_node.AddLink2Side(branch2_point2);
-	end_node.AddLink2Side(branch3_point);
+	NodeId end_node = graph.CreateNode(Vector(10, 10));
+
+	graph.AddLink2Side(end_node, branch1_point);
+	graph.AddLink2Side(end_node, branch2_point2);
+	graph.AddLink2Side(end_node, branch3_point);
 
 	// Act
-	GraphPathFinder pathfinder(graph);
-	std::vector<NodeId> path = pathfinder.FindPath(start_node.GetId(), end_node.GetId());
+	std::vector<NodeId> path = GraphPathFinder::FindPath(graph, start_node, end_node);
 
 	// Assert
 	ASSERT_EQ(3, path.size());
-	ASSERT_EQ(branch2_point1.GetId(), path[0]);
-	ASSERT_EQ(branch2_point2.GetId(), path[1]);
-	ASSERT_EQ(end_node.GetId(), path[2]);
+	ASSERT_EQ(branch2_point1, path[0]);
+	ASSERT_EQ(branch2_point2, path[1]);
+	ASSERT_EQ(end_node, path[2]);
 }
 
 #undef SUITE_NAME
