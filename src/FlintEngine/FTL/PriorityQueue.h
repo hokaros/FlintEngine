@@ -38,7 +38,6 @@ namespace ftl
 
 			if (existing_score > new_score)
 			{
-				//it++;
 				auto fwd_it = it.base();
 				m_Elements.insert(fwd_it, elem);
 				return;
