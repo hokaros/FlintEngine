@@ -43,7 +43,7 @@ namespace Navigation
 
 		TransferLinksToNavmesh(vertices, links, navmesh);
 
-		// TODO: creating a graph from the triangles
+		navmesh.OnNavmeshCompleted();
 	}
 
 	void NavmeshGenerator::GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& collider_links)

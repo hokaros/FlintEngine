@@ -59,6 +59,11 @@ namespace graph
 		return &m_Nodes[index];
 	}
 
+	const std::vector<PositionNode>& PositionGraph::GetNodes() const
+	{
+		return m_Nodes;
+	}
+
 	void PositionGraph::AddLink2Side(NodeId node_id1, NodeId node_id2)
 	{
 		GetNodeById_NotConst(node_id1)->AddLink2Side(*GetNodeById_NotConst(node_id2));

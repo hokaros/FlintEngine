@@ -47,6 +47,7 @@ namespace graph
 		NodeId CreateNode(const Vector& position);
 
 		const PositionNode* GetNodeById(NodeId id) const;
+		const std::vector<PositionNode>& GetNodes() const;
 
 		void AddLink2Side(NodeId node1, NodeId node2);
 
