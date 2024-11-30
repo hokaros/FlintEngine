@@ -27,8 +27,6 @@ public:
 	const Labirynt& GetLab() const;
 	int WallsCount() const;
 	GameObject** GetWalls() const;
-	int BorderElements() const;
-	GameObject** GetBorder() const;
 	Vector GetSize() const;
 
 	void SetLab(bool* walls);
@@ -47,7 +45,7 @@ private:
 	GameObject* BuildWall(const Vector& size);
 	GameObject* BuildWall(const Vector& size, const Rgb8& color);
 	void BuildBorder();
-	GameObject** BuildGateWall(Direction side);
+	void BuildGateWall(Direction side, GameObject*& go1, GameObject*& go2, GameObject*& go3);
 
 	void SetWallUpperLeft(GameObject& wall, const Vector& pos);
 
@@ -90,8 +88,6 @@ private:
 	std::unique_ptr<ColliderMemory> colliderMemory;
 
 	GameObject** walls; // œciany podzielone na pionowe i poziome
-	GameObject** border; // czêœci obwódki
-
-	int borderCount;
+	std::vector<GameObject*> m_Border; // czêœci obwódki
 };
 

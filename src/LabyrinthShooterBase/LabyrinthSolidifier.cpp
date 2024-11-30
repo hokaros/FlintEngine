@@ -34,7 +34,6 @@ LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 LabyrinthSolidifier::~LabyrinthSolidifier() 
 {
 	delete[] walls;
-	delete[] border;
 }
 
 const Labirynt& LabyrinthSolidifier::GetLab() const
@@ -50,16 +49,6 @@ int LabyrinthSolidifier::WallsCount() const
 GameObject** LabyrinthSolidifier::GetWalls() const
 {
 	return walls;
-}
-
-int LabyrinthSolidifier::BorderElements() const
-{
-	return borderCount;
-}
-
-GameObject** LabyrinthSolidifier::GetBorder() const
-{
-	return border;
 }
 
 Vector LabyrinthSolidifier::GetSize() const
@@ -161,27 +150,23 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color
 
 void LabyrinthSolidifier::BuildBorder()
 {
-	borderCount = 8;  // 2* przedziurawione œciany + zwyk³e œciany + drzwi
-	border = new GameObject * [borderCount];
+	m_Border.clear();
 
-	GameObject** newBorder = BuildGateWall(Direction::EAST);
-	memcpy(border, newBorder, sizeof(GameObject*) * 3);
-	newBorder = BuildGateWall(Direction::WEST);
-	memcpy(border + 3, newBorder, sizeof(GameObject*) * 3);
+	m_Border.resize(8);
+	BuildGateWall(Direction::EAST, m_Border[0], m_Border[1], m_Border[2]);
+	BuildGateWall(Direction::WEST, m_Border[3], m_Border[4], m_Border[5]);
 
 	Vector nextPos = position;
 	Vector elemSize(GetSize().x, wallWidth);
-	border[6] = BuildWall(elemSize);
-	SetWallUpperLeft(*border[6], nextPos);
+	m_Border[6] = BuildWall(elemSize);
+	SetWallUpperLeft(*m_Border[6], nextPos);
 	nextPos.y += yCount * wallLength;
-	border[7] = BuildWall(elemSize);
-	SetWallUpperLeft(*border[7], nextPos);
+	m_Border[7] = BuildWall(elemSize);
+	SetWallUpperLeft(*m_Border[7], nextPos);
 }
 
-GameObject** LabyrinthSolidifier::BuildGateWall(Direction side)
+void LabyrinthSolidifier::BuildGateWall(Direction side, GameObject*& go1, GameObject*& go2, GameObject*& go3)
 {
-	GameObject** w = new GameObject * [3];
-
 	Vector nextPos = position;
 	if (side == Direction::WEST)
 	{
@@ -196,45 +181,43 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side)
 	if (side == Direction::EAST || side == Direction::WEST)
 	{
 		Vector elemSize(wallWidth, exit.y * wallLength);
-		w[0] = BuildWall(elemSize);
-		SetWallUpperLeft(*w[0], nextPos);
+		go1 = BuildWall(elemSize);
+		SetWallUpperLeft(*go1, nextPos);
 		nextPos.y += elemSize.y;
 
 		// Brama
 		elemSize = Vector(wallWidth, wallLength);
-		w[1] = BuildWall(elemSize, m_GateColor);
-		SetWallUpperLeft(*w[1], nextPos);
+		go2 = BuildWall(elemSize, m_GateColor);
+		SetWallUpperLeft(*go2, nextPos);
 		nextPos.y += elemSize.y;
 
 		elemSize = Vector(
 			wallWidth,
 			(yCount - exit.y - 1) * wallLength
 		);
-		w[2] = BuildWall(elemSize);
-		SetWallUpperLeft(*w[2], nextPos);
+		go3 = BuildWall(elemSize);
+		SetWallUpperLeft(*go3, nextPos);
 	}
 	else
 	{
 		Vector elemSize(exit.x * wallLength, wallWidth);
-		w[0] = BuildWall(elemSize);
-		SetWallUpperLeft(*w[0], nextPos);
+		go1 = BuildWall(elemSize);
+		SetWallUpperLeft(*go1, nextPos);
 		nextPos.x += elemSize.x;
 
 		// Brama
 		elemSize = Vector(wallLength, wallWidth);
-		w[1] = BuildWall(elemSize, m_GateColor);
-		SetWallUpperLeft(*w[1], nextPos);
+		go2 = BuildWall(elemSize, m_GateColor);
+		SetWallUpperLeft(*go2, nextPos);
 		nextPos.x += elemSize.x;
 
 		elemSize = Vector(
 			(xCount - exit.x - 1) * wallLength,
 			wallWidth
 		);
-		w[2] = BuildWall(elemSize);
-		SetWallUpperLeft(*w[2], nextPos);
+		go3 = BuildWall(elemSize);
+		SetWallUpperLeft(*go3, nextPos);
 	}
-
-	return w;
 }
 
 void LabyrinthSolidifier::SetWallUpperLeft(GameObject& wall, const Vector& pos)
@@ -266,15 +249,15 @@ void LabyrinthSolidifier::Awake()
 	BuildBorder();
 
 	// Skrajne œciany zawsze widoczne
-	for (int i = 0; i < borderCount; i++)
+	for (GameObject* border : m_Border)
 	{
-		OccludableRectangle* occludable = border[i]->FindComponent<OccludableRectangle>();
+		OccludableRectangle* occludable = border->FindComponent<OccludableRectangle>();
 		std::unique_ptr<RectangleRenderer> unoccludable = std::make_unique<RectangleRenderer>();
 		unoccludable->SetColor(occludable->GetColor());
 		unoccludable->SetSize(occludable->GetSize());
 
-		border[i]->AddComponent(std::move(unoccludable));
-		border[i]->RemoveComponent(occludable);
+		border->AddComponent(std::move(unoccludable));
+		border->RemoveComponent(occludable);
 	}
 
 	colliderMemory->Refresh(walls, labyrinth->ActiveCount());
