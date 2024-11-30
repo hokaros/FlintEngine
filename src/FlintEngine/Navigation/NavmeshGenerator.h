@@ -62,6 +62,8 @@ namespace Navigation
 		NavmeshGenerator(const IGameObjectContainer& context);
 		void GenerateImpl(Navmesh& navmesh);
 
+		static void ExcludeIgnoredColliders(std::vector<BoxCollider*>& colliders);
+
 		static void GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& collider_links);
 		static void TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<std::pair<size_t, size_t>>& links, Navmesh& out_navmesh);
 		static void GetTrianglesFromLinks(const std::vector<std::pair<size_t, size_t>>& point_pairs, std::vector<IndexTriangle>& out_triangles);

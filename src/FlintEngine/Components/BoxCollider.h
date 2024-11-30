@@ -21,6 +21,8 @@ public:
 	bool IsStatic() const;
 	void GetVertices(std::vector<Vector>& out_vertices, std::vector<IndexPair>& out_edges) const;
 
+	bool ShouldNavmeshIgnore() const;
+
 	void OnCollision(BoxCollider& other);
 
 	void SetSize(const Vector& size);
@@ -56,5 +58,8 @@ private:
 
 	bool m_IsStatic = false;
 	DECLARE_FIELD(m_IsStatic);
+
+	bool m_ShouldNavmeshIgnore = false;
+	DECLARE_FIELD(m_ShouldNavmeshIgnore);
 };
 

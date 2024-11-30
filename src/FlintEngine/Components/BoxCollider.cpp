@@ -9,6 +9,7 @@ DEFINE_FIELD(BoxCollider, m_InsideOutCollision);
 DEFINE_FIELD(BoxCollider, m_Position);
 DEFINE_FIELD(BoxCollider, m_Size);
 DEFINE_FIELD(BoxCollider, m_IsStatic);
+DEFINE_FIELD(BoxCollider, m_ShouldNavmeshIgnore);
 
 bool BoxCollider::DoesCollide(const BoxCollider& other) const
 {
@@ -284,4 +285,9 @@ void BoxCollider::GetVertices(std::vector<Vector>& out_vertices, std::vector<Ind
 	out_edges.push_back({ top_left_idx, bottom_left_idx });
 	out_edges.push_back({ bottom_left_idx, bottom_right_idx });
 	out_edges.push_back({ bottom_right_idx, top_right_idx });
+}
+
+bool BoxCollider::ShouldNavmeshIgnore() const
+{
+	return m_ShouldNavmeshIgnore;
 }

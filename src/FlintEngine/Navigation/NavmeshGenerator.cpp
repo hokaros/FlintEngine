@@ -32,6 +32,7 @@ namespace Navigation
 
 		std::vector<BoxCollider*> colliders;
 		GameObject::FindComponentsInHierarchies(game_objects, colliders);
+		ExcludeIgnoredColliders(colliders);
 
 		std::vector<Vector> vertices;
 		std::vector<IndexPair> collider_links;
@@ -44,6 +45,22 @@ namespace Navigation
 		TransferLinksToNavmesh(vertices, links, navmesh);
 
 		navmesh.OnNavmeshCompleted();
+	}
+
+	void NavmeshGenerator::ExcludeIgnoredColliders(std::vector<BoxCollider*>& colliders)
+	{
+		for (auto it = colliders.begin(); it != colliders.end();)
+		{
+			BoxCollider* collider = *it;
+			if (collider->ShouldNavmeshIgnore())
+			{
+				it = colliders.erase(it);
+			}
+			else
+			{
+				it++;
+			}
+		}
 	}
 
 	void NavmeshGenerator::GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& collider_links)
