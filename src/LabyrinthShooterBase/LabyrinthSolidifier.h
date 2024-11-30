@@ -22,11 +22,9 @@ public:
 		double changeTime,
 		bool shouldChange = false
 	);
-	~LabyrinthSolidifier();
 
 	const Labirynt& GetLab() const;
 	int WallsCount() const;
-	GameObject** GetWalls() const;
 	Vector GetSize() const;
 
 	void SetLab(bool* walls);
@@ -50,6 +48,7 @@ private:
 	void SetWallUpperLeft(GameObject& wall, const Vector& pos);
 
 	void OnWallDestroyedChanged(Destroyable& wall);
+	void RefreshColliderMemory();
 
 private:
 	Vector position;
@@ -82,12 +81,12 @@ private:
 	PrefabRef wallPrefab;
 	DECLARE_FIELD(wallPrefab);
 
-	double timeSinceLastChange = 0.0;
+	double m_TimeSinceLastChange = 0.0;
 
-	std::unique_ptr<Labirynt> labyrinth;
-	std::unique_ptr<ColliderMemory> colliderMemory;
+	std::unique_ptr<Labirynt> m_Labyrinth;
+	std::unique_ptr<ColliderMemory> m_ColliderMemory;
 
-	GameObject** walls; // œciany podzielone na pionowe i poziome
+	std::vector<GameObject*> m_Walls; // œciany podzielone na pionowe i poziome
 	std::vector<GameObject*> m_Border; // czêœci obwódki
 };
 

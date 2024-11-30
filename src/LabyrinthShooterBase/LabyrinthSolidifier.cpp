@@ -31,24 +31,14 @@ LabyrinthSolidifier::LabyrinthSolidifier(const Vector& pos,
 
 }
 
-LabyrinthSolidifier::~LabyrinthSolidifier() 
-{
-	delete[] walls;
-}
-
 const Labirynt& LabyrinthSolidifier::GetLab() const
 {
-	return *labyrinth;
+	return *m_Labyrinth;
 }
 
 int LabyrinthSolidifier::WallsCount() const
 {
-	return labyrinth->ActiveCount();
-}
-
-GameObject** LabyrinthSolidifier::GetWalls() const
-{
-	return walls;
+	return m_Labyrinth->ActiveCount();
 }
 
 Vector LabyrinthSolidifier::GetSize() const
@@ -73,10 +63,10 @@ void LabyrinthSolidifier::PlaceWalls()
 		for (int x = 1; x <= xCount - 1; x++)
 		{
 			int index = (xCount - 1) * y + x - 1;
-			if (labyrinth->WallAtIndex(index))
+			if (m_Labyrinth->WallAtIndex(index))
 			{
 				// Obecna œciana
-				GameObject* wall = walls[nextWall++];
+				GameObject* wall = m_Walls[nextWall++];
 				wall->FindComponent<BoxCollider>()->SetSize(verticalWall);
 				wall->FindComponent<RectangleRenderer>()->SetSize(verticalWall);
 				SetWallUpperLeft(*wall, Vector(x * wallLength, y * wallLength) + position);
@@ -84,17 +74,17 @@ void LabyrinthSolidifier::PlaceWalls()
 		}
 	}
 
-	int horStart = labyrinth->VerticalCount();
+	int horStart = m_Labyrinth->VerticalCount();
 	// Œciany poziome
 	for (int y = 1; y <= yCount - 1; y++)
 	{
 		for (int x = 0; x < xCount; x++)
 		{
 			int index = horStart + xCount * (y - 1) + x;
-			if (labyrinth->WallAtIndex(index))
+			if (m_Labyrinth->WallAtIndex(index))
 			{
 				// Obecna œciana
-				GameObject* wall = walls[nextWall++];
+				GameObject* wall = m_Walls[nextWall++];
 				wall->FindComponent<BoxCollider>()->SetSize(horizontalWall);
 				wall->FindComponent<RectangleRenderer>()->SetSize(horizontalWall);
 				SetWallUpperLeft(*wall, Vector(x * wallLength, y * wallLength) + position);
@@ -105,27 +95,27 @@ void LabyrinthSolidifier::PlaceWalls()
 
 void LabyrinthSolidifier::SetLab(bool* walls)
 {
-	labyrinth->SetWalls(walls);
+	m_Labyrinth->SetWalls(walls);
 	PlaceWalls();
 
-	colliderMemory->Refresh(this->walls, labyrinth->ActiveCount());
+	RefreshColliderMemory();
 
 	GetOwner().GetScene()->RegenerateNavmesh();
 }
 
 void LabyrinthSolidifier::ChangeLab()
 {
-	labyrinth->ChangeLab();
+	m_Labyrinth->ChangeLab();
 	PlaceWalls();
 
-	colliderMemory->Refresh(walls, labyrinth->ActiveCount());
+	RefreshColliderMemory();
 
 	GetOwner().GetScene()->RegenerateNavmesh();
 }
 
 const ColliderMemory& LabyrinthSolidifier::GetColliderMemory() const
 {
-	return *colliderMemory;
+	return *m_ColliderMemory;
 }
 
 GameObject* LabyrinthSolidifier::BuildWall(const Vector& size)
@@ -176,7 +166,7 @@ void LabyrinthSolidifier::BuildGateWall(Direction side, GameObject*& go1, GameOb
 	{
 		nextPos.y += wallWidth + yCount * wallLength;
 	}
-	VectorInt exit = labyrinth->GetExit(side);
+	VectorInt exit = m_Labyrinth->GetExit(side);
 	
 	if (side == Direction::EAST || side == Direction::WEST)
 	{
@@ -228,21 +218,21 @@ void LabyrinthSolidifier::SetWallUpperLeft(GameObject& wall, const Vector& pos)
 
 void LabyrinthSolidifier::Awake()
 {
-	labyrinth = std::make_unique<Labirynt>(xCount, yCount);
-	colliderMemory = std::make_unique<ColliderMemory>(LabyrinthSize(wallWidth, wallLength, xCount, yCount).x + position.x, LabyrinthSize(wallWidth, wallLength, xCount, yCount).y + position.y);
+	m_Labyrinth = std::make_unique<Labirynt>(xCount, yCount);
+	m_ColliderMemory = std::make_unique<ColliderMemory>(LabyrinthSize(wallWidth, wallLength, xCount, yCount).x + position.x, LabyrinthSize(wallWidth, wallLength, xCount, yCount).y + position.y);
 
 	// Stworzenie œcian
-	walls = new GameObject * [labyrinth->ActiveCount()];
+	m_Walls.resize(m_Labyrinth->ActiveCount());
 	function<void(Destroyable&)> destroyedHandler = [this](Destroyable& source) {OnWallDestroyedChanged(source); };
-	for (int i = 0; i < labyrinth->ActiveCount(); i++)
+	for (GameObject*& wall : m_Walls)
 	{
-		walls[i] = BuildWall(Vector(wallWidth, wallLength));
+		wall = BuildWall(Vector(wallWidth, wallLength));
 
 		std::unique_ptr<Destroyable> destroyable = std::make_unique<Destroyable>();
 		destroyable->SubscribeDestroyed(destroyedHandler);
-		walls[i]->AddComponent(std::move(destroyable));
+		wall->AddComponent(std::move(destroyable));
 
-		walls[i]->AddComponent(std::make_unique<Regenerable>(WALL_REGEN));
+		wall->AddComponent(std::make_unique<Regenerable>(WALL_REGEN));
 	}
 
 	PlaceWalls(); // wstawienie œcian w odpowiednie miejsca
@@ -260,8 +250,8 @@ void LabyrinthSolidifier::Awake()
 		border->RemoveComponent(occludable);
 	}
 
-	colliderMemory->Refresh(walls, labyrinth->ActiveCount());
-	labyrinth->PrintLab(); // wyœwietlenie w konsoli
+	RefreshColliderMemory();
+	m_Labyrinth->PrintLab(); // wyœwietlenie w konsoli
 
 	GetOwner().GetScene()->RegenerateNavmesh();
 }
@@ -271,11 +261,11 @@ void LabyrinthSolidifier::Update()
 	if (!shouldChange)
 		return;
 
-	timeSinceLastChange += Timer::Main()->GetDeltaTime();
-	if (timeSinceLastChange >= changeTime)
+	m_TimeSinceLastChange += Timer::Main()->GetDeltaTime();
+	if (m_TimeSinceLastChange >= changeTime)
 	{
 		ChangeLab();
-		timeSinceLastChange = 0;
+		m_TimeSinceLastChange = 0;
 	}
 }
 
@@ -291,10 +281,15 @@ void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall)
 {
 	if (wall.IsDestroyed())
 	{
-		colliderMemory->Free(&wall.GetOwner());
+		m_ColliderMemory->Free(&wall.GetOwner());
 	}
 	else
 	{
-		colliderMemory->Claim(&wall.GetOwner());
+		m_ColliderMemory->Claim(&wall.GetOwner());
 	}
+}
+
+void LabyrinthSolidifier::RefreshColliderMemory()
+{
+	m_ColliderMemory->Refresh(m_Walls.data(), m_Walls.size()); // TODO: pass a vector here
 }
