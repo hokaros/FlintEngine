@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include <Navigation/NavmeshGenerator.h>
+#include <DebugConfig.h>
 
 Scene::Scene(const Scene& other)
 	: m_BackgroundColor(other.m_BackgroundColor)
@@ -26,7 +27,11 @@ void Scene::Update()
 void Scene::Render(SceneRenderer& renderer)
 {
 	RenderBackground(renderer);
-	m_Navmesh.Render(renderer);
+
+	if (debug::DebugConfig::ShouldDebugRenderNavmesh())
+	{
+		m_Navmesh.Render(renderer);
+	}
 
 	for (GameObject* go : m_ObjectManager.GetAllMessageSubscribers()) 
 	{
