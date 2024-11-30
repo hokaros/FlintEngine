@@ -4,8 +4,8 @@
 #include "Draw.h"
 #include "ObjectManager.h"
 #include "PhysicsSystem.h"
-#include "DebugRenderer.h"
-#include "DebugConfig.h"
+#include <Dbg/DebugRenderer.h>
+#include <Dbg/DebugConfig.h>
 #include "Scene.h"
 #include "InputController.h"
 

@@ -1,8 +1,8 @@
 #include "PhysicsSystem.h"
 #include <Components/BoxCollider.h>
 #include "utility.h"
-#include "DebugRenderer.h"
-#include "DebugConfig.h"
+#include <Dbg/DebugRenderer.h>
+#include <Dbg/DebugConfig.h>
 #include <Core/GameObject.h>
 
 PhysicsSystem* PhysicsSystem::s_Instance = nullptr;

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <list>
 #include "SceneRenderer.h"
-#include "DebugRenderer.h"
 
 #include "imgui/imgui.h"
 

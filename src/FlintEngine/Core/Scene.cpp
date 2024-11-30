@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include <Navigation/NavmeshGenerator.h>
-#include <DebugConfig.h>
+#include <Dbg/DebugConfig.h>
 
 Scene::Scene(const Scene& other)
 	: m_BackgroundColor(other.m_BackgroundColor)
