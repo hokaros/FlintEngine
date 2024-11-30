@@ -20,6 +20,7 @@ public:
 	void Update() override;
 
 	void SetDirection(const Vector& direction);
+	void SetOwnerHealth(const Health* health);
 
 protected:
 	float speed = 1.0f;
@@ -30,10 +31,12 @@ protected:
 
 protected:
 	virtual void OnCollision(BoxCollider& collider);
+	void OnCollisionWithHealth(Health& health);
 
 private:
-	Vector direction = Direction::EAST;
-	float currentLifeTime = 0.0f;
+	Vector m_Direction = Direction::EAST;
+	float m_CurrentLifeTime = 0.0f;
+	const Health* m_OwnerHealth = nullptr;
 
 	static constexpr float s_MaxTimeToLive = 10.0f;
 };

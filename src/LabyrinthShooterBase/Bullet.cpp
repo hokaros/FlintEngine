@@ -8,7 +8,7 @@ DEFINE_FIELD(Bullet, damage);
 
 Bullet::Bullet(float speed, int damage)
 	: speed(speed)
-	, direction(Direction::EAST)
+	, m_Direction(Direction::EAST)
 	, damage(damage) 
 {
 
@@ -23,17 +23,17 @@ void Bullet::Awake()
 		OnCollision(c);
 	};
 
-	currentLifeTime = 0.0f;
+	m_CurrentLifeTime = 0.0f;
 }
 
 void Bullet::Update() 
 {
 	m_GameObject->Translate(
-		direction * speed * Timer::Main()->GetDeltaTime()
+		m_Direction * speed * Timer::Main()->GetDeltaTime()
 	);
 
-	currentLifeTime += Timer::Main()->GetDeltaTime();
-	if (currentLifeTime >= s_MaxTimeToLive)
+	m_CurrentLifeTime += Timer::Main()->GetDeltaTime();
+	if (m_CurrentLifeTime >= s_MaxTimeToLive)
 	{
 		GameObject::Destroy(m_GameObject);
 	}
@@ -43,11 +43,13 @@ void Bullet::OnCollision(BoxCollider& collider)
 {
 	GameObject& other_game_object = collider.GetOwner();
 	// Obs³uga trafienia gracza
-	Health* playerHealth = other_game_object.FindComponent<Health>();
-	if (playerHealth != NULL && onPlayerCollision) 
+	Health* player_health = other_game_object.FindComponent<Health>();
+	if (player_health == m_OwnerHealth)
+		return; // Ignoruj
+
+	if (player_health != nullptr) 
 	{
-		printf("Bullet collided with a player\n");
-		onPlayerCollision(other_game_object, damage);
+		OnCollisionWithHealth(*player_health);
 	}
 
 	if (other_game_object.FindComponent<Bullet>() == nullptr)
@@ -56,8 +58,22 @@ void Bullet::OnCollision(BoxCollider& collider)
 	}
 }
 
+void Bullet::OnCollisionWithHealth(Health& health)
+{
+	if (onPlayerCollision)
+	{
+		printf("Bullet collided with a player\n");
+		onPlayerCollision(health.GetOwner(), damage);
+	}
+}
+
 void Bullet::SetDirection(const Vector& direction) 
 {
-	this->direction = Vector(direction);
-	this->direction.Normalize();
+	m_Direction = direction;
+	m_Direction.Normalize();
+}
+
+void Bullet::SetOwnerHealth(const Health* health)
+{
+	m_OwnerHealth = health;
 }

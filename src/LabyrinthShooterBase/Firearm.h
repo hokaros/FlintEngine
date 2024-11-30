@@ -43,7 +43,8 @@ class Firearm :
 public:
 	Firearm() = default;
 
-	void Update() override;
+	virtual void Awake() override;
+	virtual void Update() override;
 	// Strzela, jeœli prze³adowano
 	bool TryShoot();
 
@@ -65,8 +66,10 @@ private:
 	float m_BulletOffset = 5.0f;
 	DECLARE_FIELD(m_BulletOffset);
 
-	float timeSinceLastShot = INFINITY;
+	float m_TimeSinceLastShot = INFINITY;
 
-	bool isReloaded = true; // czy gotowy do strza³u
+	bool m_IsReloaded = true; // czy gotowy do strza³u
+
+	const Health* m_OwnerHealth = nullptr;
 };
 

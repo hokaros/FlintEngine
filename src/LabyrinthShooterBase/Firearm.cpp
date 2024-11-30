@@ -8,18 +8,25 @@ DEFINE_FIELD(Firearm, m_ReloadTime);
 DEFINE_FIELD(Firearm, m_Type);
 DEFINE_FIELD(Firearm, m_BulletOffset);
 
-void Firearm::Update() 
+void Firearm::Awake()
 {
-	timeSinceLastShot += Timer::Main()->GetDeltaTime();
-	if (timeSinceLastShot >= m_ReloadTime) 
+	GameObject* player = GetOwner().GetParent(); // TODO: this reference should be provided from data
+	FE_DATA_CHECK(player != nullptr, "Parent of a weapon should be a player");
+	m_OwnerHealth = player->FindComponent<Health>();
+}
+
+void Firearm::Update()
+{
+	m_TimeSinceLastShot += Timer::Main()->GetDeltaTime();
+	if (m_TimeSinceLastShot >= m_ReloadTime) 
 	{
-		isReloaded = true;
+		m_IsReloaded = true;
 	}
 }
 
 bool Firearm::TryShoot() 
 {
-	if (!isReloaded)
+	if (!m_IsReloaded)
 		return false;
 
 	// Stworzenie pocisku
@@ -37,10 +44,11 @@ bool Firearm::TryShoot()
 
 	// Zachowanie po kolizji
 	b->onPlayerCollision = OnPlayerCollision;
+	b->SetOwnerHealth(m_OwnerHealth);
 
 	// Aktualizacja info o prze³adowaniu
-	timeSinceLastShot = 0.0f;
-	isReloaded = false;
+	m_TimeSinceLastShot = 0.0f;
+	m_IsReloaded = false;
 
 	return true;
 }
