@@ -3,7 +3,7 @@
 GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputController& input_controller)
 	: m_Window(window)
 	, m_SceneRenderer(scene_renderer)
-	, physicsSystem({})
+	, m_PhysicsSystem({})
 	, m_InputController(input_controller)
 {
 	if (m_SceneRenderer != nullptr)
@@ -32,7 +32,7 @@ bool GameBase::Run()
 bool GameBase::RunOneLoop()
 {
 	// Nowa klatka
-	timer.NextFrame();
+	m_Timer.NextFrame();
 
 	if (!m_InputController.Update())
 		return false;
@@ -46,7 +46,7 @@ bool GameBase::RunOneLoop()
 	// Zaktualizowanie stanu gry
 	m_CurrScene->Update();
 
-	physicsSystem.Update();
+	m_PhysicsSystem.Update();
 
 	// Renderowanie obiektów
 	if (m_SceneRenderer != nullptr)
@@ -68,8 +68,8 @@ bool GameBase::RunOneLoop()
 
 bool GameBase::IsRunning()
 {
-	std::lock_guard<std::mutex> lock(metadataMutex);
-	return isRunning;
+	std::lock_guard<std::mutex> lock(m_MetadataMutex);
+	return m_IsRunning;
 }
 
 void GameBase::LoadScene(std::unique_ptr<Scene> scene)
@@ -84,27 +84,27 @@ void GameBase::LoadScene(std::unique_ptr<Scene> scene)
 
 void GameBase::InvokeOnNextFrame(function<void()> fun)
 {
-	std::lock_guard<std::mutex> lock(invokesMutex);
-	invokes.push_back(std::move(fun));
+	std::lock_guard<std::mutex> lock(m_InvokesMutex);
+	m_Invokes.push_back(std::move(fun));
 }
 
 void GameBase::DebugRender()
 {
-	physicsSystem.DebugRender();
+	m_PhysicsSystem.DebugRender();
 }
 
 void GameBase::InvokePostponed()
 {
-	std::lock_guard<std::mutex> lock(invokesMutex);
-	for (function<void()> fun : invokes) {
+	std::lock_guard<std::mutex> lock(m_InvokesMutex);
+	for (function<void()> fun : m_Invokes) {
 		if (fun)
 			fun();
 	}
-	invokes.clear();
+	m_Invokes.clear();
 }
 
 void GameBase::SetRunning(bool running)
 {
-	std::lock_guard<std::mutex> lock(metadataMutex);
-	isRunning = running;
+	std::lock_guard<std::mutex> lock(m_MetadataMutex);
+	m_IsRunning = running;
 }

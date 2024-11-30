@@ -30,19 +30,19 @@ protected:
 	SceneRenderer* m_SceneRenderer = nullptr;
 	std::unique_ptr<DebugRenderer> m_DebugRenderer = nullptr;
 
-	Timer timer;
-	PhysicsSystem physicsSystem;
+	Timer m_Timer;
+	PhysicsSystem m_PhysicsSystem;
 	debug::DebugConfigWindow m_DebugConfigWindow;
 
 	std::unique_ptr<Scene> m_CurrScene = nullptr;
 
-	bool isRunning = false;
+	bool m_IsRunning = false;
 
 	// Lista funkcji do wykonania w najbli¿szej klatce
-	std::list<function<void()>> invokes;
+	std::list<function<void()>> m_Invokes;
 
-	std::mutex invokesMutex;
-	std::mutex metadataMutex;
+	std::mutex m_InvokesMutex;
+	std::mutex m_MetadataMutex;
 
 private:
 	void DebugRender();
