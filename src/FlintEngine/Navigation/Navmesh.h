@@ -37,6 +37,8 @@ namespace Navigation
 		void RenderTriangle(const IndexTriangle& tri, SceneRenderer& renderer) const;
 		void RenderEdges(SceneRenderer& renderer) const;
 		void RenderEdge(const IndexPair& e, SceneRenderer& renderer) const;
+		void RenderVertexIndices(SceneRenderer& renderer) const;
+		void RenderEdgeIndices(SceneRenderer& renderer) const;
 
 		void RenderGraph(SceneRenderer& renderer) const;
 

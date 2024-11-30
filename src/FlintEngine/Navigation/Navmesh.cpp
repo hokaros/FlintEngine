@@ -3,11 +3,15 @@
 #include <SceneRenderer.h>
 #include <utility.h>
 
+#include <string>
+
 void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 {
-	RenderTriangles(renderer);
-	//RenderEdges(renderer);
-	RenderGraph(renderer);
+	RenderVertexIndices(renderer);
+	//RenderTriangles(renderer);
+	RenderEdges(renderer);
+	//RenderEdgeIndices(renderer);
+	//RenderGraph(renderer);
 }
 
 void Navigation::Navmesh::Clear()
@@ -112,6 +116,36 @@ void Navigation::Navmesh::RenderEdge(const IndexPair& e, SceneRenderer& renderer
 	const Vector& pos2 = GetPosAtIndex(e.second);
 
 	renderer.RenderLine(pos1, pos2, color, layer);
+}
+
+void Navigation::Navmesh::RenderVertexIndices(SceneRenderer& renderer) const
+{
+	const uint layer = 3;
+	const uint font_size = 1;
+
+	for (uint i = 0; i < m_Vertices.size(); i++)
+	{
+		const Vector& pos = m_Vertices[i];
+
+		std::string label = std::to_string(i);
+		renderer.RenderString(label.c_str(), pos, font_size, layer);
+	}
+}
+
+void Navigation::Navmesh::RenderEdgeIndices(SceneRenderer& renderer) const
+{
+	const uint layer = 3;
+	const uint font_size = 5;
+
+	for (uint i = 0; i < m_Edges.size(); i++)
+	{
+		const IndexPair& pos = m_Edges[i];
+
+		const Vector edge_middle = (GetPosAtIndex(pos.first) + GetPosAtIndex(pos.second)) / 2.0f;
+
+		std::string label = std::to_string(i);
+		renderer.RenderString(label.c_str(), edge_middle, font_size, layer);
+	}
 }
 
 void Navigation::Navmesh::RenderGraph(SceneRenderer& renderer) const
