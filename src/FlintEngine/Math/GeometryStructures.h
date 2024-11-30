@@ -42,4 +42,16 @@ public:
 	}
 };
 
-using IndexPair = std::pair<size_t, size_t>;
+struct IndexPair
+	: public std::pair<size_t, size_t>
+{
+
+	constexpr IndexPair(size_t first, size_t second)
+		: std::pair<size_t, size_t>(first, second)
+	{}
+
+	constexpr bool ContainsIndex(size_t index) const
+	{
+		return first == index || second == index;
+	}
+};

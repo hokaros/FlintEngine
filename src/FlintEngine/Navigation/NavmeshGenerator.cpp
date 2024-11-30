@@ -76,7 +76,7 @@ namespace Navigation
 		}
 	}
 
-	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<std::pair<size_t, size_t>>& links, Navmesh& out_navmesh)
+	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh)
 	{
 		out_navmesh.AddVertices(points);
 
@@ -89,7 +89,7 @@ namespace Navigation
 		// TODO: don't add triangles which are from colliders (it's a problem only if we have triangular colliders)
 	}
 
-	void NavmeshGenerator::GetTrianglesFromLinks(const std::vector<std::pair<size_t, size_t>>& point_pairs, std::vector<IndexTriangle>& out_triangles)
+	void NavmeshGenerator::GetTrianglesFromLinks(const std::vector<IndexPair>& point_pairs, std::vector<IndexTriangle>& out_triangles)
 	{
 		if (point_pairs.size() <= 2)
 			return;
