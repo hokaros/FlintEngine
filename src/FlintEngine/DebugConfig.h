@@ -12,9 +12,11 @@ namespace debug
 	{
 	public:
 		static bool ShouldDebugRenderPhysics();
+		static bool ShouldDebugRenderNavmesh();
 
 	private:
 		static bool s_ShouldDebugRenderPhysics;
+		static bool s_ShouldDebugRenderNavmesh;
 
 		friend DebugConfigWindow;
 	};

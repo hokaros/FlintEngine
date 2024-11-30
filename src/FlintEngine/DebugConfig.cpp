@@ -4,10 +4,16 @@
 namespace debug
 {
 	bool DebugConfig::s_ShouldDebugRenderPhysics = false;
+	bool DebugConfig::s_ShouldDebugRenderNavmesh = false;
 
 	bool DebugConfig::ShouldDebugRenderPhysics()
 	{
 		return s_ShouldDebugRenderPhysics;
+	}
+
+	bool DebugConfig::ShouldDebugRenderNavmesh()
+	{
+		return s_ShouldDebugRenderNavmesh;
 	}
 
 
@@ -16,6 +22,7 @@ namespace debug
 		ImGui::Begin("Debug config");
 
 		ImGui::Checkbox("Physics debug", &DebugConfig::s_ShouldDebugRenderPhysics);
+		ImGui::Checkbox("Navmesh debug", &DebugConfig::s_ShouldDebugRenderNavmesh);
 
 		ImGui::End();
 	}
