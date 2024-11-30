@@ -16,6 +16,7 @@ void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 
 void Navigation::Navmesh::Clear()
 {
+	m_Edges.clear();
 	m_Vertices.clear();
 	m_Triangles.clear();
 }
