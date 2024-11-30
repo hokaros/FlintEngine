@@ -12,6 +12,7 @@ Scene::Scene(const Scene& other)
 void Scene::OnLoaded()
 {
 	m_ObjectManager.SetAsMain();
+	RegenerateNavmesh();
 }
 
 void Scene::Update()
