@@ -37,6 +37,7 @@ public:
 
 	virtual void Awake() override;
 	virtual void Update() override;
+	virtual void RenderEditorSelected(SceneRenderer& renderer) override;
 
 	static Vector LabyrinthSize(int wallWidth, int wallLength, int xCount, int yCount);
 

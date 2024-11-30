@@ -1,6 +1,7 @@
 #include "LabyrinthSolidifier.h"
 #include <Components/BoxCollider.h>
 #include "Occlusion/OccludableRectangle.h"
+#include <Core/Scene.h>
 
 DEFINE_COMPONENT(LabyrinthSolidifier);
 DEFINE_FIELD(LabyrinthSolidifier, position);
@@ -36,44 +37,55 @@ LabyrinthSolidifier::~LabyrinthSolidifier()
 	delete[] border;
 }
 
-const Labirynt& LabyrinthSolidifier::GetLab() const {
+const Labirynt& LabyrinthSolidifier::GetLab() const
+{
 	return *labyrinth;
 }
 
-int LabyrinthSolidifier::WallsCount() const {
+int LabyrinthSolidifier::WallsCount() const
+{
 	return labyrinth->ActiveCount();
 }
 
-GameObject** LabyrinthSolidifier::GetWalls() const {
+GameObject** LabyrinthSolidifier::GetWalls() const
+{
 	return walls;
 }
 
-int LabyrinthSolidifier::BorderElements() const {
+int LabyrinthSolidifier::BorderElements() const
+{
 	return borderCount;
 }
 
-GameObject** LabyrinthSolidifier::GetBorder() const {
+GameObject** LabyrinthSolidifier::GetBorder() const
+{
 	return border;
 }
 
-Vector LabyrinthSolidifier::GetSize() const {
+Vector LabyrinthSolidifier::GetSize() const
+{
 	return LabyrinthSize(wallWidth, wallLength, xCount, yCount);
 }
 
-Vector LabyrinthSolidifier::LabyrinthSize(int wallWidth, int wallLength, int xCount, int yCount) {
+Vector LabyrinthSolidifier::LabyrinthSize(int wallWidth, int wallLength, int xCount, int yCount)
+{
 	return Vector(wallLength * xCount, wallLength * yCount);
 }
 
-void LabyrinthSolidifier::PlaceWalls() {
+void LabyrinthSolidifier::PlaceWalls()
+{
 	int nextWall = 0;
 	Vector verticalWall(wallWidth, wallLength);
 	Vector horizontalWall(wallLength, wallWidth);
 
 	// Œciany pionowe
-	for (int y = 0; y < yCount; y++) {
-		for (int x = 1; x <= xCount - 1; x++) {
+	for (int y = 0; y < yCount; y++)
+	{
+		for (int x = 1; x <= xCount - 1; x++)
+		{
 			int index = (xCount - 1) * y + x - 1;
-			if (labyrinth->WallAtIndex(index)) {
+			if (labyrinth->WallAtIndex(index))
+			{
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
 				wall->FindComponent<BoxCollider>()->SetSize(verticalWall);
@@ -85,10 +97,13 @@ void LabyrinthSolidifier::PlaceWalls() {
 
 	int horStart = labyrinth->VerticalCount();
 	// Œciany poziome
-	for (int y = 1; y <= yCount - 1; y++) {
-		for (int x = 0; x < xCount; x++) {
+	for (int y = 1; y <= yCount - 1; y++)
+	{
+		for (int x = 0; x < xCount; x++)
+		{
 			int index = horStart + xCount * (y - 1) + x;
-			if (labyrinth->WallAtIndex(index)) {
+			if (labyrinth->WallAtIndex(index))
+			{
 				// Obecna œciana
 				GameObject* wall = walls[nextWall++];
 				wall->FindComponent<BoxCollider>()->SetSize(horizontalWall);
@@ -99,29 +114,38 @@ void LabyrinthSolidifier::PlaceWalls() {
 	}
 }
 
-void LabyrinthSolidifier::SetLab(bool* walls) {
+void LabyrinthSolidifier::SetLab(bool* walls)
+{
 	labyrinth->SetWalls(walls);
 	PlaceWalls();
 
 	colliderMemory->Refresh(this->walls, labyrinth->ActiveCount());
+
+	GetOwner().GetScene()->RegenerateNavmesh();
 }
 
-void LabyrinthSolidifier::ChangeLab() {
+void LabyrinthSolidifier::ChangeLab()
+{
 	labyrinth->ChangeLab();
 	PlaceWalls();
 
 	colliderMemory->Refresh(walls, labyrinth->ActiveCount());
+
+	GetOwner().GetScene()->RegenerateNavmesh();
 }
 
-const ColliderMemory& LabyrinthSolidifier::GetColliderMemory() const {
+const ColliderMemory& LabyrinthSolidifier::GetColliderMemory() const
+{
 	return *colliderMemory;
 }
 
-GameObject* LabyrinthSolidifier::BuildWall(const Vector& size) {
+GameObject* LabyrinthSolidifier::BuildWall(const Vector& size)
+{
 	return BuildWall(size, m_WallColor);
 }
 
-GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color) {
+GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color)
+{
 	const GameObject* wallPrefabLoaded = wallPrefab.Get();
 	FE_ASSERT(wallPrefabLoaded != nullptr, "Couldn't load wall prefab");
 
@@ -135,7 +159,8 @@ GameObject* LabyrinthSolidifier::BuildWall(const Vector& size, const Rgb8& color
 	return wall;
 }
 
-void LabyrinthSolidifier::BuildBorder() {
+void LabyrinthSolidifier::BuildBorder()
+{
 	borderCount = 8;  // 2* przedziurawione œciany + zwyk³e œciany + drzwi
 	border = new GameObject * [borderCount];
 
@@ -153,19 +178,23 @@ void LabyrinthSolidifier::BuildBorder() {
 	SetWallUpperLeft(*border[7], nextPos);
 }
 
-GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
+GameObject** LabyrinthSolidifier::BuildGateWall(Direction side)
+{
 	GameObject** w = new GameObject * [3];
 
 	Vector nextPos = position;
-	if (side == Direction::WEST) {
+	if (side == Direction::WEST)
+	{
 		nextPos.x += xCount * wallLength;
 	}
-	else if (side == Direction::SOUTH) {
+	else if (side == Direction::SOUTH)
+	{
 		nextPos.y += wallWidth + yCount * wallLength;
 	}
 	VectorInt exit = labyrinth->GetExit(side);
 	
-	if (side == Direction::EAST || side == Direction::WEST) {
+	if (side == Direction::EAST || side == Direction::WEST)
+	{
 		Vector elemSize(wallWidth, exit.y * wallLength);
 		w[0] = BuildWall(elemSize);
 		SetWallUpperLeft(*w[0], nextPos);
@@ -184,7 +213,8 @@ GameObject** LabyrinthSolidifier::BuildGateWall(Direction side) {
 		w[2] = BuildWall(elemSize);
 		SetWallUpperLeft(*w[2], nextPos);
 	}
-	else {
+	else
+	{
 		Vector elemSize(exit.x * wallLength, wallWidth);
 		w[0] = BuildWall(elemSize);
 		SetWallUpperLeft(*w[0], nextPos);
@@ -249,24 +279,39 @@ void LabyrinthSolidifier::Awake()
 
 	colliderMemory->Refresh(walls, labyrinth->ActiveCount());
 	labyrinth->PrintLab(); // wyœwietlenie w konsoli
+
+	GetOwner().GetScene()->RegenerateNavmesh();
 }
 
-void LabyrinthSolidifier::Update() {
+void LabyrinthSolidifier::Update()
+{
 	if (!shouldChange)
 		return;
 
 	timeSinceLastChange += Timer::Main()->GetDeltaTime();
-	if (timeSinceLastChange >= changeTime) {
+	if (timeSinceLastChange >= changeTime)
+	{
 		ChangeLab();
 		timeSinceLastChange = 0;
 	}
 }
 
-void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall) {
-	if (wall.IsDestroyed()) {
+void LabyrinthSolidifier::RenderEditorSelected(SceneRenderer& renderer)
+{
+	const Vector labyrinth_size = LabyrinthSize(wallWidth, wallLength, xCount, yCount);
+	const Vector pos = GetOwner().TransformPoint(position);
+
+	renderer.RenderWireRect(Rect(pos, labyrinth_size), Rgb8(0x00, 0x00, 0xFF), 0);
+}
+
+void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall)
+{
+	if (wall.IsDestroyed())
+	{
 		colliderMemory->Free(&wall.GetOwner());
 	}
-	else {
+	else
+	{
 		colliderMemory->Claim(&wall.GetOwner());
 	}
 }
