@@ -229,8 +229,7 @@ namespace Navigation
 
 	bool NavmeshGenerator::VertexLinker::IsLineOfSight(const Vector& p1, const Vector& p2) const
 	{
-		const float tolerance = 0.00001f;
-		const Segment segment_with_tolerance = Segment(p1, p2).GetShortenedSegment(tolerance);
+		const Segment segment_with_tolerance = Segment(p1, p2).GetShortenedSegment(s_Tolerance);
 
 		if (AnyLinkInLine(segment_with_tolerance))
 			return false;
@@ -249,7 +248,8 @@ namespace Navigation
 		{
 			const Vector& link_p1 = m_Vertices[link.first];
 			const Vector& link_p2 = m_Vertices[link.second];
-			if (line.DoesCross(Segment(link_p1, link_p2)))
+			const Segment link_seg = Segment(link_p1, link_p2).GetShortenedSegment(s_Tolerance);
+			if (line.DoesCross(link_seg))
 			{
 				return true;
 			}

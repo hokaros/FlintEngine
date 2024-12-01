@@ -70,5 +70,7 @@ namespace Navigation
 
 	private:
 		const IGameObjectContainer& m_Context;
+
+		static constexpr float s_Tolerance = 0.001f;
 	};
 }
