@@ -291,5 +291,5 @@ void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall)
 
 void LabyrinthSolidifier::RefreshColliderMemory()
 {
-	m_ColliderMemory->Refresh(m_Walls.data(), m_Walls.size()); // TODO: pass a vector here
+	m_ColliderMemory->Refresh(m_Walls);
 }

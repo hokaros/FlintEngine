@@ -1,5 +1,6 @@
 #pragma once
 #include <Core/GameObject.h>
+#include <FTL/span.h>
 
 class ColliderMemory
 {
@@ -7,7 +8,7 @@ public:
 	ColliderMemory(size_t width, size_t height);
 	~ColliderMemory();
 
-	void Refresh(GameObject** objects, size_t count);
+	void Refresh(ftl::span<GameObject*> objects);
 	// Ustawia po³o¿enie collidera jako zajête
 	void Claim(GameObject* collider);
 	// Zwalnia po³o¿enie collidera
