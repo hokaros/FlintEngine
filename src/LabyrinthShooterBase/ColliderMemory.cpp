@@ -4,30 +4,9 @@
 #include <Components/RectangleRenderer.h>
 
 ColliderMemory::ColliderMemory(size_t width, size_t height)
-	: width(width), height(height)
+	: m_Memory(width, height)
 {
-
-	memory = new GameObject** [width];
-
-	for (size_t x = 0; x < width; x++)
-	{
-		memory[x] = new GameObject*[height];
-
-		for (size_t y = 0; y < height; y++)
-		{
-			memory[x][y] = nullptr;
-		}
-	}
-}
-
-ColliderMemory::~ColliderMemory()
-{
-	for (size_t x = 0; x < width; x++)
-	{
-		delete[] memory[x];
-	}
-
-	delete[] memory;
+	m_Memory.set_all(nullptr);
 }
 
 void ColliderMemory::Refresh(ftl::span<GameObject*> objects)
@@ -45,12 +24,7 @@ void ColliderMemory::Refresh(ftl::span<GameObject*> objects)
 
 void ColliderMemory::Clear()
 {
-	for (size_t x = 0; x < width; x++) {
-		for (size_t y = 0; y < height; y++)
-		{
-			memory[x][y] = nullptr;
-		}
-	}
+	m_Memory.set_all(nullptr);
 }
 
 void ColliderMemory::Claim(GameObject* collider)
@@ -74,21 +48,20 @@ void ColliderMemory::SetForCollider(GameObject* collider, GameObject* occupier)
 
 	for (VectorInt pixel : pixels)
 	{
-		if (pixel.x >= 0 && pixel.x < width
-			&& pixel.y >= 0 && pixel.y < height)
+		if (pixel.x >= 0 && pixel.x < m_Memory.width()
+			&& pixel.y >= 0 && pixel.y < m_Memory.height())
 		{
-
-			memory[pixel.x][pixel.y] = occupier;
+			m_Memory.at(pixel.x, pixel.y) = occupier;
 		}
 	}
 }
 
 bool ColliderMemory::IsOccupied(const VectorInt& point) const
 {
-	if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height)
+	if (point.x < 0 || point.x >= m_Memory.width() || point.y < 0 || point.y >= m_Memory.height())
 		return false;
 
-	return memory[point.x][point.y] != nullptr && memory[point.x][point.y]->IsEnabled();
+	return m_Memory.at(point.x, point.y) != nullptr && m_Memory.at(point.x, point.y)->IsEnabled();
 }
 
 bool ColliderMemory::Raycast(const VectorInt& start, const VectorInt& end, GameObject* ignore) const
@@ -103,7 +76,7 @@ bool ColliderMemory::Raycast(const VectorInt& start, const VectorInt& end, GameO
 	{
 		VectorInt point(start + (VectorInt)curr);
 
-		if (IsOccupied(point) && (ignore == nullptr || memory[point.x][point.y] != ignore))
+		if (IsOccupied(point) && (ignore == nullptr || m_Memory.at(point.x, point.y) != ignore))
 			return true;
 
 		curr += dPosPart;
@@ -114,10 +87,10 @@ bool ColliderMemory::Raycast(const VectorInt& start, const VectorInt& end, GameO
 
 size_t ColliderMemory::GetWidth() const
 {
-	return width;
+	return m_Memory.width();
 }
 
 size_t ColliderMemory::GetHeight() const
 {
-	return height;
+	return m_Memory.height();
 }

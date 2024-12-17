@@ -1,12 +1,12 @@
 #pragma once
 #include <Core/GameObject.h>
 #include <FTL/span.h>
+#include <FTL/dyn_array2.h>
 
 class ColliderMemory
 {
 public:
 	ColliderMemory(size_t width, size_t height);
-	~ColliderMemory();
 
 	void Refresh(ftl::span<GameObject*> objects);
 	// Ustawia po³o¿enie collidera jako zajête
@@ -21,9 +21,7 @@ public:
 	size_t GetHeight() const;
 
 private:
-	GameObject*** memory;
-	size_t width;
-	size_t height;
+	ftl::dyn_array2<GameObject*> m_Memory;
 
 private:
 	void Clear();
