@@ -67,6 +67,8 @@ bool GameBase::RunOneLoop()
 
 	m_CurrScene->PostFrame();
 
+	m_DebugData.PostFrame();
+
 	return true;
 }
 
