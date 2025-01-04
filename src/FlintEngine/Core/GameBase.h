@@ -6,6 +6,7 @@
 #include "PhysicsSystem.h"
 #include <Dbg/DebugRenderer.h>
 #include <Dbg/DebugConfig.h>
+#include <Dbg/DebugMonitor.h>
 #include "Scene.h"
 #include "InputController.h"
 
@@ -32,7 +33,6 @@ protected:
 
 	Timer m_Timer;
 	PhysicsSystem m_PhysicsSystem;
-	debug::DebugConfigWindow m_DebugConfigWindow;
 
 	std::unique_ptr<Scene> m_CurrScene = nullptr;
 
@@ -43,6 +43,10 @@ protected:
 
 	std::mutex m_InvokesMutex;
 	std::mutex m_MetadataMutex;
+
+	debug::DebugGameData m_DebugData;
+	debug::DebugConfigWindow m_DebugConfigWindow;
+	debug::DebugMonitor m_DebugMonitorWindow;
 
 private:
 	void DebugRender();

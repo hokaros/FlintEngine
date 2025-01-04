@@ -10,6 +10,8 @@ GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputControll
 	{
 		m_DebugRenderer = std::make_unique<DebugRenderer>(*m_SceneRenderer);
 	}
+
+	m_DebugMonitorWindow.Init(m_DebugData);
 }
 
 bool GameBase::Run()
@@ -52,6 +54,8 @@ bool GameBase::RunOneLoop()
 	if (m_SceneRenderer != nullptr)
 	{
 		m_DebugConfigWindow.Render();
+		m_DebugMonitorWindow.Render();
+
 		m_CurrScene->Render(*m_SceneRenderer);
 		DebugRender();
 
