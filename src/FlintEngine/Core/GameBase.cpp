@@ -1,5 +1,7 @@
 #include "GameBase.h"
 
+#include <Windows.h>
+
 GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputController& input_controller)
 	: m_Window(window)
 	, m_SceneRenderer(scene_renderer)
@@ -34,7 +36,7 @@ bool GameBase::Run()
 bool GameBase::RunOneLoop()
 {
 	// Nowa klatka
-	m_Timer.NextFrame();
+	m_Timer.FrameStart();
 
 	if (!m_InputController.Update())
 		return false;
@@ -69,6 +71,7 @@ bool GameBase::RunOneLoop()
 
 	m_DebugData.PostFrame();
 
+	PostFrameSleep();
 	return true;
 }
 
@@ -113,4 +116,22 @@ void GameBase::SetRunning(bool running)
 {
 	std::lock_guard<std::mutex> lock(m_MetadataMutex);
 	m_IsRunning = running;
+}
+
+void GameBase::PostFrameSleep()
+{
+	const double min_seconds_per_frame = GetMinSecondsForFrame();
+
+	const double last_frame_time = m_Timer.GetTimeSinceFrameStart();
+
+	if (last_frame_time < min_seconds_per_frame)
+	{
+		const size_t sleep_miliseconds = (min_seconds_per_frame - last_frame_time) * 1000.0;
+		Sleep(sleep_miliseconds);
+	}
+}
+
+double GameBase::GetMinSecondsForFrame() const
+{
+	return 1.0 / s_FrameRateClamp;
 }

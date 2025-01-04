@@ -30,8 +30,8 @@ class Timer
 public:
 	Timer();
 	~Timer();
-	// Aktualizuje deltaTime. Nale¿y wywo³aæ na pocz¹tku nowej klatki
-	void NextFrame();
+
+	void FrameStart();
 	// Zwraca czas od ostatniej klatki [s]
 	double GetDeltaTime() const;
 	// Zatrzymuje up³yw czasu
@@ -39,12 +39,16 @@ public:
 	// Odblokowuje up³yw czasu
 	void Unpause();
 
+	double GetTimeSinceFrameStart() const;
+
 	// Umo¿liwia wykonanie funkcji po pewnym czasie
 	void InvokeOnNextFrame(function<void()> action, double time);
 	// Wykonuje funkcje, których czas nadszed³
 	void InvokeTimed();
 
 	static Timer* Main();
+
+	static double ClocksToSeconds(clock_t clocks);
 
 private:
 	clock_t lastFrameTime = 0;

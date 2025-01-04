@@ -1,5 +1,7 @@
 #include "DebugGameData.h"
 
+#include <Timer.h>
+
 namespace debug
 {
 	float DebugGameData::GetFrameRate() const
@@ -35,16 +37,11 @@ namespace debug
 
 		if (m_PrevProbeClock)
 		{
-			const float time_elapsed = GetSecondsFromClocks(new_clock - *m_PrevProbeClock);
+			const float time_elapsed = Timer::ClocksToSeconds(new_clock - *m_PrevProbeClock);
 
 			m_FrameRate = s_NumProbedFrames / time_elapsed;
 		}
 
 		m_PrevProbeClock = new_clock;
-	}
-
-	float FrameRateTracker::GetSecondsFromClocks(clock_t clocks) const
-	{
-		return (float)clocks / CLOCKS_PER_SEC;
 	}
 }

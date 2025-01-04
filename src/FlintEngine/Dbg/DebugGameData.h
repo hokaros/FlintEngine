@@ -14,7 +14,6 @@ namespace debug
 
 	private:
 		void Probe();
-		float GetSecondsFromClocks(clock_t clocks) const;
 
 	private:
 		float m_FrameRate = 0.f;

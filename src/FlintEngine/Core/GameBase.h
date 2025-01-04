@@ -50,9 +50,15 @@ protected:
 
 private:
 	void DebugRender();
+	void PostFrameSleep();
 
 	void InvokePostponed();
 
 	void SetRunning(bool running);
+
+	double GetMinSecondsForFrame() const;
+
+private:
+	static constexpr float s_FrameRateClamp = 60.f;
 };
 
