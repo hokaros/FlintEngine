@@ -42,12 +42,14 @@ bool Segment::IsPointBetweenEnds(const Vector& target) const
 {
 	const Vector from_p1_to_p2 = end - start;
 	const Vector from_p1_to_target = target - start;
-	if (abs(Vector::GetAngle(from_p1_to_p2, from_p1_to_target)) >= M_PI / 2.0)
+	const float start_angle = Vector::GetAngle(from_p1_to_p2, from_p1_to_target);
+	if (abs(NormalizeRadians(start_angle)) >= M_PI / 2.0)
 		return false; // behind start
 
 	const Vector from_p2_to_p1 = -from_p1_to_p2;
 	const Vector from_p2_to_target = target - end;
-	if (abs(Vector::GetAngle(from_p2_to_p1, from_p2_to_target)) >= M_PI / 2.0)
+	const float end_angle = Vector::GetAngle(from_p2_to_p1, from_p2_to_target);
+	if (abs(NormalizeRadians(end_angle)) >= M_PI / 2.0)
 		return false; // behind end
 
 	return true;
@@ -65,4 +67,10 @@ Vector Segment::SlideInwardFromEnd(float dist) const
 	const Vector from_end_to_start = start - end;
 	const Vector diff_from_end = from_end_to_start.GetNormalized() * dist;
 	return end + diff_from_end;
+}
+
+float Segment::NormalizeRadians(float rad)
+{
+	constexpr float full_circle = M_PI * 2.0f;
+	return fmodf(rad, full_circle);
 }

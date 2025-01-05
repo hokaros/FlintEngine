@@ -34,4 +34,6 @@ private:
 
 	Vector SlideInwardFromStart(float dist) const;
 	Vector SlideInwardFromEnd(float dist) const;
+
+	static float NormalizeRadians(float rad);
 };
