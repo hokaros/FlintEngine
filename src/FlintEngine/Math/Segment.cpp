@@ -43,13 +43,13 @@ bool Segment::IsPointBetweenEnds(const Vector& target) const
 	const Vector from_p1_to_p2 = end - start;
 	const Vector from_p1_to_target = target - start;
 	const float start_angle = Vector::GetAngle(from_p1_to_p2, from_p1_to_target);
-	if (abs(NormalizeRadians(start_angle)) >= M_PI / 2.0)
+	if (!IsAngleFirstOrThirdQuarter(start_angle))
 		return false; // behind start
 
 	const Vector from_p2_to_p1 = -from_p1_to_p2;
 	const Vector from_p2_to_target = target - end;
 	const float end_angle = Vector::GetAngle(from_p2_to_p1, from_p2_to_target);
-	if (abs(NormalizeRadians(end_angle)) >= M_PI / 2.0)
+	if (!IsAngleFirstOrThirdQuarter(end_angle))
 		return false; // behind end
 
 	return true;
@@ -73,4 +73,13 @@ float Segment::NormalizeRadians(float rad)
 {
 	constexpr float full_circle = M_PI * 2.0f;
 	return fmodf(rad, full_circle);
+}
+
+bool Segment::IsAngleFirstOrThirdQuarter(float rad)
+{
+	constexpr float first_quarter = M_PI / 2.0f;
+	constexpr float third_quarter = 3.0f * M_PI / 2.0f;
+
+	const float normalized_angle = abs(NormalizeRadians(rad));
+	return normalized_angle <= first_quarter || normalized_angle >= third_quarter;
 }

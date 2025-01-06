@@ -36,4 +36,5 @@ private:
 	Vector SlideInwardFromEnd(float dist) const;
 
 	static float NormalizeRadians(float rad);
+	static bool IsAngleFirstOrThirdQuarter(float rad);
 };
