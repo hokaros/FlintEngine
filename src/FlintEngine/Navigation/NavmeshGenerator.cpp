@@ -156,8 +156,8 @@ namespace Navigation
 		const IndexPair link1 = collider_links[i];
 		const IndexPair link2 = collider_links[j];
 
-		const Segment seg1 = IndexPairToSegment(link1, vertices).GetShortenedSegment(s_Tolerance);
-		const Segment seg2 = IndexPairToSegment(link2, vertices).GetShortenedSegment(s_Tolerance);
+		const Segment seg1 = IndexPairToSegment(link1, vertices);
+		const Segment seg2 = IndexPairToSegment(link2, vertices);
 
 		if (seg1.GetLengthSq() == 0.f || seg2.GetLengthSq() == 0.f)
 			return;
@@ -166,7 +166,60 @@ namespace Navigation
 			return; // TODO: should we handle it?
 
 		const Vector crossing_point = seg1.GetCrossingPoint(seg2);
-		if (crossing_point != Vector::INVALID)
+		if (crossing_point == Vector::INVALID)
+			return;
+
+		Vector crossing_at_segment_end;
+		const bool seg1_contains_crossing = TryGetEqualSegmentEnd(seg1, crossing_point, crossing_at_segment_end);
+		const bool seg2_contains_crossing = TryGetEqualSegmentEnd(seg2, crossing_point, crossing_at_segment_end);
+		if (seg1_contains_crossing && seg2_contains_crossing)
+			return;
+
+		if (seg1_contains_crossing || seg2_contains_crossing)
+		{ // One segment is not cut, there are no new vertices
+			size_t crossing_point_index = 0;
+			size_t cut_link_index = 0;
+
+			// Check the configuration in which to cut
+			if (vertices[link1.first] == crossing_at_segment_end)
+			{
+				crossing_point_index = link1.first;
+				cut_link_index = j;
+			}
+			else if (vertices[link1.second] == crossing_at_segment_end)
+			{
+				crossing_point_index = link1.second;
+				cut_link_index = j;
+			}
+			else if (vertices[link2.first] == crossing_at_segment_end)
+			{
+				crossing_point_index = link2.first;
+				cut_link_index = i;
+			}
+			else
+			{
+				crossing_point_index = link2.second;
+				cut_link_index = i;
+			}
+
+			// Perform the cut 
+			const IndexPair cut_link = collider_links[cut_link_index];
+			collider_links.push_back(IndexPair(cut_link.first, crossing_point_index));
+			collider_links.push_back(IndexPair(cut_link.second, crossing_point_index));
+			collider_links.erase(collider_links.begin() + cut_link_index);
+
+			if (i >= cut_link_index)
+			{
+				i--;
+			}
+			if (j >= cut_link_index)
+			{
+				j--;
+			}
+
+			new_collider_links_offset--;
+		}
+		else
 		{
 			vertices.push_back(crossing_point);
 			const size_t crossing_point_index = vertices.size() - 1;
@@ -200,6 +253,22 @@ namespace Navigation
 		const Vector start = vertices[index_pair.first];
 		const Vector end = vertices[index_pair.second];
 		return Segment(start, end);
+	}
+
+	bool NavmeshGenerator::TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos)
+	{
+		if (segment.start == desired_end_pos)
+		{
+			end_pos = segment.start;
+			return true;
+		}
+		if (segment.end == desired_end_pos)
+		{
+			end_pos = segment.end;
+			return true;
+		}
+
+		return false;
 	}
 
 
