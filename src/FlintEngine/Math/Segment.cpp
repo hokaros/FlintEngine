@@ -4,11 +4,23 @@
 
 bool Segment::DoesCross(const Segment& other) const
 {
+	return GetCrossingPoint(other) != Vector::INVALID;
+}
+
+Vector Segment::GetCrossingPoint(const Segment& other) const
+{
 	const Vector infinite_line_crossing = Line::FromSegment(*this).GetCrossingPoint(Line::FromSegment(other));
 	if (infinite_line_crossing == Vector::INVALID)
-		return false;
+		return Vector::INVALID;
 
-	return IsPointBetweenEnds(infinite_line_crossing) && other.IsPointBetweenEnds(infinite_line_crossing);
+	if (IsPointBetweenEnds(infinite_line_crossing) && other.IsPointBetweenEnds(infinite_line_crossing))
+	{
+		return infinite_line_crossing;
+	}
+	else
+	{
+		return Vector::INVALID;
+	}
 }
 
 Segment Segment::GetShortenedSegment(float diff_from_side) const

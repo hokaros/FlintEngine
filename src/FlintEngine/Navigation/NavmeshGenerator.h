@@ -68,6 +68,10 @@ namespace Navigation
 		static void TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh);
 		static void GetTrianglesFromLinks(const std::vector<IndexPair>& point_pairs, std::vector<IndexTriangle>& out_triangles);
 
+		static void CutColliderLinks(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links);
+
+		static Segment IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices);
+
 	private:
 		const IGameObjectContainer& m_Context;
 

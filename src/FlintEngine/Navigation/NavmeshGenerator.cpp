@@ -74,6 +74,8 @@ namespace Navigation
 		{
 			collider->GetVertices(out_vertices, collider_links);
 		}
+
+		CutColliderLinks(out_vertices, collider_links);
 	}
 
 	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh)
@@ -109,6 +111,52 @@ namespace Navigation
 				out_triangles.push_back(IndexTriangle(p1, p2, neighbour));
 			}
 		}
+	}
+
+	void NavmeshGenerator::CutColliderLinks(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links)
+	{
+		size_t new_collider_links_offset = collider_links.size();
+
+		for (size_t i = 0; i < new_collider_links_offset; i++)
+		{
+			for (size_t j = i + 1; j < new_collider_links_offset; j++)
+			{
+				const IndexPair link1 = collider_links[i];
+				const IndexPair link2 = collider_links[j];
+
+				const Segment seg1 = IndexPairToSegment(link1, vertices).GetShortenedSegment(s_Tolerance);
+				const Segment seg2 = IndexPairToSegment(link2, vertices).GetShortenedSegment(s_Tolerance);
+
+				const Vector crossing_point = seg1.GetCrossingPoint(seg2);
+				if (crossing_point != Vector::INVALID)
+				{
+					vertices.push_back(crossing_point);
+					const size_t crossing_point_index = vertices.size() - 1;
+
+					// Add new collider links
+					collider_links.push_back(IndexPair(link1.first, crossing_point_index));
+					collider_links.push_back(IndexPair(link1.second, crossing_point_index));
+					collider_links.push_back(IndexPair(link2.first, crossing_point_index));
+					collider_links.push_back(IndexPair(link2.second, crossing_point_index));
+
+					// Remove old collider links
+					collider_links.erase(collider_links.begin() + i);
+					i--;
+					j--;
+					collider_links.erase(collider_links.begin() + j);
+					j--;
+
+					new_collider_links_offset -= 2;
+				}
+			}
+		}
+	}
+
+	Segment NavmeshGenerator::IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices)
+	{
+		const Vector start = vertices[index_pair.first];
+		const Vector end = vertices[index_pair.second];
+		return Segment(start, end);
 	}
 
 
