@@ -119,6 +119,13 @@ void HierarchyEditor::RenderObjectContextMenu(std::shared_ptr<EditorUniversalHan
 	{
 		ImGui::BeginDisabled(parent == nullptr); // Child nodes only
 		{
+			if (ImGui::Button("Clone"))
+			{
+				ImGui::CloseCurrentPopup();
+
+				parent->AddChild(game_object->GetGameObject().Copy());
+			}
+
 			if (ImGui::Button("Delete"))
 			{
 				m_RequestedRemove.emplace(game_object->GetGameObject(), *parent);
