@@ -17,6 +17,7 @@ public:
 	const std::vector<ObjectComponent*>& GetAdditionalComponents() const;
 
 	static std::unique_ptr<GameObject> ToRuntimeObject(std::unique_ptr<PrefabInstance> editable_object);
+	static PrefabInstance* TryCastFromGameObject(GameObject& game_object);
 
 public: // GameObject
 	virtual const std::string& GetName() const override;

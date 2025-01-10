@@ -32,6 +32,18 @@ std::unique_ptr<GameObject> PrefabInstance::ToRuntimeObject(std::unique_ptr<Pref
 	return std::move(editable_object);
 }
 
+PrefabInstance* PrefabInstance::TryCastFromGameObject(GameObject& game_object)
+{
+	if (game_object.GetGameObjectType() != GameObjectType::PrefabInstance)
+	{
+		return nullptr;
+	}
+	else
+	{
+		return static_cast<PrefabInstance*>(&game_object);
+	}
+}
+
 const std::string& PrefabInstance::GetPrefabPath() const
 {
 	return m_PrefabPath;

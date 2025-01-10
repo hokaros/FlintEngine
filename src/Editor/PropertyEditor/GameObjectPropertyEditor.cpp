@@ -1,5 +1,7 @@
 #include "GameObjectPropertyEditor.h"
 
+#include <Editables/PrefabInstance.h>
+
 void GameObjectPropertyEditor::RenderEmbedded()
 {
     EditorGameObjectHandle* game_object_handle = GetGameObjectHandle();
@@ -48,6 +50,11 @@ void GameObjectPropertyEditor::LoadAddableComponents()
 void GameObjectPropertyEditor::RenderGameObjectEditor(EditorGameObjectHandle& game_object)
 {
     ImGui::InputText("Name", m_GameObjectName, s_NameMaxSize);
+
+    if (const PrefabInstance* prefab_instance = PrefabInstance::TryCastFromGameObject(game_object.GetGameObject()))
+    {
+        ImGui::Text("Prefab: %s", prefab_instance->GetPrefabPath().c_str());
+    }
 
     ImGui::DragFloat2("Position", m_GameObjectPosition, s_SlidersSpeed);
     ImGui::DragFloat2("Size", m_GameObjectSize, s_SlidersSpeed);
