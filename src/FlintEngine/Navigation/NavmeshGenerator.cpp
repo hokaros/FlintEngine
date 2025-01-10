@@ -115,15 +115,7 @@ namespace Navigation
 
 	void NavmeshGenerator::CutColliderLinks(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links)
 	{
-		size_t new_collider_links_offset = collider_links.size();
-
-		for (size_t i = 0; i < new_collider_links_offset; i++)
-		{
-			for (size_t j = i + 1; j < new_collider_links_offset; j++)
-			{
-				TryCutColliderLinksIJ(vertices, collider_links, i, j, new_collider_links_offset);
-			}
-		}
+		size_t new_collider_links_offset = 0;
 
 		size_t i = 0;
 		while (true)
