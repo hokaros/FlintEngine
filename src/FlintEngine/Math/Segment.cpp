@@ -23,6 +23,14 @@ Vector Segment::GetCrossingPoint(const Segment& other) const
 	}
 }
 
+const bool Segment::IsSameDirection(const Segment& other) const
+{
+	const Vector my_dir = (start - end).GetNormalized();
+	const Vector other_dir = (other.start - other.end).GetNormalized();
+
+	return my_dir == other_dir || my_dir == -other_dir;
+}
+
 Segment Segment::GetShortenedSegment(float diff_from_side) const
 {
 	const float diff_sum = diff_from_side * 2;

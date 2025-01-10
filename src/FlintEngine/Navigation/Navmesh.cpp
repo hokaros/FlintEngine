@@ -8,8 +8,8 @@
 void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 {
 	RenderVertexIndices(renderer);
-	//RenderTriangles(renderer);
-	RenderEdges(renderer);
+	RenderTriangles(renderer);
+	//RenderEdges(renderer);
 	//RenderEdgeIndices(renderer);
 	//RenderGraph(renderer);
 }

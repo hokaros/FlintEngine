@@ -121,34 +121,85 @@ namespace Navigation
 		{
 			for (size_t j = i + 1; j < new_collider_links_offset; j++)
 			{
-				const IndexPair link1 = collider_links[i];
-				const IndexPair link2 = collider_links[j];
-
-				const Segment seg1 = IndexPairToSegment(link1, vertices).GetShortenedSegment(s_Tolerance);
-				const Segment seg2 = IndexPairToSegment(link2, vertices).GetShortenedSegment(s_Tolerance);
-
-				const Vector crossing_point = seg1.GetCrossingPoint(seg2);
-				if (crossing_point != Vector::INVALID)
-				{
-					vertices.push_back(crossing_point);
-					const size_t crossing_point_index = vertices.size() - 1;
-
-					// Add new collider links
-					collider_links.push_back(IndexPair(link1.first, crossing_point_index));
-					collider_links.push_back(IndexPair(link1.second, crossing_point_index));
-					collider_links.push_back(IndexPair(link2.first, crossing_point_index));
-					collider_links.push_back(IndexPair(link2.second, crossing_point_index));
-
-					// Remove old collider links
-					collider_links.erase(collider_links.begin() + i);
-					i--;
-					j--;
-					collider_links.erase(collider_links.begin() + j);
-					j--;
-
-					new_collider_links_offset -= 2;
-				}
+				TryCutColliderLinksIJ(vertices, collider_links, i, j, new_collider_links_offset);
 			}
+		}
+
+		size_t i = 0;
+		while (true)
+		{
+			const size_t new_new_collider_links_offset = CutColliderLinksForNew(vertices, collider_links, new_collider_links_offset);
+			if (new_new_collider_links_offset == new_collider_links_offset)
+				break;
+
+			new_collider_links_offset = new_new_collider_links_offset;
+			i++;
+
+			if (i > 1000)
+			{
+				FE_WARN("Cutting collider links took too long. Skipping the rest");
+				break;
+			}
+		}
+	}
+
+	size_t NavmeshGenerator::CutColliderLinksForNew(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t new_collider_links_offset)
+	{
+		size_t newest_collider_links_offset = collider_links.size();
+
+		// Only new collider links with every other
+		for (size_t new_i = new_collider_links_offset; new_i < newest_collider_links_offset; new_i++)
+		{
+			for (size_t all_i = 0; all_i < newest_collider_links_offset && all_i < new_i; all_i++)
+			{
+				TryCutColliderLinksIJ(vertices, collider_links, new_i, all_i, newest_collider_links_offset);
+			}
+		}
+
+		return newest_collider_links_offset;
+	}
+
+	void NavmeshGenerator::TryCutColliderLinksIJ(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset)
+	{
+		const IndexPair link1 = collider_links[i];
+		const IndexPair link2 = collider_links[j];
+
+		const Segment seg1 = IndexPairToSegment(link1, vertices).GetShortenedSegment(s_Tolerance);
+		const Segment seg2 = IndexPairToSegment(link2, vertices).GetShortenedSegment(s_Tolerance);
+
+		if (seg1.GetLengthSq() == 0.f || seg2.GetLengthSq() == 0.f)
+			return;
+
+		if (seg1.IsSameDirection(seg2))
+			return; // TODO: should we handle it?
+
+		const Vector crossing_point = seg1.GetCrossingPoint(seg2);
+		if (crossing_point != Vector::INVALID)
+		{
+			vertices.push_back(crossing_point);
+			const size_t crossing_point_index = vertices.size() - 1;
+
+			// Add new collider links
+			collider_links.push_back(IndexPair(link1.first, crossing_point_index));
+			collider_links.push_back(IndexPair(link1.second, crossing_point_index));
+			collider_links.push_back(IndexPair(link2.first, crossing_point_index));
+			collider_links.push_back(IndexPair(link2.second, crossing_point_index));
+
+			// Remove old collider links
+			collider_links.erase(collider_links.begin() + i);
+			i--;
+			if (j >= i)
+			{
+				j--;
+			}
+			collider_links.erase(collider_links.begin() + j);
+			j--;
+			if (i >= j)
+			{
+				i--;
+			}
+
+			new_collider_links_offset -= 2;
 		}
 	}
 

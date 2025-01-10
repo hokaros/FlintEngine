@@ -21,6 +21,8 @@ public:
 	bool DoesCross(const Segment& other) const;
 	Vector GetCrossingPoint(const Segment& other) const;
 
+	const bool IsSameDirection(const Segment& other) const;
+
 	/// <summary>
 	/// Shortens the segment by the specified difference from each end
 	/// </summary>
