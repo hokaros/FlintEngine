@@ -55,7 +55,7 @@ float Segment::GetLengthSq() const
 
 Vector Segment::GetMiddle() const
 {
-	return (start - end) / 2.0f;
+	return (start + end) / 2.0f;
 }
 
 bool Segment::IsPointBetweenEnds(const Vector& target) const

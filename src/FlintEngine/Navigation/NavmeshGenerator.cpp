@@ -409,6 +409,9 @@ namespace Navigation
 			const Vector& link_p1 = m_Vertices[link.first];
 			const Vector& link_p2 = m_Vertices[link.second];
 			const Segment link_seg = Segment(link_p1, link_p2).GetShortenedSegment(s_Tolerance);
+			if (link_seg.GetLengthSq() == 0.f)
+				continue;
+
 			if (line.DoesCross(link_seg))
 			{
 				return true;
