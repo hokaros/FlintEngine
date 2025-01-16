@@ -98,7 +98,7 @@ namespace Navigation
 
 		NeighbouringDict neighbouring_dict;
 
-		for (const auto& link : point_pairs)
+		for (const IndexPair& link : point_pairs)
 		{
 			const size_t p1 = link.first;
 			const size_t p2 = link.second;
