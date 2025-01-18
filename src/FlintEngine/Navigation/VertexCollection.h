@@ -26,6 +26,9 @@ public:
 	std::vector<IndexPair>& CreateAndGetEdgeCollection();
 	std::vector<IndexPair>& GetEdgeCollection(EdgeCollectionId id);
 
+	// TODO: remove the below intrusive getter
+	std::vector<Vector>& GetVertices();
+
 private:
 	std::vector<Vector> m_Vertices;
 	std::vector<std::vector<IndexPair>> m_EdgeCollections;

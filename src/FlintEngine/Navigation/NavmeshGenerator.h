@@ -3,6 +3,7 @@
 #include "Navmesh.h"
 #include <map>
 #include <Math/Segment.h>
+#include "VertexCollection.h"
 
 class Scene;
 class WalkableSurface;

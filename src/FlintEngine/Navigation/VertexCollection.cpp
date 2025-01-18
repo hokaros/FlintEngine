@@ -65,6 +65,11 @@ std::vector<IndexPair>& VertexCollection::GetEdgeCollection(EdgeCollectionId id)
 	return m_EdgeCollections[index];
 }
 
+std::vector<Vector>& VertexCollection::GetVertices()
+{
+	return m_Vertices;
+}
+
 
 VertexCollection::EdgeCollectionId::EdgeCollectionId(size_t index)
 	: index(index)
