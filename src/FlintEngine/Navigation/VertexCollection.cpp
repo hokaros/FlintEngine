@@ -37,6 +37,19 @@ void VertexCollection::RemoveVertex(iterator it)
 	m_Vertices.erase(it);
 }
 
+void VertexCollection::MergeVertices(iterator& v1, iterator& v2, const Vector& result_vertex)
+{
+	m_Vertices.push_back(result_vertex);
+
+	const size_t merged_vertex_index = m_Vertices.size() - 1;
+
+	const size_t v1_idx = v1 - m_Vertices.begin();
+	const size_t v2_idx = v2 - m_Vertices.begin();
+	ReattachEdges(v1_idx, v2_idx, merged_vertex_index);
+
+	RemoveVertices(v1, v2);
+}
+
 size_t VertexCollection::GetNumVertices() const
 {
 	return m_Vertices.size();
@@ -78,6 +91,45 @@ std::vector<Vector>& VertexCollection::GetVertices()
 const Vector& VertexCollection::operator[](size_t index) const
 {
 	return m_Vertices[index];
+}
+
+void VertexCollection::RemoveVertices(iterator& v1, iterator& v2)
+{
+	RemoveVertex(v1);
+	v1--;
+	if (v2 > v1)
+	{
+		v2--;
+	}
+
+	RemoveVertex(v2);
+	v2--;
+	if (v1 > v2)
+	{
+		v1--;
+	}
+}
+
+void VertexCollection::ReattachEdges(size_t old_vertex1, size_t old_vertex2, size_t new_vertex)
+{
+	auto test_and_assign = [new_vertex](size_t& tested_in_link, size_t detached_vertex)
+	{
+		if (tested_in_link == detached_vertex)
+		{
+			tested_in_link = new_vertex;
+		}
+	};
+
+	for (std::vector<IndexPair>& edges : m_EdgeCollections)
+	{
+		for (IndexPair& edge : edges)
+		{
+			test_and_assign(edge.first, old_vertex1);
+			test_and_assign(edge.second, old_vertex1);
+			test_and_assign(edge.first, old_vertex2);
+			test_and_assign(edge.second, old_vertex2);
+		}
+	}
 }
 
 
