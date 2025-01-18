@@ -76,6 +76,7 @@ namespace Navigation
 		}
 
 		CutColliderLinks(out_vertices, collider_links);
+		MergeColliderVertices(out_vertices, collider_links);
 	}
 
 	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh)
@@ -245,6 +246,82 @@ namespace Navigation
 			}
 
 			new_collider_links_offset -= 2;
+		}
+	}
+
+	void NavmeshGenerator::MergeColliderVertices(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links)
+	{
+		for (size_t i = 0; i < vertices.size(); i++)
+		{
+			for (size_t j = i + 1; j < vertices.size(); j++)
+			{
+				const Vector& v_i = vertices[i];
+				const Vector& v_j = vertices[j];
+
+				// TODO: what about groups when v_i should be merged with v_x but v_j shouldn't?
+				if ((v_i - v_j).LengthSquared() < s_MergeDistance * s_MergeDistance)
+				{
+					const Vector merged_vertex = (v_i + v_j) / 2.0f;
+					vertices.push_back(merged_vertex);
+
+					const size_t merged_vertex_index = vertices.size() - 1;
+					
+					ReattachColliderLinks(vertices, collider_links, i, j, merged_vertex_index);
+
+					RemoveColliderVertex(vertices, collider_links, i);
+					RemoveColliderVertex(vertices, collider_links, j);
+
+					i--;
+					FE_ASSERT(i < j, "j -= 2 should be applied only if i < j");
+					j -= 2;
+				}
+			}
+		}
+	}
+
+	void NavmeshGenerator::RemoveColliderVertex(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t vertex_index)
+	{
+		vertices.erase(vertices.begin() + vertex_index);
+		
+		for (auto it = collider_links.begin(); it != collider_links.end();)
+		{
+			IndexPair& link = *it;
+			if (link.ContainsIndex(vertex_index))
+			{
+				it = collider_links.erase(it);
+			}
+			else
+			{
+				if (link.first > vertex_index)
+				{
+					link.first--;
+				}
+				if (link.second > vertex_index)
+				{
+					link.second--;
+				}
+
+				it++;
+			}
+		}
+	}
+
+	void NavmeshGenerator::ReattachColliderLinks(const std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t old_vertex1, size_t old_vertex2, size_t new_vertex)
+	{
+		auto test_and_assign = [new_vertex](size_t& tested_in_link, size_t detached_vertex)
+		{
+			if (tested_in_link == detached_vertex)
+			{
+				tested_in_link = new_vertex;
+			}
+		};
+
+		for (IndexPair& link : collider_links)
+		{
+			test_and_assign(link.first, old_vertex1);
+			test_and_assign(link.second, old_vertex1);
+			test_and_assign(link.first, old_vertex2);
+			test_and_assign(link.second, old_vertex2);
 		}
 	}
 

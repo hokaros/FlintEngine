@@ -8,8 +8,8 @@
 void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 {
 	RenderVertexIndices(renderer);
+	RenderEdges(renderer);
 	RenderTriangles(renderer);
-	//RenderEdges(renderer);
 	//RenderEdgeIndices(renderer);
 	//RenderGraph(renderer);
 }
@@ -86,7 +86,7 @@ void Navigation::Navmesh::RenderTriangles(SceneRenderer& renderer) const
 
 void Navigation::Navmesh::RenderTriangle(const IndexTriangle& tri, SceneRenderer& renderer) const
 {
-	const Rgb8 color = Rgb8(0xFF, 0, 0);
+	const Rgb8 color = Rgb8(0, 0xFF, 0);
 	const uint layer = 1;
 
 	const Vector& pos1 = GetPosAtIndex(tri.idx1);
