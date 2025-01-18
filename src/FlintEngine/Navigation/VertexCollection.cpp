@@ -37,6 +37,11 @@ void VertexCollection::RemoveVertex(iterator it)
 	m_Vertices.erase(it);
 }
 
+size_t VertexCollection::GetNumVertices() const
+{
+	return m_Vertices.size();
+}
+
 VertexCollection::iterator VertexCollection::begin()
 {
 	return m_Vertices.begin();

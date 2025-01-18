@@ -18,6 +18,7 @@ public:
 public:
 	void AddVertex(const Vector& v);
 	void RemoveVertex(iterator it);
+	size_t GetNumVertices() const;
 
 	iterator begin();
 	iterator end();
