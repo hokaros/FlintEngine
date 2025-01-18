@@ -70,6 +70,11 @@ std::vector<Vector>& VertexCollection::GetVertices()
 	return m_Vertices;
 }
 
+const Vector& VertexCollection::operator[](size_t index) const
+{
+	return m_Vertices[index];
+}
+
 
 VertexCollection::EdgeCollectionId::EdgeCollectionId(size_t index)
 	: index(index)

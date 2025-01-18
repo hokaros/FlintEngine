@@ -29,6 +29,8 @@ public:
 	// TODO: remove the below intrusive getter
 	std::vector<Vector>& GetVertices();
 
+	const Vector& operator[](size_t index) const;
+
 private:
 	std::vector<Vector> m_Vertices;
 	std::vector<std::vector<IndexPair>> m_EdgeCollections;
