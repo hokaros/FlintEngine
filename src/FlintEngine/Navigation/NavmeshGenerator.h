@@ -11,10 +11,17 @@ class BoxCollider;
 
 namespace Navigation
 {
+	struct NavmeshGenerationParams
+	{
+		float merge_distance = 0.05f;
+
+		bool operator !=(const NavmeshGenerationParams& other) const;
+	};
+
 	class NavmeshGenerator
 	{
 	public:
-		static void Generate(const IGameObjectContainer& context, Navmesh& navmesh);
+		static void Generate(const IGameObjectContainer& context, const NavmeshGenerationParams& params, Navmesh& navmesh);
 
 	private:
 		using PointPair = std::pair<Vector, Vector>;
@@ -60,12 +67,12 @@ namespace Navigation
 		};
 
 	private:
-		NavmeshGenerator(const IGameObjectContainer& context);
+		NavmeshGenerator(const IGameObjectContainer& context, const NavmeshGenerationParams& params);
 		void GenerateImpl(Navmesh& navmesh);
 
 		static void ExcludeIgnoredColliders(std::vector<BoxCollider*>& colliders);
 
-		static void GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& collider_links);
+		void GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& collider_links);
 		static void TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh);
 		static void GetTrianglesFromLinks(const std::vector<IndexPair>& point_pairs, std::vector<IndexTriangle>& out_triangles);
 
@@ -74,15 +81,15 @@ namespace Navigation
 		static size_t CutColliderLinksForNew(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t new_collider_links_offset);
 		static void TryCutColliderLinksIJ(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset);
 
-		static void MergeColliderVertices(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
+		void MergeColliderVertices(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
 
 		static Segment IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices);
 		static bool TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos);
 
 	private:
 		const IGameObjectContainer& m_Context;
+		const NavmeshGenerationParams m_Params;
 
 		static constexpr float s_Tolerance = 0.001f;
-		static constexpr float s_MergeDistance = 0.1f;
 	};
 }

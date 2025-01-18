@@ -13,6 +13,7 @@ private:
 	void SaveScene(const Scene& scene);
 
 	void SaveSceneParameters(const SceneStringDesc& scene);
+	void SaveNavmeshGenerationParams(const NavmeshGenerationParamsStringDesc& params);
 	void SaveSceneGameObjects(const SceneStringDesc& scene);
 
 private:

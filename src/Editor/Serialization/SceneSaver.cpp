@@ -36,6 +36,12 @@ void SceneSaver::SaveScene(const Scene& scene)
 void SceneSaver::SaveSceneParameters(const SceneStringDesc& scene)
 {
     m_IndentPrinter.SaveKeyValuePair(SceneLoader::s_BackgroundColorKey, scene.background_color);
+    SaveNavmeshGenerationParams(scene.navmesh_generation_params);
+}
+
+void SceneSaver::SaveNavmeshGenerationParams(const NavmeshGenerationParamsStringDesc& params)
+{
+    m_IndentPrinter.SaveKeyValuePair(SceneLoader::s_NavmeshMergeDistKey, params.merge_distance);
 }
 
 void SceneSaver::SaveSceneGameObjects(const SceneStringDesc& scene)

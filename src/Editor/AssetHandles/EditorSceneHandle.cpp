@@ -16,6 +16,12 @@ Scene& EditorSceneHandle::GetScene() const
     return *m_Scene;
 }
 
+void EditorSceneHandle::SetNavmeshGenerationParams(const Navigation::NavmeshGenerationParams& params)
+{
+    m_Scene->SetNavmeshGenerationParams(params);
+    OnUnsavedChange();
+}
+
 void EditorSceneHandle::Save()
 {
     if (m_Scene != nullptr)

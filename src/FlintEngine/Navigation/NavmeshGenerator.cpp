@@ -11,14 +11,15 @@
 
 namespace Navigation
 {
-	void NavmeshGenerator::Generate(const IGameObjectContainer& context, Navmesh& navmesh)
+	void NavmeshGenerator::Generate(const IGameObjectContainer& context, const NavmeshGenerationParams& params, Navmesh& navmesh)
 	{
-		NavmeshGenerator generator(context);
+		NavmeshGenerator generator(context, params);
 		generator.GenerateImpl(navmesh);
 	}
 
-	NavmeshGenerator::NavmeshGenerator(const IGameObjectContainer& context)
+	NavmeshGenerator::NavmeshGenerator(const IGameObjectContainer& context, const NavmeshGenerationParams& params)
 		: m_Context(context)
+		, m_Params(params)
 	{
 
 	}
@@ -269,7 +270,8 @@ namespace Navigation
 				const Vector& v2 = *it2;
 
 				// TODO: what about groups when v_i should be merged with v_x but v_j shouldn't?
-				if ((v1 - v2).LengthSquared() < s_MergeDistance * s_MergeDistance)
+				const float merge_dist = m_Params.merge_distance;
+				if ((v1 - v2).LengthSquared() < merge_dist * merge_dist)
 				{
 					const Vector merged_vertex = (v1 + v2) / 2.0f;
 					vertices.MergeVertices(it1, it2, merged_vertex);
@@ -467,5 +469,11 @@ namespace Navigation
 	bool NavmeshGenerator::VertexLinker::IsColliderLink(IndexPair link) const
 	{
 		return ftl::vector_contains(m_ColliderLinks, link) || ftl::vector_contains(m_ColliderLinks, { link.second, link.first });
+	}
+
+
+	bool NavmeshGenerationParams::operator!=(const NavmeshGenerationParams& other) const
+	{
+		return merge_distance != other.merge_distance;
 	}
 }

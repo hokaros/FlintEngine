@@ -2,9 +2,15 @@
 #include "GameObjectSerializer.h"
 #include <Core/Scene.h>
 
+struct NavmeshGenerationParamsStringDesc
+{
+	std::string merge_distance;
+};
+
 struct SceneStringDesc
 {
 	std::string background_color;
+	NavmeshGenerationParamsStringDesc navmesh_generation_params;
 	std::vector<std::unique_ptr<GameObjectStringDescProxy>> game_objects;
 };
 
@@ -17,8 +23,10 @@ public:
 private:
 	static void SerializeGameObjects(const Scene& scene, SceneStringDesc& scene_serialized);
 	static void SerializeSceneParams(const Scene& scene, SceneStringDesc& scene_serialized);
+	static void SerializeNavmeshGenerationParams(const Navigation::NavmeshGenerationParams& params, NavmeshGenerationParamsStringDesc& params_serialized);
 
 	static void DeserializeGameObjects(const SceneStringDesc& scene_serialized, Scene& scene);
 	static void DeserializeSceneParams(const SceneStringDesc& scene_serialized, Scene& scene);
+	static void DeserializeNavmeshGenerationParams(const NavmeshGenerationParamsStringDesc& params_serialized, Navigation::NavmeshGenerationParams& params);
 };
 

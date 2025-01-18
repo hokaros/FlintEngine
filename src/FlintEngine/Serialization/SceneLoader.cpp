@@ -88,6 +88,10 @@ void SceneLoader::ParseSceneParamsLine(const std::string& line)
 	{
 		m_SceneDesc->background_color = value;
 	}
+	else if (key == s_NavmeshMergeDistKey)
+	{
+		m_SceneDesc->navmesh_generation_params.merge_distance = value;
+	}
 }
 
 void SceneLoader::ParseGameObjectTypeLine(const std::string& line)

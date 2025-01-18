@@ -7,7 +7,7 @@ void ScenePropertyEditor::RenderEmbedded()
     EditorSceneHandle* scene_handle = GetSceneHandle();
     if (scene_handle != nullptr)
     {
-        RenderSceneEditor(scene_handle->GetScene());
+        RenderSceneEditor(*scene_handle);
     }
     else
     {
@@ -32,29 +32,43 @@ void ScenePropertyEditor::SetScene(std::weak_ptr<EditorUniversalHandle> handle)
     InitValuesFromScene(scene);
 }
 
-void ScenePropertyEditor::RenderSceneEditor(Scene& scene)
+void ScenePropertyEditor::RenderSceneEditor(EditorSceneHandle& scene)
 {
     ImGui::Text("Scene properties");
-    RenderActions(scene);
+
+    ImGui::SeparatorText("Navmesh");
+    RenderNavmeshSection(scene.GetScene());
+    ImGui::Separator();
 
     ApplyValuesToScene(scene);
 }
 
-void ScenePropertyEditor::InitValuesFromScene(Scene& scene)
+void ScenePropertyEditor::InitValuesFromScene(const Scene& scene)
 {
+    m_NavmeshGenerationParams = scene.GetNavmeshGenerationParams();
 }
 
-void ScenePropertyEditor::ApplyValuesToScene(Scene& scene)
+void ScenePropertyEditor::ApplyValuesToScene(EditorSceneHandle& scene)
 {
-
+    if (m_NavmeshGenerationParams != scene.GetScene().GetNavmeshGenerationParams())
+    {
+        scene.SetNavmeshGenerationParams(m_NavmeshGenerationParams);
+    }
 }
 
-void ScenePropertyEditor::RenderActions(Scene& scene)
+void ScenePropertyEditor::RenderNavmeshSection(Scene& scene)
 {
+    RenderNavmeshGenerationParamsConfig();
+
     if (ImGui::Button("Generate Navmesh"))
     {
         scene.RegenerateNavmesh();
     }
+}
+
+void ScenePropertyEditor::RenderNavmeshGenerationParamsConfig()
+{
+    ImGui::InputFloat("Merge distance", &m_NavmeshGenerationParams.merge_distance);
 }
 
 EditorSceneHandle* ScenePropertyEditor::GetSceneHandle()

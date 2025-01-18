@@ -17,6 +17,7 @@ public:
 
 	static constexpr const char* s_GameObjectsKey = "game_objects";
 	static constexpr const char* s_BackgroundColorKey = "background_color";
+	static constexpr const char* s_NavmeshMergeDistKey = "navmesh_merge_distance";
 
 protected:
 	virtual SceneParsingState GetOuterParsingState(SceneParsingState current_state) override;

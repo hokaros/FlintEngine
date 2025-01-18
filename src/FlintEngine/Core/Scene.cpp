@@ -5,6 +5,7 @@
 Scene::Scene(const Scene& other)
 	: m_BackgroundColor(other.m_BackgroundColor)
 	, m_Navmesh(other.m_Navmesh)
+	, m_NavmeshGenerationParams(other.m_NavmeshGenerationParams)
 {
 	CopyObjectsFrom(other);
 }
@@ -130,7 +131,7 @@ const ObjectManager& Scene::GetObjectManager() const
 void Scene::RegenerateNavmesh()
 {
 	m_Navmesh.Clear();
-	Navigation::NavmeshGenerator::Generate(*this, m_Navmesh);
+	Navigation::NavmeshGenerator::Generate(*this, m_NavmeshGenerationParams, m_Navmesh);
 }
 
 void Scene::SetNavmesh(const Navigation::Navmesh& other)
@@ -141,4 +142,19 @@ void Scene::SetNavmesh(const Navigation::Navmesh& other)
 const Navigation::Navmesh& Scene::GetNavmesh() const
 {
 	return m_Navmesh;
+}
+
+const Navigation::NavmeshGenerationParams& Scene::GetNavmeshGenerationParams() const
+{
+	return m_NavmeshGenerationParams;
+}
+
+Navigation::NavmeshGenerationParams& Scene::GetNavmeshGenerationParams()
+{
+	return m_NavmeshGenerationParams;
+}
+
+void Scene::SetNavmeshGenerationParams(const Navigation::NavmeshGenerationParams& params)
+{
+	m_NavmeshGenerationParams = params;
 }

@@ -10,7 +10,9 @@ class EditorSceneHandle
 public:
 	EditorSceneHandle(std::unique_ptr<Scene> scene, const std::string& scene_path);
 
-	Scene& GetScene() const;
+	Scene& GetScene() const; // TODO: can we make it return a const-ref?
+
+	void SetNavmeshGenerationParams(const Navigation::NavmeshGenerationParams& params);
 
 	// ISaveable
 	virtual void Save() override;
