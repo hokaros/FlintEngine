@@ -92,14 +92,20 @@ const Vector& VertexCollection::operator[](size_t index) const
 void VertexCollection::RemoveVertices(size_t& v1, size_t& v2)
 {
 	RemoveVertex(v1);
-	v1--;
+	if (v1 > 0)
+	{
+		v1--;
+	}
 	if (v2 > v1)
 	{
 		v2--;
 	}
 
 	RemoveVertex(v2);
-	v2--;
+	if (v2 > 0)
+	{
+		v2--;
+	}
 	if (v1 > v2)
 	{
 		v1--;
