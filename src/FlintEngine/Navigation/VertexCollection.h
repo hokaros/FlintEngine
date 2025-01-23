@@ -17,8 +17,8 @@ public:
 
 public:
 	void AddVertex(const Vector& v);
-	void RemoveVertex(iterator it);
-	void MergeVertices(iterator& v1, iterator& v2, const Vector& result_vertex);
+	void RemoveVertex(size_t index);
+	void MergeVertices(size_t& v1, size_t& v2, const Vector& result_vertex);
 	size_t GetNumVertices() const;
 
 	iterator begin();
@@ -34,7 +34,7 @@ public:
 	const Vector& operator[](size_t index) const;
 
 private:
-	void RemoveVertices(iterator& v1, iterator& v2);
+	void RemoveVertices(size_t& v1, size_t& v2);
 	void ReattachEdges(size_t old_vertex1, size_t old_vertex2, size_t new_vertex);
 
 private:

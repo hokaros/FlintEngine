@@ -5,10 +5,8 @@ void VertexCollection::AddVertex(const Vector& v)
 	m_Vertices.push_back(v);
 }
 
-void VertexCollection::RemoveVertex(iterator it)
+void VertexCollection::RemoveVertex(size_t removed_index)
 {
-	const size_t removed_index = it - begin();
-
 	for (std::vector<IndexPair>& edges : m_EdgeCollections)
 	{
 		for (auto it = edges.begin(); it != edges.end();)
@@ -34,18 +32,16 @@ void VertexCollection::RemoveVertex(iterator it)
 		}
 	}
 
-	m_Vertices.erase(it);
+	m_Vertices.erase(m_Vertices.begin() + removed_index);
 }
 
-void VertexCollection::MergeVertices(iterator& v1, iterator& v2, const Vector& result_vertex)
+void VertexCollection::MergeVertices(size_t& v1, size_t& v2, const Vector& result_vertex)
 {
 	m_Vertices.push_back(result_vertex);
 
 	const size_t merged_vertex_index = m_Vertices.size() - 1;
 
-	const size_t v1_idx = v1 - m_Vertices.begin();
-	const size_t v2_idx = v2 - m_Vertices.begin();
-	ReattachEdges(v1_idx, v2_idx, merged_vertex_index);
+	ReattachEdges(v1, v2, merged_vertex_index);
 
 	RemoveVertices(v1, v2);
 }
@@ -93,7 +89,7 @@ const Vector& VertexCollection::operator[](size_t index) const
 	return m_Vertices[index];
 }
 
-void VertexCollection::RemoveVertices(iterator& v1, iterator& v2)
+void VertexCollection::RemoveVertices(size_t& v1, size_t& v2)
 {
 	RemoveVertex(v1);
 	v1--;

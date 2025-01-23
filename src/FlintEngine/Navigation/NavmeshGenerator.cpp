@@ -259,22 +259,22 @@ namespace Navigation
 
 	void NavmeshGenerator::MergeColliderVertices(VertexCollection& vertices, std::vector<IndexPair>& collider_links)
 	{
-		for (auto it1 = vertices.begin(); it1 != vertices.end(); it1++)
+		for (size_t i = 0; i < vertices.GetNumVertices(); i++)
 		{
-			for (auto it2 = it1 + 1; it2 != vertices.end(); it2++)
+			for (size_t j = i + 1; j < vertices.GetNumVertices(); j++)
 			{
-				if (it2 <= it1)
+				if (j <= i)
 					continue;
 
-				const Vector& v1 = *it1;
-				const Vector& v2 = *it2;
+				const Vector& v1 = vertices[i];
+				const Vector& v2 = vertices[j];
 
 				// TODO: what about groups when v_i should be merged with v_x but v_j shouldn't?
 				const float merge_dist = m_Params.merge_distance;
 				if ((v1 - v2).LengthSquared() < merge_dist * merge_dist)
 				{
 					const Vector merged_vertex = (v1 + v2) / 2.0f;
-					vertices.MergeVertices(it1, it2, merged_vertex);
+					vertices.MergeVertices(i, j, merged_vertex);
 				}
 			}
 		}
