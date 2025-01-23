@@ -16,7 +16,8 @@ public:
 	};
 
 public:
-	void AddVertex(const Vector& v);
+	// returns the index of the new vertex
+	size_t AddVertex(const Vector& v);
 	void RemoveVertex(size_t index);
 	void MergeVertices(size_t& v1, size_t& v2, const Vector& result_vertex);
 	size_t GetNumVertices() const;
@@ -28,6 +29,7 @@ public:
 	std::vector<IndexPair>& CreateAndGetEdgeCollection();
 	std::vector<IndexPair>& GetEdgeCollection(EdgeCollectionId id);
 
+	const std::vector<Vector>& GetVertices() const;
 	// TODO: remove the below intrusive getter
 	std::vector<Vector>& GetVertices();
 

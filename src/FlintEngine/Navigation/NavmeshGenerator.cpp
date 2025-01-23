@@ -80,7 +80,7 @@ namespace Navigation
 			collider->GetVertices(vertices, collider_links);
 		}
 
-		CutColliderLinks(vertices, collider_links);
+		CutColliderLinks(vertex_collection, collider_links);
 		MergeColliderVertices(vertex_collection, collider_links);
 
 		out_vertices = std::move(vertices);
@@ -122,7 +122,7 @@ namespace Navigation
 		}
 	}
 
-	void NavmeshGenerator::CutColliderLinks(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links)
+	void NavmeshGenerator::CutColliderLinks(VertexCollection& vertices, std::vector<IndexPair>& collider_links)
 	{
 		size_t new_collider_links_offset = 0;
 
@@ -144,7 +144,7 @@ namespace Navigation
 		}
 	}
 
-	size_t NavmeshGenerator::CutColliderLinksForNew(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t new_collider_links_offset)
+	size_t NavmeshGenerator::CutColliderLinksForNew(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t new_collider_links_offset)
 	{
 		size_t newest_collider_links_offset = collider_links.size();
 
@@ -160,13 +160,13 @@ namespace Navigation
 		return newest_collider_links_offset;
 	}
 
-	void NavmeshGenerator::TryCutColliderLinksIJ(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset)
+	void NavmeshGenerator::TryCutColliderLinksIJ(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset)
 	{
 		const IndexPair link1 = collider_links[i];
 		const IndexPair link2 = collider_links[j];
 
-		const Segment seg1 = IndexPairToSegment(link1, vertices);
-		const Segment seg2 = IndexPairToSegment(link2, vertices);
+		const Segment seg1 = IndexPairToSegment(link1, vertices.GetVertices());
+		const Segment seg2 = IndexPairToSegment(link2, vertices.GetVertices());
 
 		if (seg1.GetLengthSq() == 0.f || seg2.GetLengthSq() == 0.f)
 			return;
@@ -230,8 +230,7 @@ namespace Navigation
 		}
 		else
 		{
-			vertices.push_back(crossing_point);
-			const size_t crossing_point_index = vertices.size() - 1;
+			const size_t crossing_point_index = vertices.AddVertex(crossing_point);
 
 			// Add new collider links
 			collider_links.push_back(IndexPair(link1.first, crossing_point_index));
@@ -241,13 +240,19 @@ namespace Navigation
 
 			// Remove old collider links
 			collider_links.erase(collider_links.begin() + i);
-			i--;
+			if (i > 0)
+			{
+				i--;
+			}
 			if (j >= i)
 			{
 				j--;
 			}
 			collider_links.erase(collider_links.begin() + j);
-			j--;
+			if (j > 0)
+			{
+				j--;
+			}
 			if (i >= j)
 			{
 				i--;

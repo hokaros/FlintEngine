@@ -1,8 +1,9 @@
 #include "VertexCollection.h"
 
-void VertexCollection::AddVertex(const Vector& v)
+size_t VertexCollection::AddVertex(const Vector& v)
 {
 	m_Vertices.push_back(v);
+	return m_Vertices.size() - 1;
 }
 
 void VertexCollection::RemoveVertex(size_t removed_index)

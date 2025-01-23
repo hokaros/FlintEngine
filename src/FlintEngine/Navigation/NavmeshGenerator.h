@@ -76,10 +76,10 @@ namespace Navigation
 		static void TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh);
 		static void GetTrianglesFromLinks(const std::vector<IndexPair>& point_pairs, std::vector<IndexTriangle>& out_triangles);
 
-		static void CutColliderLinks(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links);
+		static void CutColliderLinks(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
 		// Returns new new collider links offset
-		static size_t CutColliderLinksForNew(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t new_collider_links_offset);
-		static void TryCutColliderLinksIJ(std::vector<Vector>& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset);
+		static size_t CutColliderLinksForNew(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t new_collider_links_offset);
+		static void TryCutColliderLinksIJ(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset);
 
 		void MergeColliderVertices(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
 
