@@ -7,7 +7,7 @@
 
 void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 {
-	RenderVertexIndices(renderer);
+	//RenderVertexIndices(renderer);
 	RenderEdges(renderer);
 	RenderTriangles(renderer);
 	//RenderEdgeIndices(renderer);

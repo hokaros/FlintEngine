@@ -1,5 +1,7 @@
 #include "VertexCollection.h"
 
+const VertexCollection::EdgeCollectionId VertexCollection::EdgeCollectionId::INVALID{ UINT32_MAX };
+
 size_t VertexCollection::AddVertex(const Vector& v)
 {
 	m_Vertices.push_back(v);
@@ -135,6 +137,11 @@ void VertexCollection::ReattachEdges(size_t old_vertex1, size_t old_vertex2, siz
 	}
 }
 
+
+VertexCollection::EdgeCollectionId::EdgeCollectionId()
+	: index(UINT32_MAX)
+{
+}
 
 VertexCollection::EdgeCollectionId::EdgeCollectionId(size_t index)
 	: index(index)

@@ -72,7 +72,7 @@ namespace Navigation
 
 		static void ExcludeIgnoredColliders(std::vector<BoxCollider*>& colliders);
 
-		void GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& collider_links);
+		void GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, VertexCollection& out_vertices, VertexCollection::EdgeCollectionId& out_collider_links_id);
 		static void TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh);
 		static void GetTrianglesFromLinks(const std::vector<IndexPair>& point_pairs, std::vector<IndexTriangle>& out_triangles);
 

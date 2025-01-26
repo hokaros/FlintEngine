@@ -35,15 +35,15 @@ namespace Navigation
 		GameObject::FindComponentsInHierarchies(game_objects, colliders);
 		ExcludeIgnoredColliders(colliders);
 
-		std::vector<Vector> vertices;
-		std::vector<IndexPair> collider_links;
-		GetVertices(walkables, colliders, vertices, collider_links);
+		VertexCollection vertices;
+		VertexCollection::EdgeCollectionId collider_links_id;
+		GetVertices(walkables, colliders, vertices, collider_links_id);
 
-		VertexLinker linker(colliders, vertices, collider_links);
+		VertexLinker linker(colliders, vertices.GetVertices(), vertices.GetEdgeCollection(collider_links_id));
 		std::vector<IndexPair> links;
 		linker.Link(links);
 
-		TransferLinksToNavmesh(vertices, links, navmesh);
+		TransferLinksToNavmesh(vertices.GetVertices(), links, navmesh);
 
 		navmesh.OnNavmeshCompleted();
 	}
@@ -64,27 +64,25 @@ namespace Navigation
 		}
 	}
 
-	void NavmeshGenerator::GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, std::vector<Vector>& out_vertices, std::vector<IndexPair>& out_collider_links)
+	void NavmeshGenerator::GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, VertexCollection& out_vertices, VertexCollection::EdgeCollectionId& out_collider_links_id)
 	{
-		VertexCollection vertex_collection;
-		std::vector<IndexPair>& collider_links = vertex_collection.CreateAndGetEdgeCollection();
-		std::vector<Vector>& vertices = vertex_collection.GetVertices();
+		out_collider_links_id = out_vertices.CreateEdgeCollection();
+		std::vector<IndexPair>& collider_links = out_vertices.GetEdgeCollection(out_collider_links_id);
+
+		std::vector<Vector>& underlying_vertices = out_vertices.GetVertices();
 
 		for (const WalkableSurface* surf : walkables)
 		{
-			surf->GetVertices(vertices, collider_links);
+			surf->GetVertices(underlying_vertices, collider_links);
 		}
 
 		for (const BoxCollider* collider : colliders)
 		{
-			collider->GetVertices(vertices, collider_links);
+			collider->GetVertices(underlying_vertices, collider_links);
 		}
 
-		CutColliderLinks(vertex_collection, collider_links);
-		MergeColliderVertices(vertex_collection, collider_links);
-
-		out_vertices = std::move(vertices);
-		out_collider_links = std::move(collider_links);
+		CutColliderLinks(out_vertices, collider_links);
+		MergeColliderVertices(out_vertices, collider_links);
 	}
 
 	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh)

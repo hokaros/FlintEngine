@@ -10,9 +10,12 @@ public:
 
 	struct EdgeCollectionId
 	{
+		EdgeCollectionId();
 		explicit EdgeCollectionId(size_t index);
 
 		size_t index;
+
+		static const EdgeCollectionId INVALID;
 	};
 
 public:
