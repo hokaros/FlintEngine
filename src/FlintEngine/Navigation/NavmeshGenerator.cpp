@@ -81,8 +81,8 @@ namespace Navigation
 			collider->GetVertices(underlying_vertices, collider_links);
 		}
 
-		CutColliderLinks(out_vertices, collider_links);
 		MergeColliderVertices(out_vertices, collider_links);
+		CutColliderLinks(out_vertices, collider_links);
 	}
 
 	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh)
