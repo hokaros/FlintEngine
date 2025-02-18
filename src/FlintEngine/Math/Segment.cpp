@@ -58,6 +58,87 @@ Vector Segment::GetMiddle() const
 	return (start + end) / 2.0f;
 }
 
+std::vector<Segment> Segment::CutWith(const Segment& other) const
+{
+	return Cut(*this, other);
+}
+
+std::vector<Segment> Segment::Cut(const Segment& seg1, const Segment& seg2)
+{
+	std::vector<Segment> out_segments;
+	out_segments.reserve(4); // 4 is the maximum number of segments after the operation
+
+	auto return_input = [&out_segments, &seg1, &seg2]()
+	{
+		out_segments.clear();
+		out_segments.emplace_back(seg1);
+		out_segments.emplace_back(seg2);
+		return out_segments;
+	};
+
+	if (seg1.GetLengthSq() == 0.f || seg2.GetLengthSq() == 0.f)
+		return return_input();
+
+	if (seg1.IsSameDirection(seg2))
+		return return_input();
+
+	const Vector crossing_point = seg1.GetCrossingPoint(seg2);
+	if (crossing_point == Vector::INVALID)
+		return return_input();
+
+	Vector crossing_at_segment_end;
+	const bool seg1_ends_at_crossing = TryGetEqualSegmentEnd(seg1, crossing_point, crossing_at_segment_end);
+	const bool seg2_ends_at_crossing = TryGetEqualSegmentEnd(seg2, crossing_point, crossing_at_segment_end);
+	if (seg1_ends_at_crossing && seg2_ends_at_crossing)
+		return return_input();
+
+	if (seg1_ends_at_crossing || seg2_ends_at_crossing)
+	{ // One segment is not cut, there are no new vertices, the result are 3 segments with 1 mutual end
+		auto return_3_segments = [&out_segments](const Vector& center, const Vector& end1, const Vector& end2, const Vector& end3)
+		{
+			out_segments.clear();
+			out_segments.emplace_back(center, end1);
+			out_segments.emplace_back(center, end2);
+			out_segments.emplace_back(center, end3);
+			return out_segments;
+		};
+
+		// Check the configuration in which to cut
+		if (seg1.start == crossing_at_segment_end)
+		{ // Cutting seg2 in the point of seg1.start
+			return return_3_segments(seg1.start, seg1.end, seg2.start, seg2.end);
+		}
+		else if (seg1.end == crossing_at_segment_end)
+		{ // Cutting seg2 in the point of seg1.end
+			return return_3_segments(seg1.end, seg1.start, seg2.start, seg2.end);
+		}
+		else if (seg2.start == crossing_at_segment_end)
+		{ // Cutting seg1 in the point of seg2.start
+			return return_3_segments(seg2.start, seg2.end, seg1.start, seg1.end);
+		}
+		else
+		{ // Cutting seg1 in the point of seg2.end
+			return return_3_segments(seg2.end, seg2.start, seg1.start, seg1.end);
+		}
+	}
+	else
+	{ // The crossing point is between all ends
+		// Cut all segments to the crossing point
+		out_segments.clear();
+		out_segments.emplace_back(crossing_point, seg1.start);
+		out_segments.emplace_back(crossing_point, seg1.end);
+		out_segments.emplace_back(crossing_point, seg2.start);
+		out_segments.emplace_back(crossing_point, seg2.end);
+		return out_segments;
+	}
+}
+
+bool Segment::operator==(const Segment& other) const
+{
+	return (start == other.start || start == other.end)
+		&& (end == other.start || end == other.end);
+}
+
 bool Segment::IsPointBetweenEnds(const Vector& target) const
 {
 	const Vector from_p1_to_p2 = end - start;
@@ -102,4 +183,20 @@ bool Segment::IsAngleFirstOrThirdQuarter(float rad)
 
 	const float normalized_angle = abs(NormalizeRadians(rad));
 	return normalized_angle <= first_quarter || normalized_angle >= third_quarter;
+}
+
+bool Segment::TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos)
+{
+	if (segment.start == desired_end_pos)
+	{
+		end_pos = segment.start;
+		return true;
+	}
+	if (segment.end == desired_end_pos)
+	{
+		end_pos = segment.end;
+		return true;
+	}
+
+	return false;
 }

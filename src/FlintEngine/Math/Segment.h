@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector.h"
+#include <vector>
 
 struct Segment
 {
@@ -32,6 +33,11 @@ public:
 	float GetLengthSq() const;
 	Vector GetMiddle() const;
 
+	std::vector<Segment> CutWith(const Segment& other) const;
+	static std::vector<Segment> Cut(const Segment& s1, const Segment& s2);
+
+	bool operator==(const Segment& other) const;
+
 private:
 	bool IsPointBetweenEnds(const Vector& point) const;
 
@@ -40,4 +46,6 @@ private:
 
 	static float NormalizeRadians(float rad);
 	static bool IsAngleFirstOrThirdQuarter(float rad);
+
+	static bool TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos);
 };
