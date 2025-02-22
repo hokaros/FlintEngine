@@ -75,8 +75,9 @@ namespace Navigation
 		static void ExcludeIgnoredColliders(std::vector<BoxCollider*>& colliders);
 
 		void GetVertices(const std::vector<WalkableSurface*>& walkables, const std::vector<BoxCollider*>& colliders, VertexCollection& out_vertices, VertexCollection::EdgeCollectionId& out_collider_links_id);
-		static void TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh);
+		static void TransferLinksToNavmesh(const std::vector<Vector>& points, std::vector<IndexPair>&& links, Navmesh& out_navmesh);
 		static void GetTrianglesFromLinks(const std::vector<IndexPair>& point_pairs, std::vector<IndexTriangle>& out_triangles);
+		static void RemoveLinksNotInTriangles(std::vector<IndexPair>& links, const std::vector<IndexTriangle>& triangles);
 
 		static void CutColliderLinks(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
 		// Returns new new collider links offset
@@ -89,6 +90,8 @@ namespace Navigation
 
 		static Segment IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices);
 		static bool TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos);
+
+		static bool IsLinkInTriangles(IndexPair link, const std::vector<IndexTriangle>& triangles);
 
 	private:
 		const IGameObjectContainer& m_Context;

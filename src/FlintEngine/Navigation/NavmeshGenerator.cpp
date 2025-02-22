@@ -45,7 +45,7 @@ namespace Navigation
 		std::vector<IndexPair> links;
 		linker.Link(links);
 
-		TransferLinksToNavmesh(vertices.GetVertices(), links, navmesh);
+		TransferLinksToNavmesh(vertices.GetVertices(), std::move(links), navmesh);
 
 		navmesh.OnNavmeshCompleted();
 	}
@@ -88,14 +88,16 @@ namespace Navigation
 		CutColliderLinks(out_vertices, collider_links);
 	}
 
-	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, const std::vector<IndexPair>& links, Navmesh& out_navmesh)
+	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, std::vector<IndexPair>&& links, Navmesh& out_navmesh)
 	{
 		out_navmesh.AddVertices(points);
 
 		std::vector<IndexTriangle> triangles;
 		GetTrianglesFromLinks(links, triangles);
 		out_navmesh.AddTriangles(triangles);
-		
+
+		//RemoveLinksNotInTriangles(links, triangles);
+
 		out_navmesh.AddEdges(links);
 
 		// TODO: don't add triangles which are from colliders (it's a problem only if we have triangular colliders)
@@ -346,6 +348,19 @@ namespace Navigation
 		{
 			end_pos = segment.end;
 			return true;
+		}
+
+		return false;
+	}
+
+	bool NavmeshGenerator::IsLinkInTriangles(IndexPair link, const std::vector<IndexTriangle>& triangles)
+	{
+		for (const IndexTriangle& tri : triangles)
+		{
+			if (tri.ContainsIndex(link.first) && tri.ContainsIndex(link.second))
+			{
+				return true;
+			}
 		}
 
 		return false;
