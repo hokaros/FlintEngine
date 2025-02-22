@@ -83,7 +83,7 @@ namespace Navigation
 			collider->GetVertices(underlying_vertices, collider_links);
 		}
 
-		MergeColliderVertices(out_vertices, collider_links);
+		MergeVertices(out_vertices);
 		MergeDuplicateLinks(collider_links);
 		CutColliderLinks(out_vertices, collider_links);
 	}
@@ -135,8 +135,10 @@ namespace Navigation
 				break;
 
 			new_collider_links_offset = new_new_collider_links_offset;
-			i++;
 
+			MergeDuplicateLinksForNew(collider_links, new_collider_links_offset);
+
+			i++;
 			if (i > 1000)
 			{
 				FE_WARN("Cutting collider links took too long. Skipping the rest");
@@ -255,7 +257,30 @@ namespace Navigation
 		}
 	}
 
-	void NavmeshGenerator::MergeColliderVertices(VertexCollection& vertices, std::vector<IndexPair>& collider_links)
+	void NavmeshGenerator::MergeDuplicateLinksForNew(std::vector<IndexPair>& links, size_t new_links_offset)
+	{
+		// Only new links with every other
+		for (size_t all_i = 0; all_i < links.size(); all_i++)
+		{
+			size_t new_i = all_i >= new_links_offset ? all_i + 1 : new_links_offset; // Don't duplicate checks between new links
+			for (; new_i < links.size();)
+			{
+				const IndexPair& link_from_new = links[new_i];
+				const IndexPair& link_from_all = links[all_i];
+
+				if (link_from_new == link_from_all)
+				{
+					links.erase(links.begin() + new_i);
+				}
+				else
+				{
+					new_i++;
+				}
+			}
+		}
+	}
+
+	void NavmeshGenerator::MergeVertices(VertexCollection& vertices)
 	{
 		for (size_t i = 0; i < vertices.GetNumVertices(); i++)
 		{

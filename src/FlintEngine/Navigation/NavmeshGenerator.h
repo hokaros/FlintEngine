@@ -80,8 +80,9 @@ namespace Navigation
 		// Returns new new collider links offset
 		static size_t CutColliderLinksForNew(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t new_collider_links_offset);
 		static void TryCutColliderLinksIJ(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset);
+		static void MergeDuplicateLinksForNew(std::vector<IndexPair>& links, size_t new_links_offset);
 
-		void MergeColliderVertices(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
+		void MergeVertices(VertexCollection& vertices);
 		void MergeDuplicateLinks(std::vector<IndexPair>& collider_links);
 
 		static Segment IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices);
