@@ -9,6 +9,8 @@ public:
 
 	void Run(const char* starting_scene_path);
 
+	Window& GetWindow();
+
 private:
 	InputController m_Input;
 	AssetManager m_AssetManager;

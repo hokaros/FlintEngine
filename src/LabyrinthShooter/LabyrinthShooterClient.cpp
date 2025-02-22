@@ -10,6 +10,8 @@ int main()
 	constexpr const char* starting_scene_path = "Assets/main.scene";
 
 	StandaloneGame game(window_size);
+	//game.GetWindow().GetSceneRenderer().SetViewport(Rect(Vector(100, -300), Vector(700, 700)));
+
 	game.Run(starting_scene_path);
 
 	return 0;

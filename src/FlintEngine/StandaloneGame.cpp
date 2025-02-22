@@ -19,3 +19,8 @@ void StandaloneGame::Run(const char* starting_scene_path)
 
 	game.Run();
 }
+
+Window& StandaloneGame::GetWindow()
+{
+	return m_Window;
+}
