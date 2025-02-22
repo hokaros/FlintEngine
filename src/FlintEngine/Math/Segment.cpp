@@ -58,12 +58,12 @@ Vector Segment::GetMiddle() const
 	return (start + end) / 2.0f;
 }
 
-std::vector<Segment> Segment::CutWith(const Segment& other) const
+std::vector<Segment> Segment::CutWith(const Segment& other, float tolerance) const
 {
-	return Cut(*this, other);
+	return Cut(*this, other, tolerance);
 }
 
-std::vector<Segment> Segment::Cut(const Segment& seg1, const Segment& seg2)
+std::vector<Segment> Segment::Cut(const Segment& seg1, const Segment& seg2, float tolerance)
 {
 	std::vector<Segment> out_segments;
 	out_segments.reserve(4); // 4 is the maximum number of segments after the operation

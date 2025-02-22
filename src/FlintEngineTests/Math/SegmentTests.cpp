@@ -138,4 +138,62 @@ TEST(SUITE_NAME, CutAtEndAt90deg)
 	assertEqualSegments(expected_result, cut_result);
 }
 
+TEST(SUITE_NAME, CutAtEndAt45deg)
+{
+	// Arrange
+	const float vertical_x = 30.0f;
+	const Segment vertical_segment = Segment(Vector(vertical_x, 10), Vector(vertical_x, 60));
+
+	const Segment diagonal_segment = Segment(Vector(15, 10), Vector(vertical_x, 25));
+
+	// Act
+	const std::vector<Segment> cut_result = diagonal_segment.CutWith(vertical_segment);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(Segment(vertical_segment));
+	expected_result.emplace_back(Segment(Vector(30, 10), Vector(30, 25)));
+	expected_result.emplace_back(Segment(Vector(30, 25), Vector(30, 60)));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
+TEST(SUITE_NAME, CutAt2EndsAt90deg)
+{
+	// Arrange
+	const float vertical_x = 60.0f;
+	const float horizontal_y = 60.0f;
+
+	const Segment vertical_segment = Segment(Vector(vertical_x, 20), Vector(vertical_x, horizontal_y));
+
+	const Segment horizontal_segment = Segment(Vector(10, horizontal_y), Vector(vertical_x, horizontal_y));
+
+	// Act
+	const std::vector<Segment> cut_result = horizontal_segment.CutWith(vertical_segment);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(Segment(vertical_segment));
+	expected_result.emplace_back(Segment(horizontal_segment));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
+TEST(SUITE_NAME, CutAt2EndsAt45deg)
+{
+	// Arrange
+	const Segment vertical_segment = Segment(Vector(50, 10), Vector(50, 50));
+	const Segment diagonal_segment = Segment(Vector(10, 10), Vector(50, 50));
+
+	// Act
+	const std::vector<Segment> cut_result = diagonal_segment.CutWith(vertical_segment);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(Segment(vertical_segment));
+	expected_result.emplace_back(Segment(diagonal_segment));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
 #undef SUITE_NAME
