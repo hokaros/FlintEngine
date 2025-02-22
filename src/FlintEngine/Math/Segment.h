@@ -37,6 +37,7 @@ public:
 	static std::vector<Segment> Cut(const Segment& s1, const Segment& s2);
 
 	bool operator==(const Segment& other) const;
+	bool operator!=(const Segment& other) const;
 
 private:
 	bool IsPointBetweenEnds(const Vector& point) const;

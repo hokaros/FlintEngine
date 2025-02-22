@@ -167,6 +167,18 @@ float Vector::GetDistanceSq(const Vector& p1, const Vector& p2)
 }
 
 
+bool VectorTreeComparator::operator()(const Vector& v1, const Vector& v2) const
+{
+	if (v1.x < v2.x)
+		return true;
+
+	if (v1.x > v2.x)
+		return false;
+
+	return v1.y < v2.y;
+}
+
+
 
 VectorInt::VectorInt(const Vector& other)
 	: x(other.x), y(other.y) {

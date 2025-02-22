@@ -82,6 +82,7 @@ namespace Navigation
 		static void TryCutColliderLinksIJ(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset);
 
 		void MergeColliderVertices(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
+		void MergeDuplicateLinks(std::vector<IndexPair>& collider_links);
 
 		static Segment IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices);
 		static bool TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos);

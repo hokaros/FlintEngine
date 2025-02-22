@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <algorithm>
+#include <unordered_map>
+
 #include <Components/WalkableSurface.h>
 #include <Components/BoxCollider.h>
 #include <Core/GameObject.h>
@@ -82,6 +84,7 @@ namespace Navigation
 		}
 
 		MergeColliderVertices(out_vertices, collider_links);
+		MergeDuplicateLinks(collider_links);
 		CutColliderLinks(out_vertices, collider_links);
 	}
 
@@ -160,103 +163,95 @@ namespace Navigation
 
 	void NavmeshGenerator::TryCutColliderLinksIJ(VertexCollection& vertices, std::vector<IndexPair>& collider_links, size_t& i, size_t& j, size_t& new_collider_links_offset)
 	{
-		const IndexPair link1 = collider_links[i];
-		const IndexPair link2 = collider_links[j];
+		const IndexPair orig_link1 = collider_links[i];
+		const IndexPair orig_link2 = collider_links[j];
 
-		const Segment seg1 = IndexPairToSegment(link1, vertices.GetVertices());
-		const Segment seg2 = IndexPairToSegment(link2, vertices.GetVertices());
+		const Segment orig_seg1 = IndexPairToSegment(orig_link1, vertices.GetVertices());
+		const Segment orig_seg2 = IndexPairToSegment(orig_link2, vertices.GetVertices());
 
-		if (seg1.GetLengthSq() == 0.f || seg2.GetLengthSq() == 0.f)
-			return;
+		std::vector<Segment> cut_result = orig_seg1.CutWith(orig_seg2);
 
-		if (seg1.IsSameDirection(seg2))
-			return; // TODO: should we handle it?
+		// TODO: extract a class
+		using VertexMapT = std::map<Vector, size_t, VectorTreeComparator>;
+		VertexMapT segment_vertices_to_indices; // position of the vertex -> index of the vertex
+		auto dict_contains_vertex = [](const VertexMapT& dict, const Vector& vertex)
+		{
+			return dict.find(vertex) != dict.end();
+		};
+		auto insert_vertex_at_index_to_dict = [&](VertexMapT& dict, size_t vertex_index)
+		{
+			const Vector& vertex_pos = vertices[vertex_index];
+			if (dict_contains_vertex(dict, vertex_pos))
+				return;
 
-		const Vector crossing_point = seg1.GetCrossingPoint(seg2);
-		if (crossing_point == Vector::INVALID)
-			return;
+			dict.insert({ vertex_pos, vertex_index });
+		};
 
-		Vector crossing_at_segment_end;
-		const bool seg1_contains_crossing = TryGetEqualSegmentEnd(seg1, crossing_point, crossing_at_segment_end);
-		const bool seg2_contains_crossing = TryGetEqualSegmentEnd(seg2, crossing_point, crossing_at_segment_end);
-		if (seg1_contains_crossing && seg2_contains_crossing)
-			return;
+		// Original vertices
+		insert_vertex_at_index_to_dict(segment_vertices_to_indices, orig_link1.first);
+		insert_vertex_at_index_to_dict(segment_vertices_to_indices, orig_link1.second);
+		insert_vertex_at_index_to_dict(segment_vertices_to_indices, orig_link2.first);
+		insert_vertex_at_index_to_dict(segment_vertices_to_indices, orig_link2.second);
 
-		if (seg1_contains_crossing || seg2_contains_crossing)
-		{ // One segment is not cut, there are no new vertices
-			size_t crossing_point_index = 0;
-			size_t cut_link_index = 0;
-
-			// Check the configuration in which to cut
-			if (vertices[link1.first] == crossing_at_segment_end)
+		auto add_vertex_if_absent = [&](const Vector& vertex)
+		{
+			if (!dict_contains_vertex(segment_vertices_to_indices, vertex))
 			{
-				crossing_point_index = link1.first;
-				cut_link_index = j;
+				const size_t vertex_index = vertices.AddVertex(vertex);
+				insert_vertex_at_index_to_dict(segment_vertices_to_indices, vertex_index);
 			}
-			else if (vertices[link1.second] == crossing_at_segment_end)
+		};
+		
+		// Add new segments
+		bool is_orig_seg1_present = false;
+		bool is_orig_seg2_present = false;
+		for (const Segment& new_seg : cut_result)
+		{
+			if (new_seg == orig_seg1)
 			{
-				crossing_point_index = link1.second;
-				cut_link_index = j;
+				is_orig_seg1_present = true;
+
+				//FE_ASSERT(new_seg != orig_seg2, "New segment is equal to 2 original ones");
 			}
-			else if (vertices[link2.first] == crossing_at_segment_end)
+			else if (new_seg == orig_seg2)
 			{
-				crossing_point_index = link2.first;
-				cut_link_index = i;
+				is_orig_seg2_present = true;
 			}
 			else
-			{
-				crossing_point_index = link2.second;
-				cut_link_index = i;
-			}
+			{ // New segment is new
+				add_vertex_if_absent(new_seg.start);
+				add_vertex_if_absent(new_seg.end);
 
-			// Perform the cut 
-			const IndexPair cut_link = collider_links[cut_link_index];
-			collider_links.push_back(IndexPair(cut_link.first, crossing_point_index));
-			collider_links.push_back(IndexPair(cut_link.second, crossing_point_index));
-			collider_links.erase(collider_links.begin() + cut_link_index);
+				const size_t seg_start_index = segment_vertices_to_indices[new_seg.start];
+				const size_t seg_end_index = segment_vertices_to_indices[new_seg.end];
 
-			if (i >= cut_link_index)
-			{
-				i--;
+				collider_links.push_back(IndexPair(seg_start_index, seg_end_index));
 			}
-			if (j >= cut_link_index)
-			{
-				j--;
-			}
-
-			new_collider_links_offset--;
 		}
-		else
+
+		// Remove the ones that are no longer present
+		if (!is_orig_seg1_present)
 		{
-			const size_t crossing_point_index = vertices.AddVertex(crossing_point);
-
-			// Add new collider links
-			collider_links.push_back(IndexPair(link1.first, crossing_point_index));
-			collider_links.push_back(IndexPair(link1.second, crossing_point_index));
-			collider_links.push_back(IndexPair(link2.first, crossing_point_index));
-			collider_links.push_back(IndexPair(link2.second, crossing_point_index));
-
-			// Remove old collider links
 			collider_links.erase(collider_links.begin() + i);
-			if (i > 0)
-			{
-				i--;
-			}
+			new_collider_links_offset--;
+			i--;
+
 			if (j >= i)
 			{
 				j--;
 			}
+		}
+
+		if (!is_orig_seg2_present)
+		{
 			collider_links.erase(collider_links.begin() + j);
-			if (j > 0)
-			{
-				j--;
-			}
+			new_collider_links_offset--;
+			j--;
+
 			if (i >= j)
 			{
 				i--;
 			}
-
-			new_collider_links_offset -= 2;
 		}
 	}
 
@@ -281,6 +276,11 @@ namespace Navigation
 				}
 			}
 		}
+	}
+
+	void NavmeshGenerator::MergeDuplicateLinks(std::vector<IndexPair>& collider_links)
+	{
+		// TODO
 	}
 
 	Segment NavmeshGenerator::IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices)

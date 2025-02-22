@@ -130,6 +130,12 @@ public:
     static const Vector INVALID;
 };
 
+class VectorTreeComparator
+{
+public:
+    bool operator()(const Vector& v1, const Vector& v2) const;
+};
+
 struct Rect 
 {
 public:
