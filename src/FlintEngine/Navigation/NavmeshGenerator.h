@@ -31,10 +31,12 @@ namespace Navigation
 		public:
 			void RegisterLink(size_t p1, size_t p2);
 			bool TryGetMutualNeighbour(size_t p1, size_t p2, size_t& neighbour) const;
+			void GetMutualNeighbours(size_t p1, size_t p2, std::vector<size_t>& out_neighbours) const;
 
 		private:
 			void RegisterNeighbour(size_t p, size_t neighbour);
 			static bool TryGetMutualPoint(const std::vector<size_t>& points1, const std::vector<size_t>& points2, size_t& mutual);
+			static void GetMutualPoints(const std::vector<size_t>& points1, const std::vector<size_t>& points2, std::vector<size_t>& out_mutuals);
 
 		private:
 			std::map<size_t, std::vector<size_t>> m_PointNeighbours;

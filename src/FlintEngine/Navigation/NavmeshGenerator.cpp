@@ -115,10 +115,14 @@ namespace Navigation
 
 			neighbouring_dict.RegisterLink(p1, p2);
 
-			size_t neighbour;
-			if (neighbouring_dict.TryGetMutualNeighbour(p1, p2, neighbour))
+			std::vector<size_t> mutual_neighbours;
+			neighbouring_dict.GetMutualNeighbours(p1, p2, mutual_neighbours);
+
+			FE_ASSERT(mutual_neighbours.size() <= 2, "Planar points cannot have more than 2 neighbours");
+			
+			for (size_t mutual_neighbour : mutual_neighbours)
 			{
-				out_triangles.push_back(IndexTriangle(p1, p2, neighbour));
+				out_triangles.push_back(IndexTriangle(p1, p2, mutual_neighbour));
 			}
 		}
 	}
@@ -367,6 +371,19 @@ namespace Navigation
 		return TryGetMutualPoint(it1->second, it2->second, neighbour);
 	}
 
+	void NavmeshGenerator::NeighbouringDict::GetMutualNeighbours(size_t p1, size_t p2, std::vector<size_t>& out_neighbours) const
+	{
+		auto it1 = m_PointNeighbours.find(p1);
+		if (it1 == m_PointNeighbours.end())
+			return; // p1 has no neighbours
+
+		auto it2 = m_PointNeighbours.find(p2);
+		if (it2 == m_PointNeighbours.end())
+			return; // p2 has no neighbours
+
+		GetMutualPoints(it1->second, it2->second, out_neighbours);
+	}
+
 	void NavmeshGenerator::NeighbouringDict::RegisterNeighbour(size_t p, size_t neighbour)
 	{
 		auto it = m_PointNeighbours.find(p);
@@ -394,6 +411,20 @@ namespace Navigation
 		}
 
 		return false;
+	}
+
+	void NavmeshGenerator::NeighbouringDict::GetMutualPoints(const std::vector<size_t>& points1, const std::vector<size_t>& points2, std::vector<size_t>& out_mutuals)
+	{
+		for (size_t p1 : points1)
+		{
+			for (size_t p2 : points2)
+			{
+				if (p1 == p2)
+				{
+					out_mutuals.push_back(p1);
+				}
+			}
+		}
 	}
 
 
@@ -445,12 +476,17 @@ namespace Navigation
 
 	void NavmeshGenerator::VertexLinker::CreateLinks(const std::vector<IndexPair>& all_pairs, std::vector<IndexPair>& out_links)
 	{
+		//size_t stop_at = 144; // find the last that doesn't create the link (it's the first that would)
+
+		//size_t i = 0;
 		for (IndexPair in_pair : all_pairs)
 		{
 			if (IsColliderLink(in_pair) || IsLineOfSight(in_pair)) // TODO: check if within walkable surface
 			{
 				out_links.push_back(in_pair);
 			}
+
+			//i++;
 		}
 
 		// TODO: triangle relaxation
