@@ -33,8 +33,8 @@ public:
 	float GetLengthSq() const;
 	Vector GetMiddle() const;
 
-	std::vector<Segment> CutWith(const Segment& other, float tolerance = 0.001f) const;
-	static std::vector<Segment> Cut(const Segment& s1, const Segment& s2, float tolerance = 0.001f);
+	std::vector<Segment> CutWith(const Segment& other) const;
+	static std::vector<Segment> Cut(const Segment& s1, const Segment& s2);
 
 	bool operator==(const Segment& other) const;
 

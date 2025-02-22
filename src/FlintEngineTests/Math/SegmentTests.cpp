@@ -141,7 +141,6 @@ TEST(SUITE_NAME, CutAtEndAt90deg)
 TEST(SUITE_NAME, CutAtEndAt90degNotReaching)
 {
 	// Arrange
-	const float tolerance = 0.001f;
 	const float offset = 0.1f;
 
 	const float horizontal_y = 40.0f;
@@ -151,7 +150,7 @@ TEST(SUITE_NAME, CutAtEndAt90degNotReaching)
 	const Segment vertical_segment = Segment(Vector(vertical_x, 20), Vector(vertical_x, 60));
 
 	// Act
-	const std::vector<Segment> cut_result = horizontal_segment.CutWith(vertical_segment, tolerance);
+	const std::vector<Segment> cut_result = horizontal_segment.CutWith(vertical_segment);
 
 	// Assert
 	std::vector<Segment> expected_result;
@@ -205,7 +204,6 @@ TEST(SUITE_NAME, CutAt2EndsAt90deg)
 TEST(SUITE_NAME, CutAt2EndsAt90degNotReaching)
 {
 	// Arrange
-	const float tolerance = 0.001f;
 	const float offset = 0.1f;
 
 	const float vertical_x = 60.0f;
