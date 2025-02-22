@@ -173,7 +173,7 @@ TEST(SUITE_NAME, CutAtEndAt45deg)
 
 	// Assert
 	std::vector<Segment> expected_result;
-	expected_result.emplace_back(Segment(vertical_segment));
+	expected_result.emplace_back(Segment(diagonal_segment));
 	expected_result.emplace_back(Segment(Vector(30, 10), Vector(30, 25)));
 	expected_result.emplace_back(Segment(Vector(30, 25), Vector(30, 60)));
 
