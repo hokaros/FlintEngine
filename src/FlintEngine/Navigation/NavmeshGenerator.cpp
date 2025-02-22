@@ -211,7 +211,7 @@ namespace Navigation
 			{
 				is_orig_seg1_present = true;
 
-				//FE_ASSERT(new_seg != orig_seg2, "New segment is equal to 2 original ones");
+				FE_ASSERT(new_seg != orig_seg2, "New segment is equal to 2 original ones");
 			}
 			else if (new_seg == orig_seg2)
 			{
@@ -280,7 +280,23 @@ namespace Navigation
 
 	void NavmeshGenerator::MergeDuplicateLinks(std::vector<IndexPair>& collider_links)
 	{
-		// TODO
+		for (auto it1 = collider_links.begin(); it1 != collider_links.end(); it1++)
+		{
+			for (auto it2 = it1 + 1; it2 != collider_links.end();)
+			{
+				const IndexPair& link1 = *it1;
+				const IndexPair& link2 = *it2;
+
+				if (link1 == link2)
+				{
+					it2 = collider_links.erase(it2);
+				}
+				else
+				{
+					it2++;
+				}
+			}
+		}
 	}
 
 	Segment NavmeshGenerator::IndexPairToSegment(IndexPair index_pair, const std::vector<Vector>& vertices)

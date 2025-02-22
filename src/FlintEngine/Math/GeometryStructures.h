@@ -54,4 +54,10 @@ struct IndexPair
 	{
 		return first == index || second == index;
 	}
+
+	constexpr bool operator==(const IndexPair& other) const
+	{
+		return (first == other.first && second == other.second)
+			|| (first == other.second && second == other.first);
+	}
 };
