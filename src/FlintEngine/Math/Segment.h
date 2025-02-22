@@ -45,7 +45,8 @@ private:
 	Vector SlideInwardFromEnd(float dist) const;
 
 	static float NormalizeRadians(float rad);
-	static bool IsAngleFirstOrThirdQuarter(float rad);
+	static bool IsAngleFirstOrFourthQuarter(float rad);
+	static bool IsAngleSecondOrThirdQuarter(float rad);
 
 	static bool TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos);
 };
