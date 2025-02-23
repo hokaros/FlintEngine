@@ -177,6 +177,31 @@ namespace Navigation
 		const Segment orig_seg1 = IndexPairToSegment(orig_link1, vertices.GetVertices());
 		const Segment orig_seg2 = IndexPairToSegment(orig_link2, vertices.GetVertices());
 
+		/*auto is_almost = [](float actual, float expected) -> bool
+		{
+			return fabsf(actual - expected) < 0.3f;
+		};
+
+		auto is_almost_vec = [&is_almost](const Vector& actual, const Vector& expected) -> bool
+		{
+			return is_almost(actual.x, expected.x) && is_almost(actual.y, expected.y);
+		};
+
+		auto does_segment_end_match = [&is_almost_vec](const Segment& seg, const Vector& expected_end) -> bool
+		{
+			return is_almost_vec(seg.start, expected_end) || is_almost_vec(seg.end, expected_end);
+		};
+
+		auto does_segment_match = [&does_segment_end_match](const Segment& seg) -> bool
+		{
+			return does_segment_end_match(seg, Vector(710, 10)) && does_segment_end_match(seg, Vector(10, 10));
+		};
+
+		if (does_segment_match(orig_seg1) || does_segment_match(orig_seg2))
+		{
+			int x = 1;
+		}*/
+
 		std::vector<Segment> cut_result = orig_seg1.CutWith(orig_seg2);
 
 		// TODO: extract a class
@@ -491,11 +516,16 @@ namespace Navigation
 
 	void NavmeshGenerator::VertexLinker::CreateLinks(const std::vector<IndexPair>& all_pairs, std::vector<IndexPair>& out_links)
 	{
-		//size_t stop_at = 144; // find the last that doesn't create the link (it's the first that would)
+		//size_t stop_at = 60; // find the last that doesn't create the link (it's the first that would)
 
 		//size_t i = 0;
 		for (IndexPair in_pair : all_pairs)
 		{
+			/*if (i >= stop_at)
+			{
+				break;
+			}*/
+
 			if (IsColliderLink(in_pair) || IsLineOfSight(in_pair)) // TODO: check if within walkable surface
 			{
 				out_links.push_back(in_pair);

@@ -241,4 +241,95 @@ TEST(SUITE_NAME, CutAt2EndsAt45deg)
 	assertEqualSegments(expected_result, cut_result);
 }
 
+TEST(SUITE_NAME, CutOverlapping)
+{
+	// Arrange
+	const float y = 55.0f;
+	const Segment seg1 = Segment(Vector(10, y), Vector(50, y));
+	const Segment seg2 = Segment(Vector(30, y), Vector(70, y));
+
+	// Act
+	const std::vector<Segment> cut_result = seg1.CutWith(seg2);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(Segment(Vector(10, y), Vector(30, y)));
+	expected_result.emplace_back(Segment(Vector(30, y), Vector(50, y)));
+	expected_result.emplace_back(Segment(Vector(50, y), Vector(70, y)));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
+TEST(SUITE_NAME, CutOverlapping1Inside)
+{
+	// Arrange
+	const float y = 55.0f;
+	const Segment seg1 = Segment(Vector(10, y), Vector(70, y));
+	const Segment seg2 = Segment(Vector(30, y), Vector(50, y));
+
+	// Act
+	const std::vector<Segment> cut_result = seg1.CutWith(seg2);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(Segment(Vector(10, y), Vector(30, y)));
+	expected_result.emplace_back(Segment(Vector(30, y), Vector(50, y)));
+	expected_result.emplace_back(Segment(Vector(50, y), Vector(70, y)));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
+TEST(SUITE_NAME, CutOverlapping1InsideWithMatchingEnd)
+{
+	// Arrange
+	const float y = 55.0f;
+	const Segment seg1 = Segment(Vector(10, y), Vector(70, y));
+	const Segment seg2 = Segment(Vector(10, y), Vector(50, y));
+
+	// Act
+	const std::vector<Segment> cut_result = seg1.CutWith(seg2);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(Segment(Vector(10, y), Vector(50, y)));
+	expected_result.emplace_back(Segment(Vector(50, y), Vector(70, y)));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
+TEST(SUITE_NAME, CutDuplicates)
+{
+	// Arrange
+	const Segment seg1 = Segment(Vector(45, 55), Vector(45, 55));
+	const Segment seg2 = Segment(Vector(45, 55), Vector(45, 55));
+
+	// Act
+	const std::vector<Segment> cut_result = seg1.CutWith(seg2);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(Segment(Vector(45, 55), Vector(45, 55)));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
+TEST(SUITE_NAME, CutParallelDisjoined)
+{
+	// Arrange
+	const float y1 = 55.0f;
+	const float y2 = 72.0f;
+	const Segment seg1 = Segment(Vector(10, y1), Vector(70, y1));
+	const Segment seg2 = Segment(Vector(10, y2), Vector(50, y2));
+
+	// Act
+	const std::vector<Segment> cut_result = seg1.CutWith(seg2);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(seg1);
+	expected_result.emplace_back(seg2);
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
 #undef SUITE_NAME
