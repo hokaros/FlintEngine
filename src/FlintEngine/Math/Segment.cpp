@@ -68,6 +68,12 @@ std::vector<Segment> Segment::Cut(const Segment& seg1, const Segment& seg2)
 	std::vector<Segment> out_segments;
 	out_segments.reserve(4); // 4 is the maximum number of segments after the operation
 
+	if (seg1 == seg2)
+	{
+		out_segments.emplace_back(seg1);
+		return out_segments;
+	}
+
 	auto return_input = [&out_segments, &seg1, &seg2]()
 	{
 		out_segments.clear();
