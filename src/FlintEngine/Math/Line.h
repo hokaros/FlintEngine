@@ -22,4 +22,7 @@ public:
 	Vector GetCrossingPoint(const Line& other) const;
 	float GetYAtX(float x) const;
 	float GetSlopeFactor() const;
+	float GetProgressOfPoint(const Vector& point) const;
+
+	bool operator==(const Line& other) const;
 };

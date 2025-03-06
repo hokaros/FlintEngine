@@ -82,3 +82,32 @@ float Line::GetSlopeFactor() const
 {
 	return direction.y / direction.x;
 }
+
+float Line::GetProgressOfPoint(const Vector& point) const
+{
+	const Vector to_point = point - anchor;
+
+	if (Vector::Dot(to_point, direction) >= 0)
+	{
+		return to_point.Length();
+	}
+	else
+	{
+		return -to_point.Length();
+	}
+}
+
+bool Line::operator==(const Line& other) const
+{
+	const Vector my_dir = direction.GetNormalized();
+	const Vector other_dir = other.direction.GetNormalized();
+	if (my_dir != other_dir && my_dir != -other_dir)
+		return false; // Different directions
+
+	const Vector anchors_diff = other.anchor - anchor;
+	if (anchors_diff == Vector::ZERO)
+		return true; // Same anchors and equal directions
+
+	const Vector anchors_dir = anchors_diff.GetNormalized();
+	return anchors_dir == my_dir || anchors_dir == -my_dir;
+}

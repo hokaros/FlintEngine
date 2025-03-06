@@ -1,5 +1,7 @@
 #include "Segment.h"
 
+#include <map>
+
 #include "Line.h"
 
 bool Segment::DoesCross(const Segment& other) const
@@ -29,6 +31,11 @@ const bool Segment::IsSameDirection(const Segment& other) const
 	const Vector other_dir = (other.start - other.end).GetNormalized();
 
 	return my_dir == other_dir || my_dir == -other_dir;
+}
+
+const bool Segment::IsOnSameLine(const Segment& other) const
+{
+	return Line::FromSegment(*this) == Line::FromSegment(other);
 }
 
 Segment Segment::GetShortenedSegment(float diff_from_side) const
@@ -83,10 +90,19 @@ std::vector<Segment> Segment::Cut(const Segment& seg1, const Segment& seg2)
 	};
 
 	if (seg1.GetLengthSq() == 0.f || seg2.GetLengthSq() == 0.f)
-		return return_input();
+		return return_input(); // TODO: what if 1 segment is a point on the other?
 
 	if (seg1.IsSameDirection(seg2))
-		return return_input();
+	{
+		if (seg1.IsOnSameLine(seg2))
+		{
+			return CutSegmentsOnSameLine(seg1, seg2);
+		}
+		else
+		{ // TODO: this case can be taken under GetCrossingPoint without the need of checking direction
+			return return_input();
+		}
+	}
 
 	const Vector crossing_point = seg1.GetCrossingPoint(seg2);
 	if (crossing_point == Vector::INVALID)
@@ -222,4 +238,108 @@ bool Segment::TryGetEqualSegmentEnd(const Segment& segment, const Vector& desire
 	}
 
 	return false;
+}
+
+std::vector<Segment> Segment::CutSegmentsOnSameLine(const Segment& seg1, const Segment& seg2)
+{
+	std::vector<Segment> out_segments;
+	out_segments.reserve(3); // 3 is the maximum number of segments after the operation
+
+	auto return_input = [&out_segments, &seg1, &seg2]()
+	{
+		out_segments.clear();
+		out_segments.emplace_back(seg1);
+		out_segments.emplace_back(seg2);
+		return out_segments;
+	};
+
+	// Get progresses on a line
+	enum class PointSource
+	{
+		Seg1Start,
+		Seg1End,
+		Seg2Start,
+		Seg2End
+	};
+
+	auto point_source_to_point = [&seg1, &seg2](PointSource source) -> const Vector&
+	{
+		switch (source)
+		{
+		case PointSource::Seg1Start:
+			return seg1.start;
+		case PointSource::Seg1End:
+			return seg1.end;
+		case PointSource::Seg2Start:
+			return seg2.start;
+		case PointSource::Seg2End:
+			return seg2.end;
+		default:
+			return Vector::INVALID;
+		}
+	};
+
+	struct ProgressEntry
+	{
+		float progress = 0.f;
+		PointSource source = PointSource::Seg1Start;
+
+		ProgressEntry(float progress, PointSource source)
+			: progress(progress)
+			, source(source)
+		{}
+	};
+
+	std::vector<ProgressEntry> progresses_ordered;
+	progresses_ordered.reserve(4);
+
+	{
+		const Line line = Line::FromSegment(seg1);
+		std::map<float, PointSource> progresses;
+
+		progresses.insert({ line.GetProgressOfPoint(seg1.start), PointSource::Seg1Start });
+		progresses.insert({ line.GetProgressOfPoint(seg1.end), PointSource::Seg1End });
+		progresses.insert({ line.GetProgressOfPoint(seg2.start), PointSource::Seg2Start });
+		progresses.insert({ line.GetProgressOfPoint(seg2.end), PointSource::Seg2End });
+
+		for (const std::pair<float, PointSource>& progress : progresses)
+		{
+			progresses_ordered.emplace_back(progress.first, progress.second);
+		}
+	}
+
+	// Check if disjoint
+	const bool is_seg2_fully_on_right = (progresses_ordered[0].source == PointSource::Seg1Start && progresses_ordered[1].source == PointSource::Seg1End)
+		|| (progresses_ordered[0].source == PointSource::Seg1End && progresses_ordered[1].source == PointSource::Seg1Start);
+	if (is_seg2_fully_on_right)
+		return return_input();
+
+	const bool is_seg2_fully_on_left = (progresses_ordered[0].source == PointSource::Seg2Start && progresses_ordered[1].source == PointSource::Seg2End)
+		|| (progresses_ordered[0].source == PointSource::Seg2End && progresses_ordered[1].source == PointSource::Seg2Start);
+	if (is_seg2_fully_on_left)
+		return return_input();
+
+	// Merge duplicates
+	for (auto it = progresses_ordered.begin(); it != progresses_ordered.end(); it++)
+	{
+		auto next_it = it + 1;
+		if (next_it != progresses_ordered.end() && next_it->progress == it->progress)
+		{
+			progresses_ordered.erase(next_it);
+		}
+	}
+
+	// Create segments along the order
+	for (auto it = progresses_ordered.begin(); it != progresses_ordered.end(); it++)
+	{
+		auto next_it = it + 1;
+		if (next_it == progresses_ordered.end())
+			break;
+
+		const Vector& p = point_source_to_point(it->source);
+		const Vector& next_p = point_source_to_point(next_it->source);
+		out_segments.push_back(Segment(p, next_p));
+	}
+
+	return out_segments;
 }

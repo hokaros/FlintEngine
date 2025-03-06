@@ -23,6 +23,7 @@ public:
 	Vector GetCrossingPoint(const Segment& other) const;
 
 	const bool IsSameDirection(const Segment& other) const;
+	const bool IsOnSameLine(const Segment& other) const;
 
 	/// <summary>
 	/// Shortens the segment by the specified difference from each end
@@ -50,4 +51,6 @@ private:
 	static bool IsAngleSecondOrThirdQuarter(float rad);
 
 	static bool TryGetEqualSegmentEnd(const Segment& segment, const Vector& desired_end_pos, Vector& end_pos);
+
+	static std::vector<Segment> CutSegmentsOnSameLine(const Segment& s1, const Segment& s2);
 };
