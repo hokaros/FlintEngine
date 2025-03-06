@@ -84,6 +84,7 @@ namespace Navigation
 		}
 
 		MergeVertices(out_vertices);
+		QuantizeVertices(out_vertices);
 		MergeDuplicateLinks(collider_links);
 		CutColliderLinks(out_vertices, collider_links);
 	}
@@ -402,6 +403,34 @@ namespace Navigation
 		return false;
 	}
 
+	void NavmeshGenerator::QuantizeVertices(VertexCollection& vertices)
+	{
+		for (size_t i = 0; i < vertices.GetNumVertices(); i++)
+		{
+			vertices[i] = QuantizeVertex(vertices[i]);
+		}
+	}
+
+	Vector NavmeshGenerator::QuantizeVertex(const Vector& v)
+	{
+		return Vector(QuantizeVertexComponent(v.x), QuantizeVertexComponent(v.y));
+	}
+
+	float NavmeshGenerator::QuantizeVertexComponent(float v)
+	{
+		constexpr float quant = s_Tolerance * 2.0f;
+
+		const float remainder = fmodf(v, quant);
+		if (remainder < quant / 2.0f)
+		{
+			return v - remainder;
+		}
+		else
+		{
+			return (v - remainder) + quant;
+		}
+	}
+
 
 	void NavmeshGenerator::NeighbouringDict::RegisterLink(size_t p1, size_t p2)
 	{
@@ -527,7 +556,7 @@ namespace Navigation
 
 	void NavmeshGenerator::VertexLinker::CreateLinks(const std::vector<IndexPair>& all_pairs, std::vector<IndexPair>& out_links)
 	{
-		//size_t stop_at = 60; // find the last that doesn't create the link (it's the first that would)
+		//size_t stop_at = 72; // find the last that doesn't create the link (it's the first that would)
 
 		//size_t i = 0;
 		for (IndexPair in_pair : all_pairs)

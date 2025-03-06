@@ -94,6 +94,10 @@ namespace Navigation
 
 		static bool IsLinkInTriangles(IndexPair link, const std::vector<IndexTriangle>& triangles);
 
+		static void QuantizeVertices(VertexCollection& vertices);
+		static Vector QuantizeVertex(const Vector& v);
+		static float QuantizeVertexComponent(float v);
+
 	private:
 		const IGameObjectContainer& m_Context;
 		const NavmeshGenerationParams m_Params;

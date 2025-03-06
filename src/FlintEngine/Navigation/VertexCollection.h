@@ -37,6 +37,7 @@ public:
 	std::vector<Vector>& GetVertices();
 
 	const Vector& operator[](size_t index) const;
+	Vector& operator[](size_t index);
 
 private:
 	void RemoveVertices(size_t& v1, size_t& v2);

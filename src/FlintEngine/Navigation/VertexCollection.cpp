@@ -92,6 +92,11 @@ const Vector& VertexCollection::operator[](size_t index) const
 	return m_Vertices[index];
 }
 
+Vector& VertexCollection::operator[](size_t index)
+{
+	return m_Vertices[index];
+}
+
 void VertexCollection::RemoveVertices(size_t& v1, size_t& v2)
 {
 	RemoveVertex(v1);
