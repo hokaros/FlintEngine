@@ -332,4 +332,22 @@ TEST(SUITE_NAME, CutParallelDisjoined)
 	assertEqualSegments(expected_result, cut_result);
 }
 
+TEST(SUITE_NAME, CutSameLineDisjoined)
+{
+	// Arrange
+	const float y = 150.0f;
+	const Segment seg1 = Segment(Vector(10, y), Vector(50, y));
+	const Segment seg2 = Segment(Vector(55, y), Vector(120, y));
+
+	// Act
+	const std::vector<Segment> cut_result = seg1.CutWith(seg2);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(seg1);
+	expected_result.emplace_back(seg2);
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
 #undef SUITE_NAME
