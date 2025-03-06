@@ -129,6 +129,17 @@ namespace Navigation
 		}
 	}
 
+	void NavmeshGenerator::GetLinksNotInTriangles(const std::vector<IndexPair>& links, const std::vector<IndexTriangle>& triangles, std::vector<IndexPair>& not_in_triangles)
+	{
+		for (IndexPair link : links)
+		{
+			if (!IsLinkInTriangles(link, triangles))
+			{
+				not_in_triangles.push_back(link);
+			}
+		}
+	}
+
 	void NavmeshGenerator::CutColliderLinks(VertexCollection& vertices, std::vector<IndexPair>& collider_links)
 	{
 		size_t new_collider_links_offset = 0;
