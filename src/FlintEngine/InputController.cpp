@@ -35,17 +35,32 @@ bool InputController::Update()
 		if (event.type == SDL_QUIT)
 			quit = true;
 
-		if (event.type != SDL_KEYDOWN && event.type != SDL_KEYUP)
-			continue; //not my business
-
-		SDL_Keycode keycode = event.key.keysym.sym;
-		if (event.type == SDL_KEYDOWN)
+		if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 		{
-			OnKeyDown(keycode);
+			SDL_Keycode keycode = event.key.keysym.sym;
+			if (event.type == SDL_KEYDOWN)
+			{
+				OnKeyDown(keycode);
+			}
+			else if (event.type == SDL_KEYUP)
+			{
+				OnKeyUp(keycode);
+			}
 		}
-		else if (event.type == SDL_KEYUP)
+		else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
 		{
-			OnKeyUp(keycode);
+			const MouseButton button = MouseButtonIdToEnum(event.button.button);
+			if (button == MouseButton::Unknown)
+				continue;
+
+			if (event.type == SDL_MOUSEBUTTONDOWN)
+			{
+				OnMouseButtonDown(button);
+			}
+			else if (event.type == SDL_MOUSEBUTTONUP)
+			{
+				OnMouseButtonUp(button);
+			}
 		}
 	};
 
@@ -64,6 +79,11 @@ bool InputController::IsKeyDown(SDL_Keycode key) const
 bool InputController::PressedThisFrame(SDL_Keycode key) const 
 {
 	return ftl::vector_contains(m_PressedThisFrame, key);
+}
+
+bool InputController::MouseButtonPressedThisFrame(MouseButton button) const
+{
+	return ftl::vector_contains(m_MousePressedThisFrame, button);
 }
 
 Vector InputController::GetMousePosition() const 
@@ -99,9 +119,29 @@ void InputController::OnKeyUp(SDL_Keycode key)
 	it->second = false;
 }
 
+void InputController::OnMouseButtonDown(MouseButton button)
+{
+	m_MousePressedThisFrame.push_back(button);
+}
+
+void InputController::OnMouseButtonUp(MouseButton button)
+{
+}
+
 void InputController::ClearFrameInfo()
 {
 	m_PressedThisFrame.clear();
+	m_MousePressedThisFrame.clear();
+}
+
+MouseButton InputController::MouseButtonIdToEnum(uint8_t button_id)
+{
+	if (button_id == 0)
+		return MouseButton::Right;
+	if (button_id == 1)
+		return MouseButton::Left;
+
+	return MouseButton::Unknown;
 }
 
 const IInputController* IInputController::Main()
