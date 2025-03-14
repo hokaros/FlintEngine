@@ -158,6 +158,11 @@ Vector SceneRenderer::WorldSpaceToScreenSpace(const Vector& worldSpace) const
 	return ViewportSpaceToScreenSpace(WorldSpaceToViewportSpace(worldSpace));
 }
 
+Vector SceneRenderer::ScreenSpaceToWorldSpace(const Vector& screenSpace) const
+{
+	return ViewportSpaceToWorldSpace(ScreenSpaceToViewportSpace(screenSpace));
+}
+
 Vector SceneRenderer::VectorWorldSpaceToScreenSpace(const Vector& worldSpace) const
 {
 	return VectorViewportSpaceToScreenSpace(VectorWorldSpaceToViewportSpace(worldSpace));
@@ -178,6 +183,11 @@ Vector SceneRenderer::WorldSpaceToViewportSpace(const Vector& worldSpace) const
 	return worldSpace - m_CurrentViewport.pos;
 }
 
+Vector SceneRenderer::ViewportSpaceToWorldSpace(const Vector& viewportSpace) const
+{
+	return viewportSpace + m_CurrentViewport.pos;
+}
+
 Vector SceneRenderer::VectorWorldSpaceToViewportSpace(const Vector& world_space) const
 {
 	return world_space;
@@ -194,6 +204,13 @@ Vector SceneRenderer::ViewportSpaceToScreenSpace(const Vector& viewportSpace) co
 {
 	float x = viewportSpace.x * m_RTSize.x / m_CurrentViewport.size.x;
 	float y = viewportSpace.y * m_RTSize.y / m_CurrentViewport.size.y;
+	return Vector(x, y);
+}
+
+Vector SceneRenderer::ScreenSpaceToViewportSpace(const Vector& screenSpace) const
+{
+	float x = screenSpace.x * m_CurrentViewport.size.x / m_RTSize.x;
+	float y = screenSpace.y * m_CurrentViewport.size.y / m_RTSize.y;
 	return Vector(x, y);
 }
 

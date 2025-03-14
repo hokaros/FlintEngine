@@ -44,22 +44,25 @@ public:
 	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize, uint layer);
 	void RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, uint layer);
 
-	Rect WorldSpaceToScreenSpace(const Rect& worldSpace) const;
-	Vector WorldSpaceToScreenSpace(const Vector& worldSpace) const;
-	Vector VectorWorldSpaceToScreenSpace(const Vector& worldSpace) const;
+	[[nodiscard]] Rect WorldSpaceToScreenSpace(const Rect& worldSpace) const;
+	[[nodiscard]] Vector WorldSpaceToScreenSpace(const Vector& worldSpace) const;
+	[[nodiscard]] Vector ScreenSpaceToWorldSpace(const Vector& screenSpace) const;
+	[[nodiscard]] Vector VectorWorldSpaceToScreenSpace(const Vector& worldSpace) const;
 
 	SDL_Texture* CreateTextureFromSurface(SDL_Surface* surface);
 
 	~SceneRenderer();
 
 private:
-	Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
-	Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
-	Vector VectorWorldSpaceToViewportSpace(const Vector& world_space) const;
+	[[nodiscard]] Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
+	[[nodiscard]] Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
+	[[nodiscard]] Vector ViewportSpaceToWorldSpace(const Vector& viewportSpace) const;
+	[[nodiscard]] Vector VectorWorldSpaceToViewportSpace(const Vector& world_space) const;
 
-	Rect ViewportSpaceToScreenSpace(const Rect& viewportSpace) const;
-	Vector ViewportSpaceToScreenSpace(const Vector& viewportSpace) const;
-	Vector VectorViewportSpaceToScreenSpace(const Vector& viewport_space) const;
+	[[nodiscard]]Rect ViewportSpaceToScreenSpace(const Rect& viewportSpace) const;
+	[[nodiscard]]Vector ViewportSpaceToScreenSpace(const Vector& viewportSpace) const;
+	[[nodiscard]] Vector ScreenSpaceToViewportSpace(const Vector& screenSpace) const;
+	[[nodiscard]] Vector VectorViewportSpaceToScreenSpace(const Vector& viewport_space) const;
 
 	bool LoadCharsets();
 	VectorInt GetCharCoordinates(char c) const;
