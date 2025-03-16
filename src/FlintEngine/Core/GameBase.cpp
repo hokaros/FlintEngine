@@ -2,11 +2,14 @@
 
 #include <Windows.h>
 
+GameBase* GameBase::s_Current{ nullptr };
+
 GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputController& input_controller)
 	: m_Window(window)
 	, m_SceneRenderer(scene_renderer)
 	, m_PhysicsSystem({})
 	, m_InputController(input_controller)
+	, m_DebugNavmeshQuerier(*this)
 {
 	if (m_SceneRenderer != nullptr)
 	{
@@ -14,6 +17,31 @@ GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputControll
 	}
 
 	m_DebugMonitorWindow.Init(m_DebugData);
+
+	s_Current = this;
+}
+
+GameBase::~GameBase()
+{
+	if (s_Current == this)
+	{
+		s_Current = nullptr;
+	}
+}
+
+const SceneRenderer* GameBase::GetSceneRenderer() const
+{
+	return m_SceneRenderer;
+}
+
+SceneRenderer* GameBase::GetSceneRenderer()
+{
+	return m_SceneRenderer;
+}
+
+const IInputController& GameBase::GetInput() const
+{
+	return m_InputController;
 }
 
 bool GameBase::Run()
@@ -52,13 +80,16 @@ bool GameBase::RunOneLoop()
 
 	m_PhysicsSystem.Update();
 
+	m_DebugNavmeshQuerier.Update();
+
 	// Renderowanie obiektów
 	if (m_SceneRenderer != nullptr)
 	{
+		m_CurrScene->Render(*m_SceneRenderer);
+
 		m_DebugConfigWindow.Render();
 		m_DebugMonitorWindow.Render();
-
-		m_CurrScene->Render(*m_SceneRenderer);
+		m_DebugNavmeshQuerier.Render(*m_SceneRenderer);
 		DebugRender();
 
 		if (m_Window != nullptr)
@@ -95,6 +126,11 @@ void GameBase::InvokeOnNextFrame(function<void()> fun)
 {
 	std::lock_guard<std::mutex> lock(m_InvokesMutex);
 	m_Invokes.push_back(std::move(fun));
+}
+
+GameBase* GameBase::GetCurrent()
+{
+	return s_Current;
 }
 
 void GameBase::DebugRender()
