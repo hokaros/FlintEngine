@@ -41,7 +41,16 @@ namespace Navigation
 		if (start_triangle == graph::NodeId::INVALID || end_triangle == graph::NodeId::INVALID)
 			return; // Either start pos or end pos is outside of navmesh
 
+		if (start_triangle == end_triangle)
+		{
+			out_path.AddControlPoint(start_point);
+			out_path.AddControlPoint(end_point);
+			return;
+		}
+
 		const std::vector<graph::NodeId> path_on_graph = graph::GraphPathFinder::FindPath(navmesh.GetGraph(), start_triangle, end_triangle);
+		if (path_on_graph.empty())
+			return;
 
 		out_path.AddControlPoint(start_point);
 		for (auto it = path_on_graph.begin(); it != path_on_graph.end(); it++)
