@@ -28,6 +28,7 @@ public:
 	bool IsRunning();
 
 	void LoadScene(std::unique_ptr<Scene> scene);
+	Scene* GetCurrentScene();
 
 	void InvokeOnNextFrame(function<void()> fun);
 

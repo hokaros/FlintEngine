@@ -30,8 +30,14 @@ namespace Navigation
 
 		case State::StartPointSelected:
 			m_EndPoint = world_pos;
+
+			m_Path.Clear();
+			if (const Navmesh* navmesh = GetNavmesh())
+			{
+				CalculatePath(*navmesh, m_Path);
+			}
+
 			m_State = State::StartAndEndPointsSelected;
-			// TODO: calculate path
 			break;
 
 		case State::StartAndEndPointsSelected:
@@ -65,7 +71,7 @@ namespace Navigation
 		case State::StartAndEndPointsSelected:
 			RenderPoint(m_StartPoint, renderer);
 			RenderPoint(m_EndPoint, renderer);
-			RenderPath(renderer);
+			RenderPath(renderer, m_Path);
 			break;
 		}
 	}
@@ -81,8 +87,35 @@ namespace Navigation
 		renderer.RenderLine(world_pos - Vector(-half_x_size, half_x_size), world_pos + Vector(-half_x_size, half_x_size), color, layer);
 	}
 
-	void DebugNavmeshQuerier::RenderPath(SceneRenderer& renderer)
+	void DebugNavmeshQuerier::RenderPath(SceneRenderer& renderer, const NavmeshPath& path)
 	{
-		renderer.RenderLine(m_StartPoint, m_EndPoint, Rgb8(0x00, 0x00, 0xFF), 10);
+		constexpr uint layer = 1;
+
+		const Vector* prev_point = nullptr;
+
+		for (const Vector& control_point : path)
+		{
+			if (prev_point != nullptr)
+			{
+				renderer.RenderLine(m_StartPoint, m_EndPoint, Rgb8(0x00, 0x00, 0xFF), layer);
+			}
+
+			prev_point = &control_point;
+		}
+	}
+
+	const Navmesh* DebugNavmeshQuerier::GetNavmesh() const
+	{
+		if (const Scene* scene = m_Game.GetCurrentScene())
+		{
+			return &scene->GetNavmesh();
+		}
+
+		return nullptr;
+	}
+
+	void DebugNavmeshQuerier::CalculatePath(const Navmesh& navmesh, NavmeshPath& path) const
+	{
+		NavmeshPathfinder::FindPath(navmesh, m_StartPoint, m_EndPoint, path);
 	}
 }

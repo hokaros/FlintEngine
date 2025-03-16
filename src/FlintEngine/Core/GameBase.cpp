@@ -122,6 +122,11 @@ void GameBase::LoadScene(std::unique_ptr<Scene> scene)
 	}
 }
 
+Scene* GameBase::GetCurrentScene()
+{
+	return m_CurrScene.get();
+}
+
 void GameBase::InvokeOnNextFrame(function<void()> fun)
 {
 	std::lock_guard<std::mutex> lock(m_InvokesMutex);
