@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Line.h"
+#include "MathHelpers.h"
 
 bool Segment::DoesCross(const Segment& other) const
 {
@@ -200,18 +201,12 @@ Vector Segment::SlideInwardFromEnd(float dist) const
 	return end + diff_from_end;
 }
 
-float Segment::NormalizeRadians(float rad)
-{
-	constexpr float full_circle = M_PI * 2.0f;
-	return fmodf(rad, full_circle);
-}
-
 bool Segment::IsAngleFirstOrFourthQuarter(float rad)
 {
 	constexpr float first_quarter = M_PI / 2.0f;
 	constexpr float third_quarter = 3.0f * M_PI / 2.0f;
 
-	const float normalized_angle = abs(NormalizeRadians(rad));
+	const float normalized_angle = abs(MathHelpers::NormalizeRadians(rad));
 	return normalized_angle <= first_quarter || normalized_angle >= third_quarter;
 }
 
@@ -220,7 +215,7 @@ bool Segment::IsAngleSecondOrThirdQuarter(float rad)
 	constexpr float first_quarter = M_PI / 2.0f;
 	constexpr float third_quarter = 3.0f * M_PI / 2.0f;
 
-	const float normalized_angle = abs(NormalizeRadians(rad));
+	const float normalized_angle = abs(MathHelpers::NormalizeRadians(rad));
 	return normalized_angle >= first_quarter && normalized_angle <= third_quarter;
 }
 

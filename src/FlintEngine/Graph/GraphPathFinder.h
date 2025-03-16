@@ -11,7 +11,7 @@ namespace graph
 	class GraphPathFinder
 	{
 	public:
-		static std::vector<NodeId> FindPath(PositionGraph& graph, NodeId start_node, NodeId end_node);
+		static std::vector<NodeId> FindPath(const PositionGraph& graph, NodeId start_node, NodeId end_node);
 
 	private:
 		struct NodeDistance
@@ -31,7 +31,7 @@ namespace graph
 		};
 
 	private:
-		GraphPathFinder(PositionGraph& graph, NodeId start_node, NodeId end_node);
+		GraphPathFinder(const PositionGraph& graph, NodeId start_node, NodeId end_node);
 
 		std::vector<NodeId> FindPathImpl();
 
@@ -51,7 +51,7 @@ namespace graph
 		std::vector<NodeId> GatherPath() const;
 
 	private:
-		PositionGraph& m_Graph;
+		const PositionGraph& m_Graph;
 		NodeId m_StartNode;
 		NodeId m_EndNode;
 

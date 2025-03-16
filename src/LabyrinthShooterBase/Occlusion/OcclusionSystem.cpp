@@ -64,6 +64,8 @@ OcclusionSystem* OcclusionSystem::GetInstance()
 
 bool OcclusionSystem::ShouldBeRendered(GameObject& go) const
 {
+	return true;
+
 	// Wyœwietlanie tylko, jeœli obiekt jest widziany przez obecnego gracza
 	if ((go.GetWorldPosition() - m_Player->GetTransformable().GetWorldPosition()).LengthSquared() > PLAYER_SIGHT * PLAYER_SIGHT)
 		return false;  // zbyt daleko

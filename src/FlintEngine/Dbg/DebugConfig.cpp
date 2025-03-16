@@ -4,7 +4,7 @@
 namespace debug
 {
 	bool DebugConfig::s_ShouldDebugRenderPhysics = false;
-	bool DebugConfig::s_ShouldDebugRenderNavmesh = false;
+	bool DebugConfig::s_ShouldDebugRenderNavmesh = true;
 
 	bool DebugConfig::ShouldDebugRenderPhysics()
 	{

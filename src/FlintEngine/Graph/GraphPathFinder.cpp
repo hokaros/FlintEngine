@@ -5,14 +5,14 @@
 
 namespace graph
 {
-	std::vector<NodeId> GraphPathFinder::FindPath(PositionGraph& graph, NodeId start_node, NodeId end_node)
+	std::vector<NodeId> GraphPathFinder::FindPath(const PositionGraph& graph, NodeId start_node, NodeId end_node)
 	{
 		GraphPathFinder path_finder(graph, start_node, end_node);
 
 		return path_finder.FindPathImpl();
 	}
 
-	GraphPathFinder::GraphPathFinder(PositionGraph& graph, NodeId start_node, NodeId end_node)
+	GraphPathFinder::GraphPathFinder(const PositionGraph& graph, NodeId start_node, NodeId end_node)
 		: m_Graph(graph)
 		, m_StartNode(start_node)
 		, m_EndNode(end_node)

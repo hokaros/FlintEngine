@@ -97,7 +97,7 @@ namespace Navigation
 		{
 			if (prev_point != nullptr)
 			{
-				renderer.RenderLine(m_StartPoint, m_EndPoint, Rgb8(0x00, 0x00, 0xFF), layer);
+				renderer.RenderLine(control_point, *prev_point, Rgb8(0x00, 0x00, 0xFF), layer);
 			}
 
 			prev_point = &control_point;

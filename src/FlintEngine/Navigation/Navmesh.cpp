@@ -14,11 +14,30 @@ void Navigation::Navmesh::Render(SceneRenderer& renderer) const
 	//RenderGraph(renderer);
 }
 
+const graph::PositionGraph& Navigation::Navmesh::GetGraph() const
+{
+	return m_Graph;
+}
+
+graph::NodeId Navigation::Navmesh::GetTriangleOfPos(const Vector& pos) const
+{
+	for (const NavmeshTriangle& tri : m_Triangles)
+	{
+		if (IsPosInsideTriangle(pos, tri.vertices))
+		{
+			return tri.graph_node;
+		}
+	}
+
+	return graph::NodeId::INVALID;
+}
+
 void Navigation::Navmesh::Clear()
 {
 	m_Edges.clear();
 	m_Vertices.clear();
 	m_Triangles.clear();
+	m_Graph = {};
 }
 
 void Navigation::Navmesh::AddVertex(Vector&& v)
@@ -67,6 +86,11 @@ const Vector& Navigation::Navmesh::GetPosAtIndex(int idx) const
 	return m_Vertices[idx];
 }
 
+Triangle Navigation::Navmesh::IndexTriangleToTriangle(const IndexTriangle& tri) const
+{
+	return Triangle(GetPosAtIndex(tri.idx1), GetPosAtIndex(tri.idx2), GetPosAtIndex(tri.idx3));
+}
+
 Vector Navigation::Navmesh::GetTriangleMid(const IndexTriangle& tri) const
 {
 	const Vector& v1 = GetPosAtIndex(tri.idx1);
@@ -76,9 +100,14 @@ Vector Navigation::Navmesh::GetTriangleMid(const IndexTriangle& tri) const
 	return (v1 + v2 + v3) / 3.0f;
 }
 
+bool Navigation::Navmesh::IsPosInsideTriangle(const Vector& pos, const IndexTriangle& tri) const
+{
+	return IndexTriangleToTriangle(tri).Contains(pos);
+}
+
 void Navigation::Navmesh::RenderTriangles(SceneRenderer& renderer) const
 {
-	for (const Triangle& tri : m_Triangles)
+	for (const NavmeshTriangle& tri : m_Triangles)
 	{
 		RenderTriangle(tri.vertices, renderer);
 	}
@@ -96,8 +125,6 @@ void Navigation::Navmesh::RenderTriangle(const IndexTriangle& tri, SceneRenderer
 	renderer.RenderLine(pos1, pos2, color, layer);
 	renderer.RenderLine(pos2, pos3, color, layer);
 	renderer.RenderLine(pos3, pos1, color, layer);
-
-	// TODO: filling the triangle
 }
 
 void Navigation::Navmesh::RenderEdges(SceneRenderer& renderer) const
@@ -177,13 +204,13 @@ void Navigation::Navmesh::CreateGraph()
 	// Go through every triangle pair
 	for (uint i = 0; i < m_Triangles.size(); i++)
 	{
-		Triangle& tri1 = m_Triangles[i];
+		NavmeshTriangle& tri1 = m_Triangles[i];
 
 		tri1.graph_node = m_Graph.CreateNode(GetTriangleMid(tri1.vertices));
 
 		for (uint j = 0; j < i; j++)
 		{
-			Triangle& older_tri = m_Triangles[j]; // This triangle already has a graph node
+			NavmeshTriangle& older_tri = m_Triangles[j]; // This triangle already has a graph node
 
 			if (older_tri.vertices.ContainsMutualEdge(tri1.vertices))
 			{
