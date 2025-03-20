@@ -14,7 +14,8 @@ Labirynt::Labirynt(int x, int y)
 	wall_buffer = (int*)malloc(walls_num * sizeof(int));
 	if (walls == NULL || wall_buffer == NULL) exit(1);
 
-	srand(time(NULL));
+	seed = time(NULL);
+	srand(seed);
 
 	for (int i = 0; i < walls_num; i++)
 	{

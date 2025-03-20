@@ -3,6 +3,8 @@
 
 class Labirynt
 {
+	unsigned int seed;
+
 	int x;
 	int y;
 	int walls_num;
