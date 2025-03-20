@@ -138,6 +138,29 @@ TEST(SUITE_NAME, CutAtEndAt90deg)
 	assertEqualSegments(expected_result, cut_result);
 }
 
+TEST(SUITE_NAME, CutAtEndAt90deg_VerticalFromAbove)
+{
+	// Arrange
+	const float horizontal_y = 510.000031f;
+	const float x1 = 610.000061f;
+	const float x2 = 710.000061f;
+	const Segment horizontal_segment = Segment(Vector(x1, horizontal_y), Vector(x2, horizontal_y));
+
+	const float vertical_x = 620.000061f;
+	const Segment vertical_segment = Segment(Vector(vertical_x, 410.000031f), Vector(vertical_x, 510.000031f));
+
+	// Act
+	const std::vector<Segment> cut_result = horizontal_segment.CutWith(vertical_segment);
+
+	// Assert
+	std::vector<Segment> expected_result;
+	expected_result.emplace_back(vertical_segment);
+	expected_result.emplace_back(Segment(Vector(x1, horizontal_y), Vector(vertical_x, horizontal_y)));
+	expected_result.emplace_back(Segment(Vector(vertical_x, horizontal_y), Vector(x2, horizontal_y)));
+
+	assertEqualSegments(expected_result, cut_result);
+}
+
 TEST(SUITE_NAME, CutAtEndAt90degNotReaching)
 {
 	// Arrange
