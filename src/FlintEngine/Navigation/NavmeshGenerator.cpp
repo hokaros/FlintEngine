@@ -148,8 +148,9 @@ namespace Navigation
 		size_t i = 0;
 		while (true)
 		{
+			const size_t prev_collider_links_count = collider_links.size();
 			const size_t new_new_collider_links_offset = CutColliderLinksForNew(vertices, collider_links, new_collider_links_offset);
-			if (new_new_collider_links_offset == new_collider_links_offset)
+			if (prev_collider_links_count == collider_links.size() && new_new_collider_links_offset == new_collider_links_offset)
 				break;
 
 			new_collider_links_offset = new_new_collider_links_offset;
@@ -215,6 +216,9 @@ namespace Navigation
 		}*/
 
 		std::vector<Segment> cut_result = orig_seg1.CutWith(orig_seg2);
+
+		if (cut_result.size() == 2 && ftl::vector_contains(cut_result, orig_seg1) && ftl::vector_contains(cut_result, orig_seg2) && orig_seg1 != orig_seg2)
+			return;
 
 		// TODO: extract a class
 		using VertexMapT = std::map<Vector, size_t, VectorTreeComparator>;
@@ -556,7 +560,7 @@ namespace Navigation
 
 	void NavmeshGenerator::VertexLinker::CreateLinks(const std::vector<IndexPair>& all_pairs, std::vector<IndexPair>& out_links)
 	{
-		//size_t stop_at = 72; // find the last that doesn't create the link (it's the first that would)
+		//size_t stop_at = 218; // find the last that doesn't create the link (it's the first that would)
 
 		//size_t i = 0;
 		for (IndexPair in_pair : all_pairs)
