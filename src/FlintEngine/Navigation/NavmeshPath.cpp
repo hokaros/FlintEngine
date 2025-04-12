@@ -2,6 +2,11 @@
 
 namespace Navigation
 {
+	NavmeshPath::NavmeshPath(NavmeshPath&& other)
+		: m_ControlPoints(std::move(other.m_ControlPoints))
+	{
+	}
+
 	void NavmeshPath::AddControlPoint(const Vector& point)
 	{
 		m_ControlPoints.emplace_back(point);
@@ -30,5 +35,11 @@ namespace Navigation
 	NavmeshPath::const_iterator NavmeshPath::end() const
 	{
 		return m_ControlPoints.end();
+	}
+
+	NavmeshPath& NavmeshPath::operator=(NavmeshPath&& other)
+	{
+		m_ControlPoints = std::move(other.m_ControlPoints);
+		return *this;
 	}
 }
