@@ -1,18 +1,23 @@
 #pragma once
 #include <Math/Vector.h>
-#include "Navmesh.h"
+#include <Navigation/Navmesh.h>
+#include <Navigation/PathFollower.h>
 
 namespace Navigation
 {
 	class NavmeshAgent
 	{
 	public:
-		NavmeshAgent(const Navmesh& navmesh);
+		NavmeshAgent(const Navmesh& navmesh, IMovable& movable);
 
-		void SetTarget(const Vector& pos);
+		void Update();
+
+		void SetTarget(const Vector& targetPos);
 
 	private:
 		const Navmesh& m_Navmesh;
-		// TODO: path follower
+		IMovable& m_Movable;
+
+		PathFollower m_PathFollower;
 	};
 }

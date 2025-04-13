@@ -17,6 +17,21 @@ namespace Navigation
 		m_ControlPoints.clear();
 	}
 
+	bool NavmeshPath::IsEmpty() const
+	{
+		return m_ControlPoints.empty();
+	}
+
+	const Vector& NavmeshPath::GetFirstControlPoint() const
+	{
+		return m_ControlPoints.front();
+	}
+
+	void NavmeshPath::RemoveFirstControlPoint()
+	{
+		m_ControlPoints.erase(m_ControlPoints.begin());
+	}
+
 	NavmeshPath::iterator NavmeshPath::begin()
 	{
 		return m_ControlPoints.begin();

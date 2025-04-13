@@ -44,3 +44,20 @@ bool ConstantMover::IsSameDirection(const Vector& otherDir) const
 
 	return abs(Vector::GetAngle(moveDir, otherDir)) <= DIRECTION_TOLERANCE;
 }
+
+void ConstantMover::MoveTowards(const Vector& targetPos)
+{
+	const Vector currPos = GetPosition();
+	const Vector dir = targetPos - currPos;
+	SetDirection(dir);
+}
+
+void ConstantMover::Stop()
+{
+	SetDirection(Vector::ZERO);
+}
+
+Vector ConstantMover::GetPosition() const
+{
+	return GetOwner().GetWorldPosition();
+}

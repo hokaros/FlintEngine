@@ -1,19 +1,19 @@
 #pragma once
 #include <ComponentDefinition.h>
 #include <InputController.h>
+#include <Controllers/PlayerActionsController.h>
+#include <Navigation/NavmeshAgent.h>
 #include "PlayerEquipment.h"
 #include "ConstantMover.h"
 #include "Firearm.h"
-#include <Controllers/PlayerActionsController.h>
 
-class PlayerController :
-	public ObjectComponent
+class ClickPlayerController
+	: public ObjectComponent
 {
 	DECLARE_COMPONENT();
-
 public:
-	void Update() override;
-	void Awake() override;
+	virtual void Awake() override;
+	virtual void Update() override;
 
 protected:
 	const IInputController* input = nullptr;
@@ -22,9 +22,8 @@ protected:
 
 private:
 	void ProcessMovement();
-	void ProcessAim();
 
 private:
 	Controllers::PlayerActionsController m_ActionsController;
+	std::unique_ptr<Navigation::NavmeshAgent> m_NavmeshAgent = nullptr;
 };
-

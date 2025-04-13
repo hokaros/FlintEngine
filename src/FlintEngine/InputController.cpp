@@ -136,10 +136,12 @@ void InputController::ClearFrameInfo()
 
 MouseButton InputController::MouseButtonIdToEnum(uint8_t button_id)
 {
-	if (button_id == 0)
-		return MouseButton::Right;
 	if (button_id == 1)
 		return MouseButton::Left;
+	if (button_id == 2)
+		return MouseButton::Middle;
+	if (button_id == 3)
+		return MouseButton::Right;
 
 	return MouseButton::Unknown;
 }

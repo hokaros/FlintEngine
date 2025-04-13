@@ -1,10 +1,9 @@
 #include "PlayerController.h"
-#include "Health.h"
 #include <Core/GameObject.h>
 
 DEFINE_COMPONENT(PlayerController);
 
-void PlayerController::Start() 
+void PlayerController::Awake() 
 {
 	// Za³adowanie cache'a
 	input = IInputController::Main();
@@ -15,25 +14,11 @@ void PlayerController::Start()
 void PlayerController::Update() 
 {
 	ProcessMovement();
+
+	Controllers::PlayerControlContext context(*input, *equipment);
+	m_ActionsController.Update(context);
+
 	ProcessAim();
-
-	// Zmiana broni
-	if (input->PressedThisFrame(WPN_SWITCH_KEY)) 
-	{
-		equipment->SwitchWeapon();
-
-		if (onWeaponChanged)
-			onWeaponChanged(equipment->GetCurrentWeapon()->GetType());
-	}
-
-	// Strzelanie
-	if (input->IsKeyDown(SHOOT_KEY) && equipment->GetCurrentWeapon() != NULL) 
-	{
-		bool success = equipment->GetCurrentWeapon()->TryShoot();
-
-		if (success && onShot)
-			onShot();
-	}
 }
 
 void PlayerController::ProcessMovement() 
@@ -61,9 +46,6 @@ void PlayerController::ProcessMovement()
 	{
 		// Zmieniony kierunek ruchu
 		mover->SetDirection(moveDir);
-
-		if (onMovementChanged)
-			onMovementChanged(moveDir);
 	}
 }
 
@@ -73,7 +55,4 @@ void PlayerController::ProcessAim()
 
 	Vector mousePos = input->GetMousePosition();
 	m_GameObject->LookAt(mousePos);
-
-	if (m_GameObject->GetWorldRotation() != prevRotation && onAimChanged)
-		onAimChanged(m_GameObject->GetWorldRotation());
 }
