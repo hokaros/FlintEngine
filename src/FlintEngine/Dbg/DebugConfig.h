@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 namespace debug
 {
@@ -9,10 +10,31 @@ namespace debug
 		Raycast
 	};
 
+	const char* DebugModeToString(DebugMode mode);
+
 	class DebugConfigWindow
 	{
 	public:
 		void Render();
+
+	private:
+		struct DebugModeEntry
+		{
+			const char* display_name;
+			DebugMode mode;
+
+			constexpr DebugModeEntry(const char* display_name, DebugMode mode)
+				: display_name(display_name)
+				, mode(mode)
+			{}
+		};
+
+	private:
+		void GatherDebugModes(std::vector<DebugModeEntry>& out_modes);
+		void GatherDebugMode(DebugMode mode, std::vector<DebugModeEntry>& out_modes);
+
+	private:
+		std::vector<DebugModeEntry> m_DebugModes;
 	};
 
 	class DebugConfig
