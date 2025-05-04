@@ -1,6 +1,7 @@
 #include "DebugNavmeshQuerier.h"
 
 #include <Core/GameBase.h>
+#include <Dbg/DebugConfig.h>
 
 namespace Navigation
 {
@@ -11,6 +12,12 @@ namespace Navigation
 
 	void DebugNavmeshQuerier::Update()
 	{
+		if (debug::DebugConfig::GetDebugMode() != debug::DebugMode::NavmeshQuery)
+		{
+			Reset();
+			return;
+		}
+
 		SceneRenderer* scene_renderer = m_Game.GetSceneRenderer();
 		if (scene_renderer == nullptr)
 			return;
@@ -24,24 +31,15 @@ namespace Navigation
 		switch (m_State)
 		{
 		case State::NoPointSelected:
-			m_StartPoint = world_pos;
-			m_State = State::StartPointSelected;
+			OnStartPointSelected(world_pos);
 			break;
 
 		case State::StartPointSelected:
-			m_EndPoint = world_pos;
-
-			m_Path.Clear();
-			if (const Navmesh* navmesh = GetNavmesh())
-			{
-				CalculatePath(*navmesh, m_Path);
-			}
-
-			m_State = State::StartAndEndPointsSelected;
+			OnEndPointSelected(world_pos);
 			break;
 
 		case State::StartAndEndPointsSelected:
-			m_State = State::NoPointSelected;
+			Reset();
 			break;
 		}
 	}
@@ -117,5 +115,29 @@ namespace Navigation
 	void DebugNavmeshQuerier::CalculatePath(const Navmesh& navmesh, NavmeshPath& path) const
 	{
 		NavmeshPathfinder::FindPath(navmesh, m_StartPoint, m_EndPoint, path);
+	}
+
+	void DebugNavmeshQuerier::Reset()
+	{
+		m_State = State::NoPointSelected;
+	}
+
+	void DebugNavmeshQuerier::OnStartPointSelected(const Vector& world_pos)
+	{
+		m_StartPoint = world_pos;
+		m_State = State::StartPointSelected;
+	}
+
+	void DebugNavmeshQuerier::OnEndPointSelected(const Vector& world_pos)
+	{
+		m_EndPoint = world_pos;
+
+		m_Path.Clear();
+		if (const Navmesh* navmesh = GetNavmesh())
+		{
+			CalculatePath(*navmesh, m_Path);
+		}
+
+		m_State = State::StartAndEndPointsSelected;
 	}
 }

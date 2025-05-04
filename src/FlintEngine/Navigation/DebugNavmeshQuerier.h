@@ -34,6 +34,10 @@ namespace Navigation
 		const Navmesh* GetNavmesh() const;
 		void CalculatePath(const Navmesh& navmesh, NavmeshPath& path) const;
 
+		void Reset();
+		void OnStartPointSelected(const Vector& world_pos);
+		void OnEndPointSelected(const Vector& world_pos);
+
 	private:
 		GameBase& m_Game;
 
