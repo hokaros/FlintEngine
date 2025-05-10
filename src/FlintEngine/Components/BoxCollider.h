@@ -10,6 +10,7 @@ class BoxCollider
 
 public:
 	BoxCollider() = default;
+	BoxCollider(Vector local_position, Vector local_size);
 
 	bool DoesCollide(const BoxCollider& other) const;
 	bool DoesSegmentIntersect(const Vector& line_start, const Vector& line_end) const;

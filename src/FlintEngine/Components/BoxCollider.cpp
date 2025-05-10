@@ -11,6 +11,12 @@ DEFINE_FIELD(BoxCollider, m_Size);
 DEFINE_FIELD(BoxCollider, m_IsStatic);
 DEFINE_FIELD(BoxCollider, m_ShouldNavmeshIgnore);
 
+BoxCollider::BoxCollider(Vector local_position, Vector local_size)
+	: m_Position(local_position)
+	, m_Size(local_size)
+{
+}
+
 bool BoxCollider::DoesCollide(const BoxCollider& other) const
 {
 	// Rozpatrzenie kolizji odwrotnych (mog¹ siê znosiæ)

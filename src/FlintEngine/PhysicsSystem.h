@@ -1,10 +1,17 @@
 #pragma once
 #include <vector>
+#include <optional>
+#include <Math/Vector.h>
 #include "SystemCreationKey.h"
 
 #define BUMPOUT_SPEED 10000.0
 
 class BoxCollider;
+
+struct RaycastHit
+{
+	Vector collision_point;
+};
 
 class PhysicsSystem
 {
@@ -17,6 +24,8 @@ public:
 
 	void Update();
 	void DebugRender();
+
+	std::optional<RaycastHit> Raycast(Vector from, Vector to);
 
 	static PhysicsSystem* GetInstance();
 

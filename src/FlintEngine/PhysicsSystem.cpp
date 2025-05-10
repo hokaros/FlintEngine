@@ -53,6 +53,11 @@ void PhysicsSystem::DebugRender()
 	}
 }
 
+std::optional<RaycastHit> PhysicsSystem::Raycast(Vector from, Vector to)
+{
+	return std::optional<RaycastHit>();
+}
+
 PhysicsSystem* PhysicsSystem::GetInstance()
 {
 	return s_Instance;
