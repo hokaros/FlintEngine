@@ -24,10 +24,13 @@ TEST(SUITE_NAME, CrossingColliderHorizontallyInMiddle)
 	const Vector collider_size = Vector(5, 6);
 	game_object.AddComponent(std::make_unique<BoxCollider>(collider_offset, collider_size));
 
+	game_object.Awake();
+	game_object.Start();
+
 	// Act
 	const Vector raycast_start = Vector(6, 15);
 	const Vector raycast_end = Vector(15, 15);
-	std::optional<RaycastHit> hit = physics.Raycast(raycast_start, raycast_end);
+	std::optional<RaycastHit> hit = physics.RaycastAny(raycast_start, raycast_end);
 
 	// Assert
 	ASSERT_TRUE(hit.has_value());
@@ -47,10 +50,13 @@ TEST(SUITE_NAME, CrossingColliderVerticallyInMiddle)
 	const Vector collider_size = Vector(5, 6);
 	game_object.AddComponent(std::make_unique<BoxCollider>(collider_offset, collider_size));
 
+	game_object.Awake();
+	game_object.Start();
+
 	// Act
 	const Vector raycast_start = Vector(10, 10);
 	const Vector raycast_end = Vector(10, 20);
-	std::optional<RaycastHit> hit = physics.Raycast(raycast_start, raycast_end);
+	std::optional<RaycastHit> hit = physics.RaycastAny(raycast_start, raycast_end);
 
 	// Assert
 	ASSERT_TRUE(hit.has_value());
@@ -70,10 +76,13 @@ TEST(SUITE_NAME, CrossingColliderHorizontallyInMiddleWithoutCutThrough)
 	const Vector collider_size = Vector(5, 6);
 	game_object.AddComponent(std::make_unique<BoxCollider>(collider_offset, collider_size));
 
+	game_object.Awake();
+	game_object.Start();
+
 	// Act
 	const Vector raycast_start = Vector(6, 15);
 	const Vector raycast_end = Vector(11, 15);
-	std::optional<RaycastHit> hit = physics.Raycast(raycast_start, raycast_end);
+	std::optional<RaycastHit> hit = physics.RaycastAny(raycast_start, raycast_end);
 
 	// Assert
 	ASSERT_TRUE(hit.has_value());
@@ -93,10 +102,13 @@ TEST(SUITE_NAME, NotCrossing)
 	const Vector collider_size = Vector(5, 6);
 	game_object.AddComponent(std::make_unique<BoxCollider>(collider_offset, collider_size));
 
+	game_object.Awake();
+	game_object.Start();
+
 	// Act
 	const Vector raycast_start = Vector(0, 0);
 	const Vector raycast_end = Vector(-10, 15);
-	std::optional<RaycastHit> hit = physics.Raycast(raycast_start, raycast_end);
+	std::optional<RaycastHit> hit = physics.RaycastAny(raycast_start, raycast_end);
 
 	// Assert
 	ASSERT_FALSE(hit.has_value());

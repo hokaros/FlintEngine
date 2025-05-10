@@ -53,9 +53,20 @@ void PhysicsSystem::DebugRender()
 	}
 }
 
-std::optional<RaycastHit> PhysicsSystem::Raycast(Vector from, Vector to)
+std::optional<RaycastHit> PhysicsSystem::RaycastAny(Vector from, Vector to)
 {
-	return std::optional<RaycastHit>();
+	for (BoxCollider* collider : m_Colliders)
+	{
+		const std::optional<Vector> contact_point = collider->GetFirstContactPointWithSegment(from, to);
+		if (contact_point.has_value())
+		{
+			RaycastHit hit;
+			hit.collision_point = contact_point.value();
+			return hit;
+		}
+	}
+
+	return std::nullopt;
 }
 
 PhysicsSystem* PhysicsSystem::GetInstance()

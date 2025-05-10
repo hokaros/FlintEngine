@@ -9,6 +9,8 @@ public:
 	Vector end;
 
 public:
+	constexpr Segment() = default;
+
 	constexpr Segment(const Vector& start, const Vector& end)
 		: start(start)
 		, end(end)

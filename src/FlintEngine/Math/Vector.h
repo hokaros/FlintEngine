@@ -103,6 +103,8 @@ public:
     // Zwraca k¹t w radianach wskazywany przez wektor
     double GetAngle() const;
 
+    float GetDistanceSq(const Vector& other) const;
+
     friend Vector operator+(const Vector& left, const Vector& right);
     friend Vector& operator+=(Vector& left, const Vector& right);
     friend Vector operator-(const Vector& left, const Vector& right);

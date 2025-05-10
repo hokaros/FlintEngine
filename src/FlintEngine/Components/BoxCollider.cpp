@@ -79,31 +79,18 @@ bool BoxCollider::DoesSegmentIntersectBoundary(const Vector& seg_start, const Ve
 
 bool BoxCollider::DoesSegmentIntersectBoundary(const Segment& segment) const
 {
-	const Vector top_left = m_Position - Vector(m_Size.x, m_Size.y) / 2.f;
-	const Vector top_right = top_left + Vector(m_Size.x, 0);
-	const Vector bottom_left = top_left + Vector(0, m_Size.y);
-	const Vector bottom_right = bottom_left + Vector(m_Size.x, 0);
+	const Boundary boundary = GetWorldBoundary();
 
-	const GameObject& owner = GetOwner();
-	const Vector top_left_world = owner.TransformPoint(top_left);
-	const Vector top_right_world = owner.TransformPoint(top_right);
-	const Vector bottom_left_world = owner.TransformPoint(bottom_left);
-	const Vector bottom_right_world = owner.TransformPoint(bottom_right);
-
-	const Segment left_boundary_world = Segment(top_left_world, bottom_left_world);
-	if (left_boundary_world.DoesCross(segment))
+	if (boundary.left.DoesCross(segment))
 		return true;
 
-	const Segment right_boundary_world = Segment(top_right_world, bottom_right_world);
-	if (right_boundary_world.DoesCross(segment))
+	if (boundary.right.DoesCross(segment))
 		return true;
 
-	const Segment top_boundary_world = Segment(top_left_world, top_right_world);
-	if (top_boundary_world.DoesCross(segment))
+	if (boundary.top.DoesCross(segment))
 		return true;
 
-	const Segment bottom_boundary_world = Segment(bottom_left_world, bottom_right_world);
-	if (bottom_boundary_world.DoesCross(segment))
+	if (boundary.bottom.DoesCross(segment))
 		return true;
 
 	return false;
@@ -136,6 +123,33 @@ Vector BoxCollider::GetWorldMiddle() const
 Vector BoxCollider::GetWorldSize() const
 {
 	return m_Size.GetScaled(GetOwner().GetWorldScale());
+}
+
+BoxCollider::Boundary BoxCollider::GetWorldBoundary() const
+{
+	const Vector top_left = m_Position - Vector(m_Size.x, m_Size.y) / 2.f;
+	const Vector top_right = top_left + Vector(m_Size.x, 0);
+	const Vector bottom_left = top_left + Vector(0, m_Size.y);
+	const Vector bottom_right = bottom_left + Vector(m_Size.x, 0);
+
+	const GameObject& owner = GetOwner();
+	const Vector top_left_world = owner.TransformPoint(top_left);
+	const Vector top_right_world = owner.TransformPoint(top_right);
+	const Vector bottom_left_world = owner.TransformPoint(bottom_left);
+	const Vector bottom_right_world = owner.TransformPoint(bottom_right);
+
+	const Segment left_boundary_world = Segment(top_left_world, bottom_left_world);
+	const Segment right_boundary_world = Segment(top_right_world, bottom_right_world);
+	const Segment top_boundary_world = Segment(top_left_world, top_right_world);
+	const Segment bottom_boundary_world = Segment(bottom_left_world, bottom_right_world);
+
+	Boundary boundary;
+	boundary.left = left_boundary_world;
+	boundary.right = right_boundary_world;
+	boundary.top = top_boundary_world;
+	boundary.bottom = bottom_boundary_world;
+
+	return boundary;
 }
 
 void BoxCollider::Awake()
@@ -180,6 +194,35 @@ bool BoxCollider::DoesIntersect(const BoxCollider& other) const
 	return true;
 }
 
+std::optional<Vector> BoxCollider::GetFirstContactPointInBoundaryWithSegment(const Vector& seg_start, const Vector& seg_end) const
+{
+	std::vector<Vector> contact_points;
+	GetContactPointsInBoundaryWithSegment(seg_start, seg_end, contact_points);
+
+	if (contact_points.empty())
+		return std::nullopt;
+
+	return GetClosestPointToPoint(contact_points, seg_start);
+}
+
+void BoxCollider::GetContactPointsInBoundaryWithSegment(const Vector& seg_start, const Vector& seg_end, std::vector<Vector>& out_points) const
+{
+	auto test_and_add_segment_contact = [&out_points, seg_start, seg_end](const Segment& seg)
+	{
+		const Vector crossing = seg.GetCrossingPoint(Segment(seg_start, seg_end));
+		if (crossing != Vector::INVALID)
+		{
+			out_points.emplace_back(crossing);
+		}
+	};
+
+	const Boundary boundary = GetWorldBoundary();
+	test_and_add_segment_contact(boundary.top);
+	test_and_add_segment_contact(boundary.bottom);
+	test_and_add_segment_contact(boundary.left);
+	test_and_add_segment_contact(boundary.right);
+}
+
 bool BoxCollider::DoLinesIntersect(float min1, float max1, float min2, float max2)
 {
 	return (min1 >= min2 && min1 <= max2)
@@ -212,6 +255,24 @@ bool BoxCollider::IsInside(const BoxCollider& collider1, const BoxCollider& coll
 		return false;
 
 	return true;
+}
+
+Vector BoxCollider::GetClosestPointToPoint(const vector<Vector>& points, const Vector& target)
+{
+	float min_dist_sq = INFINITY;
+	Vector min_dist_p = Vector::INVALID;
+
+	for (const Vector& p : points)
+	{
+		const float dist_sq = p.GetDistanceSq(target);
+		if (dist_sq < min_dist_sq)
+		{
+			min_dist_sq = dist_sq;
+			min_dist_p = p;
+		}
+	}
+
+	return min_dist_p;
 }
 
 bool BoxCollider::IsLineInside(float min1, float max1, float min2, float max2)
@@ -259,6 +320,13 @@ Rect BoxCollider::GetIntersection(const BoxCollider& other) const
 		Vector(xIntersection.x, yIntersection.x),
 		size
 	);
+}
+
+std::optional<Vector> BoxCollider::GetFirstContactPointWithSegment(const Vector& seg_start, const Vector& seg_end) const
+{
+	if (DoesContainPoint(seg_start))
+		return seg_start;
+	return GetFirstContactPointInBoundaryWithSegment(seg_start, seg_end);
 }
 
 bool BoxCollider::IsStatic() const

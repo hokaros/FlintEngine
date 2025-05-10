@@ -25,7 +25,11 @@ public:
 	void Update();
 	void DebugRender();
 
-	std::optional<RaycastHit> Raycast(Vector from, Vector to);
+	/**
+	* Checks for collision points with the specified ray.
+	* If more than one collider collides, returns a random collision.
+	*/
+	std::optional<RaycastHit> RaycastAny(Vector from, Vector to);
 
 	static PhysicsSystem* GetInstance();
 

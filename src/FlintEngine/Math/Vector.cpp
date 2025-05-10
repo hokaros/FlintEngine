@@ -59,6 +59,10 @@ float Vector::LengthSquared() const {
 	return x * x + y * y;
 }
 
+float Vector::GetDistanceSq(const Vector& other) const {
+	return GetDistanceSq(*this, other);
+}
+
 
 Vector operator+(const Vector& left, const Vector& right) {
 	Vector result;

@@ -2,11 +2,21 @@
 #include "ComponentDefinition.h"
 #include <Math/GeometryStructures.h>
 #include <Math/Segment.h>
+#include <vector>
 
 class BoxCollider
 	: public ObjectComponent
 {
 	DECLARE_COMPONENT();
+
+public:
+	struct Boundary
+	{
+		Segment top;
+		Segment bottom;
+		Segment left;
+		Segment right;
+	};
 
 public:
 	BoxCollider() = default;
@@ -19,6 +29,7 @@ public:
 	bool DoesSegmentIntersectBoundary(const Vector& seg_start, const Vector& seg_end) const;
 	bool DoesSegmentIntersectBoundary(const Segment& segment) const;
 	Rect GetIntersection(const BoxCollider& other) const;
+	std::optional<Vector> GetFirstContactPointWithSegment(const Vector& seg_start, const Vector& seg_end) const;
 	bool IsStatic() const;
 	void GetVertices(std::vector<Vector>& out_vertices, std::vector<IndexPair>& out_edges) const;
 
@@ -31,6 +42,7 @@ public:
 	Vector GetWorldPos() const;
 	Vector GetWorldMiddle() const;
 	Vector GetWorldSize() const;
+	Boundary GetWorldBoundary() const;
 
 	virtual void Awake() override;
 	virtual void OnDestroy() override;
@@ -40,7 +52,11 @@ public:
 
 private:
 	bool DoesIntersect(const BoxCollider& other) const;
+	std::optional<Vector> GetFirstContactPointInBoundaryWithSegment(const Vector& seg_start, const Vector& seg_end) const;
+	void GetContactPointsInBoundaryWithSegment(const Vector& seg_start, const Vector& seg_end, std::vector<Vector>& out_points) const;
 	static bool IsInside(const BoxCollider& collider1, const BoxCollider& collider2);
+
+	static Vector GetClosestPointToPoint(const std::vector<Vector>& points, const Vector& target);
 
 	/***** Operacje na jednowymiarowych liniach ******/
 	static bool DoLinesIntersect(float min1, float max1, float min2, float max2);
