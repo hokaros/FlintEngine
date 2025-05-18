@@ -1,8 +1,11 @@
 #pragma once
 #include <vector>
+#include <optional>
+#include <map>
 #include <Math/GeometryStructures.h>
 #include <Math/Vector.h>
 #include <Math/Triangle.h>
+#include <Math/Segment.h>
 #include <Graph/PositionGraph.h>
 
 class SceneRenderer;
@@ -16,6 +19,9 @@ namespace Navigation
 
 		const graph::PositionGraph& GetGraph() const;
 		graph::NodeId GetTriangleOfPos(const Vector& pos) const;
+
+		bool ContainsLine(const Segment& line) const;
+		bool ContainsPoint(const Vector& pos) const;
 
 		void Clear();
 		void AddVertex(Vector&& v);
@@ -31,6 +37,15 @@ namespace Navigation
 		{
 			IndexTriangle vertices;
 			graph::NodeId graph_node;
+
+			void GetEdgesAsIndexPairs(std::vector<IndexPair>& out_edges) const;
+		};
+
+		struct TriangleId
+		{
+			size_t index = 0;
+
+			static const TriangleId INVALID;
 		};
 
 	private:
@@ -38,6 +53,13 @@ namespace Navigation
 		Triangle IndexTriangleToTriangle(const IndexTriangle& tri) const;
 		Vector GetTriangleMid(const IndexTriangle& tri) const;
 		bool IsPosInsideTriangle(const Vector& pos, const IndexTriangle& tri) const;
+
+		bool DoesLineCrossNonNeighbouringTriangles(const Segment& line) const;
+		std::optional<IndexPair> GetCrossedEdgeOfTriangle(const Segment& crossing_seg, const NavmeshTriangle& tri) const;
+		graph::NodeId GetTriangleNeighbourContainingEdge(const NavmeshTriangle& tri, const IndexPair& edge) const;
+
+		TriangleId FindTriangleOfGraphNode(graph::NodeId node) const;
+		const NavmeshTriangle& GetTriangleById(TriangleId id) const;
 
 		void RenderTriangles(SceneRenderer& renderer) const;
 		void RenderTriangle(const IndexTriangle& tri, SceneRenderer& renderer) const;
@@ -50,10 +72,13 @@ namespace Navigation
 
 		void CreateGraph();
 
+		bool DoesAnyTriangleContainPos(const std::vector<NavmeshTriangle>& triangles, const Vector& pos) const;
+
 	private:
 		std::vector<Vector> m_Vertices;
 		std::vector<NavmeshTriangle> m_Triangles;
 		std::vector<IndexPair> m_Edges; // TODO: remove
 		graph::PositionGraph m_Graph;
+		std::map<graph::NodeId, TriangleId> m_GraphNodesToTriangles;
 	};
 }

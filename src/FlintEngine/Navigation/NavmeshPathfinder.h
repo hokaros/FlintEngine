@@ -8,5 +8,9 @@ namespace Navigation
 	{
 	public:
 		static void FindPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, NavmeshPath& out_path);
+
+	private:
+		static void FindTriangleCenterPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, NavmeshPath& out_path);
+		static void SmoothPath(NavmeshPath& path, const Navmesh& navmesh);
 	};
 }

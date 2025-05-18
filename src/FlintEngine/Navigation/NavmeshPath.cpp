@@ -32,6 +32,16 @@ namespace Navigation
 		m_ControlPoints.erase(m_ControlPoints.begin());
 	}
 
+	const Vector& NavmeshPath::GetLastControlPoint() const
+	{
+		return m_ControlPoints.back();
+	}
+
+	size_t NavmeshPath::GetControlPointCount() const
+	{
+		return m_ControlPoints.size();
+	}
+
 	NavmeshPath::iterator NavmeshPath::begin()
 	{
 		return m_ControlPoints.begin();
@@ -56,5 +66,10 @@ namespace Navigation
 	{
 		m_ControlPoints = std::move(other.m_ControlPoints);
 		return *this;
+	}
+
+	const Vector& NavmeshPath::operator[](size_t index) const
+	{
+		return m_ControlPoints[index];
 	}
 }

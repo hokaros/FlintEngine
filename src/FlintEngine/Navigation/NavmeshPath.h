@@ -19,6 +19,8 @@ namespace Navigation
 		bool IsEmpty() const;
 		const Vector& GetFirstControlPoint() const;
 		void RemoveFirstControlPoint();
+		const Vector& GetLastControlPoint() const;
+		size_t GetControlPointCount() const;
 
 		iterator begin();
 		iterator end();
@@ -26,6 +28,7 @@ namespace Navigation
 		const_iterator end() const;
 
 		NavmeshPath& operator=(NavmeshPath&& other);
+		const Vector& operator[](size_t index) const;
 
 	private:
 		std::vector<Vector> m_ControlPoints;
