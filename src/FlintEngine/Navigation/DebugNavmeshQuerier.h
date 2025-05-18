@@ -1,49 +1,27 @@
 #pragma once
-#include <Math/Vector.h>
 #include <Navigation/NavmeshPathfinder.h>
-
-class GameBase;
-class SceneRenderer;
-class IInputController;
+#include <Dbg/TwoPointDebugger.h>
 
 namespace Navigation
 {
 	class DebugNavmeshQuerier
+		: public debug::TwoPointDebugger
 	{
 	public:
 		DebugNavmeshQuerier(GameBase& game);
 
-		void Update();
-		void Render(SceneRenderer& renderer);
+	protected:
+		virtual bool IsEnabled() const override;
+		virtual void OnStartAndEndPointsSelected(const Vector& start_point, const Vector& end_point) override;
+		virtual void RenderWhenStartAndEndPointsSelected(SceneRenderer& renderer) override;
 
 	private:
-		enum class State
-		{
-			NoPointSelected,
-			StartPointSelected,
-			StartAndEndPointsSelected
-		};
-
-	private:
-		void OnPointSelected(const Vector& world_pos);
-		void ProcessInput(const IInputController& input, const SceneRenderer& scene_renderer);
-
-		void RenderPoint(const Vector& world_pos, SceneRenderer& renderer);
 		void RenderPath(SceneRenderer& renderer, const NavmeshPath& path);
 
 		const Navmesh* GetNavmesh() const;
-		void CalculatePath(const Navmesh& navmesh, NavmeshPath& path) const;
-
-		void Reset();
-		void OnStartPointSelected(const Vector& world_pos);
-		void OnEndPointSelected(const Vector& world_pos);
+		void CalculatePath(const Vector& start_point, const Vector& end_point, const Navmesh& navmesh, NavmeshPath& path) const;
 
 	private:
-		GameBase& m_Game;
-
-		State m_State = State::NoPointSelected;
-		Vector m_StartPoint;
-		Vector m_EndPoint;
 		NavmeshPath m_Path;
 	};
 }
