@@ -167,6 +167,13 @@ bool Segment::operator!=(const Segment& other) const
 	return !(*this == other);
 }
 
+Segment& Segment::operator=(const Segment& other)
+{
+	start = other.start;
+	end = other.end;
+	return *this;
+}
+
 bool Segment::IsPointBetweenEnds(const Vector& target) const
 {
 	if (target == start || target == end)

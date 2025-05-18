@@ -10,6 +10,7 @@ GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputControll
 	, m_PhysicsSystem({})
 	, m_InputController(input_controller)
 	, m_DebugNavmeshQuerier(*this)
+	, m_DebugNavmeshContainChecker(*this)
 {
 	if (m_SceneRenderer != nullptr)
 	{
@@ -80,16 +81,14 @@ bool GameBase::RunOneLoop()
 
 	m_PhysicsSystem.Update();
 
-	m_DebugNavmeshQuerier.Update();
+	UpdateDebuggers();
 
 	// Renderowanie obiektów
 	if (m_SceneRenderer != nullptr)
 	{
 		m_CurrScene->Render(*m_SceneRenderer);
 
-		m_DebugConfigWindow.Render();
-		m_DebugMonitorWindow.Render();
-		m_DebugNavmeshQuerier.Render(*m_SceneRenderer);
+		RenderDebuggers();
 		DebugRender();
 
 		if (m_Window != nullptr)
@@ -136,6 +135,20 @@ void GameBase::InvokeOnNextFrame(function<void()> fun)
 GameBase* GameBase::GetCurrent()
 {
 	return s_Current;
+}
+
+void GameBase::UpdateDebuggers()
+{
+	m_DebugNavmeshQuerier.Update();
+	m_DebugNavmeshContainChecker.Update();
+}
+
+void GameBase::RenderDebuggers()
+{
+	m_DebugConfigWindow.Render();
+	m_DebugMonitorWindow.Render();
+	m_DebugNavmeshQuerier.Render(*m_SceneRenderer);
+	m_DebugNavmeshContainChecker.Render(*m_SceneRenderer);
 }
 
 void GameBase::DebugRender()

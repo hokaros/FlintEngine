@@ -41,6 +41,7 @@ public:
 
 	bool operator==(const Segment& other) const;
 	bool operator!=(const Segment& other) const;
+	Segment& operator=(const Segment& other);
 
 private:
 	bool IsPointBetweenEnds(const Vector& point) const;

@@ -7,6 +7,7 @@ namespace debug
 	{
 		None,
 		NavmeshQuery,
+		NavmeshLineContainment,
 		Raycast
 	};
 
