@@ -55,7 +55,7 @@ namespace Navigation
 		bool IsPosInsideTriangle(const Vector& pos, const IndexTriangle& tri) const;
 
 		bool DoesLineCrossNonNeighbouringTriangles(const Segment& line) const;
-		std::optional<IndexPair> GetCrossedEdgeOfTriangle(const Segment& crossing_seg, const NavmeshTriangle& tri) const;
+		void GetCrossedEdgesOfTriangle(const Segment& crossing_seg, const NavmeshTriangle& tri, std::vector<IndexPair>& out_crossed_edges) const;
 		graph::NodeId GetTriangleNeighbourContainingEdge(const NavmeshTriangle& tri, const IndexPair& edge) const;
 
 		TriangleId FindTriangleOfGraphNode(graph::NodeId node) const;

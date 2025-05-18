@@ -128,10 +128,12 @@ namespace Navigation
 		// TODO: space partitioning (check only triangles which are within extents of the line)
 		for (const NavmeshTriangle& tri : m_Triangles)
 		{
-			const std::optional<IndexPair> crossed_edge = GetCrossedEdgeOfTriangle(line, tri);
-			if (crossed_edge.has_value())
+			std::vector<IndexPair> crossed_edges;
+			GetCrossedEdgesOfTriangle(line, tri, crossed_edges);
+
+			for (const IndexPair& crossed_edge : crossed_edges)
 			{
-				const graph::NodeId neighbour_containing_edge_id = GetTriangleNeighbourContainingEdge(tri, *crossed_edge);
+				const graph::NodeId neighbour_containing_edge_id = GetTriangleNeighbourContainingEdge(tri, crossed_edge);
 				if (neighbour_containing_edge_id == graph::NodeId::INVALID)
 				{
 					return true;
@@ -142,7 +144,7 @@ namespace Navigation
 		return false;
 	}
 
-	std::optional<IndexPair> Navmesh::GetCrossedEdgeOfTriangle(const Segment& crossing_seg, const NavmeshTriangle& tri) const
+	void Navmesh::GetCrossedEdgesOfTriangle(const Segment& crossing_seg, const NavmeshTriangle& tri, std::vector<IndexPair>& out_crossed_edges) const
 	{
 		std::vector<IndexPair> edges;
 		tri.GetEdgesAsIndexPairs(edges);
@@ -152,11 +154,9 @@ namespace Navigation
 			const Segment edge_line = Segment(m_Vertices[edge.first], m_Vertices[edge.second]);
 			if (edge_line.DoesCross(crossing_seg))
 			{
-				return edge;
+				out_crossed_edges.emplace_back(edge);
 			}
 		}
-
-		return std::nullopt;
 	}
 
 	graph::NodeId Navmesh::GetTriangleNeighbourContainingEdge(const NavmeshTriangle& tri, const IndexPair& edge) const
