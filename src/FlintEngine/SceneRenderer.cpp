@@ -67,6 +67,19 @@ void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color, uint layer)
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
+void SceneRenderer::RenderRect(const DirectedRect& rect, const Rgb8& color, uint layer)
+{
+	RenderTargetScope render_scope = SetTargetLayer(layer);
+
+	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
+
+	TriangleList triangles;
+	RectToTriangles(rect, color, triangles);
+
+	int result = RenderTriangles(triangles);
+	FE_ASSERT(result == 0, "ERROR: Could not render");
+}
+
 void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb8& color, uint layer)
 {
 	RenderTargetScope render_scope = SetTargetLayer(layer);
@@ -245,7 +258,60 @@ VectorInt SceneRenderer::GetCharCoordinates(char c) const
 	return VectorInt(x, y);
 }
 
+int SceneRenderer::RenderTriangles(const TriangleList& triangles)
+{
+	std::vector<SDL_Vertex> vertices;
+	VerticesToSDLVertices(triangles.vertices, vertices);
+
+	return SDL_RenderGeometry(m_Renderer, nullptr, vertices.data(), vertices.size(), triangles.indices.data(), triangles.indices.size());
+}
+
 RenderTargetScope SceneRenderer::SetTargetLayer(uint layer_index)
 {
 	return RenderTargetScope(m_Renderer, m_TargetLayers.GetOrCreateLayer(layer_index));
+}
+
+void SceneRenderer::RectToTriangles(const DirectedRect& rect, const Rgb8& color, TriangleList& triangles)
+{
+	triangles.vertices.push_back({ rect.GetCorner1(), color });
+	triangles.vertices.push_back({ rect.GetCorner2(), color });
+	triangles.vertices.push_back({ rect.GetCorner3(), color });
+	triangles.vertices.push_back({ rect.GetCorner4(), color });
+	
+	triangles.indices.push_back(0);
+	triangles.indices.push_back(1);
+	triangles.indices.push_back(2);
+	triangles.indices.push_back(1);
+	triangles.indices.push_back(2);
+	triangles.indices.push_back(3);
+}
+
+void SceneRenderer::VerticesToSDLVertices(const std::vector<Vertex>& vertices, std::vector<SDL_Vertex>& sdl_vertices)
+{
+	for (const Vertex& in_v : vertices)
+	{
+		SDL_Vertex sdl_v;
+		sdl_v.position = VectorToSDLPoint(in_v.pos);
+		sdl_v.color = Rgb8ToSDLColor(in_v.color);
+
+		sdl_vertices.push_back(sdl_v);
+	}
+}
+
+SDL_FPoint SceneRenderer::VectorToSDLPoint(const Vector& v)
+{
+	SDL_FPoint p;
+	p.x = v.x;
+	p.y = v.y;
+	return p;
+}
+
+SDL_Color SceneRenderer::Rgb8ToSDLColor(const Rgb8& color)
+{
+	SDL_Color out_c;
+	out_c.r = color.r;
+	out_c.g = color.g;
+	out_c.b = color.b;
+	out_c.a = 0xFF;
+	return out_c;
 }

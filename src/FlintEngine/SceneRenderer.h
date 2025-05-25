@@ -2,6 +2,7 @@
 #include <Rendering/TargetLayersContainer.h>
 
 #include "Draw.h"
+#include <Math/DirectedRect.h>
 
 class Window;
 class SceneEditor;
@@ -29,6 +30,7 @@ public:
 
 	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, uint layer);
 	void RenderRect(const Rect& rect, const Rgb8& color, uint layer);
+	void RenderRect(const DirectedRect& rect, const Rgb8& color, uint layer);
 	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color, uint layer);
 	void RenderWireRect(const Rect& rect, const Rgb8& color, uint layer);
 
@@ -54,20 +56,44 @@ public:
 	~SceneRenderer();
 
 private:
+	struct Vertex
+	{
+		Vector pos;
+		Rgb8 color;
+
+		constexpr Vertex(const Vector& pos, const Rgb8& color)
+			: pos(pos)
+			, color(color)
+		{}
+	};
+
+	struct TriangleList
+	{
+		std::vector<Vertex> vertices;
+		std::vector<int> indices;
+	};
+
+private:
 	[[nodiscard]] Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
 	[[nodiscard]] Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
 	[[nodiscard]] Vector ViewportSpaceToWorldSpace(const Vector& viewportSpace) const;
 	[[nodiscard]] Vector VectorWorldSpaceToViewportSpace(const Vector& world_space) const;
 
-	[[nodiscard]]Rect ViewportSpaceToScreenSpace(const Rect& viewportSpace) const;
-	[[nodiscard]]Vector ViewportSpaceToScreenSpace(const Vector& viewportSpace) const;
+	[[nodiscard]] Rect ViewportSpaceToScreenSpace(const Rect& viewportSpace) const;
+	[[nodiscard]] Vector ViewportSpaceToScreenSpace(const Vector& viewportSpace) const;
 	[[nodiscard]] Vector ScreenSpaceToViewportSpace(const Vector& screenSpace) const;
 	[[nodiscard]] Vector VectorViewportSpaceToScreenSpace(const Vector& viewport_space) const;
 
 	bool LoadCharsets();
 	VectorInt GetCharCoordinates(char c) const;
+	int RenderTriangles(const TriangleList& triangles);
 
 	[[nodiscard]] RenderTargetScope SetTargetLayer(uint layer_index);
+
+	static void RectToTriangles(const DirectedRect& rect, const Rgb8& color, TriangleList& triangles);
+	static void VerticesToSDLVertices(const std::vector<Vertex>& vertices, std::vector<SDL_Vertex>& sdl_vertices);
+	static SDL_FPoint VectorToSDLPoint(const Vector& v);
+	static SDL_Color Rgb8ToSDLColor(const Rgb8& color);
 
 private:
 	TargetLayersContainer m_TargetLayers;

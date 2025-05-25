@@ -1,4 +1,4 @@
-#include "DebugNavmeshContainChecker.h"
+#include "DebugNavmeshLineContainChecker.h"
 
 #include <Core/GameBase.h>
 #include <Dbg/DebugConfig.h>
@@ -6,24 +6,24 @@
 
 namespace Navigation
 {
-	DebugNavmeshContainChecker::DebugNavmeshContainChecker(GameBase& game)
+	DebugNavmeshLineContainChecker::DebugNavmeshLineContainChecker(GameBase& game)
 		: debug::TwoPointDebugger(game)
 	{
 
 	}
 
-	bool DebugNavmeshContainChecker::IsEnabled() const
+	bool DebugNavmeshLineContainChecker::IsEnabled() const
 	{
 		return debug::DebugConfig::GetDebugMode() == debug::DebugMode::NavmeshLineContainment;
 	}
 
-	void DebugNavmeshContainChecker::OnStartAndEndPointsSelected(const Vector& start_point, const Vector& end_point)
+	void DebugNavmeshLineContainChecker::OnStartAndEndPointsSelected(const Vector& start_point, const Vector& end_point)
 	{
 		m_Line = Segment(start_point, end_point);
 		m_IsLineOnNavmesh = IsLineOnNavmesh(m_Line);
 	}
 
-	void DebugNavmeshContainChecker::RenderWhenStartAndEndPointsSelected(SceneRenderer& renderer)
+	void DebugNavmeshLineContainChecker::RenderWhenStartAndEndPointsSelected(SceneRenderer& renderer)
 	{
 		constexpr uint layer = 1;
 		Rgb8 color = Rgb8(0xFF, 0x00, 0x00);
@@ -36,7 +36,7 @@ namespace Navigation
 		renderer.RenderLine(m_Line.start, m_Line.end, color, layer);
 	}
 
-	bool DebugNavmeshContainChecker::IsLineOnNavmesh(const Segment& line) const
+	bool DebugNavmeshLineContainChecker::IsLineOnNavmesh(const Segment& line) const
 	{
 		if (const Navmesh* navmesh = GetNavmesh())
 		{
@@ -46,7 +46,7 @@ namespace Navigation
 		return false;
 	}
 
-	const Navmesh* DebugNavmeshContainChecker::GetNavmesh() const
+	const Navmesh* DebugNavmeshLineContainChecker::GetNavmesh() const
 	{
 		if (const Scene* scene = GetGame().GetCurrentScene())
 		{

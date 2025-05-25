@@ -8,7 +8,8 @@
 #include <Dbg/DebugConfig.h>
 #include <Dbg/DebugMonitor.h>
 #include <Navigation/DebugNavmeshQuerier.h>
-#include <Navigation/DebugNavmeshContainChecker.h>
+#include <Navigation/DebugNavmeshLineContainChecker.h>
+#include <Navigation/DebugNavmeshDirectedRectContainChecker.h>
 #include "Scene.h"
 #include "InputController.h"
 
@@ -58,7 +59,8 @@ protected:
 	debug::DebugConfigWindow m_DebugConfigWindow;
 	debug::DebugMonitor m_DebugMonitorWindow;
 	Navigation::DebugNavmeshQuerier m_DebugNavmeshQuerier;
-	Navigation::DebugNavmeshContainChecker m_DebugNavmeshContainChecker;
+	Navigation::DebugNavmeshLineContainChecker m_DebugNavmeshLineContainChecker;
+	Navigation::DebugNavmeshDirectedRectContainChecker m_DebugNavmeshDirectedRectContainChecker;
 
 private:
 	void UpdateDebuggers();

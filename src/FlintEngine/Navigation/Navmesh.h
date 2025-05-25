@@ -23,7 +23,7 @@ namespace Navigation
 
 		bool ContainsPoint(const Vector& pos) const;
 		bool ContainsLine(const Segment& line) const;
-		bool ContainsDirectedRect(const DirectedRect& rect) const;
+		bool ContainsRect(const DirectedRect& rect) const;
 
 		void Clear();
 		void AddVertex(Vector&& v);

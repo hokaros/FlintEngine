@@ -10,7 +10,8 @@ GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputControll
 	, m_PhysicsSystem({})
 	, m_InputController(input_controller)
 	, m_DebugNavmeshQuerier(*this)
-	, m_DebugNavmeshContainChecker(*this)
+	, m_DebugNavmeshLineContainChecker(*this)
+	, m_DebugNavmeshDirectedRectContainChecker(*this)
 {
 	if (m_SceneRenderer != nullptr)
 	{
@@ -140,7 +141,8 @@ GameBase* GameBase::GetCurrent()
 void GameBase::UpdateDebuggers()
 {
 	m_DebugNavmeshQuerier.Update();
-	m_DebugNavmeshContainChecker.Update();
+	m_DebugNavmeshLineContainChecker.Update();
+	m_DebugNavmeshDirectedRectContainChecker.Update();
 }
 
 void GameBase::RenderDebuggers()
@@ -148,7 +150,8 @@ void GameBase::RenderDebuggers()
 	m_DebugConfigWindow.Render();
 	m_DebugMonitorWindow.Render();
 	m_DebugNavmeshQuerier.Render(*m_SceneRenderer);
-	m_DebugNavmeshContainChecker.Render(*m_SceneRenderer);
+	m_DebugNavmeshLineContainChecker.Render(*m_SceneRenderer);
+	m_DebugNavmeshDirectedRectContainChecker.Render(*m_SceneRenderer);
 }
 
 void GameBase::DebugRender()

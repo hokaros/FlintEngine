@@ -61,6 +61,7 @@ namespace debug
 		GatherDebugMode(DebugMode::None, out_modes);
 		GatherDebugMode(DebugMode::NavmeshQuery, out_modes);
 		GatherDebugMode(DebugMode::NavmeshLineContainment, out_modes);
+		GatherDebugMode(DebugMode::NavmeshDirectedRectContainment, out_modes);
 		GatherDebugMode(DebugMode::Raycast, out_modes);
 	}
 
@@ -81,6 +82,9 @@ namespace debug
 
 		case debug::DebugMode::NavmeshLineContainment:
 			return "NavmeshLineContainment";
+
+		case debug::DebugMode::NavmeshDirectedRectContainment:
+			return "NavmeshDirectedRectContainment";
 
 		case debug::DebugMode::Raycast:
 			return "Raycast";

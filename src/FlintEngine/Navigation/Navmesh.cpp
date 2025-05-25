@@ -50,11 +50,11 @@ namespace Navigation
 		return !DoesLineCrossNonNeighbouringTriangles(line);
 	}
 
-	bool Navmesh::ContainsDirectedRect(const DirectedRect& rect) const
+	bool Navmesh::ContainsRect(const DirectedRect& rect) const
 	{
 		if(!ContainsPoint(rect.GetCorner1()) ||
 			!ContainsPoint(rect.GetCorner2()) ||
-			! ContainsPoint(rect.GetCorner3()) ||
+			!ContainsPoint(rect.GetCorner3()) ||
 			!ContainsPoint(rect.GetCorner4()))
 		return false;
 

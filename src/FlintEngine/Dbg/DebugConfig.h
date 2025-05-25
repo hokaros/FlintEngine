@@ -8,6 +8,7 @@ namespace debug
 		None,
 		NavmeshQuery,
 		NavmeshLineContainment,
+		NavmeshDirectedRectContainment,
 		Raycast
 	};
 

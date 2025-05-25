@@ -9,6 +9,7 @@ public:
 	float width;
 
 public:
+	DirectedRect() = default;
 	DirectedRect(const Segment& mid, float width);
 
 	Vector GetCorner1() const;

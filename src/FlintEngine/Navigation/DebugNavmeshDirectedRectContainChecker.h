@@ -1,16 +1,16 @@
 #pragma once
 #include <Dbg/TwoPointDebugger.h>
-#include <Math/Segment.h>
+#include <Math/DirectedRect.h>
 
 namespace Navigation
 {
 	class Navmesh;
 
-	class DebugNavmeshContainChecker
+	class DebugNavmeshDirectedRectContainChecker
 		: public debug::TwoPointDebugger
 	{
 	public:
-		DebugNavmeshContainChecker(GameBase& game);
+		DebugNavmeshDirectedRectContainChecker(GameBase& game);
 
 	protected:
 		virtual bool IsEnabled() const override;
@@ -18,11 +18,13 @@ namespace Navigation
 		virtual void RenderWhenStartAndEndPointsSelected(SceneRenderer& renderer) override;
 
 	private:
-		bool IsLineOnNavmesh(const Segment& line) const;
+		bool IsRectOnNavmesh(const DirectedRect& line) const;
 		const Navmesh* GetNavmesh() const;
 
 	private:
-		Segment m_Line;
-		bool m_IsLineOnNavmesh = false;
+		DirectedRect m_Rect;
+		bool m_IsRectOnNavmesh = false;
+
+		static constexpr float s_RectWidth = 10.0f;
 	};
 }
