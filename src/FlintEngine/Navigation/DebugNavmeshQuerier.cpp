@@ -59,6 +59,6 @@ namespace Navigation
 
 	void DebugNavmeshQuerier::CalculatePath(const Vector& start_point, const Vector& end_point, const Navmesh& navmesh, NavmeshPath& path) const
 	{
-		NavmeshPathfinder::FindPath(navmesh, start_point, end_point, path);
+		NavmeshPathfinder::FindPath(navmesh, start_point, end_point, 0.f, path);
 	}
 }

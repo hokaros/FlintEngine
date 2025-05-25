@@ -4,10 +4,10 @@
 
 namespace Navigation
 {
-	void NavmeshPathfinder::FindPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, NavmeshPath& out_path)
+	void NavmeshPathfinder::FindPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, float min_width, NavmeshPath& out_path)
 	{
 		FindTriangleCenterPath(navmesh, start_point, end_point, out_path);
-		SmoothPath(out_path, navmesh);
+		SmoothPath(out_path, navmesh, min_width);
 	}
 
 	void NavmeshPathfinder::FindTriangleCenterPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, NavmeshPath& out_path)
@@ -42,7 +42,7 @@ namespace Navigation
 		out_path.AddControlPoint(end_point);
 	}
 
-	void NavmeshPathfinder::SmoothPath(NavmeshPath& path, const Navmesh& navmesh)
+	void NavmeshPathfinder::SmoothPath(NavmeshPath& path, const Navmesh& navmesh, float min_width)
 	{
 		if (path.GetControlPointCount() <= 2)
 			return;
@@ -62,7 +62,7 @@ namespace Navigation
 			const size_t next_index = index_of_furthest_point_with_clean_sight + 1;
 			const Vector next_point = path[next_index];
 			const Segment from_last_control_point_on_smooth_path_to_next_point = Segment(smoothed_path.GetLastControlPoint(), next_point);
-			if (!navmesh.ContainsLine(from_last_control_point_on_smooth_path_to_next_point))
+			if (!navmesh.ContainsRect(DirectedRect(from_last_control_point_on_smooth_path_to_next_point, min_width)))
 			{
 				// No longer within sight, save last point
 				smoothed_path.AddControlPoint(path[index_of_furthest_point_with_clean_sight]);

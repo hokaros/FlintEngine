@@ -4,9 +4,10 @@
 
 namespace Navigation
 {
-    NavmeshAgent::NavmeshAgent(const Navmesh& navmesh, IMovable& movable)
+    NavmeshAgent::NavmeshAgent(const Navmesh& navmesh, IMovable& movable, float width)
         : m_Navmesh(navmesh)
         , m_Movable(movable)
+        , m_Width(width)
     {
     }
 
@@ -18,7 +19,7 @@ namespace Navigation
     void NavmeshAgent::SetTarget(const Vector& targetPos)
     {
         NavmeshPath path;
-        NavmeshPathfinder::FindPath(m_Navmesh, m_Movable.GetPosition(), targetPos, path);
+        NavmeshPathfinder::FindPath(m_Navmesh, m_Movable.GetPosition(), targetPos, m_Width, path);
         m_PathFollower.StartPath(std::move(path));
     }
 }

@@ -11,11 +11,13 @@ void ClickPlayerController::Awake()
 	equipment = GetOwner().FindComponent<PlayerEquipment>();
 	mover = GetOwner().FindComponent<ConstantMover>();
 
+	const float collider_extent = GetOwner().FindComponent<BoxCollider>()->GetWorldSize().Length();
+
 	FE_ASSERT(input != nullptr, "No input");
 	FE_ASSERT(equipment != nullptr, "No equipment");
 	FE_ASSERT(mover != nullptr, "No movement component");
 
-	m_NavmeshAgent = std::make_unique<Navigation::NavmeshAgent>(GetOwner().GetScene()->GetNavmesh(), *mover);
+	m_NavmeshAgent = std::make_unique<Navigation::NavmeshAgent>(GetOwner().GetScene()->GetNavmesh(), *mover, collider_extent);
 }
 
 void ClickPlayerController::Update()

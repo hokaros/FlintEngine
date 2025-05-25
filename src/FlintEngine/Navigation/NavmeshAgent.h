@@ -8,7 +8,7 @@ namespace Navigation
 	class NavmeshAgent
 	{
 	public:
-		NavmeshAgent(const Navmesh& navmesh, IMovable& movable);
+		NavmeshAgent(const Navmesh& navmesh, IMovable& movable, float width);
 
 		void Update();
 
@@ -19,5 +19,6 @@ namespace Navigation
 		IMovable& m_Movable;
 
 		PathFollower m_PathFollower;
+		float m_Width;
 	};
 }
