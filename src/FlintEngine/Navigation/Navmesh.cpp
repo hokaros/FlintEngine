@@ -37,6 +37,11 @@ namespace Navigation
 		return graph::NodeId::INVALID;
 	}
 
+	bool Navigation::Navmesh::ContainsPoint(const Vector& pos) const
+	{
+		return DoesAnyTriangleContainPos(m_Triangles, pos);
+	}
+
 	bool Navigation::Navmesh::ContainsLine(const Segment& line) const
 	{
 		if (!ContainsPoint(line.start) || !ContainsPoint(line.end))
@@ -45,9 +50,15 @@ namespace Navigation
 		return !DoesLineCrossNonNeighbouringTriangles(line);
 	}
 
-	bool Navigation::Navmesh::ContainsPoint(const Vector& pos) const
+	bool Navmesh::ContainsDirectedRect(const DirectedRect& rect) const
 	{
-		return DoesAnyTriangleContainPos(m_Triangles, pos);
+		if(!ContainsPoint(rect.GetCorner1()) ||
+			!ContainsPoint(rect.GetCorner2()) ||
+			! ContainsPoint(rect.GetCorner3()) ||
+			!ContainsPoint(rect.GetCorner4()))
+		return false;
+
+		return !DoesDirectedRectCrossNonNeighbouringTriangles(rect);
 	}
 
 	void Navigation::Navmesh::Clear()
@@ -144,6 +155,26 @@ namespace Navigation
 		return false;
 	}
 
+	bool Navmesh::DoesDirectedRectCrossNonNeighbouringTriangles(const DirectedRect& rect) const
+	{
+		for (const NavmeshTriangle& tri : m_Triangles)
+		{
+			std::vector<IndexPair> crossed_edges;
+			GetCrossedEdgesOfTriangle(rect, tri, crossed_edges);
+
+			for (const IndexPair& crossed_edge : crossed_edges)
+			{
+				const graph::NodeId neighbour_containing_edge_id = GetTriangleNeighbourContainingEdge(tri, crossed_edge);
+				if (neighbour_containing_edge_id == graph::NodeId::INVALID)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	void Navmesh::GetCrossedEdgesOfTriangle(const Segment& crossing_seg, const NavmeshTriangle& tri, std::vector<IndexPair>& out_crossed_edges) const
 	{
 		std::vector<IndexPair> edges;
@@ -153,6 +184,21 @@ namespace Navigation
 		{
 			const Segment edge_line = Segment(m_Vertices[edge.first], m_Vertices[edge.second]);
 			if (edge_line.DoesCross(crossing_seg))
+			{
+				out_crossed_edges.emplace_back(edge);
+			}
+		}
+	}
+
+	void Navmesh::GetCrossedEdgesOfTriangle(const DirectedRect& crossing_rect, const NavmeshTriangle& tri, std::vector<IndexPair>& out_crossed_edges) const
+	{
+		std::vector<IndexPair> edges;
+		tri.GetEdgesAsIndexPairs(edges);
+
+		for (const IndexPair& edge : edges)
+		{
+			const Segment edge_line = Segment(m_Vertices[edge.first], m_Vertices[edge.second]);
+			if (crossing_rect.DoesIntersect(edge_line))
 			{
 				out_crossed_edges.emplace_back(edge);
 			}
