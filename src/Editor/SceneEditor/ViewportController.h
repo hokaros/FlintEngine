@@ -1,6 +1,6 @@
 #pragma once
 #include <imgui/imgui.h>
-#include <Math/Vector.h>
+#include <Math/Rect.h>
 
 Vector ImVecToVec(ImVec2 imVec); // TODO: move to helpers
 

@@ -7,6 +7,7 @@ extern "C" {
 }
 
 #include <Math/Vector.h>
+#include <Math/Rect.h>
 
 struct Rgb8
 {
