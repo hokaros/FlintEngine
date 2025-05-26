@@ -17,7 +17,7 @@ void ClickPlayerController::Awake()
 	FE_ASSERT(equipment != nullptr, "No equipment");
 	FE_ASSERT(mover != nullptr, "No movement component");
 
-	m_NavmeshAgent = std::make_unique<Navigation::NavmeshAgent>(GetOwner().GetScene()->GetNavmesh(), *mover, collider_extent);
+	m_NavmeshAgent = std::make_unique<Navigation::NavmeshAgent>(GetOwner().GetScene()->GetNavmesh(), *mover, collider_extent / 2.0f);
 }
 
 void ClickPlayerController::Update()

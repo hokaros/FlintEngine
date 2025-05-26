@@ -25,6 +25,6 @@ namespace Navigation
 		DirectedRect m_Rect;
 		bool m_IsRectOnNavmesh = false;
 
-		static constexpr float s_RectWidth = 10.0f;
+		static constexpr float s_RectWidth = 14.0f;
 	};
 }
