@@ -11,6 +11,9 @@ namespace Navigation
 
 	private:
 		static void FindTriangleCenterPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, NavmeshPath& out_path);
-		static void SmoothPath(NavmeshPath& path, const Navmesh& navmesh, float min_width);
+		static void CollapsePathControlPointsWhileClearSight(NavmeshPath& path, const Navmesh& navmesh, float min_width);
+		static void PullPathControlPointsWhileClearSight(NavmeshPath& path, const Navmesh& navmesh, float min_width);
+
+		static constexpr size_t s_MaxPullingIterationsPerSegment = 8;
 	};
 }

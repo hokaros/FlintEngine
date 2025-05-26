@@ -29,6 +29,7 @@ namespace Navigation
 
 		NavmeshPath& operator=(NavmeshPath&& other);
 		const Vector& operator[](size_t index) const;
+		Vector& operator[](size_t index);
 
 	private:
 		std::vector<Vector> m_ControlPoints;

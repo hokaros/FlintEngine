@@ -72,4 +72,9 @@ namespace Navigation
 	{
 		return m_ControlPoints[index];
 	}
+
+	Vector& NavmeshPath::operator[](size_t index)
+	{
+		return m_ControlPoints[index];
+	}
 }

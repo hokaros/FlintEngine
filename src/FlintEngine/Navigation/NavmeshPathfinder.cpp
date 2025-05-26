@@ -7,7 +7,8 @@ namespace Navigation
 	void NavmeshPathfinder::FindPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, float min_width, NavmeshPath& out_path)
 	{
 		FindTriangleCenterPath(navmesh, start_point, end_point, out_path);
-		SmoothPath(out_path, navmesh, min_width);
+		CollapsePathControlPointsWhileClearSight(out_path, navmesh, min_width);
+		PullPathControlPointsWhileClearSight(out_path, navmesh, min_width);
 	}
 
 	void NavmeshPathfinder::FindTriangleCenterPath(const Navmesh& navmesh, const Vector& start_point, const Vector& end_point, NavmeshPath& out_path)
@@ -42,7 +43,7 @@ namespace Navigation
 		out_path.AddControlPoint(end_point);
 	}
 
-	void NavmeshPathfinder::SmoothPath(NavmeshPath& path, const Navmesh& navmesh, float min_width)
+	void NavmeshPathfinder::CollapsePathControlPointsWhileClearSight(NavmeshPath& path, const Navmesh& navmesh, float min_width)
 	{
 		if (path.GetControlPointCount() <= 2)
 			return;
@@ -72,5 +73,38 @@ namespace Navigation
 		}
 
 		path = std::move(smoothed_path);
+	}
+
+	void NavmeshPathfinder::PullPathControlPointsWhileClearSight(NavmeshPath& path, const Navmesh& navmesh, float min_width)
+	{
+		if (path.GetControlPointCount() <= 2)
+			return;
+
+		for (size_t i = 1; i < path.GetControlPointCount() - 1; i++)
+		{
+			// Binary search for furthest pull that has clear sight
+			Vector near_bound = path[i - 1];
+			Vector far_bound = path[i];
+			const Vector target = path[i + 1];
+
+			for (size_t j = 0; j < s_MaxPullingIterationsPerSegment; j++)
+			{
+				const Vector mid = (near_bound + far_bound) / 2.0f;
+
+				const Segment from_mid_to_target = Segment(mid, target);
+				const bool is_sight_from_mid = navmesh.ContainsRect(DirectedRect(from_mid_to_target, min_width));
+
+				if (is_sight_from_mid)
+				{
+					far_bound = mid;
+				}
+				else
+				{
+					near_bound = mid;
+				}
+			}
+
+			path[i] = far_bound;
+		}
 	}
 }
