@@ -9,7 +9,7 @@ DEFINE_FIELD(WalkableSurface, m_Size);
 void WalkableSurface::RenderEditorSelected(SceneRenderer& renderer)
 {
 	const Rgb8 color = Rgb8(0x30, 0x83, 0xdb);
-	const Rect rect = Rect(m_GameObject->GetWorldPosition() - m_Size / 2.0f, m_Size);
+	const Rect rect = GetRect();
 	renderer.RenderWireRect(rect, color, 0);
 }
 
@@ -43,4 +43,14 @@ void WalkableSurface::GetVertices(std::vector<Vector>& out_vertices, std::vector
 	out_edges.push_back({ top_left_idx, bottom_left_idx });
 	out_edges.push_back({ bottom_left_idx, bottom_right_idx });
 	out_edges.push_back({ bottom_right_idx, top_right_idx });
+}
+
+Rect WalkableSurface::GetRect() const
+{
+	return Rect(m_GameObject->GetWorldPosition() - m_Size / 2.0f, m_Size);
+}
+
+bool WalkableSurface::ContainsPoint(const Vector& point, float tolerance) const
+{
+	return GetRect().ContainsPoint(point, tolerance);
 }

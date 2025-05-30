@@ -4,6 +4,7 @@
 struct Rect
 {
 public:
+    // Corner of the rect with minimum x and y
     Vector pos;
     Vector size;
 public:
@@ -11,6 +12,8 @@ public:
 
     Vector GetMiddle() const;
     float CalculateArea() const;
+
+    bool ContainsPoint(const Vector& point, float tolerance = 0.f) const;
 
     static Rect FromCenterAndSize(const Vector& center, const Vector& size);
 };

@@ -79,6 +79,8 @@ namespace Navigation
 		static void GetTrianglesFromLinks(const std::vector<IndexPair>& point_pairs, std::vector<IndexTriangle>& out_triangles);
 		static void RemoveLinksNotInTriangles(std::vector<IndexPair>& links, const std::vector<IndexTriangle>& triangles);
 		static void GetLinksNotInTriangles(const std::vector<IndexPair>& links, const std::vector<IndexTriangle>& triangles, std::vector<IndexPair>& not_in_triangles);
+		static void RemoveVerticesOutsideWalkableSurfaces(VertexCollection& vertices, const std::vector<WalkableSurface*>& walkables);
+		static bool AnyWalkableSurfaceContainsPoint(const Vector& v, const std::vector<WalkableSurface*>& walkables);
 
 		static void CutColliderLinks(VertexCollection& vertices, std::vector<IndexPair>& collider_links);
 		// Returns new new collider links offset

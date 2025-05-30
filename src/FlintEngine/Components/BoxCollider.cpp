@@ -2,6 +2,7 @@
 
 #include "PhysicsSystem.h"
 #include <Core/GameObject.h>
+#include <Math/Rect.h>
 
 DEFINE_COMPONENT(BoxCollider);
 
@@ -55,11 +56,7 @@ bool BoxCollider::DoesSegmentIntersect(const Segment& seg) const
 
 bool BoxCollider::DoesContainPoint(const Vector& p) const
 {
-	const Vector box_min = GetWorldPos() - GetWorldSize() / 2.f;
-	const Vector box_max = box_min + GetWorldSize();
-
-	const bool box_contains = p.x >= box_min.x && p.x <= box_max.x
-		&& p.y >= box_min.y && p.y <= box_max.y;
+	const bool box_contains = Rect(GetWorldPos() - GetWorldSize() / 2.0f, GetWorldSize()).ContainsPoint(p);
 
 	if (m_InsideOutCollision)
 	{

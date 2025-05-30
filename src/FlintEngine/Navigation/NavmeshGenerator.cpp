@@ -87,6 +87,7 @@ namespace Navigation
 		QuantizeVertices(out_vertices);
 		MergeDuplicateLinks(collider_links);
 		CutColliderLinks(out_vertices, collider_links);
+		RemoveVerticesOutsideWalkableSurfaces(out_vertices, walkables);
 	}
 
 	void NavmeshGenerator::TransferLinksToNavmesh(const std::vector<Vector>& points, std::vector<IndexPair>&& links, Navmesh& out_navmesh)
@@ -139,6 +140,36 @@ namespace Navigation
 				not_in_triangles.push_back(link);
 			}
 		}
+	}
+
+	void NavmeshGenerator::RemoveVerticesOutsideWalkableSurfaces(VertexCollection& vertices, const std::vector<WalkableSurface*>& walkables)
+	{
+		for (size_t i = 0; i < vertices.GetNumVertices();)
+		{
+			const Vector& vertex = vertices[i];
+			
+			if (!AnyWalkableSurfaceContainsPoint(vertex, walkables))
+			{
+				vertices.RemoveVertex(i);
+			}
+			else
+			{
+				i++;
+			}
+		}
+	}
+
+	bool NavmeshGenerator::AnyWalkableSurfaceContainsPoint(const Vector& v, const std::vector<WalkableSurface*>& walkables)
+	{
+		for (const WalkableSurface* walkable : walkables)
+		{
+			if (walkable->ContainsPoint(v, s_Tolerance))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	void NavmeshGenerator::CutColliderLinks(VertexCollection& vertices, std::vector<IndexPair>& collider_links)
