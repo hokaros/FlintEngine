@@ -80,7 +80,7 @@ bool GameBase::RunOneLoop()
 	{
 		m_CurrScene->Render(*m_SceneRenderer);
 
-		m_DebugManager.Render();
+		m_DebugManager.Render(*m_SceneRenderer);
 		DebugRender();
 
 		if (m_Window != nullptr)

@@ -14,12 +14,11 @@ namespace debug
 		GameDebugManager(GameBase& game, SceneRenderer* scene_renderer);
 
 		void Update();
-		void Render();
+		void Render(SceneRenderer& renderer);
 		void PostFrame();
 
 	private:
-		std::unique_ptr<DebugRenderer> m_DebugRenderer = nullptr;
-		SceneRenderer* m_SceneRenderer = nullptr;
+		std::unique_ptr<DebugRenderer> m_DebugRenderer = nullptr; // TODO: make the DebugRenderer react to SceneRenderer changes
 
 		debug::DebugGameData m_DebugData;
 		debug::DebugConfigWindow m_DebugConfigWindow;
