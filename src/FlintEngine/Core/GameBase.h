@@ -4,15 +4,9 @@
 #include "Draw.h"
 #include "ObjectManager.h"
 #include "PhysicsSystem.h"
-#include <Dbg/DebugRenderer.h>
-#include <Dbg/DebugConfig.h>
-#include <Dbg/DebugMonitor.h>
-#include <Navigation/DebugNavmeshQuerier.h>
-#include <Navigation/DebugNavmeshLineContainChecker.h>
-#include <Navigation/DebugNavmeshDirectedRectContainChecker.h>
 #include "Scene.h"
 #include "InputController.h"
-
+#include <Dbg/GameDebugManager.h>
 
 class GameBase
 {
@@ -40,7 +34,6 @@ protected:
 	IInputController& m_InputController;
 	Window* m_Window = nullptr;
 	SceneRenderer* m_SceneRenderer = nullptr;
-	std::unique_ptr<DebugRenderer> m_DebugRenderer = nullptr;
 
 	Timer m_Timer;
 	PhysicsSystem m_PhysicsSystem;
@@ -55,16 +48,9 @@ protected:
 	std::mutex m_InvokesMutex;
 	std::mutex m_MetadataMutex;
 
-	debug::DebugGameData m_DebugData;
-	debug::DebugConfigWindow m_DebugConfigWindow;
-	debug::DebugMonitor m_DebugMonitorWindow;
-	Navigation::DebugNavmeshQuerier m_DebugNavmeshQuerier;
-	Navigation::DebugNavmeshLineContainChecker m_DebugNavmeshLineContainChecker;
-	Navigation::DebugNavmeshDirectedRectContainChecker m_DebugNavmeshDirectedRectContainChecker;
+	debug::GameDebugManager m_DebugManager;
 
 private:
-	void UpdateDebuggers();
-	void RenderDebuggers();
 	void DebugRender();
 	void PostFrameSleep();
 

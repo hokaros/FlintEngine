@@ -9,17 +9,8 @@ GameBase::GameBase(Window* window, SceneRenderer* scene_renderer, IInputControll
 	, m_SceneRenderer(scene_renderer)
 	, m_PhysicsSystem({})
 	, m_InputController(input_controller)
-	, m_DebugNavmeshQuerier(*this)
-	, m_DebugNavmeshLineContainChecker(*this)
-	, m_DebugNavmeshDirectedRectContainChecker(*this)
+	, m_DebugManager(*this, scene_renderer)
 {
-	if (m_SceneRenderer != nullptr)
-	{
-		m_DebugRenderer = std::make_unique<DebugRenderer>(*m_SceneRenderer);
-	}
-
-	m_DebugMonitorWindow.Init(m_DebugData);
-
 	s_Current = this;
 }
 
@@ -82,14 +73,14 @@ bool GameBase::RunOneLoop()
 
 	m_PhysicsSystem.Update();
 
-	UpdateDebuggers();
+	m_DebugManager.Update();
 
 	// Renderowanie obiektów
 	if (m_SceneRenderer != nullptr)
 	{
 		m_CurrScene->Render(*m_SceneRenderer);
 
-		RenderDebuggers();
+		m_DebugManager.Render();
 		DebugRender();
 
 		if (m_Window != nullptr)
@@ -100,7 +91,7 @@ bool GameBase::RunOneLoop()
 
 	m_CurrScene->PostFrame();
 
-	m_DebugData.PostFrame();
+	m_DebugManager.PostFrame();
 
 	PostFrameSleep();
 	return true;
@@ -136,22 +127,6 @@ void GameBase::InvokeOnNextFrame(function<void()> fun)
 GameBase* GameBase::GetCurrent()
 {
 	return s_Current;
-}
-
-void GameBase::UpdateDebuggers()
-{
-	m_DebugNavmeshQuerier.Update();
-	m_DebugNavmeshLineContainChecker.Update();
-	m_DebugNavmeshDirectedRectContainChecker.Update();
-}
-
-void GameBase::RenderDebuggers()
-{
-	m_DebugConfigWindow.Render();
-	m_DebugMonitorWindow.Render();
-	m_DebugNavmeshQuerier.Render(*m_SceneRenderer);
-	m_DebugNavmeshLineContainChecker.Render(*m_SceneRenderer);
-	m_DebugNavmeshDirectedRectContainChecker.Render(*m_SceneRenderer);
 }
 
 void GameBase::DebugRender()
