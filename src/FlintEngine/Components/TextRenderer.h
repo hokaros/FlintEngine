@@ -1,7 +1,7 @@
 #pragma once
 #include <ObjectRenderer.h>
 #include <ComponentDefinition.h>
-#include <SceneRenderer.h>
+#include <SimpleTypes.h>
 
 class TextRenderer
 	: public ObjectRenderer

@@ -1,6 +1,6 @@
 #include "Navmesh.h"
 
-#include <SceneRenderer.h>
+#include <Rendering/SceneRenderer.h>
 #include <utility.h>
 
 #include <string>
@@ -246,7 +246,7 @@ namespace Navigation
 	void Navigation::Navmesh::RenderTriangle(const IndexTriangle& tri, SceneRenderer& renderer) const
 	{
 		const Rgb8 color = Rgb8(0, 0xFF, 0);
-		const uint layer = 1;
+		const rendering::LayerId layer = rendering::LayerId::DEBUG_ABOVE_GROUND;
 
 		const Vector& pos1 = GetPosAtIndex(tri.idx1);
 		const Vector& pos2 = GetPosAtIndex(tri.idx2);
@@ -268,17 +268,15 @@ namespace Navigation
 	void Navigation::Navmesh::RenderEdge(const IndexPair& e, SceneRenderer& renderer) const
 	{
 		const Rgb8 color = Rgb8(0xFF, 0, 0);
-		const uint layer = 1;
 
 		const Vector& pos1 = GetPosAtIndex(e.first);
 		const Vector& pos2 = GetPosAtIndex(e.second);
 
-		renderer.RenderLine(pos1, pos2, color, layer);
+		renderer.RenderLine(pos1, pos2, color, rendering::LayerId::DEBUG_ABOVE_GROUND);
 	}
 
 	void Navigation::Navmesh::RenderVertexIndices(SceneRenderer& renderer) const
 	{
-		const uint layer = 3;
 		const uint font_size = 1;
 
 		for (uint i = 0; i < m_Vertices.size(); i++)
@@ -286,13 +284,12 @@ namespace Navigation
 			const Vector& pos = m_Vertices[i];
 
 			std::string label = std::to_string(i);
-			renderer.RenderString(label.c_str(), pos, font_size, layer);
+			renderer.RenderString(label.c_str(), pos, font_size, rendering::LayerId::DEBUG_ABOVE_GROUND);
 		}
 	}
 
 	void Navigation::Navmesh::RenderEdgeIndices(SceneRenderer& renderer) const
 	{
-		const uint layer = 3;
 		const uint font_size = 5;
 
 		for (uint i = 0; i < m_Edges.size(); i++)
@@ -302,14 +299,14 @@ namespace Navigation
 			const Vector edge_middle = (GetPosAtIndex(pos.first) + GetPosAtIndex(pos.second)) / 2.0f;
 
 			std::string label = std::to_string(i);
-			renderer.RenderString(label.c_str(), edge_middle, font_size, layer);
+			renderer.RenderString(label.c_str(), edge_middle, font_size, rendering::LayerId::DEBUG_ABOVE_GROUND);
 		}
 	}
 
 	void Navigation::Navmesh::RenderGraph(SceneRenderer& renderer) const
 	{
 		const Rgb8 color = Rgb8(0, 0, 0xFF);
-		const uint layer = 1;
+		const rendering::LayerId layer = rendering::LayerId::DEBUG_ABOVE_GROUND;
 
 		const Vector vertex_size = Vector(1, 1);
 

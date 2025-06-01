@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <list>
-#include "SceneRenderer.h"
+#include <Rendering/SceneRenderer.h>
 
 #include "imgui/imgui.h"
 

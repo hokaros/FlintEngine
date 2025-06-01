@@ -2,7 +2,7 @@
 #include "Draw.h"
 #include <Core/GameObject.h>
 #include "AssetManager.h"
-#include "SceneRenderer.h"
+#include <Rendering/SceneRenderer.h>
 
 DEFINE_COMPONENT(SpriteRenderer);
 
@@ -25,7 +25,7 @@ void SpriteRenderer::Render(SceneRenderer& renderer)
 		m_Texture = CreateTextureFromBitmap(m_BitmapPath, renderer);
 	}
 
-	renderer.RenderTexture(m_Texture, GetRenderRect(), m_GameObject->GetWorldRotation(), m_Layer);
+	renderer.RenderTexture(m_Texture, GetRenderRect(), m_GameObject->GetWorldRotation(), rendering::LayerId(m_Layer));
 }
 
 Vector SpriteRenderer::GetRenderSize() const

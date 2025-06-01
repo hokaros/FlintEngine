@@ -49,13 +49,13 @@ Rect& SceneRenderer::GetViewport()
 	return m_CurrentViewport;
 }
 
-void SceneRenderer::RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, uint layer)
+void SceneRenderer::RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, rendering::LayerId layer)
 {
 	Rect screen_space_rect = WorldSpaceToScreenSpace(rect);
 	RenderTextureScreenSpace(texture, screen_space_rect, angle, layer);
 }
 
-void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color, uint layer)
+void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer)
 {
 	RenderTargetScope render_scope = SetTargetLayer(layer);
 
@@ -67,7 +67,7 @@ void SceneRenderer::RenderRect(const Rect& rect, const Rgb8& color, uint layer)
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void SceneRenderer::RenderRect(const DirectedRect& rect, const Rgb8& color, uint layer)
+void SceneRenderer::RenderRect(const DirectedRect& rect, const Rgb8& color, rendering::LayerId layer)
 {
 	RenderTargetScope render_scope = SetTargetLayer(layer);
 
@@ -80,7 +80,7 @@ void SceneRenderer::RenderRect(const DirectedRect& rect, const Rgb8& color, uint
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb8& color, uint layer)
+void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb8& color, rendering::LayerId layer)
 {
 	RenderTargetScope render_scope = SetTargetLayer(layer);
 
@@ -93,7 +93,7 @@ void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, uint layer)
+void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer)
 {
 	RenderTargetScope render_scope = SetTargetLayer(layer);
 
@@ -105,7 +105,7 @@ void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, uint lay
 	FE_ASSERT(result == 0, "ERROR: Could not render");
 }
 
-void SceneRenderer::RenderString(const char* text, const Vector& start, int fontSize, uint layer)
+void SceneRenderer::RenderString(const char* text, const Vector& start, int fontSize, rendering::LayerId layer)
 {
 	const Vector screen_space_start = WorldSpaceToScreenSpace(start);
 	const Vector ss_font_size = VectorWorldSpaceToScreenSpace(Vector(fontSize, fontSize));
@@ -115,10 +115,10 @@ void SceneRenderer::RenderString(const char* text, const Vector& start, int font
 void SceneRenderer::Clear(const Rgb8& clear_color)
 {
 	m_TargetLayers.ClearLayers();
-	RenderRect(GetRenderedRect(), clear_color, /*layer*/0); // Render on first layer
+	RenderRect(GetRenderedRect(), clear_color, rendering::LayerId(0)); // Render on first layer
 }
 
-void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fontSize, uint layer)
+void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fontSize, rendering::LayerId layer)
 {
 	RenderTargetScope render_scope = SetTargetLayer(layer);
 
@@ -142,7 +142,7 @@ void SceneRenderer::DrawStringScreenSpace(int x, int y, const char* text, int fo
 	};
 }
 
-void SceneRenderer::RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, uint layer)
+void SceneRenderer::RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, rendering::LayerId layer)
 {
 	RenderTargetScope render_scope = SetTargetLayer(layer);
 
@@ -266,9 +266,9 @@ int SceneRenderer::RenderTriangles(const TriangleList& triangles)
 	return SDL_RenderGeometry(m_Renderer, nullptr, vertices.data(), vertices.size(), triangles.indices.data(), triangles.indices.size());
 }
 
-RenderTargetScope SceneRenderer::SetTargetLayer(uint layer_index)
+RenderTargetScope SceneRenderer::SetTargetLayer(rendering::LayerId layer_id)
 {
-	return RenderTargetScope(m_Renderer, m_TargetLayers.GetOrCreateLayer(layer_index));
+	return RenderTargetScope(m_Renderer, m_TargetLayers.GetOrCreateLayer(layer_id));
 }
 
 void SceneRenderer::RectToTriangles(const DirectedRect& rect, const Rgb8& color, TriangleList& triangles)

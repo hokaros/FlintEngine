@@ -33,7 +33,7 @@ void BMPStats::Render(SceneRenderer& renderer)
 
 	for (int i = 0; i < stat; i++) 
 	{
-		renderer.RenderTexture(m_Bitmap, dest, /* angle = */0.0f, m_Layer);
+		renderer.RenderTexture(m_Bitmap, dest, /* angle = */0.0f, rendering::LayerId(m_Layer));
 
 		dest.pos.x += m_ElementSize.x;
 	}

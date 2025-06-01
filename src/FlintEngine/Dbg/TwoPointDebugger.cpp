@@ -102,7 +102,7 @@ namespace debug
 		constexpr float x_size = 10.0f;
 		constexpr float half_x_size = x_size / 2.0f;
 
-		constexpr uint layer = 1;
+		const rendering::LayerId layer = rendering::LayerId::DEBUG_ABOVE_GROUND;
 		constexpr Rgb8 color = Rgb8(0xFF, 0x00, 0xFF);
 		renderer.RenderLine(world_pos - Vector(half_x_size, half_x_size), world_pos + Vector(half_x_size, half_x_size), color, layer);
 		renderer.RenderLine(world_pos - Vector(-half_x_size, half_x_size), world_pos + Vector(-half_x_size, half_x_size), color, layer);

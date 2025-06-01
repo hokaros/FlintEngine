@@ -25,7 +25,6 @@ namespace Navigation
 
 	void DebugNavmeshLineContainChecker::RenderWhenStartAndEndPointsSelected(SceneRenderer& renderer)
 	{
-		constexpr uint layer = 1;
 		Rgb8 color = Rgb8(0xFF, 0x00, 0x00);
 
 		if (m_IsLineOnNavmesh)
@@ -33,7 +32,7 @@ namespace Navigation
 			color = Rgb8(0x00, 0xFF, 0x00);
 		}
 
-		renderer.RenderLine(m_Line.start, m_Line.end, color, layer);
+		renderer.RenderLine(m_Line.start, m_Line.end, color, rendering::LayerId::DEBUG_ABOVE_GROUND);
 	}
 
 	bool DebugNavmeshLineContainChecker::IsLineOnNavmesh(const Segment& line) const

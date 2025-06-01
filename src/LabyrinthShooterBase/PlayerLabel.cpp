@@ -12,5 +12,5 @@ DEFINE_FIELD(PlayerLabel, m_Offset);
 void PlayerLabel::Render(SceneRenderer& renderer)
 {
 	const Vector& render_pos = GetOwner().GetWorldPosition() + m_Offset;
-	renderer.RenderString(m_Text.c_str(), render_pos, m_FontSize, m_Layer);
+	renderer.RenderString(m_Text.c_str(), render_pos, m_FontSize, rendering::LayerId(m_Layer));
 }

@@ -1,6 +1,6 @@
 #include "DebugNavmeshQuerier.h"
 
-#include <SceneRenderer.h>
+#include <Rendering/SceneRenderer.h>
 #include <Core/GameBase.h>
 #include <Dbg/DebugConfig.h>
 
@@ -32,15 +32,13 @@ namespace Navigation
 
 	void DebugNavmeshQuerier::RenderPath(SceneRenderer& renderer, const NavmeshPath& path)
 	{
-		constexpr uint layer = 1;
-
 		const Vector* prev_point = nullptr;
 
 		for (const Vector& control_point : path)
 		{
 			if (prev_point != nullptr)
 			{
-				renderer.RenderLine(control_point, *prev_point, Rgb8(0x00, 0x00, 0xFF), layer);
+				renderer.RenderLine(control_point, *prev_point, Rgb8(0x00, 0x00, 0xFF), rendering::LayerId::DEBUG_ABOVE_GROUND);
 			}
 
 			prev_point = &control_point;

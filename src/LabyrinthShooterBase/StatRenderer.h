@@ -1,6 +1,6 @@
 #pragma once
 #include <Math/Vector.h>
-#include <SceneRenderer.h>
+#include <Rendering/SceneRenderer.h>
 #include <ComponentDefinition.h>
 
 // Element wyœwietlaj¹cy pewn¹ statystykê (zdrowie / liczbê graczy itp.)

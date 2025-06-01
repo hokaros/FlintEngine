@@ -1,6 +1,6 @@
 #pragma once
 #include <Core/GameObject.h>
-#include "SceneRenderer.h"
+#include <Rendering/SceneRenderer.h>
 #include "ObjectManager.h"
 #include <Navigation/Navmesh.h>
 #include <Navigation/NavmeshGenerator.h>

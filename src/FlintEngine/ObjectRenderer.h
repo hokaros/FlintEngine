@@ -2,6 +2,8 @@
 #include <SDL.h>
 #include <Core/ObjectComponent.h>
 
+class SceneRenderer;
+
 // Komponent rysuj¹cy obiekt
 class ObjectRenderer : public ObjectComponent
 {

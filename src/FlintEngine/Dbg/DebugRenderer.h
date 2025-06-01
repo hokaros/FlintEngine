@@ -1,5 +1,8 @@
 #pragma once
-#include "SceneRenderer.h"
+#include <Draw.h>
+#include <SimpleTypes.h>
+
+class SceneRenderer;
 
 class DebugRenderer
 {
@@ -18,8 +21,6 @@ private:
 
 private:
 	SceneRenderer& m_Renderer;
-
-	static constexpr uint s_RenderLayer = UINT32_MAX;
 
 	static DebugRenderer* s_Instance;
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include <Rendering/TargetLayersContainer.h>
+#include <Rendering/LayerId.h>
 
 #include "Draw.h"
 #include <Math/DirectedRect.h>
@@ -28,13 +29,13 @@ public:
 
 	SDL_Texture* FinalizeFrame();
 
-	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, uint layer);
-	void RenderRect(const Rect& rect, const Rgb8& color, uint layer);
-	void RenderRect(const DirectedRect& rect, const Rgb8& color, uint layer);
-	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color, uint layer);
-	void RenderWireRect(const Rect& rect, const Rgb8& color, uint layer);
+	void RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, rendering::LayerId layer);
+	void RenderRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer);
+	void RenderRect(const DirectedRect& rect, const Rgb8& color, rendering::LayerId layer);
+	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color, rendering::LayerId layer);
+	void RenderWireRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer);
 
-	void RenderString(const char* text, const Vector& start, int fontSize, uint layer); // Renders string in world space. start is the upper left corner
+	void RenderString(const char* text, const Vector& start, int fontSize, rendering::LayerId layer); // Renders string in world space. start is the upper left corner
 
 	void Clear(const Rgb8& clear_color);
 
@@ -43,8 +44,8 @@ public:
 	Rect& GetViewport();
 
 	// narysowanie napisu txt na ekranie, zaczynaj¹c od punktu (x, y)
-	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize, uint layer);
-	void RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, uint layer);
+	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize, rendering::LayerId layer);
+	void RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, rendering::LayerId layer);
 
 	[[nodiscard]] Rect WorldSpaceToScreenSpace(const Rect& worldSpace) const;
 	[[nodiscard]] Vector WorldSpaceToScreenSpace(const Vector& worldSpace) const;
@@ -88,7 +89,7 @@ private:
 	VectorInt GetCharCoordinates(char c) const;
 	int RenderTriangles(const TriangleList& triangles);
 
-	[[nodiscard]] RenderTargetScope SetTargetLayer(uint layer_index);
+	[[nodiscard]] RenderTargetScope SetTargetLayer(rendering::LayerId layer_id);
 
 	static void RectToTriangles(const DirectedRect& rect, const Rgb8& color, TriangleList& triangles);
 	static void VerticesToSDLVertices(const std::vector<Vertex>& vertices, std::vector<SDL_Vertex>& sdl_vertices);
@@ -96,7 +97,7 @@ private:
 	static SDL_Color Rgb8ToSDLColor(const Rgb8& color);
 
 private:
-	TargetLayersContainer m_TargetLayers;
+	rendering::TargetLayersContainer m_TargetLayers;
 
 	SDL_Renderer* m_Renderer = nullptr;
 

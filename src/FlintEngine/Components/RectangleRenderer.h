@@ -2,7 +2,7 @@
 #include "ObjectRenderer.h"
 #include "ComponentDefinition.h"
 #include "Draw.h"
-#include "SceneRenderer.h"
+#include <SimpleTypes.h>
 
 class RectangleRenderer :
 	public ObjectRenderer

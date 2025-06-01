@@ -274,7 +274,7 @@ void LabyrinthSolidifier::RenderEditorSelected(SceneRenderer& renderer)
 	const Vector labyrinth_size = LabyrinthSize(wallWidth, wallLength, xCount, yCount);
 	const Vector pos = GetOwner().TransformPoint(position);
 
-	renderer.RenderWireRect(Rect(pos, labyrinth_size), Rgb8(0x00, 0x00, 0xFF), 0);
+	renderer.RenderWireRect(Rect(pos, labyrinth_size), Rgb8(0x00, 0x00, 0xFF), rendering::LayerId::DEBUG_FIRST_PLAN);
 }
 
 void LabyrinthSolidifier::OnWallDestroyedChanged(Destroyable& wall)

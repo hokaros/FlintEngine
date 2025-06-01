@@ -1,6 +1,6 @@
 #include "WalkableSurface.h"
 
-#include <SceneRenderer.h>
+#include <Rendering/SceneRenderer.h>
 #include <Core/GameObject.h>
 
 DEFINE_COMPONENT(WalkableSurface);
@@ -10,7 +10,7 @@ void WalkableSurface::RenderEditorSelected(SceneRenderer& renderer)
 {
 	const Rgb8 color = Rgb8(0x30, 0x83, 0xdb);
 	const Rect rect = GetRect();
-	renderer.RenderWireRect(rect, color, 0);
+	renderer.RenderWireRect(rect, color, rendering::LayerId::ABOVE_GROUND_LAYER);
 }
 
 const Vector& WalkableSurface::GetSize() const

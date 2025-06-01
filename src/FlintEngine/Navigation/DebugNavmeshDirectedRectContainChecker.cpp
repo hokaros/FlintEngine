@@ -25,7 +25,6 @@ namespace Navigation
 
 	void DebugNavmeshDirectedRectContainChecker::RenderWhenStartAndEndPointsSelected(SceneRenderer& renderer)
 	{
-		constexpr uint layer = 1;
 		Rgb8 color = Rgb8(0xFF, 0x00, 0x00);
 
 		if (m_IsRectOnNavmesh)
@@ -33,7 +32,7 @@ namespace Navigation
 			color = Rgb8(0x00, 0xFF, 0x00);
 		}
 
-		renderer.RenderRect(m_Rect, color, layer);
+		renderer.RenderRect(m_Rect, color, rendering::LayerId::DEBUG_ABOVE_GROUND);
 	}
 
 	bool DebugNavmeshDirectedRectContainChecker::IsRectOnNavmesh(const DirectedRect& rect) const

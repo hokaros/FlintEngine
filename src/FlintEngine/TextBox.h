@@ -1,5 +1,5 @@
 #pragma once
-#include "SceneRenderer.h"
+#include <Rendering/SceneRenderer.h>
 #include "Timer.h"
 #include "InputController.h"
 #include <deque>

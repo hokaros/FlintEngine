@@ -1,7 +1,7 @@
 #pragma once
 #include <ComponentDefinition.h>
 #include <ObjectRenderer.h>
-#include <SceneRenderer.h>
+#include <Rendering/SceneRenderer.h>
 
 class PlayerLabel
 	: public ObjectRenderer

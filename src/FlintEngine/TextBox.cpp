@@ -14,8 +14,8 @@ void TextBox::Draw(SceneRenderer& renderer)
 {
 	// Ramka
 	Rect rect = SDLRectToRect(m_Rect);
-	renderer.RenderRect(rect, m_Fill, m_Layer);
-	renderer.RenderWireRect(rect, m_Outline, m_Layer);
+	renderer.RenderRect(rect, m_Fill, rendering::LayerId(m_Layer));
+	renderer.RenderWireRect(rect, m_Outline, rendering::LayerId(m_Layer));
 
 	// Wyœwietlenie zebranego tekstu
 	char buffer[32];
@@ -31,7 +31,7 @@ void TextBox::Draw(SceneRenderer& renderer)
 		m_Rect.y + m_Rect.h / 2 - m_FontSize / 2,
 		buffer,
 		m_FontSize,
-		m_Layer
+		rendering::LayerId(m_Layer)
 	);
 }
 

@@ -1,6 +1,6 @@
 #include "RectangleRenderer.h"
 #include "Window.h"
-#include "SceneRenderer.h"
+#include <Rendering/SceneRenderer.h>
 #include <Core/GameObject.h>
 
 DEFINE_COMPONENT(RectangleRenderer);
@@ -10,7 +10,7 @@ DEFINE_FIELD(RectangleRenderer, m_Size);
 
 void RectangleRenderer::Render(SceneRenderer& renderer)
 {
-	renderer.RenderRect(GetRenderRect(), m_Color, m_Layer); // TODO: rotation
+	renderer.RenderRect(GetRenderRect(), m_Color, rendering::LayerId(m_Layer)); // TODO: rotation
 }
 
 void RectangleRenderer::SetColor(Rgb8 color)

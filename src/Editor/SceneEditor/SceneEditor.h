@@ -1,5 +1,5 @@
 #pragma once
-#include <SceneRenderer.h>
+#include <Rendering/SceneRenderer.h>
 #include <imgui/imgui.h>
 #include <Core/Scene.h>
 #include <AssetHandles/EditorUniversalHandle.h>
@@ -13,7 +13,7 @@ public:
 
 	void Init(SelectedObjectManager& selected_object_manager);
 
-	void SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object); // TODO: make this for scenes also
+	void SetRootObject(std::weak_ptr<EditorUniversalHandle> root_object);
 
 	void Render();
 

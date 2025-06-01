@@ -30,12 +30,12 @@ void SelectedObjectRenderer::RenderAxes(GameObject& game_object, SceneRenderer& 
 	{
 		const Vector object_local_x = transformable.VectorLocalToWorld(Vector(1, 0)).Normalize();
 		const Vector x_axis_end = object_pos + object_local_x * axis_length;
-		renderer.RenderLine(object_pos, x_axis_end, X_AXIS_COLOR, SELECTION_RENDER_LAYER);
+		renderer.RenderLine(object_pos, x_axis_end, X_AXIS_COLOR, rendering::LayerId::EDITOR_SELECTION);
 	}
 
 	{
 		const Vector object_local_y = transformable.VectorLocalToWorld(Vector(0, 1)).Normalize();
 		const Vector y_axis_end = object_pos + object_local_y * axis_length;
-		renderer.RenderLine(object_pos, y_axis_end, Y_AXIS_COLOR, SELECTION_RENDER_LAYER);
+		renderer.RenderLine(object_pos, y_axis_end, Y_AXIS_COLOR, rendering::LayerId::EDITOR_SELECTION);
 	}
 }
