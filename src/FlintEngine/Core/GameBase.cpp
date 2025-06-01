@@ -68,6 +68,8 @@ bool GameBase::RunOneLoop()
 	// Wywo³anie zleconych akcji
 	InvokePostponed();
 
+	m_DebugManager.PreUpdate();
+
 	// Zaktualizowanie stanu gry
 	m_CurrScene->Update();
 
