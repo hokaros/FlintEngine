@@ -1,7 +1,7 @@
 #include "LabyrinthSolidifier.h"
 #include <Components/BoxCollider.h>
 #include "Occlusion/OccludableRectangle.h"
-#include <Core/Scene.h>
+#include <Scene/Scene.h>
 
 DEFINE_COMPONENT(LabyrinthSolidifier);
 DEFINE_FIELD(LabyrinthSolidifier, position);

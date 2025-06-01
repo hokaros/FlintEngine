@@ -49,6 +49,11 @@ Rect& SceneRenderer::GetViewport()
 	return m_CurrentViewport;
 }
 
+Vector SceneRenderer::GetScreenSize() const
+{
+	return m_RTSize;
+}
+
 void SceneRenderer::RenderTexture(SDL_Texture* texture, const Rect& rect, double angle, rendering::LayerId layer)
 {
 	Rect screen_space_rect = WorldSpaceToScreenSpace(rect);

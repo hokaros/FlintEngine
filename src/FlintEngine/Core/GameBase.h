@@ -4,7 +4,7 @@
 #include "Draw.h"
 #include "ObjectManager.h"
 #include "PhysicsSystem.h"
-#include "Scene.h"
+#include <Scene/Scene.h>
 #include "InputController.h"
 #include <Dbg/GameDebugManager.h>
 

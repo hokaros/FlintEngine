@@ -43,6 +43,8 @@ public:
 	const Rect& GetRenderedRect() const;
 	Rect& GetViewport();
 
+	Vector GetScreenSize() const;
+
 	// narysowanie napisu txt na ekranie, zaczynaj¹c od punktu (x, y)
 	void DrawStringScreenSpace(int x, int y, const char* text, int fontSize, rendering::LayerId layer);
 	void RenderTextureScreenSpace(SDL_Texture* texture, const Rect& rect, double angle, rendering::LayerId layer);

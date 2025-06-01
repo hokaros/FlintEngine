@@ -1,7 +1,7 @@
 #pragma once
 #include <Rendering/SceneRenderer.h>
 #include <imgui/imgui.h>
-#include <Core/Scene.h>
+#include <Scene/Scene.h>
 #include <AssetHandles/EditorUniversalHandle.h>
 #include "ViewportController.h"
 #include "SelectedObjectManager.h"

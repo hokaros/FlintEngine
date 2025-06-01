@@ -4,6 +4,7 @@
 #include "ObjectManager.h"
 #include <Navigation/Navmesh.h>
 #include <Navigation/NavmeshGenerator.h>
+#include <Scene/CameraManager.h>
 
 class Scene
 	: public IGameObjectContainer
@@ -35,6 +36,7 @@ public:
 	const Rgb8& GetBackgroundColor() const;
 
 	const ObjectManager& GetObjectManager() const;
+	scene::CameraManager& GetCameraManager();
 
 	void RegenerateNavmesh();
 	void SetNavmesh(const Navigation::Navmesh& other);
@@ -45,6 +47,7 @@ public:
 
 private:
 	void RenderBackground(SceneRenderer& renderer);
+	void SetViewportBasedOnCamera(SceneRenderer& renderer);
 
 protected:
 	ObjectManager m_ObjectManager;
@@ -52,5 +55,7 @@ protected:
 
 	Navigation::NavmeshGenerationParams m_NavmeshGenerationParams;
 	Navigation::Navmesh m_Navmesh;
+
+	scene::CameraManager m_CameraManager;
 };
 

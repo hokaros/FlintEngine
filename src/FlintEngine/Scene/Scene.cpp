@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include <Navigation/NavmeshGenerator.h>
 #include <Dbg/DebugConfig.h>
+#include <Scene/Camera.h>
 
 Scene::Scene(const Scene& other)
 	: m_BackgroundColor(other.m_BackgroundColor)
@@ -28,6 +29,7 @@ void Scene::Update()
 
 void Scene::Render(SceneRenderer& renderer)
 {
+	SetViewportBasedOnCamera(renderer);
 	RenderBackground(renderer);
 
 	if (debug::DebugConfig::ShouldDebugRenderNavmesh())
@@ -123,9 +125,22 @@ void Scene::RenderBackground(SceneRenderer& renderer)
 	renderer.Clear(m_BackgroundColor);
 }
 
+void Scene::SetViewportBasedOnCamera(SceneRenderer& renderer)
+{
+	if (const Camera* current_camera = m_CameraManager.GetCurrentCamera())
+	{
+		renderer.SetViewport(current_camera->CalculateViewport());
+	}
+}
+
 const ObjectManager& Scene::GetObjectManager() const
 {
 	return m_ObjectManager;
+}
+
+scene::CameraManager& Scene::GetCameraManager()
+{
+	return m_CameraManager;
 }
 
 void Scene::RegenerateNavmesh()

@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObjectSerializer.h"
-#include <Core/Scene.h>
+#include <Scene/Scene.h>
 
 struct NavmeshGenerationParamsStringDesc
 {

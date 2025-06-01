@@ -15,7 +15,7 @@ namespace debug
 	void DebugOverlayText::Render(SceneRenderer& renderer)
 	{
 		constexpr int font_size = 14;
-		const int viewport_lower_bound = renderer.GetViewport().size.y;
-		renderer.DrawStringScreenSpace(0, viewport_lower_bound - font_size, m_CornerText.c_str(), font_size, rendering::LayerId::DEBUG_SCREENSPACE);
+		const int screen_lower_bound = renderer.GetScreenSize().y;
+		renderer.DrawStringScreenSpace(0, screen_lower_bound - font_size, m_CornerText.c_str(), font_size, rendering::LayerId::DEBUG_SCREENSPACE);
 	}
 }

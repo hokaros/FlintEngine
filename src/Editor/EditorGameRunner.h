@@ -2,7 +2,7 @@
 #include <imgui/imgui.h>
 
 #include <InputController.h>
-#include <Core/Scene.h>
+#include <Scene/Scene.h>
 #include <Core/GameBase.h>
 #include <AssetHandles/EditorUniversalHandle.h>
 

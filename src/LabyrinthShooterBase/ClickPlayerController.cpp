@@ -1,6 +1,6 @@
 #include "ClickPlayerController.h"
 
-#include <Core/Scene.h>
+#include <Scene/Scene.h>
 #include <Core/GameBase.h>
 
 DEFINE_COMPONENT(ClickPlayerController);
