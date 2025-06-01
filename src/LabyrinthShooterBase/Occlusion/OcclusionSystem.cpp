@@ -44,7 +44,11 @@ void OcclusionSystem::OnDestroy()
 
 void OcclusionSystem::RegisterOccludable(IOccludable& occludable)
 {
-	FE_ASSERT(s_Instance != nullptr, "No instance"); // TODO: create on demand
+	if (s_Instance == nullptr)
+	{
+		FE_WARN("No OcclusionSystem but trying to register an IOccludable");
+		return;
+	}
 
 	s_Instance->RegisterOccludableImpl(occludable);
 }
