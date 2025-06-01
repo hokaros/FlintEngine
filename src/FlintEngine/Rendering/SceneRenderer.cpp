@@ -78,8 +78,13 @@ void SceneRenderer::RenderRect(const DirectedRect& rect, const Rgb8& color, rend
 
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
 
+	const DirectedRect screen_space_rect = DirectedRect(Segment(
+		WorldSpaceToScreenSpace(rect.mid.start),
+		WorldSpaceToScreenSpace(rect.mid.end)
+	), rect.width);
+
 	TriangleList triangles;
-	RectToTriangles(rect, color, triangles);
+	RectToTriangles(screen_space_rect, color, triangles);
 
 	int result = RenderTriangles(triangles);
 	FE_ASSERT(result == 0, "ERROR: Could not render");
@@ -87,15 +92,11 @@ void SceneRenderer::RenderRect(const DirectedRect& rect, const Rgb8& color, rend
 
 void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb8& color, rendering::LayerId layer)
 {
-	RenderTargetScope render_scope = SetTargetLayer(layer);
+	constexpr float rt_size_to_thickness = 1 / 500.0f;
+	float thickness = std::min<float>(m_RTSize.x, m_RTSize.y) * rt_size_to_thickness;
+	thickness = std::max<float>(thickness, 1.0f);
 
-	Vector ssStart = WorldSpaceToScreenSpace(start);
-	Vector ssEnd = WorldSpaceToScreenSpace(end);
-
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
-
-	int result = SDL_RenderDrawLine(m_Renderer, ssStart.x, ssStart.y, ssEnd.x, ssEnd.y);
-	FE_ASSERT(result == 0, "ERROR: Could not render");
+	RenderRect(DirectedRect(Segment(start, end), thickness), color, layer);
 }
 
 void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer)
