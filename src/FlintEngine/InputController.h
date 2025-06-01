@@ -43,6 +43,8 @@ public:
 	virtual bool IsKeyDown(SDL_Keycode key) const override;
 	virtual bool PressedThisFrame(SDL_Keycode key) const override;
 	virtual bool MouseButtonPressedThisFrame(MouseButton button) const override;
+
+	// Returns mouse position in ViewportSpace
 	virtual Vector GetMousePosition() const override;
 
 private:

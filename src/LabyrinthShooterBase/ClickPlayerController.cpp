@@ -40,7 +40,7 @@ void ClickPlayerController::ProcessMovement()
 	{
 		const Vector mousePos = input->GetMousePosition();
 
-		const Vector worldPos = sceneRenderer->ScreenSpaceToWorldSpace(mousePos);
+		const Vector worldPos = sceneRenderer->ViewportSpaceToWorldSpace(mousePos);
 		m_NavmeshAgent->SetTarget(worldPos);
 	}
 }

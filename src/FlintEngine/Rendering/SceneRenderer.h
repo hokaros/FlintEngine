@@ -54,6 +54,9 @@ public:
 	[[nodiscard]] Vector ScreenSpaceToWorldSpace(const Vector& screenSpace) const;
 	[[nodiscard]] Vector VectorWorldSpaceToScreenSpace(const Vector& worldSpace) const;
 
+	[[nodiscard]] Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
+	[[nodiscard]] Vector ViewportSpaceToWorldSpace(const Vector& viewportSpace) const;
+
 	SDL_Texture* CreateTextureFromSurface(SDL_Surface* surface);
 
 	~SceneRenderer();
@@ -78,8 +81,6 @@ private:
 
 private:
 	[[nodiscard]] Rect WorldSpaceToViewportSpace(const Rect& worldSpace) const;
-	[[nodiscard]] Vector WorldSpaceToViewportSpace(const Vector& worldSpace) const;
-	[[nodiscard]] Vector ViewportSpaceToWorldSpace(const Vector& viewportSpace) const;
 	[[nodiscard]] Vector VectorWorldSpaceToViewportSpace(const Vector& world_space) const;
 
 	[[nodiscard]] Rect ViewportSpaceToScreenSpace(const Rect& viewportSpace) const;

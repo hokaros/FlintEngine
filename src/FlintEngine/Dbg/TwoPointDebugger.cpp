@@ -55,7 +55,7 @@ namespace debug
 		{
 			const Vector mouse_pos = input.GetMousePosition();
 
-			const Vector world_pos = scene_renderer.ScreenSpaceToWorldSpace(mouse_pos);
+			const Vector world_pos = scene_renderer.ViewportSpaceToWorldSpace(mouse_pos);
 			OnPointSelected(world_pos);
 		}
 	}
