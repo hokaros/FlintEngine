@@ -17,12 +17,12 @@ class IInputController
 {
 public:
 	virtual void PreUpdate() = 0;
-	virtual void OnPostFrame() = 0;
+	virtual void ClearFrameData() = 0;
 
 	virtual bool IsKeyDown(SDL_Keycode key) const = 0;
 	virtual bool PressedThisFrame(SDL_Keycode key) const = 0;
 	virtual bool MouseButtonPressedThisFrame(MouseButton button) const = 0;
-	virtual bool IsWindowClosed() const = 0;
+	virtual bool IsWindowClosedThisFrame() const = 0;
 	virtual Vector GetMousePosition() const = 0;
 
 	virtual ~IInputController() = default;
@@ -41,12 +41,12 @@ public:
 	~InputController();
 
 	virtual void PreUpdate() override;
-	virtual void OnPostFrame() override;
+	virtual void ClearFrameData() override;
 
 	virtual bool IsKeyDown(SDL_Keycode key) const override;
 	virtual bool PressedThisFrame(SDL_Keycode key) const override;
 	virtual bool MouseButtonPressedThisFrame(MouseButton button) const override;
-	virtual bool IsWindowClosed() const override;
+	virtual bool IsWindowClosedThisFrame() const override;
 
 	// Returns mouse position in ViewportSpace
 	virtual Vector GetMousePosition() const override;
@@ -58,7 +58,6 @@ private:
 	void OnKeyUp(SDL_Keycode key);
 	void OnMouseButtonDown(MouseButton button);
 	void OnMouseButtonUp(MouseButton button);
-	void ClearFrameInfo();
 
 	static [[nodiscard]] MouseButton MouseButtonIdToEnum(uint8_t button_id);
 
@@ -66,6 +65,6 @@ private:
 	std::vector<SDL_Keycode> m_PressedThisFrame;
 	std::vector<MouseButton> m_MousePressedThisFrame;
 	std::unordered_map<SDL_Keycode, bool> m_KeyDownInfo;
-	bool m_IsWindowClosed = false;
+	bool m_IsWindowClosedThisFrame = false;
 };
 

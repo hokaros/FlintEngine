@@ -61,9 +61,6 @@ bool GameBase::RunOneLoop()
 
 	m_InputController.PreUpdate();
 
-	if (m_InputController.PressedThisFrame(SDLK_ESCAPE) || m_InputController.IsWindowClosed())
-		return false;
-
 	// Wywo³anie zleconych akcji
 	InvokePostponed();
 
@@ -94,10 +91,12 @@ bool GameBase::RunOneLoop()
 
 	m_DebugManager.PostFrame();
 
-	m_InputController.OnPostFrame();
+	const bool should_quit = m_InputController.PressedThisFrame(SDLK_ESCAPE) || m_InputController.IsWindowClosedThisFrame();
+
+	m_InputController.ClearFrameData();
 
 	PostFrameSleep();
-	return true;
+	return !should_quit;
 }
 
 bool GameBase::IsRunning()

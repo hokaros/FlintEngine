@@ -30,7 +30,7 @@ void InputController::PreUpdate()
 	{
 		ImGui_ImplSDL2_ProcessEvent(&event);
 		if (event.type == SDL_QUIT)
-			m_IsWindowClosed = true;
+			m_IsWindowClosedThisFrame = true;
 
 		if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 		{
@@ -62,9 +62,11 @@ void InputController::PreUpdate()
 	};
 }
 
-void InputController::OnPostFrame()
+void InputController::ClearFrameData()
 {
-	ClearFrameInfo();
+	m_PressedThisFrame.clear();
+	m_MousePressedThisFrame.clear();
+	m_IsWindowClosedThisFrame = false;
 }
 
 bool InputController::IsKeyDown(SDL_Keycode key) const 
@@ -86,9 +88,9 @@ bool InputController::MouseButtonPressedThisFrame(MouseButton button) const
 	return ftl::vector_contains(m_MousePressedThisFrame, button);
 }
 
-bool InputController::IsWindowClosed() const
+bool InputController::IsWindowClosedThisFrame() const
 {
-	return m_IsWindowClosed;
+	return m_IsWindowClosedThisFrame;
 }
 
 Vector InputController::GetMousePosition() const 
@@ -135,12 +137,6 @@ void InputController::OnMouseButtonDown(MouseButton button)
 
 void InputController::OnMouseButtonUp(MouseButton button)
 {
-}
-
-void InputController::ClearFrameInfo()
-{
-	m_PressedThisFrame.clear();
-	m_MousePressedThisFrame.clear();
 }
 
 MouseButton InputController::MouseButtonIdToEnum(uint8_t button_id)
