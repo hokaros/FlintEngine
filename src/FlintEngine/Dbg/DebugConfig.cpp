@@ -5,8 +5,8 @@
 namespace debug
 {
 	bool DebugConfig::s_ShouldDebugRenderPhysics = false;
-	bool DebugConfig::s_ShouldDebugRenderNavmesh = true;
-	DebugMode DebugConfig::s_DebugMode = DebugMode::NavmeshQuery;
+	bool DebugConfig::s_ShouldDebugRenderNavmesh = false;
+	DebugMode DebugConfig::s_DebugMode = DebugMode::None;
 
 	bool DebugConfig::ShouldDebugRenderPhysics()
 	{
