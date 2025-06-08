@@ -1,5 +1,5 @@
 #include "pch.h"
-#include <Core/Scene.h>
+#include <Scene/Scene.h>
 #include <Editables/PrefabInstance.h>
 
 #include "FakeAssetManager.h"
