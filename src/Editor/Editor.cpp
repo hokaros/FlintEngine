@@ -27,6 +27,11 @@ void Editor::Render()
     EndEditorSpace();
 }
 
+void Editor::ProcessEvent(const SDL_Event& event)
+{
+    m_GameRunner.ProcessEvent(event);
+}
+
 EditorGameRunner& Editor::GetGameRunner()
 {
     return m_GameRunner;

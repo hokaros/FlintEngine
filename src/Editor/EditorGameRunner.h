@@ -25,6 +25,7 @@ public:
 
 	void SetSelectedScene(std::shared_ptr<EditorUniversalHandle> handle);
 	void Render();
+	void ProcessEvent(const SDL_Event& event);
 
 	void StartGame();
 	void StopGame();

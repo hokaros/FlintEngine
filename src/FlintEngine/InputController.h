@@ -16,7 +16,7 @@ enum class MouseButton
 class IInputController
 {
 public:
-	virtual void PreUpdate() = 0;
+	virtual void ProcessEvent(const SDL_Event& event) = 0;
 	virtual void ClearFrameData() = 0;
 
 	virtual bool IsKeyDown(SDL_Keycode key) const = 0;
@@ -40,7 +40,7 @@ public:
 	InputController();
 	~InputController();
 
-	virtual void PreUpdate() override;
+	virtual void ProcessEvent(const SDL_Event& event) override;
 	virtual void ClearFrameData() override;
 
 	virtual bool IsKeyDown(SDL_Keycode key) const override;
@@ -50,8 +50,6 @@ public:
 
 	// Returns mouse position in ViewportSpace
 	virtual Vector GetMousePosition() const override;
-
-	void ProcessEvent(const SDL_Event& event);
 
 private:
 	void OnKeyDown(SDL_Keycode key);

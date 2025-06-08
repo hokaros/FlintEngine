@@ -22,6 +22,7 @@ public:
 	bool Run();
 	bool RunOneLoop();
 	bool IsRunning();
+	void ProcessEvent(const SDL_Event& event);
 
 	void LoadScene(std::unique_ptr<Scene> scene);
 	Scene* GetCurrentScene();
@@ -54,6 +55,7 @@ private:
 	void DebugRender();
 	void PostFrameSleep();
 
+	void ProcessAllSDLEvents();
 	void InvokePostponed();
 
 	void SetRunning(bool running);

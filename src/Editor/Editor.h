@@ -14,6 +14,7 @@ class Editor
 public:
 	Editor(ImVec4& clear_color, SDL_Renderer& renderer, int screenWidth, int screenHeight);
 	void Render();
+	void ProcessEvent(const SDL_Event& event);
 
 	EditorGameRunner& GetGameRunner();
 

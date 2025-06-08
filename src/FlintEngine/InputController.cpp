@@ -22,46 +22,6 @@ InputController::~InputController()
 	}
 }
 
-void InputController::PreUpdate() 
-{
-	SDL_Event event;
-
-	while (SDL_PollEvent(&event))
-	{
-		ImGui_ImplSDL2_ProcessEvent(&event);
-		if (event.type == SDL_QUIT)
-			m_IsWindowClosedThisFrame = true;
-
-		if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
-		{
-			SDL_Keycode keycode = event.key.keysym.sym;
-			if (event.type == SDL_KEYDOWN)
-			{
-				OnKeyDown(keycode);
-			}
-			else if (event.type == SDL_KEYUP)
-			{
-				OnKeyUp(keycode);
-			}
-		}
-		else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
-		{
-			const MouseButton button = MouseButtonIdToEnum(event.button.button);
-			if (button == MouseButton::Unknown)
-				continue;
-
-			if (event.type == SDL_MOUSEBUTTONDOWN)
-			{
-				OnMouseButtonDown(button);
-			}
-			else if (event.type == SDL_MOUSEBUTTONUP)
-			{
-				OnMouseButtonUp(button);
-			}
-		}
-	};
-}
-
 void InputController::ClearFrameData()
 {
 	m_PressedThisFrame.clear();
@@ -103,6 +63,37 @@ Vector InputController::GetMousePosition() const
 
 void InputController::ProcessEvent(const SDL_Event& event)
 {
+	ImGui_ImplSDL2_ProcessEvent(&event);
+	if (event.type == SDL_QUIT)
+		m_IsWindowClosedThisFrame = true;
+
+	if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+	{
+		SDL_Keycode keycode = event.key.keysym.sym;
+		if (event.type == SDL_KEYDOWN)
+		{
+			OnKeyDown(keycode);
+		}
+		else if (event.type == SDL_KEYUP)
+		{
+			OnKeyUp(keycode);
+		}
+	}
+	else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
+	{
+		const MouseButton button = MouseButtonIdToEnum(event.button.button);
+		if (button != MouseButton::Unknown)
+		{
+			if (event.type == SDL_MOUSEBUTTONDOWN)
+			{
+				OnMouseButtonDown(button);
+			}
+			else if (event.type == SDL_MOUSEBUTTONUP)
+			{
+				OnMouseButtonUp(button);
+			}
+		}
+	}
 }
 
 void InputController::OnKeyDown(SDL_Keycode key)

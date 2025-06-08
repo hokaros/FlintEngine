@@ -46,6 +46,7 @@ bool GameBase::Run()
 	bool is_running = true;
 	while (is_running) 
 	{
+		ProcessAllSDLEvents();
 		is_running = RunOneLoop();
 	}
 
@@ -58,8 +59,6 @@ bool GameBase::RunOneLoop()
 {
 	// Nowa klatka
 	m_Timer.FrameStart();
-
-	m_InputController.PreUpdate();
 
 	// Wywo³anie zleconych akcji
 	InvokePostponed();
@@ -105,6 +104,11 @@ bool GameBase::IsRunning()
 	return m_IsRunning;
 }
 
+void GameBase::ProcessEvent(const SDL_Event& event)
+{
+	m_InputController.ProcessEvent(event);
+}
+
 void GameBase::LoadScene(std::unique_ptr<Scene> scene)
 {
 	m_CurrScene = std::move(scene);
@@ -134,6 +138,15 @@ GameBase* GameBase::GetCurrent()
 void GameBase::DebugRender()
 {
 	m_PhysicsSystem.DebugRender();
+}
+
+void GameBase::ProcessAllSDLEvents()
+{
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+	{
+		ProcessEvent(event);
+	};
 }
 
 void GameBase::InvokePostponed()

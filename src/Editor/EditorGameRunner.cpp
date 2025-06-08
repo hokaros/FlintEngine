@@ -35,6 +35,14 @@ void EditorGameRunner::Render()
 	ImGui::End();
 }
 
+void EditorGameRunner::ProcessEvent(const SDL_Event& event)
+{
+	if (m_RunningGame == nullptr)
+		return;
+
+	m_RunningGame->ProcessEvent(event);
+}
+
 void EditorGameRunner::StartGame()
 {
 	if (m_RunningGame != nullptr)
