@@ -22,18 +22,15 @@ InputController::~InputController()
 	}
 }
 
-bool InputController::Update() 
+void InputController::PreUpdate() 
 {
-	ClearFrameInfo();
-
 	SDL_Event event;
-	bool quit = false;
 
 	while (SDL_PollEvent(&event))
 	{
 		ImGui_ImplSDL2_ProcessEvent(&event);
 		if (event.type == SDL_QUIT)
-			quit = true;
+			m_IsWindowClosed = true;
 
 		if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 		{
@@ -63,8 +60,11 @@ bool InputController::Update()
 			}
 		}
 	};
+}
 
-	return !quit;
+void InputController::OnPostFrame()
+{
+	ClearFrameInfo();
 }
 
 bool InputController::IsKeyDown(SDL_Keycode key) const 
@@ -86,12 +86,21 @@ bool InputController::MouseButtonPressedThisFrame(MouseButton button) const
 	return ftl::vector_contains(m_MousePressedThisFrame, button);
 }
 
+bool InputController::IsWindowClosed() const
+{
+	return m_IsWindowClosed;
+}
+
 Vector InputController::GetMousePosition() const 
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
 	return Vector(x, y);
+}
+
+void InputController::ProcessEvent(const SDL_Event& event)
+{
 }
 
 void InputController::OnKeyDown(SDL_Keycode key)

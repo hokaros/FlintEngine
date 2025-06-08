@@ -59,10 +59,9 @@ bool GameBase::RunOneLoop()
 	// Nowa klatka
 	m_Timer.FrameStart();
 
-	if (!m_InputController.Update())
-		return false;
+	m_InputController.PreUpdate();
 
-	if (m_InputController.PressedThisFrame(SDLK_ESCAPE))
+	if (m_InputController.PressedThisFrame(SDLK_ESCAPE) || m_InputController.IsWindowClosed())
 		return false;
 
 	// Wywo³anie zleconych akcji
@@ -94,6 +93,8 @@ bool GameBase::RunOneLoop()
 	m_CurrScene->PostFrame();
 
 	m_DebugManager.PostFrame();
+
+	m_InputController.OnPostFrame();
 
 	PostFrameSleep();
 	return true;
