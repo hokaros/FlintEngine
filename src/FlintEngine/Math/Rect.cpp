@@ -14,6 +14,46 @@ float Rect::CalculateArea() const
 	return size.x * size.y;
 }
 
+Segment Rect::GetSideHorizontalPositive() const
+{
+	return Segment(GetCornerNegativeXPositiveY(), GetCornerPositiveXPositiveY());
+}
+
+Segment Rect::GetSideHorizontalNegative() const
+{
+	return Segment(GetCornerNegativeXNegativeY(), GetCornerPositiveXNegativeY());
+}
+
+Segment Rect::GetSideVerticalPositive() const
+{
+	return Segment(GetCornerPositiveXNegativeY(), GetCornerPositiveXPositiveY());
+}
+
+Segment Rect::GetSideVerticalNegative() const
+{
+	return Segment(GetCornerNegativeXNegativeY(), GetCornerNegativeXPositiveY());
+}
+
+Vector Rect::GetCornerPositiveXPositiveY() const
+{
+	return pos + size;
+}
+
+Vector Rect::GetCornerNegativeXPositiveY() const
+{
+	return pos + Vector(0, size.y);
+}
+
+Vector Rect::GetCornerPositiveXNegativeY() const
+{
+	return pos + Vector(size.x, 0);
+}
+
+Vector Rect::GetCornerNegativeXNegativeY() const
+{
+	return pos;
+}
+
 bool Rect::ContainsPoint(const Vector& p, float tolerance) const
 {
 	const Vector rect_min = pos - Vector(tolerance / 2.0f, tolerance / 2.0f);

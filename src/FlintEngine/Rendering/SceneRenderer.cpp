@@ -99,16 +99,17 @@ void SceneRenderer::RenderLine(const Vector& start, const Vector& end, const Rgb
 	RenderRect(DirectedRect(Segment(start, end), thickness), color, layer);
 }
 
+void SceneRenderer::RenderLine(const Segment& line, const Rgb8& color, rendering::LayerId layer)
+{
+	RenderLine(line.start, line.end, color, layer);
+}
+
 void SceneRenderer::RenderWireRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer)
 {
-	RenderTargetScope render_scope = SetTargetLayer(layer);
-
-	SDL_Rect ssRect = RectToSDLRect(WorldSpaceToScreenSpace(rect));
-
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, 0xFF);
-
-	int result = SDL_RenderDrawRect(m_Renderer, &ssRect);
-	FE_ASSERT(result == 0, "ERROR: Could not render");
+	RenderLine(rect.GetSideHorizontalNegative(), color, layer);
+	RenderLine(rect.GetSideHorizontalPositive(), color, layer);
+	RenderLine(rect.GetSideVerticalNegative(), color, layer);
+	RenderLine(rect.GetSideVerticalPositive(), color, layer);
 }
 
 void SceneRenderer::RenderString(const char* text, const Vector& start, int fontSize, rendering::LayerId layer)

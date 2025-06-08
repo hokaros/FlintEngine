@@ -33,6 +33,7 @@ public:
 	void RenderRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer);
 	void RenderRect(const DirectedRect& rect, const Rgb8& color, rendering::LayerId layer);
 	void RenderLine(const Vector& start, const Vector& end, const Rgb8& color, rendering::LayerId layer);
+	void RenderLine(const Segment& line, const Rgb8& color, rendering::LayerId layer);
 	void RenderWireRect(const Rect& rect, const Rgb8& color, rendering::LayerId layer);
 
 	void RenderString(const char* text, const Vector& start, int fontSize, rendering::LayerId layer); // Renders string in world space. start is the upper left corner
